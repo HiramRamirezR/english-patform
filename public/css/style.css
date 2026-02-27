@@ -1,0 +1,380 @@
+/* English Forest - Base Design System */
+
+:root {
+    /* Primary Color Palette (Cool/Mountain Theme) */
+    --primary-deep: #1e3a8a;
+    /* Blue-900 */
+    --primary-medium: #3b82f6;
+    /* Blue-500 */
+    --primary-light: #eff6ff;
+    /* Blue-50 */
+    --accent-cool: #2dd4bf;
+    /* Teal */
+    --accent-orange: #f45050;
+    /* Manteniendo el naranja para contraste en CTAs */
+    --sky-blue: #dbeafe;
+    --night-blue: #0f172a;
+
+    /* Neutral Palette */
+    --white: #ffffff;
+    --slate-900: #0f172a;
+    --slate-700: #334155;
+    --slate-500: #64748b;
+    --slate-200: #e2e8f0;
+    --slate-50: #f8fafc;
+
+    /* Typography */
+    --font-primary: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-secondary: 'Inter', sans-serif;
+
+    /* Shadows & Effects */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --glass: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--slate-50);
+    color: var(--slate-900);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Typography Helpers */
+h1,
+h2,
+h3 {
+    font-family: var(--font-primary);
+    font-weight: 700;
+}
+
+/* Components Base */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 99px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    text-decoration: none;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-deep);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+    background-color: #1e40af;
+}
+
+.btn-accent {
+    background-color: var(--sun-yellow);
+    color: var(--slate-900);
+}
+
+.btn-accent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(249, 217, 73, 0.4);
+}
+
+/* Layout Containers */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Header & Nav */
+header {
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(180deg, var(--primary-light) 0%, var(--white) 100%);
+    padding: 8rem 0 12rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.mountains-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.mountain {
+    position: absolute;
+    bottom: -2px;
+    width: 100%;
+    height: 100%;
+}
+
+/* Paleta de Azules Puros y Sólidos - De claro (fondo) a oscuro (frente) */
+.mtn-1 {
+    background-color: #eff6ff;
+    /* El más pálido */
+    clip-path: polygon(0% 45%, 15% 20%, 35% 40%, 50% 15%, 75% 50%, 90% 25%, 100% 45%, 100% 100%, 0% 100%);
+}
+
+.mtn-2 {
+    background-color: #dbeafe;
+    clip-path: polygon(0% 100%, 0% 65%, 20% 45%, 45% 75%, 70% 40%, 100% 70%, 100% 100%);
+}
+
+.mtn-3 {
+    background-color: #bfdbfe;
+    clip-path: polygon(0% 100%, 0% 85%, 25% 65%, 50% 90%, 80% 60%, 100% 95%, 100% 100%);
+}
+
+.mtn-4 {
+    background-color: #93c5fd;
+    /* El más oscuro de las montañas */
+    clip-path: polygon(0% 100%, 0% 95%, 15% 80%, 35% 100%, 60% 75%, 85% 100%, 100% 90%, 100% 100%);
+}
+
+/* Pine Trees CSS with perspective logic */
+.pines {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.pine {
+    position: absolute;
+    bottom: 0px;
+    width: 0;
+    height: 0;
+}
+
+/* El tronco del pino */
+.pine::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 1px;
+}
+
+/* Tree Variations: Color + Size + Height */
+
+/* Extra Pequeño */
+.tree-xs {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 12px solid #bfdbfe;
+    bottom: 90px;
+}
+
+.tree-xs::before {
+    content: '';
+    position: absolute;
+    left: -3px;
+    bottom: -4px;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-bottom: 9px solid #bfdbfe;
+}
+
+.tree-xs::after {
+    background-color: #bfdbfe;
+    width: 2px;
+    height: 8px;
+    top: 10px;
+    /* Alineado justo en la base del triángulo con solape */
+}
+
+/* Pequeño */
+.tree-sm {
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 20px solid #93c5fd;
+    bottom: 60px;
+}
+
+.tree-sm::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    bottom: -6px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 16px solid #93c5fd;
+}
+
+.tree-sm::after {
+    background-color: #93c5fd;
+    width: 3px;
+    height: 10px;
+    top: 18px;
+}
+
+/* Mediano */
+.tree-md {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 35px solid #60a5fa;
+    bottom: 25px;
+}
+
+.tree-md::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    bottom: -10px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 28px solid #60a5fa;
+}
+
+.tree-md::after {
+    background-color: #60a5fa;
+    width: 4px;
+    height: 12px;
+    top: 33px;
+}
+
+/* Grande */
+.tree-lg {
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 50px solid #3b82f6;
+    bottom: -5px;
+}
+
+.tree-lg::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    bottom: -15px;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 40px solid #3b82f6;
+}
+
+.tree-lg::after {
+    background-color: #3b82f6;
+    width: 5px;
+    height: 14px;
+    top: 48px;
+}
+
+.hero h1 {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    margin-bottom: 1.5rem;
+    color: var(--primary-deep);
+    line-height: 1.1;
+    position: relative;
+    z-index: 3;
+}
+
+.hero p {
+    position: relative;
+    z-index: 3;
+    font-size: clamp(1rem, 4vw, 1.25rem);
+    color: var(--slate-700);
+    max-width: 700px;
+    margin: 0 auto 2.5rem;
+}
+
+.hero-actions {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Feature Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+    align-items: center;
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+    .nav-links a {
+        display: none;
+        /* Hide secondary links on mobile for simplicity */
+    }
+
+    .hero {
+        padding: 3rem 0;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero-image {
+        margin-top: 2rem;
+    }
+
+    ul {
+        text-align: left;
+        display: inline-block;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade {
+    animation: fadeIn 0.6s ease-out forwards;
+}

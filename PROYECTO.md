@@ -18,9 +18,11 @@ Plataforma de aprendizaje de inglés en línea, interactiva y gamificada con una
 - **Hero Section:** Paisaje inmersivo generado completamente con `clip-path` y `position` en CSS, con múltiples capas de montañas y un denso bosque de pinos escalados y desalineados aleatoriamente. CTAs principales: "¡Módulo 1 GRATIS!" y "Explorar plataforma".
 - **Sección Maestros:** Invitación directa y concisa: "¿Eres maestro de inglés? Trabaja con nosotros". (Los detalles de compensación se reservan para el portal interno).
 
-### 2. Autenticación y Onboarding (Próximos Pasos)
-- Integración real del flujo de Google Sign-In mediante el SDK de Firebase.
-- Creación de perfiles en Firestore (roles: `student` o `teacher`).
+### 2. Autenticación, Roles y Onboarding (En Progreso 🚀)
+- [x] Integración real del flujo de Google Sign-In mediante el SDK de Firebase.
+- [x] Arquitectura de Header Modular Inteligente (Inyectado en DOM según estado de sesión).
+- [ ] Creación de perfiles en Firestore con arquitectura de "Rol Base" (Todos son estudiantes por defecto).
+- [ ] Vista de Perfil con opción "Convertirme en Maestro" (Perfiles Duales activables).
 
 ### 3. Experiencia del Alumno (The Peak / The Forest)
 - **Moon (IA Companion):** Asistente virtual educativo.

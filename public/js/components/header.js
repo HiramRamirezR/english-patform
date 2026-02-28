@@ -1,7 +1,8 @@
-import { auth, handleLogin, logout } from '../auth.js';
+import { auth, db, handleLogin, logout } from '../auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-const renderHeader = (user) => {
+const renderHeader = (user, userData = null) => {
     const headerContainer = document.getElementById('main-header');
     if (!headerContainer) return;
 
@@ -9,9 +10,16 @@ const renderHeader = (user) => {
 
     if (user) {
         // Usuario Autenticado
+        let teacherBtn = '';
+        if (userData && userData.isTeacher) {
+            teacherBtn = `<a href="teacher.html" class="btn btn-accent" style="padding: 0.5rem 1rem; font-size: 0.8rem; margin-right: 0.5rem;">👨‍🏫 Cambiar a Maestro</a>`;
+        }
+
         navLinks = `
+            ${teacherBtn}
             <a href="index.html" style="color: var(--slate-700); text-decoration: none; font-weight: 500;">Home</a>
             <a href="dashboard.html" style="color: var(--slate-700); text-decoration: none; font-weight: 500;">Dashboard</a>
+            <a href="profile.html" style="color: var(--slate-700); text-decoration: none; font-weight: 500;">Perfil</a>
             <button class="btn" id="header-logout-btn" style="border: 1px solid var(--slate-300); color: var(--slate-500); padding: 0.5rem 1rem; font-size: 0.9rem; background: transparent; transition: all 0.2s;">Cerrar Sesión</button>
         `;
     } else {
@@ -57,6 +65,21 @@ const renderHeader = (user) => {
 renderHeader(null);
 
 // Escuchar los cambios de Auth de Firebase para redibujar el header
-onAuthStateChanged(auth, (user) => {
-    renderHeader(user);
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        try {
+            const docRef = doc(db, 'users', user.uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                renderHeader(user, docSnap.data());
+            } else {
+                renderHeader(user, null);
+            }
+        } catch (error) {
+            console.error("Error al obtener datos del usuario:", error);
+            renderHeader(user, null);
+        }
+    } else {
+        renderHeader(null);
+    }
 });

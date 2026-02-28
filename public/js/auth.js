@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 /**
  * Configuración de Firebase
@@ -16,6 +17,7 @@ const firebaseConfig = {
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 const initApp = () => {
@@ -64,7 +66,25 @@ export const handleLogin = async () => {
     try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
-        console.log("Login exitoso:", user.displayName);
+        console.log("Login exitoso con Google:", user.displayName);
+
+        // Lógica de Firestore: Perfiles Duales Automáticos
+        const userRef = doc(db, 'users', user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+            console.log("Creando nuevo perfil de usuario (student base)...");
+            await setDoc(userRef, {
+                uid: user.uid,
+                name: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL,
+                role: 'student', // Todos nacen como alumno
+                isTeacher: false, // Bandera de switch inactiva
+                createdAt: serverTimestamp(),
+                points: 0
+            });
+        }
 
         // Redirigir al dashboard
         window.location.href = 'dashboard.html';

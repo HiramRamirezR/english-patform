@@ -18,26 +18,30 @@ Plataforma de aprendizaje de inglés en línea, interactiva y gamificada con una
 - **Hero Section:** Paisaje inmersivo generado completamente con `clip-path` y `position` en CSS, con múltiples capas de montañas y un denso bosque de pinos escalados y desalineados aleatoriamente. CTAs principales: "¡Módulo 1 GRATIS!" y "Explorar plataforma".
 - **Sección Maestros:** Invitación directa y concisa: "¿Eres maestro de inglés? Trabaja con nosotros". (Los detalles de compensación se reservan para el portal interno).
 
-### 2. Autenticación, Roles y Onboarding (En Progreso 🚀)
+### 2. Autenticación, Roles y Onboarding (Completada 🚀)
 - [x] Integración real del flujo de Google Sign-In mediante el SDK de Firebase.
 - [x] Arquitectura de Header Modular Inteligente (Inyectado en DOM según estado de sesión).
-- [ ] Creación de perfiles en Firestore con arquitectura de "Rol Base" (Todos son estudiantes por defecto).
-- [ ] Vista de Perfil con opción "Convertirme en Maestro" (Perfiles Duales activables).
+- [x] Creación de perfiles en Firestore con arquitectura de "Rol Base" (Todos son estudiantes por defecto).
+- [x] Vista de Perfil con opción "Convertirme en Maestro" (Perfiles Duales activables interactivamente).
 
 ### 3. Experiencia del Alumno (The Peak / The Forest)
-- **Moon (IA Companion):** Asistente virtual educativo.
-  - **Interacción:** Web Speech API para TTS (Text-to-Speech) y STT (Speech-to-Text) gratuito en navegador, optimizando el costo.
-  - **Respuestas:** Generación dinámica con Gemini 1.5 Flash (por velocidad y costo), utilizando prompts contextuales guardados en Firestore.
-- **Dashboard de Aprendizaje:**
-  - Mapa de progreso visualizando los 20 módulos disponibles.
-  - El primer módulo es de acceso libre.
-  - Ejercicios interactivos (Drag & Drop, pronunciación, tests).
+- **Lore y Estética (Influencia Virgilio-Dante):** El alumno es un viajero (Dante) escalando "English Peak". Para subir de altitud, debe aprender a comunicarse con los habitantes del ecosistema probando su dominio del nivel. 
+- **Selección de Personaje:** Al registrarse o iniciar, el alumno escoge un avatar que es un **animalito del bosque**.
+- **Moon (IA Companion):** Asistente virtual educativo interactivo (una osita sabia). Actúa como la guía de la montaña (Virgilio). Moon habla directamente con el animalito del alumno.
+  - **Interacción:** Web Speech API para TTS y STT en navegador gratuito.
+  - **Respuestas:** Gemini 1.5 Flash usando prompts contextuales en Firestore.
+- **Flujo de Aprendizaje y Módulos:**
+  - **Inicio Directo:** Todos aterrizan en el Mapa de Módulos (empiezan en el Módulo 1 que es gratuito).
+  - **Fast-Track (Evaluación Inicial Opcional):** Si el alumno siente que el Módulo 1 es muy básico, puede pagar **$60 MXN** para una evaluación con un Maestro. El maestro decide en qué Módulo colocarlo. Esto le desbloquea su nuevo nivel de inmediato para "probarlo".
+  - **Estructura de Lecciones:** Actividades de micro-learning con vocabulario interactivo, estructuras guiadas, lecturas, Drag & Drop y, sobre todo, **mucha práctica conversacional oral guiada por Moon**.
+  - **Suscripción Premium:** Para avanzar tan rápido como deseen a través de todos los módulos del mapa, los alumnos deben tener su pago activo de **$300 MXN mensuales**.
+  - **Aprobación Obligatoria (El Boss Fight):** Para que un alumno demuestre que realmente conquistó el módulo y avance formalmente al siguiente, **debe solicitar, pagar o usar sus créditos y aprobar una evaluación con un maestro humano real**.
 
-### 4. Portal del Maestro
-- **Perfil Profesional Público:** Biografía y Video de presentación opcional (YouTube).
-- **Información Operativa:** Enlace fijo para videollamadas (Zoom/Meet).
-- **Información Administrativa (Privada):** WhatsApp de contacto, enlace a CV (Google Drive) y datos bancarios (CLABE de 18 dígitos y Banco) para cortes semanales.
-- **Agenda y Evaluaciones:** Gestión de disponibilidad en slots de 20 minutos para sesiones 1 a 1 de evaluación pagada.
+### 4. Portal del Maestro (MVP Completado 🚀)
+- [x] **Perfil Profesional Público:** Biografía y Video de presentación opcional (YouTube).
+- [x] **Información Operativa:** Enlace fijo para videollamadas (Zoom/Meet).
+- [x] **Información Administrativa (Privada):** WhatsApp de contacto, enlace a CV (Google Drive) y datos bancarios (CLABE, Banco) para pagos.
+- [x] **Agenda y Evaluaciones:** Generación múltiple de disponibilidad de slots de 20 minutos con validación de solapamiento en Firestore. Dashboard privado con control de citas.
 
 ### 5. Economía, Pagos y Referidos
 - **Alumnos:**

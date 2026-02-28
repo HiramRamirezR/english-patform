@@ -1,7 +1,7 @@
 # Proyecto: Moonsforest 🌲
 
 ## Visión General
-Plataforma de aprendizaje de inglés en línea, interactiva y gamificada con una estética de bosque misterioso y encantador. Los alumnos exploran el bosque, completan módulos interactivos guiados por "Moon" (una osita sabia de IA) y los maestros pueden monetizar evaluando a los alumnos.
+Plataforma de aprendizaje de inglés en línea, interactiva y gamificada con una estética de bosque misterioso y encantador. La premisa principal es clara: **A Moonsforest se viene a hablar, no solo a hacer clics.** Los alumnos exploran el bosque y completan módulos guiados por "Moon" (una osita sabia de IA). Para avanzar, las evaluaciones se realizan con maestros reales que evalúan la capacidad de construir conversaciones en vivo con el vocabulario de la lección.
 
 ## Stack Tecnológico
 - **Frontend:** HTML5, CSS3 (Vanilla), JavaScript (ES6+). Diseño 100% responsivo y dependiente de CSS para gráficos complejos (ej. montañas lejanas y pinos asimétricos).

@@ -19,7 +19,7 @@ function generateLesson(vocabList) {
     // Paso Inicial: Presentar todo el vocabulario de golpe (Listen & Click)
     generatedSteps.push({
         type: 'listen_click',
-        prompt: '1. Toca cada tarjeta para descubrir y escuchar las palabras de hoy.',
+        prompt: '1. Toca cada tarjeta y escucha con atención. ¡Repite la palabra en voz alta para aprendértela!',
         cards: vocabList
     });
 
@@ -34,33 +34,35 @@ function generateLesson(vocabList) {
         });
     });
 
-    // Fase 2: Repaso Intercalado (Mini-Examen)
-    // Mezclamos las palabras y le pedimos que las diga de nuevo para reforzar memoria a corto plazo
-    const shuffledVocab = [...vocabList].sort(() => Math.random() - 0.5);
+    // Fase 2: Repaso de Traducciones Inversas (Memoria Pura)
+    // Mostramos español, pedimos que diga el inglés
+    const shuffledTranslations = [...vocabList].sort(() => Math.random() - 0.5);
 
-    shuffledVocab.forEach((item, index) => {
+    shuffledTranslations.forEach((item, index) => {
         generatedSteps.push({
             type: 'echo_chamber',
-            prompt: `Repaso rápido: ¿Recuerdas cómo decir esta palabra?`,
-            word: item.word,
-            successMsg: '¡Todavía lo recuerdas! Muy bien.'
+            prompt: `💡 Pensemos en inglés: ¿Cómo dirías esto?`,
+            word: item.word,               // La validación interna es en Inglés (Target)
+            displayWord: item.translation, // Pero la pantalla muestra el español
+            successMsg: '¡Esa es la traducción perfecta!'
         });
     });
 
-    // Fase 3: Práctica de Pares (Hablar 2 cosas)
-    // Empezamos a juntar conceptos simples basándonos en el mismo vocabulario
+    // Fase 3: Práctica de Pares (Hablar 2 cosas sin ayuda)
     generatedSteps.push({
         type: 'echo_chamber',
-        prompt: `¡Reto Final! Dilo todo junto.`,
-        word: 'Hello, Good morning',
-        successMsg: '¡Increíble! Ya estás uniendo palabras.'
+        prompt: `¡Reto Final! Une estos dos saludos (dilos en inglés).`,
+        word: 'Hello Good morning',
+        displayWord: 'Hola, Buenos días.',
+        successMsg: '¡Increíble! Ya estás uniendo oraciones.'
     });
 
     generatedSteps.push({
         type: 'echo_chamber',
-        prompt: `Última prueba del día. Despídete.`,
-        word: 'Goodbye, Good night',
-        successMsg: '¡Perfecto! Has dominado esta lección.'
+        prompt: `Última prueba del día. Despídete para ir a dormir.`,
+        word: 'Goodbye Good night',
+        displayWord: 'Adiós, Buenas noches.',
+        successMsg: '¡Perfecto! Has dominado The Clearing.'
     });
 
     return generatedSteps;

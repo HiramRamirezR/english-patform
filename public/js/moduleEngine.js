@@ -145,7 +145,8 @@ export class MoonsforestEngine {
         // Big Word
         const echoWord = document.createElement('div');
         echoWord.className = 'echo-word';
-        echoWord.innerText = data.word;
+        // Si hay una palabra para mostrar (ej. su traducción para forzar memoria), úsala. Si no, usa el inglés directo.
+        echoWord.innerText = data.displayWord || data.word;
 
         // Mic Button
         const micBtn = document.createElement('button');
@@ -178,22 +179,28 @@ export class MoonsforestEngine {
             this.recognition.start();
 
             this.recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript.toLowerCase();
-                const target = data.word.toLowerCase().replace(/[^a-z0-9 ]/gi, '');
-                const cleanTranscript = transcript.replace(/[^a-z0-9 ]/gi, '');
+                const transcript = event.results[0][0].transcript.toLowerCase().trim();
+                const target = data.word.toLowerCase().replace(/[^a-z0-9 ]/gi, '').trim();
+                const cleanTranscript = transcript.replace(/[^a-z0-9 ]/gi, '').trim();
 
                 feedback.innerHTML = `Escuché: "<strong>${transcript}</strong>"`;
 
-                // Tolerancia muy básica: si contiene la palabra (o match directo)
-                if (cleanTranscript.includes(target) || target.includes(cleanTranscript)) {
+                // TOLERANCIA ESTRICTA:
+                // Para lecciones infantiles exigimos que lo que dijo empiece o sea exactamente la palabra/frase.
+                // Ya no validamos si "contain" porque "bye" pasaba si decía "goodbye".
+                const isExactMatch = cleanTranscript === target;
+                const startsWithMatch = cleanTranscript.startsWith(target) && (cleanTranscript.length <= target.length + 5);
+
+                if (isExactMatch || startsWithMatch) {
                     micBtn.classList.remove('listening');
                     echoWord.classList.add('success');
+                    echoWord.innerText = data.word; // Revelar inglés si estaba oculto en español
                     micBtn.style.display = 'none'; // ocultar micro
                     this.showMoon(data.successMsg || "¡Ese es el sonido perfecto!");
                     this.showNextButton(box);
                 } else {
                     micBtn.classList.remove('listening');
-                    this.showMoon("¡Casi! Intenta pronunciarlo más suave.");
+                    this.showMoon("¡Casi! Intenta pronunciarlo un par de veces más.");
                 }
             };
 

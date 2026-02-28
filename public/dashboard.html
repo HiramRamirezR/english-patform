@@ -13,6 +13,8 @@
 </head>
 
 <body>
+    <!-- Header Modular -->
+    <div id="main-header"></div>
 
     <div class="dashboard-container">
         <!-- Dashboard Header -->
@@ -65,22 +67,14 @@
             <!-- Sprite placeholder for Moon -->
             <div style="font-size: 4rem; text-align: center;">🐻‍❄️</div>
         </div>
-
-        <div style="text-align: center; margin-top: 2rem; padding-bottom: 2rem;">
-            <button id="logout-btn" class="btn"
-                style="border: 1px solid var(--slate-300); color: var(--slate-500); padding: 0.5rem 1rem; font-size: 0.8rem;">Cerrar
-                Sesión</button>
-        </div>
     </div>
 
+    <!-- Firebase & Auth Logic -->
     <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/components/header.js"></script>
     <script type="module">
-        import { logout } from "/js/auth.js";
+        // Lógica específica del dashboard
 
-        // El nombre del usuario se actualizará vía onAuthStateChanged en auth.js
-        // Pero aquí podemos añadir lógica específica del dashboard
-
-        document.getElementById('logout-btn').addEventListener('click', logout);
 
         window.startModule = function (id) {
             if (id === 1) {

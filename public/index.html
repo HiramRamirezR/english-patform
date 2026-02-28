@@ -14,14 +14,8 @@
 
 <body>
 
-    <header>
-        <nav class="container">
-            <div class="logo" style="color: var(--primary-deep);">🏔️ English Peak</div>
-            <div class="nav-links">
-                <button class="btn btn-primary" id="google-login">Comenzar</button>
-            </div>
-        </nav>
-    </header>
+    <!-- Header Modular -->
+    <div id="main-header"></div>
 
     <main>
         <section id="alumnos" class="hero">
@@ -131,6 +125,7 @@
 
     <!-- Firebase & Auth Logic -->
     <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/components/header.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>

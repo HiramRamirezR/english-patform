@@ -15,7 +15,7 @@ const firebaseConfig = {
 
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+export const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 const initApp = () => {
@@ -57,7 +57,7 @@ const initApp = () => {
 // Bandera para evitar múltiples clics concurrentes
 let isLoggingIn = false;
 
-const handleLogin = async () => {
+export const handleLogin = async () => {
     if (isLoggingIn) return;
     isLoggingIn = true;
 

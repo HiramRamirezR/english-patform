@@ -32,7 +32,7 @@ Plataforma de aprendizaje de inglés en línea, interactiva y gamificada con una
   - **Respuestas:** Gemini 1.5 Flash usando prompts contextuales en Firestore.
 - **Flujo de Aprendizaje y Módulos:**
   - **Macro-Mapa (El Bosque):** Un diseño con scroll horizontal (tipo carrusel fluido) mostrando 20 módulos. El Módulo 1 está abierto por defecto, revelando el inicio de la inmensidad del bosque.
-  - **Micro-Mapa (Las Lecciones):** Al entrar a un módulo, se muestran las lecciones en un camino interno. **Desbloqueo estricto y lineal:** Las lecciones deben ser superadas cronológicamente (aprobando con el motor STT) para desbloquear el acceso a la siguiente.
+  - **Micro-Mapa (Las Lecciones):** Al entrar a un módulo, se muestran las lecciones en un camino interno. **Desbloqueo estricto y lineal impulsado por Firestore:** Al terminar cada lección el motor la guarda en el arreglo `completedLessons` del usuario (ej., `m1l1` desbloquea `m1l2`). Además, **se registra activamente los minutos hablados al día (`minutesSpokenToday`)** para gamificar su avance.
   - **Fast-Track / Aprobación con el Guardián:** El botón de "Evalúate ($60)" vivirá siempre fijo a la vista en el **Header**. Un alumno puede pulsarlo en cualquier momento para pedir la evaluación humana.
   - **Estructura de Lecciones:** Actividades de micro-learning organizadas en submódulos (vocabulario, estructuras, lecturas, Drag & Drop, y práctica conversacional guiada por Moon).
   - **Arquitectura de Lecciones (Modular):** Las actividades están creadas con componentes frontend reutilizables (Ej. *Listen & Click Box*, *Echo Chamber Mic*, *Drag & Drop Engine*) para escalar a 20+ módulos rápidamente con pura configuración de JSON u objetos JavaScript.

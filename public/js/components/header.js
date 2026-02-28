@@ -12,7 +12,7 @@ const renderHeader = (user, userData = null) => {
         // Usuario Autenticado
         let teacherBtn = '';
         if (userData && userData.isTeacher) {
-            teacherBtn = `<a href="teacher.html" class="btn btn-accent" style="padding: 0.5rem 1rem; font-size: 0.8rem; margin-right: 0.5rem;">👨‍🏫 Cambiar a Maestro</a>`;
+            teacherBtn = `<a href="teacher.html" class="btn btn-accent" style="padding: 0.5rem 1rem; font-size: 0.8rem; margin-right: 0.5rem;">Cambiar a Maestro</a>`;
         }
 
         navLinks = `

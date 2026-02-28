@@ -7,10 +7,20 @@ service cloud.firestore {
       // Un usuario solo puede leer y modificar su propio documento
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
+
+    // Reglas para la colección de slots / agenda
+    match /slots/{slotId} {
+      // Maestros pueden leer y escribir si son los dueños de este slot
+      // Alumnos (luego) podrán leer y actualizar status a booked (lo afinaremos)
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.teacherId;
+      allow update, delete: if request.auth != null && request.auth.uid == resource.data.teacherId;
+    }
     
-    // Por seguridad, bloqueamos cualquier otra colección que no hayamos definido
+    // Por seguridad, bloqueamos cualquier otra colección
     match /{document=**} {
       allow read, write: if false;
     }
   }
 }
+

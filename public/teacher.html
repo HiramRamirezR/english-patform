@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal del Maestro | English Peak</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .teacher-dashboard {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+
+        .stats-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-item h3 {
+            font-size: 0.9rem;
+            color: var(--slate-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-deep);
+        }
+
+        .stat-item .currency {
+            font-size: 1.25rem;
+            color: var(--slate-500);
+            font-weight: 500;
+        }
+
+        .panel-section {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--slate-200);
+            padding-bottom: 1rem;
+        }
+
+        .panel-header h2 {
+            font-size: 1.25rem;
+            color: var(--slate-900);
+        }
+
+        .slot-list {
+            list-style: none;
+        }
+
+        .slot-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--slate-200);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .slot-item:hover {
+            border-color: var(--primary-medium);
+        }
+
+        .slot-info h4 {
+            color: var(--slate-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .slot-info p {
+            font-size: 0.85rem;
+            color: var(--slate-500);
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #d97706;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-booked {
+            background: #d1fae5;
+            color: #059669;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .teacher-dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Modular -->
+    <div id="main-header"></div>
+
+    <main class="teacher-dashboard">
+
+        <!-- Columna Principal -->
+        <div class="main-column">
+            <div class="stats-card">
+                <div class="stat-item">
+                    <h3>Ganancias Pendientes</h3>
+                    <div class="value"><span class="currency">$</span>0.00 <span class="currency"
+                            style="font-size: 1rem;">MXN</span></div>
+                    <p style="font-size: 0.8rem; color: var(--slate-500); margin-top: 0.5rem;">Corte: El próximo Lunes
+                    </p>
+                    <p style="font-size: 0.8rem; color: var(--slate-500); margin-top: 0.5rem;">Monto mínimo de retiro:
+                        $200 MXN</p>
+                </div>
+                <div class="stat-item" style="text-align: right;">
+                    <h3>Evaluaciones Históricas</h3>
+                    <div class="value" style="color: var(--slate-700);">0</div>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <div class="panel-header">
+                    <h2>📅 Mi Agenda (Próximos 7 días)</h2>
+                    <button id="toggle-slot-form-btn" class="btn btn-primary"
+                        style="padding: 0.5rem 1rem; font-size: 0.85rem;">+ Abrir Horarios</button>
+                </div>
+
+                <!-- Selector de Slots Predefinidos -->
+                <div id="new-slot-container"
+                    style="display: none; background: #f8fafc; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid var(--slate-200);">
+                    <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--slate-700);">Selecciona los horarios
+                        que deseas abrir:</h3>
+                    <p style="font-size: 0.85rem; color: var(--slate-500); margin-bottom: 1.5rem;">Crea disponibilidad
+                        fija en bloques de 20 minutos.</p>
+
+                    <form id="predefined-slots-form">
+                        <div style="margin-bottom: 1.5rem;">
+                            <label for="slot-date-select"
+                                style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--slate-700); margin-bottom: 0.5rem;">Día:</label>
+                            <select id="slot-date-select" class="form-control"
+                                style="max-width: 300px; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--slate-300); font-family: var(--font-primary);">
+                                <!-- Las opciones se llenan con JS -->
+                            </select>
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label
+                                style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--slate-700); margin-bottom: 0.5rem;">Horarios
+                                Disponibles:</label>
+                            <!-- Grid para los botones de hora -->
+                            <div id="time-grid"
+                                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.8rem;">
+                                <!-- Botones de hora inyectados por JS -->
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                            <span id="selected-count"
+                                style="align-self: center; font-size: 0.85rem; color: var(--slate-500); display: none;">0
+                                seleccionados</span>
+                            <button type="submit" id="save-slot-btn" class="btn btn-primary" disabled>Abrir Horarios
+                                Seleccionados</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="empty-agenda-msg" style="text-align: center; padding: 3rem 1rem; color: var(--slate-500);">
+                    <p style="font-size: 2rem; margin-bottom: 1rem;">📭</p>
+                    <p>No tienes horarios disponibles configurados.</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Abre algunos bloques para que los alumnos puedan
+                        agendar.</p>
+                </div>
+
+                <!-- Lista de Slots Dinámica -->
+                <ul class="slot-list" id="slots-container"></ul>
+            </div>
+        </div>
+
+        <!-- Columna Lateral -->
+        <div class="side-column">
+            <div class="panel-section">
+                <h2
+                    style="font-size: 1.1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--slate-200); padding-bottom: 1rem;">
+                    🔔 Solicitudes</h2>
+                <div style="text-align: center; color: var(--slate-500); padding: 1rem 0;">
+                    <p>Todo al día.</p>
+                </div>
+            </div>
+
+            <div class="panel-section"
+                style="margin-top: 2rem; background: #f8fafc; border: 1px dashed var(--slate-300); text-align: center;">
+                <p style="font-size: 2rem; margin-bottom: 0.5rem;">👨‍🏫</p>
+                <h3 id="teacher-name" style="font-size: 1rem; margin-bottom: 0.5rem;">Cargando perfil...</h3>
+                <p style="font-size: 0.8rem; color: var(--slate-500); margin-bottom: 1rem;">Tu sala de evaluaciones:</p>
+                <a href="#" id="zoom-link-display" target="_blank" class="btn"
+                    style="background: white; border: 1px solid var(--primary-medium); color: var(--primary-medium); font-size: 0.8rem; padding: 0.4rem 0.8rem; display: none;">Entrar
+                    a mi sala</a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Firebase & Auth Logic -->
+    <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/components/header.js"></script>
+    <script type="module" src="/js/teacher.js"></script>
+</body>
+
+</html>

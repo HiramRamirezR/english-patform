@@ -34,7 +34,9 @@ Plataforma de aprendizaje de inglés en línea, interactiva y gamificada con una
   - Ejercicios interactivos (Drag & Drop, pronunciación, tests).
 
 ### 4. Portal del Maestro
-- **Perfil Profesional:** Biografía, fotografía y enlace personal para videollamadas (Zoom/Meet).
+- **Perfil Profesional Público:** Biografía y Video de presentación opcional (YouTube).
+- **Información Operativa:** Enlace fijo para videollamadas (Zoom/Meet).
+- **Información Administrativa (Privada):** WhatsApp de contacto, enlace a CV (Google Drive) y datos bancarios (CLABE de 18 dígitos y Banco) para cortes semanales.
 - **Agenda y Evaluaciones:** Gestión de disponibilidad en slots de 20 minutos para sesiones 1 a 1 de evaluación pagada.
 
 ### 5. Economía, Pagos y Referidos

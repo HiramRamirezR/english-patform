@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil | English Peak</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--slate-200);
+        }
+
+        .user-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-light);
+        }
+
+        .user-info h1 {
+            font-size: 1.5rem;
+            color: var(--slate-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .user-info p {
+            color: var(--slate-500);
+            font-size: 0.9rem;
+        }
+
+        .teacher-cta {
+            background: linear-gradient(135deg, var(--primary-light), var(--sky-blue));
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #bfdbfe;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .teacher-form {
+            display: none;
+            /* Oculto por defecto */
+            margin-top: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--slate-700);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--slate-300);
+            border-radius: 8px;
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-medium);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .help-text {
+            font-size: 0.8rem;
+            color: var(--slate-500);
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        /* Modificador para ver el formulario */
+        .show-form {
+            display: block;
+        }
+
+        .tag-student {
+            background: var(--slate-100);
+            color: var(--slate-600);
+            padding: 0.2rem 0.6rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .tag-teacher {
+            background: #dcfce7;
+            color: #166534;
+            padding: 0.2rem 0.6rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Modular -->
+    <div id="main-header"></div>
+
+    <main class="container">
+        <div class="profile-container">
+
+            <div id="loading-state" style="text-align: center; padding: 2rem; color: var(--slate-500);">
+                Cargando tu perfil... 🐻‍❄️
+            </div>
+
+            <div id="profile-content" style="display: none;">
+                <div class="user-header">
+                    <img src="" alt="Foto de Perfil" id="profile-photo" class="user-photo">
+                    <div class="user-info">
+                        <h1 id="profile-name">Cargando...</h1>
+                        <p id="profile-email">Cargando...</p>
+                        <span id="profile-role-tag" class="tag-student">Alumno</span>
+                    </div>
+                </div>
+
+                <!-- Banner y formulario de maestro -->
+                <div id="teacher-section" class="teacher-cta">
+                    <div id="teacher-intro">
+                        <h2 style="font-size: 1.25rem; color: var(--primary-deep); margin-bottom: 0.5rem;">¿Eres
+                            experto en inglés?</h2>
+                        <p style="color: var(--slate-700); margin-bottom: 1rem; font-size: 0.95rem;">
+                            Únete como maestro y gana dinero evaluando a nuestros alumnos en sesiones 1 a 1 de 20
+                            minutos.
+                        </p>
+                        <button id="show-teacher-form-btn" class="btn btn-primary"
+                            style="padding: 0.5rem 1.5rem; font-size: 0.9rem;">
+                            Quiero ser Maestro
+                        </button>
+                    </div>
+
+                    <form id="teacher-form" class="teacher-form">
+                        <div class="form-group">
+                            <label for="teacher-bio">Biografía / Presentación Pública *</label>
+                            <textarea id="teacher-bio" class="form-control" rows="3" required
+                                placeholder="Hola, soy [Tu Nombre] y tengo X años enseñando..."></textarea>
+                            <span class="help-text">Esto es lo que leerán los alumnos antes de agendar una sesión
+                                contigo.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="teacher-video">Video de Presentación (Opcional)</label>
+                            <input type="url" id="teacher-video" class="form-control"
+                                placeholder="https://youtube.com/watch?v=...">
+                            <span class="help-text">Una URL de YouTube. Es totalmente opcional, pero ayuda mucho a los
+                                alumnos.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="teacher-zoom">Enlace para Videollamadas (Zoom/Meet) *</label>
+                            <input type="url" id="teacher-zoom" class="form-control" required
+                                placeholder="https://zoom.us/j/123456789">
+                            <span class="help-text">Tu sala personal donde harás las evaluaciones de 20 min.</span>
+                        </div>
+
+                        <hr style="border: 0; border-top: 1px solid var(--slate-200); margin: 2rem 0;">
+                        <h3 style="font-size: 1rem; margin-bottom: 1rem; color: var(--slate-700);">Información
+                            Administrativa (Privada)</h3>
+
+                        <div class="form-group">
+                            <label for="teacher-whatsapp">WhatsApp (Privado) *</label>
+                            <input type="tel" id="teacher-whatsapp" class="form-control" required placeholder="+52...">
+                            <span class="help-text">Solo para el equipo de English Peak, los alumnos no lo verán.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="teacher-cv">Enlace a tu CV o LinkedIn (Privado) *</label>
+                            <input type="url" id="teacher-cv" class="form-control" required
+                                placeholder="Link a Google Drive o LinkedIn">
+                            <span class="help-text">Solo para revisión del equipo.</span>
+                        </div>
+
+                        <div class="form-group" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                            <div>
+                                <label for="teacher-clabe">CLABE Interbancaria *</label>
+                                <input type="text" id="teacher-clabe" class="form-control" required minlength="18"
+                                    maxlength="18" placeholder="18 dígitos">
+                            </div>
+                            <div>
+                                <label for="teacher-bank">Banco *</label>
+                                <input type="text" id="teacher-bank" class="form-control" required
+                                    placeholder="Ej. BBVA">
+                            </div>
+                        </div>
+                        <span class="help-text" style="margin-top: -0.5rem; margin-bottom: 1.5rem;">Para depositarte tus
+                            ganancias semanales.</span>
+
+                        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                            <button type="button" id="cancel-teacher-btn" class="btn"
+                                style="background: var(--slate-200); color: var(--slate-700);">Cancelar</button>
+                            <button type="submit" id="submit-teacher-btn" class="btn btn-primary">Activar mi Perfil de
+                                Maestro</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase & Auth Logic -->
+    <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/components/header.js"></script>
+    <script type="module" src="/js/profile.js"></script>
+</body>
+
+</html>

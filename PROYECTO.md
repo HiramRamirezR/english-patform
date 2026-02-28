@@ -34,6 +34,7 @@ Plataforma de aprendizaje de inglés en línea, interactiva y gamificada con una
   - **Inicio Directo:** Todos aterrizan en el Mapa del Bosque (empiezan en el Módulo 1 que es gratuito).
   - **Fast-Track (Evaluación Inicial Opcional):** Si el alumno siente que el Módulo 1 es básico, puede pagar **$60 MXN** para una evaluación con un Maestro para saltar ramas del bosque.
   - **Estructura de Lecciones:** Actividades de micro-learning organizadas en submódulos (vocabulario, estructuras, lecturas, Drag & Drop, y práctica conversacional guiada por Moon).
+  - **Arquitectura de Lecciones (Modular):** Las actividades están creadas con componentes frontend reutilizables (Ej. *Listen & Click Box*, *Echo Chamber Mic*, *Drag & Drop Engine*) para escalar a 20+ módulos rápidamente con pura configuración de JSON u objetos JavaScript.
   - **Suscripción Premium:** Para explorar todo el mapa, se requiere un pago de **$300 MXN mensuales**.
   - **Aprobación Obligatoria (The Guardian):** Para avanzar formalmente al siguiente Módulo (o claro del bosque), **debe aprobar una evaluación con un maestro humano real**.
 

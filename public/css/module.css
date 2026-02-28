@@ -1,0 +1,265 @@
+/* Learning Module Styles */
+body {
+    background-color: #f8fafc;
+    /* Color claro para foco */
+    font-family: 'Outfit', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.module-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.btn-back {
+    background: transparent;
+    border: none;
+    color: var(--slate-500);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.btn-back:hover {
+    color: var(--primary-deep);
+}
+
+.module-title {
+    font-weight: 700;
+    color: var(--slate-800);
+    font-size: 1.1rem;
+}
+
+.progress-container {
+    width: 25%;
+    height: 10px;
+    background: var(--slate-200);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: var(--primary-medium);
+    transition: width 0.4s ease;
+}
+
+.learning-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Common Activity Views */
+.activity-box {
+    text-align: center;
+    width: 100%;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.activity-prompt {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--slate-800);
+    margin-bottom: 2rem;
+}
+
+/* Listen & Click Components */
+.cards-grid {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.flashcard {
+    background: white;
+    border: 2px solid var(--slate-200);
+    border-radius: 20px;
+    width: 200px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    perspective: 1000px;
+}
+
+.flashcard:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-light);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.flashcard.solved {
+    border-color: var(--success, #22c55e);
+    background: #f0fdf4;
+    cursor: default;
+    transform: none;
+}
+
+.flashcard-content {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-deep);
+}
+
+.flashcard-translation {
+    font-size: 1.2rem;
+    color: var(--slate-500);
+    margin-top: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.flashcard.flipped .flashcard-translation {
+    opacity: 1;
+}
+
+/* Echo Chamber Mic */
+.echo-word {
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--slate-800);
+    margin-bottom: 3rem;
+    letter-spacing: -1px;
+    transition: color 0.3s;
+}
+
+.echo-word.success {
+    color: var(--success, #22c55e);
+}
+
+.mic-btn {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--primary-medium);
+    border: none;
+    color: white;
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+    transition: all 0.2s;
+    margin: 0 auto;
+}
+
+.mic-btn:hover {
+    transform: scale(1.05);
+    background: var(--primary-deep);
+}
+
+.mic-btn.listening {
+    animation: pulse 1.5s infinite;
+    background: #ef4444;
+    /* Rojo para grabar */
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 20px rgba(239, 68, 68, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+.speech-feedback {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    color: var(--slate-500);
+    min-height: 2rem;
+}
+
+/* Next Button global */
+.btn-next-step {
+    margin-top: 3rem;
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
+}
+
+.btn-next-step.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Moon Support (Overlay corner) */
+.moon-support {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.moon-support.hidden {
+    transform: translateY(150px);
+    opacity: 0;
+}
+
+.moon-message-bubble {
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: 20px 20px 0 20px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+    color: var(--primary-deep);
+    border: 2px solid var(--primary-light);
+}
+
+.moon-avatar {
+    font-size: 4rem;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}

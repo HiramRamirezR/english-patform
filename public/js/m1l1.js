@@ -96,11 +96,17 @@ document.addEventListener('DOMContentLoaded', () => {
                             currentMinutes = 0; // reset for a new day
                         }
 
+                        let completedLessons = data.completedLessons || [];
+                        if (!completedLessons.includes('m1l1')) {
+                            completedLessons.push('m1l1');
+                        }
+
                         await updateDoc(userRef, {
                             minutesSpokenToday: currentMinutes + minutes,
-                            lastSpokenDate: today
+                            lastSpokenDate: today,
+                            completedLessons: completedLessons
                         });
-                        console.log(`¡Minutos actualizados!: +${minutes}`);
+                        console.log(`¡Progreso guardado!: +${minutes} mins, m1l1 completada.`);
                     }
                 } catch (error) {
                     console.error("Error actualizando minutos hablados:", error);

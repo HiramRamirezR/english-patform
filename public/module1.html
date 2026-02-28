@@ -35,7 +35,7 @@
         <main class="peak-map" id="map-path"
             style="flex-direction: column; overflow-x: hidden; padding-top: 0; max-width: 600px; margin: 0 auto; gap: 1rem;">
 
-            <div class="module-node unlocked" onclick="window.location.href='m1l1.html'"
+            <div class="module-node unlocked" id="lesson-m1l1" onclick="window.location.href='m1l1.html'"
                 style="width: 100%; height: auto; padding: 1rem;">
                 <span class="module-icon" style="background: var(--primary-light);">🔊</span>
                 <div style="flex: 1;">
@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="module-node locked" style="width: 100%; height: auto; padding: 1rem;">
+            <div class="module-node locked" id="lesson-m1l2" style="width: 100%; height: auto; padding: 1rem;">
                 <span class="module-icon">✋</span>
                 <div style="flex: 1;">
                     <span class="module-label" style="font-size: 1rem;">Lección 1.2: Presentaciones</span>
@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="module-node locked" style="width: 100%; height: auto; padding: 1rem;">
+            <div class="module-node locked" id="lesson-m1l3" style="width: 100%; height: auto; padding: 1rem;">
                 <span class="module-icon">🧩</span>
                 <div style="flex: 1;">
                     <span class="module-label" style="font-size: 1rem;">Lección 1.3: Construcción</span>
@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <div class="module-node locked" style="width: 100%; height: auto; padding: 1rem;">
+            <div class="module-node locked" id="lesson-m1l4" style="width: 100%; height: auto; padding: 1rem;">
                 <span class="module-icon">🗣️</span>
                 <div style="flex: 1;">
                     <span class="module-label" style="font-size: 1rem;">Lección 1.4: Eco Profundo</span>
@@ -71,7 +71,7 @@
                 </div>
             </div>
 
-            <div class="module-node locked"
+            <div class="module-node locked" id="lesson-m1l5"
                 style="width: 100%; height: auto; padding: 1rem; border: 2px dashed var(--slate-300);">
                 <span class="module-icon">🐻</span>
                 <div style="flex: 1;">
@@ -99,6 +99,7 @@
     <!-- Firebase & Custom Logic -->
     <script type="module" src="/js/auth.js"></script>
     <script type="module" src="/js/components/header.js"></script>
+    <script type="module" src="/js/module1Map.js"></script>
 </body>
 
 </html>

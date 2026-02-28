@@ -13,16 +13,23 @@ const renderHeader = (user, userData = null) => {
         let teacherBtn = '';
         if (userData && userData.isTeacher) {
             const isTeacherView = window.location.pathname.includes('teacher.html');
-            const targetUrl = isTeacherView ? 'dashboard.html' : 'teacher.html';
+            const targetUrl = isTeacherView ? 'mapa.html' : 'teacher.html';
             const btnText = isTeacherView ? 'Cambiar a Alumno' : 'Cambiar a Maestro';
 
             teacherBtn = `<a href="${targetUrl}" class="btn btn-accent" style="padding: 0.5rem 1rem; font-size: 0.8rem; margin-right: 0.5rem;">${btnText}</a>`;
         }
 
+        let evaluateBtn = '';
+        const isTeacherView = window.location.pathname.includes('teacher.html');
+        if (!userData || !isTeacherView) {
+            evaluateBtn = `<button class="btn" style="background-color: var(--accent-warm); color: var(--slate-900); padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 600; border: none; box-shadow: 0 4px 6px -1px rgba(251, 146, 60, 0.4);">Evalúate ($60)</button>`;
+        }
+
         navLinks = `
+            ${evaluateBtn}
             ${teacherBtn}
             <a href="index.html" style="color: var(--slate-700); text-decoration: none; font-weight: 500;">Home</a>
-            <a href="dashboard.html" style="color: var(--slate-700); text-decoration: none; font-weight: 500;">Dashboard</a>
+            <a href="mapa.html" style="color: var(--slate-700); text-decoration: none; font-weight: 500;">Mapa</a>
             <a href="profile.html" style="color: var(--slate-700); text-decoration: none; font-weight: 500;">Perfil</a>
             <button class="btn" id="header-logout-btn" style="border: 1px solid var(--slate-300); color: var(--slate-500); padding: 0.5rem 1rem; font-size: 0.9rem; background: transparent; transition: all 0.2s;">Cerrar Sesión</button>
         `;

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moonsforest | Mapa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+
+<body>
+    <!-- Header Modular -->
+    <div id="main-header"></div>
+
+    <!-- Modal de Selección de Avatar (Oculto por defecto) -->
+    <div id="avatar-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2 style="font-size: 1.5rem; color: var(--slate-800); margin-bottom: 0.5rem;">Elige tu Compañero de Viaje
+            </h2>
+            <p style="color: var(--slate-500); font-size: 0.9rem; margin-bottom: 1.5rem;">Como viajero en Moonsforest,
+                un animalito del bosque representará tu espíritu entre los árboles.</p>
+
+            <div class="avatar-grid" id="avatar-grid">
+                <div class="avatar-option" data-avatar="🦊">🦊<br><span
+                        style="font-size: 0.8rem; font-weight:500;">Zorro</span></div>
+                <div class="avatar-option" data-avatar="🦉">🦉<br><span
+                        style="font-size: 0.8rem; font-weight:500;">Búho</span></div>
+                <div class="avatar-option" data-avatar="🐻">🐻<br><span
+                        style="font-size: 0.8rem; font-weight:500;">Oso</span></div>
+                <div class="avatar-option" data-avatar="🦌">🦌<br><span
+                        style="font-size: 0.8rem; font-weight:500;">Ciervo</span></div>
+                <div class="avatar-option" data-avatar="🦝">🦝<br><span
+                        style="font-size: 0.8rem; font-weight:500;">Mapache</span></div>
+                <div class="avatar-option" data-avatar="🐺">🐺<br><span
+                        style="font-size: 0.8rem; font-weight:500;">Lobo</span></div>
+            </div>
+
+            <button id="save-avatar-btn" class="btn btn-primary" style="margin-top: 1.5rem; width: 100%;"
+                disabled>Comenzar Aventura</button>
+        </div>
+    </div>
+
+    <!-- Contenido del Dashboard -->
+    <div class="dashboard-container" style="display: none;" id="dashboard-content">
+        <!-- Dashboard Header -->
+        <header class="stats-header">
+            <div class="user-profile">
+                <div class="user-avatar" id="display-avatar">🦊</div>
+                <div>
+                    <h3 id="user-name" style="font-size: 1rem;">Cargando...</h3>
+                    <p style="font-size: 0.7rem; color: var(--slate-500);">Viajero Nivel 1</p>
+                </div>
+            </div>
+            <div class="points-badge">
+                🏔️ <span id="user-points">0</span> pts
+            </div>
+        </header>
+
+        <!-- Widget: Minutos Hablados -->
+        <section class="dashboard-stats-widget"
+            style="max-width: 1200px; margin: 2rem auto 0; padding: 0 2rem; display: flex; justify-content: center;">
+            <div
+                style="background: white; border-radius: 20px; padding: 2rem; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 2rem; width: 100%; max-width: 650px; justify-content: space-between; border-left: 5px solid var(--accent-cool);">
+                <div style="flex: 1;">
+                    <h4
+                        style="color: var(--slate-800); margin-bottom: 0.5rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        🎙️ Minutos hablados hoy</h4>
+                    <p style="font-size: 0.9rem; color: var(--slate-500); line-height: 1.4;">A Moonsforest se viene a
+                        hablar. Acumula tiempo frente al micrófono para mejorar tu fluidez.</p>
+                </div>
+                <div style="text-align: center; background: #eff6ff; padding: 1rem 1.5rem; border-radius: 16px;">
+                    <div style="font-size: 3rem; font-weight: 700; color: var(--primary-deep); line-height: 1;"
+                        id="minutes-spoken-today">0</div>
+                    <span
+                        style="font-size: 0.85rem; color: var(--primary-medium); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">minutos</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Peak Map Area -->
+        <div style="position: relative; max-width: 1200px; margin: 0 auto;">
+            <!-- Indicador de Scroll -->
+            <div id="scroll-indicator"
+                style="position: absolute; right: 2rem; top: 50%; transform: translateY(-50%); z-index: 10; font-size: 2.5rem; color: var(--primary-deep); animation: bounceX 2s infinite; pointer-events: none; text-shadow: 0 4px 6px rgba(255,255,255,0.8);">
+                ➡️
+            </div>
+
+            <!-- The Peak Map -->
+            <main class="peak-map" id="map-path">
+                <!-- Módulo 1 Abierto -->
+                <div class="module-node unlocked" onclick="window.location.href='module1.html'"
+                    style="margin-left: 1rem;">
+                    <span class="module-icon">🏕️</span>
+                    <span class="module-label">Módulo 1: Campamento Base</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🌉</span>
+                    <span class="module-label">Módulo 2: El Puente Colgante</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🌊</span>
+                    <span class="module-label">Módulo 3: El Río Susurrante</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🦇</span>
+                    <span class="module-label">Módulo 4: Las Cuevas de Eco</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🪨</span>
+                    <span class="module-label">Módulo 5: Las Rocas Parlantes</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🌲</span>
+                    <span class="module-label">Módulo 6: El Bosque Denso</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🦊</span>
+                    <span class="module-label">Módulo 7: La Madriguera del Zorro</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🦉</span>
+                    <span class="module-label">Módulo 8: El Nido del Búho</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🌧️</span>
+                    <span class="module-label">Módulo 9: Tormenta de Verano</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🌈</span>
+                    <span class="module-label">Módulo 10: El Claro del Arcoíris</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🐝</span>
+                    <span class="module-label">Módulo 11: El Valle de las Abejas</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🍄</span>
+                    <span class="module-label">Módulo 12: El Círculo de Hongos</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🦋</span>
+                    <span class="module-label">Módulo 13: El Jardín Secreto</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🐍</span>
+                    <span class="module-label">Módulo 14: El Camino de la Serpiente</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🐸</span>
+                    <span class="module-label">Módulo 15: El Estanque del Sapo</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🕸️</span>
+                    <span class="module-label">Módulo 16: La Telaraña de Plata</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🐾</span>
+                    <span class="module-label">Módulo 17: Huellas en el Barro</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🪵</span>
+                    <span class="module-label">Módulo 18: El Tronco Hueco</span>
+                </div>
+
+                <div class="module-node locked">
+                    <span class="module-icon">🔥</span>
+                    <span class="module-label">Módulo 19: La Antigua Fogata</span>
+                </div>
+
+                <div class="module-node locked" style="margin-right: 2rem;">
+                    <span class="module-icon">🌳</span>
+                    <span class="module-label">Módulo 20: El Árbol Gigante</span>
+                </div>
+            </main>
+        </div>
+
+        <!-- Moon Companion Area -->
+        <div class="moon-companion" id="moon-trigger">
+            <div class="moon-bubble" id="moon-text">
+                ¡Hola viajero! Soy Moon. Entra al Campamento Base (Módulo 1) para prepararte.
+            </div>
+            <!-- Moon representation -->
+            <div style="font-size: 4rem; text-align: center; filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));">🐻‍❄️
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase & Custom Logic -->
+    <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/components/header.js"></script>
+    <script type="module" src="/js/dashboard.js"></script>
+</body>
+
+</html>

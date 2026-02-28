@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (!userData.isTeacher) {
                     alert("Acceso denegado. No tienes permisos de maestro.");
-                    window.location.href = 'dashboard.html';
+                    window.location.href = 'mapa.html';
                     return;
                 }
 
@@ -336,11 +336,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 await loadSlots();
 
             } else {
-                window.location.href = 'dashboard.html';
+                window.location.href = 'mapa.html';
             }
         } catch (error) {
             console.error("Error comprobando portal de maestros:", error);
-            window.location.href = 'dashboard.html';
+            window.location.href = 'mapa.html';
         }
     });
 });

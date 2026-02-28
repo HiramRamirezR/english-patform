@@ -30,8 +30,8 @@ const initApp = () => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (auth.currentUser) {
-                    // Si ya está logueado, lo mandamos al dashboard directamente
-                    window.location.href = 'dashboard.html';
+                    // Si ya está logueado, lo mandamos al mapa directamente
+                    window.location.href = 'mapa.html';
                 } else {
                     // Si no, forzamos login
                     handleLogin();
@@ -54,8 +54,8 @@ const initApp = () => {
             }
         } else {
             console.log("No hay sesión activa.");
-            // Si estamos en el dashboard y no hay sesión, volver a la landing
-            if (window.location.pathname.endsWith('dashboard.html')) {
+            // Si estamos en el mapa y no hay sesión, volver a la landing
+            if (window.location.pathname.endsWith('mapa.html')) {
                 window.location.href = 'index.html';
             }
         }
@@ -92,8 +92,8 @@ export const handleLogin = async () => {
             });
         }
 
-        // Redirigir al dashboard
-        window.location.href = 'dashboard.html';
+        // Redirigir al mapa
+        window.location.href = 'mapa.html';
     } catch (error) {
         // Ignorar errores de cancelación para no asustar al usuario
         if (error.code !== 'auth/cancelled-popup-request' && error.code !== 'auth/popup-closed-by-user') {

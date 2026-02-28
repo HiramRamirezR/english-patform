@@ -4,10 +4,12 @@
  */
 
 export class MoonsforestEngine {
-    constructor(containerId, data) {
+    constructor(containerId, data, options = {}) {
         this.container = document.getElementById(containerId);
         this.data = data;
+        this.options = options;
         this.currentStep = 0;
+        this.startTime = Date.now();
 
         // UI Elements
         this.progressBar = document.getElementById('progress-bar');
@@ -215,13 +217,20 @@ export class MoonsforestEngine {
     renderCompletion() {
         this.progressBar.style.width = '100%';
         this.container.innerHTML = ''; // Limpiar el contenedor anterior
+
+        // Calcular minutos y lanzar evento
+        const endTime = Date.now();
+        const minutesSpent = Math.max(1, Math.round((endTime - this.startTime) / 60000));
+        document.dispatchEvent(new CustomEvent('lessonCompleted', { detail: { minutes: minutesSpent } }));
+
+        const targetUrl = this.options.returnUrl || 'mapa.html';
         const box = document.createElement('div');
         box.className = 'activity-box';
         box.innerHTML = `
             <div style="font-size: 5rem; margin-bottom: 1rem;">🏞️</div>
             <h2 style="font-size: 2.5rem; color: var(--primary-deep); margin-bottom: 2rem;">¡Lección Completada!</h2>
             <p style="font-size: 1.2rem; margin-bottom: 3rem; color: var(--slate-600);">Tu desempeño oral ha mejorado bastante.</p>
-            <button class="btn btn-primary" style="padding: 1rem 3rem;" onclick="window.location.href='dashboard.html'">Volver al Bosque</button>
+            <button class="btn btn-primary" style="padding: 1rem 3rem;" onclick="window.location.href='${targetUrl}'">Volver al Bosque</button>
         `;
         this.container.appendChild(box);
         this.showMoon("¡Terminaste tu primer entrenamiento! Eres valiente.");

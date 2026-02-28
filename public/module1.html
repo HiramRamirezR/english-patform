@@ -4,38 +4,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo 1 | Moonsforest</title>
+    <title>Módulo 1: Campamento Base | Moonsforest</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/module.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 
 <body>
-    <!-- Navigation Bar for Modules -->
-    <header class="module-header">
-        <button class="btn-back" onclick="window.location.href='dashboard.html'">← Volver al Mapa</button>
-        <div class="module-title">Módulo 1: Campamento Base</div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
+    <!-- Header Modular -->
+    <div id="main-header"></div>
+
+    <!-- Eliminada la modal de avatar en la vista de módulo porque es solo para el login inicial del mapa -->
+
+    <!-- Contenido del Dashboard -->
+    <div class="dashboard-container" id="dashboard-content">
+        <!-- Dashboard Header -->
+        <header class="stats-header" style="justify-content: flex-start; gap: 1rem;">
+            <button class="btn" onclick="window.location.href='mapa.html'"
+                style="padding: 0.5rem 1rem; border: 1px solid var(--slate-300);">← Volver al Bosque</button>
+            <h2 style="font-size: 1.5rem; color: var(--slate-800);">🏕️ Campamento Base</h2>
+        </header>
+
+        <p style="text-align: center; color: var(--slate-600); margin-bottom: 2rem;">Completa cada desafío para avanzar
+            al siguiente claro.</p>
+
+        <!-- The Peak Map -->
+        <!-- Micro-Map (Vertical) -->
+        <main class="peak-map" id="map-path"
+            style="flex-direction: column; overflow-x: hidden; padding-top: 0; max-width: 600px; margin: 0 auto; gap: 1rem;">
+
+            <div class="module-node unlocked" onclick="window.location.href='m1l1.html'"
+                style="width: 100%; height: auto; padding: 1rem;">
+                <span class="module-icon" style="background: var(--primary-light);">🔊</span>
+                <div style="flex: 1;">
+                    <span class="module-label" style="font-size: 1rem;">Lección 1.1: Los Primeros Sonidos</span>
+                    <p style="font-size: 0.8rem; color: var(--slate-500); margin-top: 0.2rem;">Vocabulario básico y
+                        saludos.</p>
+                </div>
+            </div>
+
+            <div class="module-node locked" style="width: 100%; height: auto; padding: 1rem;">
+                <span class="module-icon">✋</span>
+                <div style="flex: 1;">
+                    <span class="module-label" style="font-size: 1rem;">Lección 1.2: Presentaciones</span>
+                    <p style="font-size: 0.8rem; color: var(--slate-500); margin-top: 0.2rem;">Di quién eres.</p>
+                </div>
+            </div>
+
+            <div class="module-node locked" style="width: 100%; height: auto; padding: 1rem;">
+                <span class="module-icon">🧩</span>
+                <div style="flex: 1;">
+                    <span class="module-label" style="font-size: 1rem;">Lección 1.3: Construcción</span>
+                    <p style="font-size: 0.8rem; color: var(--slate-500); margin-top: 0.2rem;">Estructura tus oraciones.
+                    </p>
+                </div>
+            </div>
+
+            <div class="module-node locked" style="width: 100%; height: auto; padding: 1rem;">
+                <span class="module-icon">🗣️</span>
+                <div style="flex: 1;">
+                    <span class="module-label" style="font-size: 1rem;">Lección 1.4: Eco Profundo</span>
+                    <p style="font-size: 0.8rem; color: var(--slate-500); margin-top: 0.2rem;">Frases largas y
+                        complejas.</p>
+                </div>
+            </div>
+
+            <div class="module-node locked"
+                style="width: 100%; height: auto; padding: 1rem; border: 2px dashed var(--slate-300);">
+                <span class="module-icon">🐻</span>
+                <div style="flex: 1;">
+                    <span class="module-label" style="font-size: 1rem; color: var(--primary-deep);">Lección 1.5: La
+                        Fogata (Final)</span>
+                    <p style="font-size: 0.8rem; color: var(--slate-500); margin-top: 0.2rem;">Pruébate platicando con
+                        Moon.</p>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Moon Companion Area -->
+        <div class="moon-companion" id="moon-trigger">
+            <div class="moon-bubble" id="moon-text">
+                ¡Hola viajero! Soy Moon. ¡Bienvenido al Campamento Base! Aquí aprenderás los fundamentos para
+                comunicarte con los habitantes del bosque.
+            </div>
+            <!-- Moon representation -->
+            <div style="font-size: 4rem; text-align: center; filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));">🐻‍❄️
+            </div>
         </div>
-    </header>
-
-    <!-- Main Learning Engine Container -->
-    <main class="learning-container" id="learning-container">
-        <!-- Content injected dynamically by JS -->
-    </main>
-
-    <!-- Moon Feedback Overlay -->
-    <div id="moon-support" class="moon-support hidden">
-        <div class="moon-message-bubble" id="moon-message">Great job!</div>
-        <div class="moon-avatar">🐻‍❄️</div>
     </div>
 
-    <!-- Script for Speech Synthesis & Recognition, plus Activity Engine -->
-    <script type="module" src="/js/moduleEngine.js"></script>
-    <script type="module" src="/js/module1.js"></script>
+    <!-- Firebase & Custom Logic -->
+    <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/components/header.js"></script>
 </body>
 
 </html>

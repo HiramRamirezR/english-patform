@@ -72,6 +72,20 @@ const setupDashboardUI = () => {
     const firstName = currentProfile.name.split(' ')[0];
     userNameDisplay.textContent = `¡Hola, ${firstName}!`;
 
+    // Minutos hablados (reset diario)
+    const today = new Date().toISOString().split('T')[0];
+    let minutesToday = currentProfile.minutesSpokenToday || 0;
+
+    // Si la última fecha de estudio no es hoy, el contador hoy es 0
+    if (currentProfile.lastSpokenDate !== today) {
+        minutesToday = 0;
+    }
+
+    const minutesSpokenDisplay = document.getElementById('minutes-spoken-today');
+    if (minutesSpokenDisplay) {
+        minutesSpokenDisplay.textContent = minutesToday;
+    }
+
     // Frase inicial
     moonText.innerHTML = `¡Hola viajero! Qué bueno verte, <strong>${currentProfile.avatar}</strong>. Entra al Campamento Base (Módulo 1) para prepararnos.`;
 };

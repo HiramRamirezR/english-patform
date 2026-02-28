@@ -31,12 +31,12 @@ Plataforma de aprendizaje de inglés en línea, interactiva y gamificada con una
   - **Interacción:** Web Speech API para TTS y STT en navegador gratuito.
   - **Respuestas:** Gemini 1.5 Flash usando prompts contextuales en Firestore.
 - **Flujo de Aprendizaje y Módulos:**
-  - **Inicio Directo:** Todos aterrizan en el Mapa del Bosque (empiezan en el Módulo 1 que es gratuito).
-  - **Fast-Track (Evaluación Inicial Opcional):** Si el alumno siente que el Módulo 1 es básico, puede pagar **$60 MXN** para una evaluación con un Maestro para saltar ramas del bosque.
+  - **Macro-Mapa (El Bosque):** Un diseño con scroll horizontal (tipo carrusel fluido) mostrando 20 módulos. El Módulo 1 está abierto por defecto, revelando el inicio de la inmensidad del bosque.
+  - **Micro-Mapa (Las Lecciones):** Al entrar a un módulo, se muestran las lecciones en un camino interno. **Desbloqueo estricto y lineal:** Las lecciones deben ser superadas cronológicamente (aprobando con el motor STT) para desbloquear el acceso a la siguiente.
+  - **Fast-Track / Aprobación con el Guardián:** El botón de "Evalúate ($60)" vivirá siempre fijo a la vista en el **Header**. Un alumno puede pulsarlo en cualquier momento para pedir la evaluación humana.
   - **Estructura de Lecciones:** Actividades de micro-learning organizadas en submódulos (vocabulario, estructuras, lecturas, Drag & Drop, y práctica conversacional guiada por Moon).
   - **Arquitectura de Lecciones (Modular):** Las actividades están creadas con componentes frontend reutilizables (Ej. *Listen & Click Box*, *Echo Chamber Mic*, *Drag & Drop Engine*) para escalar a 20+ módulos rápidamente con pura configuración de JSON u objetos JavaScript.
   - **Suscripción Premium:** Para explorar todo el mapa, se requiere un pago de **$300 MXN mensuales**.
-  - **Aprobación Obligatoria (The Guardian):** Para avanzar formalmente al siguiente Módulo (o claro del bosque), **debe aprobar una evaluación con un maestro humano real**.
 
 ### 4. Portal del Maestro (MVP Completado 🚀)
 - [x] **Perfil Profesional Público:** Biografía y Video de presentación opcional (YouTube).

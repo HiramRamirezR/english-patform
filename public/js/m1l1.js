@@ -1,6 +1,7 @@
 import { MoonsforestEngine } from './moduleEngine.js';
 import { auth, db } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // Diccionario base para la Lección 1.1: Los Primeros Sonidos
 const vocabulary = [
@@ -79,7 +80,37 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Inicializar Motor
-        new MoonsforestEngine('learning-container', lessonData);
+        // Event listener para cuando la lección se complete
+        document.addEventListener('lessonCompleted', async (e) => {
+            const minutes = e.detail.minutes;
+            if (minutes > 0) {
+                try {
+                    const userRef = doc(db, 'users', user.uid);
+                    const userSnap = await getDoc(userRef);
+                    if (userSnap.exists()) {
+                        const data = userSnap.data();
+                        const today = new Date().toISOString().split('T')[0];
+
+                        let currentMinutes = data.minutesSpokenToday || 0;
+                        if (data.lastSpokenDate !== today) {
+                            currentMinutes = 0; // reset for a new day
+                        }
+
+                        await updateDoc(userRef, {
+                            minutesSpokenToday: currentMinutes + minutes,
+                            lastSpokenDate: today
+                        });
+                        console.log(`¡Minutos actualizados!: +${minutes}`);
+                    }
+                } catch (error) {
+                    console.error("Error actualizando minutos hablados:", error);
+                }
+            }
+        });
+
+        // Inicializar Motor apuntando de regreso al mapa del módulo
+        new MoonsforestEngine('learning-container', lessonData, {
+            returnUrl: 'module1.html'
+        });
     });
 });

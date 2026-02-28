@@ -29,7 +29,13 @@ const initApp = () => {
         if (btn) {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                handleLogin();
+                if (auth.currentUser) {
+                    // Si ya está logueado, lo mandamos al dashboard directamente
+                    window.location.href = 'dashboard.html';
+                } else {
+                    // Si no, forzamos login
+                    handleLogin();
+                }
             });
         }
     };

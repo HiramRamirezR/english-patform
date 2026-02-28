@@ -12,7 +12,11 @@ const renderHeader = (user, userData = null) => {
         // Usuario Autenticado
         let teacherBtn = '';
         if (userData && userData.isTeacher) {
-            teacherBtn = `<a href="teacher.html" class="btn btn-accent" style="padding: 0.5rem 1rem; font-size: 0.8rem; margin-right: 0.5rem;">Cambiar a Maestro</a>`;
+            const isTeacherView = window.location.pathname.includes('teacher.html');
+            const targetUrl = isTeacherView ? 'dashboard.html' : 'teacher.html';
+            const btnText = isTeacherView ? 'Cambiar a Alumno' : 'Cambiar a Maestro';
+
+            teacherBtn = `<a href="${targetUrl}" class="btn btn-accent" style="padding: 0.5rem 1rem; font-size: 0.8rem; margin-right: 0.5rem;">${btnText}</a>`;
         }
 
         navLinks = `
@@ -34,7 +38,7 @@ const renderHeader = (user, userData = null) => {
         <header style="background: var(--white); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; width: 100%;">
             <nav class="container" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; max-width: 1200px; margin: 0 auto;">
                 <div class="logo">
-                    <a href="index.html" style="text-decoration: none; color: var(--primary-deep); font-weight: 700; font-size: 1.25rem;">🏔️ English Peak</a>
+                    <a href="index.html" style="text-decoration: none; color: var(--primary-deep); font-weight: 700; font-size: 1.25rem;">🌲 Moonsforest</a>
                 </div>
                 <div class="nav-links" style="display: flex; gap: 1.5rem; align-items: center;">
                     ${navLinks}

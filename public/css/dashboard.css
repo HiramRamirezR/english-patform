@@ -5,7 +5,8 @@
     min-height: 100vh;
     padding: 2rem 1rem;
     position: relative;
-    overflow-x: hidden;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 /* User Progress Header */
@@ -179,4 +180,24 @@
 
 .module-node:nth-child(odd):hover {
     transform: translateX(-50px) scale(1.1);
+}
+
+/* Logout Button */
+#logout-btn {
+    background: white;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid var(--slate-200) !important;
+    display: inline-block;
+    position: relative;
+    z-index: 100;
+}
+
+#logout-btn:hover {
+    background: #fff1f2;
+    color: #e11d48 !important;
+    border-color: #fecdd3 !important;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }

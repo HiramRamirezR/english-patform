@@ -1,7 +1,8 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
 /**
  * Configuración de Firebase
- * Nota: Estas llaves son públicas por diseño de Firebase Web SDK.
- * La seguridad se aplica vía Firestore Rules.
  */
 const firebaseConfig = {
     apiKey: "AIzaSyCUEOZ3OAa69N-ONy6LYxpgexOmvZYlLTU",
@@ -12,21 +13,82 @@ const firebaseConfig = {
     appId: "1:764678309974:web:9c90e5bedddfd72f3753f7"
 };
 
-const initApp = () => {
-    console.log("🌲 English Forest: Sistema de Auth listo.");
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-    const loginBtn = document.getElementById('google-login');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', () => {
-            handleLogin();
-        });
+const initApp = () => {
+    console.log("English Peak: Sistema de Auth inicializado.");
+
+    // Botones de login
+    const setupLogin = (id) => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleLogin();
+            });
+        }
+    };
+
+    ['google-login', 'hero-cta-free', 'hero-cta-explore'].forEach(setupLogin);
+
+    // Escuchar cambios en el estado de autenticación
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log("Usuario autenticado:", user.displayName);
+
+            // Actualizar nombre en el dashboard si existe el elemento
+            const userNameEl = document.getElementById('user-name');
+            if (userNameEl) {
+                userNameEl.textContent = `¡Hola, ${user.displayName.split(' ')[0]}!`;
+            }
+        } else {
+            console.log("No hay sesión activa.");
+            // Si estamos en el dashboard y no hay sesión, volver a la landing
+            if (window.location.pathname.endsWith('dashboard.html')) {
+                window.location.href = 'index.html';
+            }
+        }
+    });
+}
+
+// Bandera para evitar múltiples clics concurrentes
+let isLoggingIn = false;
+
+const handleLogin = async () => {
+    if (isLoggingIn) return;
+    isLoggingIn = true;
+
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        console.log("Login exitoso:", user.displayName);
+
+        // Redirigir al dashboard
+        window.location.href = 'dashboard.html';
+    } catch (error) {
+        // Ignorar errores de cancelación para no asustar al usuario
+        if (error.code !== 'auth/cancelled-popup-request' && error.code !== 'auth/popup-closed-by-user') {
+            console.error("Error en login:", error.code, error.message);
+            alert("Error al iniciar sesión: " + error.message);
+        }
+    } finally {
+        isLoggingIn = false;
     }
 }
 
-const handleLogin = () => {
-    // Aquí implementaremos el popup de Google Auth después
-    console.log('Iniciando sesión con:', firebaseConfig.projectId);
-    window.location.href = 'dashboard.html';
+// Función para cerrar sesión
+export const logout = () => {
+    signOut(auth).then(() => {
+        window.location.href = 'index.html';
+    });
 }
 
-document.addEventListener('DOMContentLoaded', initApp);
+// Ejecutar inicialización
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}

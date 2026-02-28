@@ -31,9 +31,9 @@
                     desafíos y
                     practica con Moon, tu guía personal de IA.</p>
                 <div class="hero-actions">
-                    <a href="#" class="btn btn-accent"
+                    <a href="#" class="btn btn-accent" id="hero-cta-free"
                         style="background-color: var(--accent-cool); color: var(--night-blue);">¡Módulo 1 GRATIS!</a>
-                    <a href="#" class="btn"
+                    <a href="#" class="btn" id="hero-cta-explore"
                         style="border: 2px solid var(--primary-deep); color: var(--primary-deep);">Explorar
                         plataforma</a>
                 </div>
@@ -129,7 +129,8 @@
         </div>
     </footer>
 
-    <script src="/js/auth.js"></script>
+    <!-- Firebase & Auth Logic -->
+    <script type="module" src="/js/auth.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>

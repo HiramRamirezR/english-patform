@@ -63,7 +63,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 2rem 2rem 8rem 2rem;
+    /* Mucho padding inferior para evadir a Moon */
     max-width: 800px;
     margin: 0 auto;
     width: 100%;
@@ -335,4 +336,41 @@ body {
 .moon-avatar {
     font-size: 4rem;
     filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 600px) {
+    .module-header {
+        padding: 0.8rem 1rem;
+    }
+
+    .learning-container {
+        padding: 2rem 1rem 8rem 1rem;
+    }
+
+    .activity-prompt {
+        font-size: 1.5rem;
+    }
+
+    .flashcard {
+        width: 140px;
+        height: 180px;
+        border-radius: 15px;
+    }
+
+    .flashcard-content {
+        font-size: 1.8rem;
+    }
+
+    .flashcard-translation {
+        font-size: 1rem;
+    }
+
+    .cards-grid {
+        gap: 1rem;
+    }
+
+    .echo-word {
+        font-size: 2.5rem;
+    }
 }

@@ -1,6 +1,7 @@
 import { auth, db } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc, collection, addDoc, query, where, getDocs, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { sendDiscordNotification } from './discord.js';
 
 // Elementos del DOM para la agenda
 const toggleFormBtn = document.getElementById('toggle-slot-form-btn');
@@ -173,8 +174,16 @@ predefinedSlotsForm.addEventListener('submit', async (e) => {
         // Feedback
         if (skippedCount > 0) {
             alert(`✅ Se crearon ${savedCount} horarios.\n⚠️ Se omitieron ${skippedCount} horarios porque chocaban con disponibilidad existente.`);
-        } else {
+        } else if (savedCount > 0) {
             console.log(`Todos los slots (${savedCount}) guardados exitosamente.`);
+        }
+
+        if (savedCount > 0) {
+            sendDiscordNotification(
+                "📆 Nuevos Horarios de Evaluación",
+                `**${currentTeacherProfile.name || currentUser.displayName}** acaba de abrir **${savedCount}** bloques nuevos para el día ${slotDate}.`,
+                3447003 // Azul
+            );
         }
 
         // Limpieza y recarga

@@ -35,6 +35,21 @@ function generateLesson(phraseList) {
             successMsg: '¡Oración perfecta!'
         });
     });
+    // Mezcla de Dictados con Drag and Drop para probar la lectura y la retención
+    generatedSteps.push({
+        type: 'drag_and_drop',
+        prompt: `¡Hora de ordenar! Forma: "Mi nombre es Moon"`,
+        target: 'My name is Moon',
+        options: ['name', 'Moon', 'My', 'is']
+    });
+
+    generatedSteps.push({
+        type: 'drag_and_drop',
+        prompt: `Arma la frase: "Tú hablas inglés"`,
+        target: 'You speak English',
+        // Shuffle manual para options
+        options: ['English', 'You', 'speak']
+    });
 
     return generatedSteps;
 }

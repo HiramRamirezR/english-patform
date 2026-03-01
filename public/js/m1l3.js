@@ -43,21 +43,20 @@ function generateLesson(vocabList) {
         });
     });
 
-    // Fase 3: Práctica de Oraciones
+    // Fase 3: Práctica de Oraciones (Drag & Drop)
     generatedSteps.push({
-        type: 'echo_chamber',
-        prompt: `¡Reto Final! Unamos palabras de las lecciones anteriores.`,
-        word: 'I speak English',
-        displayWord: 'Yo hablo inglés.',
-        successMsg: '¡Eso es! Ya hablas de verdad.'
+        type: 'drag_and_drop',
+        prompt: `¡Reto Final! Ordena las palabras para formar la frase en inglés: "Yo hablo inglés."`,
+        target: 'I speak English',
+        // Podemos añadir palabras que lo confundan o simplemente dejar que el motor las construya barajando target
+        options: ['English', 'speak', 'I', 'listen']
     });
 
     generatedSteps.push({
-        type: 'echo_chamber',
-        prompt: `Otra más.`,
-        word: 'Listen to me',
-        displayWord: 'Escúchame a mí.',
-        successMsg: '¡Lo haces ver fácil!'
+        type: 'drag_and_drop',
+        prompt: `Otra más: "Escúchame a mí."`,
+        target: 'Listen to me',
+        options: ['to', 'me', 'Listen', 'speak']
     });
 
     return generatedSteps;

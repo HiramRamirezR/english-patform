@@ -64,6 +64,8 @@ export class MoonsforestEngine {
             this.renderListenClick(stepData);
         } else if (stepData.type === 'echo_chamber') {
             this.renderEchoChamber(stepData);
+        } else if (stepData.type === 'drag_and_drop') {
+            this.renderDragAndDrop(stepData);
         } else {
             this.container.innerHTML = `<p>Actividad no soportada: ${stepData.type}</p>`;
         }
@@ -236,6 +238,144 @@ export class MoonsforestEngine {
             };
         });
     }
+
+    renderDragAndDrop(data) {
+        const box = document.createElement('div');
+        box.className = 'activity-box';
+
+        const prompt = document.createElement('div');
+        prompt.className = 'activity-prompt';
+        prompt.innerText = data.prompt || 'Ordena las palabras para formar la frase correcta.';
+        box.appendChild(prompt);
+
+        // Container for dropzones
+        const dropZoneContainer = document.createElement('div');
+        dropZoneContainer.className = 'drop-zone-container';
+
+        // Target phrase logic
+        const targetWords = data.target.split(' ');
+
+        const dropZones = [];
+        targetWords.forEach((word, index) => {
+            const dz = document.createElement('div');
+            dz.className = 'drop-zone';
+            dz.dataset.index = index;
+            dropZones.push(dz);
+            dropZoneContainer.appendChild(dz);
+        });
+        box.appendChild(dropZoneContainer);
+
+        // Container for draggable words
+        const wordsContainer = document.createElement('div');
+        wordsContainer.className = 'draggable-words';
+
+        // words
+        // We use data.options if provided (useful for adding distractors), or just shuffle the target words
+        const allWords = data.options || targetWords.slice().sort(() => Math.random() - 0.5);
+
+        let draggedElement = null;
+
+        allWords.forEach(word => {
+            const wordEl = document.createElement('div');
+            wordEl.className = 'draggable-word';
+            wordEl.draggable = true;
+            wordEl.innerText = word;
+
+            // Touch / Drag events
+            wordEl.addEventListener('dragstart', (e) => {
+                draggedElement = wordEl;
+                setTimeout(() => wordEl.classList.add('dragging'), 0);
+            });
+
+            wordEl.addEventListener('dragend', () => {
+                wordEl.classList.remove('dragging');
+                draggedElement = null;
+                checkCompletion();
+            });
+
+            // Tap/Click support for mobile/tablets
+            wordEl.addEventListener('click', () => {
+                // If it's already in a dropzone, we let the dropzone click handler manage taking it out
+                if (wordEl.parentElement.classList.contains('drop-zone')) {
+                    return;
+                }
+
+                // Find first empty dropzone
+                const emptyZone = dropZones.find(dz => !dz.hasChildNodes());
+                if (emptyZone) {
+                    emptyZone.appendChild(wordEl);
+                    checkCompletion();
+                }
+            });
+
+            wordsContainer.appendChild(wordEl);
+        });
+        box.appendChild(wordsContainer);
+
+        // dropZone listeners
+        dropZones.forEach(dz => {
+            dz.addEventListener('dragover', e => {
+                e.preventDefault();
+                dz.classList.add('drag-over');
+            });
+
+            dz.addEventListener('dragleave', () => {
+                dz.classList.remove('drag-over');
+            });
+
+            dz.addEventListener('drop', e => {
+                e.preventDefault();
+                dz.classList.remove('drag-over');
+                if (draggedElement && !dz.hasChildNodes()) {
+                    dz.appendChild(draggedElement);
+                }
+            });
+
+            // Allow returning to wordsContainer with a simple click
+            dz.addEventListener('click', () => {
+                if (dz.firstChild) {
+                    wordsContainer.appendChild(dz.firstChild);
+                    checkCompletion();
+                }
+            });
+        });
+
+        // Allow dropping back to the main container
+        wordsContainer.addEventListener('dragover', e => e.preventDefault());
+        wordsContainer.addEventListener('drop', e => {
+            if (draggedElement) wordsContainer.appendChild(draggedElement);
+        });
+
+        const checkCompletion = () => {
+            let currentSentence = [];
+            let allFilled = true;
+            dropZones.forEach(dz => {
+                if (dz.firstChild) {
+                    currentSentence.push(dz.firstChild.innerText);
+                } else {
+                    allFilled = false;
+                }
+            });
+
+            if (allFilled) {
+                if (currentSentence.join(' ') === data.target) {
+                    this.playSound('success');
+                    this.showMoon("¡Exacto! Así se construye la frase.");
+
+                    // Style them inside the box to show success
+                    dropZones.forEach(dz => dz.firstChild.classList.add('success'));
+
+                    this.showNextButton(box);
+                } else {
+                    this.playSound('error');
+                    this.showMoon("Hmm... esa no es la estructura correcta. Cámbialas de lugar.");
+                }
+            }
+        };
+
+        this.container.appendChild(box);
+    }
+
 
     // --- SOUND EFFECTS ENGINE (Web Audio API) ---
     playSound(type) {

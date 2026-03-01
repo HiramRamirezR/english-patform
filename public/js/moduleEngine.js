@@ -172,13 +172,21 @@ export class MoonsforestEngine {
                 return;
             }
 
+            // Si ya está escuchando, no hacemos nada para no trabar la API
+            if (micBtn.classList.contains('listening')) {
+                return;
+            }
+
             micBtn.classList.add('listening');
             feedback.innerText = 'Listening... Habla ahora.';
 
-            // To prevent weird overlaps, play the word first? Optional.
-            // this.speak(data.word);
-
-            this.recognition.start();
+            try {
+                this.recognition.start();
+            } catch (err) {
+                console.error("No se pudo iniciar el reconocimiento:", err);
+                micBtn.classList.remove('listening');
+                return;
+            }
 
             this.recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript.toLowerCase().trim();
@@ -188,28 +196,39 @@ export class MoonsforestEngine {
                 feedback.innerHTML = `Escuché: "<strong>${transcript}</strong>"`;
 
                 // TOLERANCIA ESTRICTA:
-                // Para lecciones infantiles exigimos que lo que dijo empiece o sea exactamente la palabra/frase.
-                // Ya no validamos si "contain" porque "bye" pasaba si decía "goodbye".
                 const isExactMatch = cleanTranscript === target;
                 const startsWithMatch = cleanTranscript.startsWith(target) && (cleanTranscript.length <= target.length + 5);
 
                 if (isExactMatch || startsWithMatch) {
-                    micBtn.classList.remove('listening');
                     echoWord.classList.add('success');
                     echoWord.innerText = data.word; // Revelar inglés si estaba oculto en español
                     micBtn.style.display = 'none'; // ocultar micro
                     this.showMoon(data.successMsg || "¡Ese es el sonido perfecto!");
                     this.showNextButton(box);
                 } else {
-                    micBtn.classList.remove('listening');
                     this.showMoon("¡Casi! Intenta pronunciarlo un par de veces más.");
                 }
             };
 
-            this.recognition.onerror = (event) => {
-                micBtn.classList.remove('listening');
+            this.recognition.onnomatch = () => {
                 feedback.innerText = 'No pude escucharte bien. Intenta otra vez.';
-                this.showMoon("Asegúrate de darle permiso a tu micrófono.");
+                this.showMoon("Habla un poquito más fuerte.");
+            };
+
+            this.recognition.onerror = (event) => {
+                console.error("Recognition Error:", event.error);
+                if (event.error === 'no-speech') {
+                    feedback.innerText = 'No detecté voz. ¿Podrías repetirlo?';
+                    this.showMoon("No escuché nada. Intenta hablar más cerca del micro.");
+                } else {
+                    feedback.innerText = 'Hubo un problema. Intenta otra vez.';
+                    this.showMoon("Revisa el permiso de tu micrófono.");
+                }
+            };
+
+            // Asegurar siempre que quitamos la clase listening cuando termine, sin importar por qué terminó
+            this.recognition.onend = () => {
+                micBtn.classList.remove('listening');
             };
         });
     }

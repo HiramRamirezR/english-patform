@@ -1,0 +1,1034 @@
+{
+  "id": "m1",
+  "title": "Módulo 1: Campamento Base",
+  "description": "Pierde el miedo al micrófono. Pronombres y emociones básicas.",
+  "lessons": [
+    {
+      "id": "m1l1",
+      "title": "1.1: Hola y Adiós",
+      "desc": "Saludos básicos.",
+      "icon": "👋",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "Hello",
+              "translation": "Hola"
+            },
+            {
+              "word": "Goodbye",
+              "translation": "Adiós"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Hello",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Goodbye",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Hello",
+          "displayWord": "Hola",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Goodbye",
+          "displayWord": "Adiós",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Une la frase: \"Hola, Adiós\"",
+          "target": "Hello Goodbye",
+          "options": [
+            "Goodbye",
+            "Hello"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m1l2",
+      "title": "1.2: Mañana y Noche",
+      "desc": "Saludos de todo el día.",
+      "icon": "☀️",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "Good morning",
+              "translation": "Buenos días"
+            },
+            {
+              "word": "Good night",
+              "translation": "Buenas noches"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Good morning",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Good night",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Good night",
+          "displayWord": "Buenas noches",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Good morning",
+          "displayWord": "Buenos días",
+          "successMsg": "¡Traducción exacta!"
+        }
+      ]
+    },
+    {
+      "id": "m1l3",
+      "title": "1.3: Yo soy...",
+      "desc": "Introducción a \"I am\".",
+      "icon": "👤",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "I am",
+              "translation": "Yo soy"
+            },
+            {
+              "word": "I",
+              "translation": "Yo"
+            },
+            {
+              "word": "Am",
+              "translation": "Soy / Estoy"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "I am",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "I",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Am",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Am",
+          "displayWord": "Soy / Estoy",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "I",
+          "displayWord": "Yo",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "I am",
+          "displayWord": "Yo soy",
+          "successMsg": "¡Traducción exacta!"
+        }
+      ]
+    },
+    {
+      "id": "m1l4",
+      "title": "1.4: Niño o Niña",
+      "desc": "Vocabulario de identidad.",
+      "icon": "👦",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "Boy",
+              "translation": "Niño"
+            },
+            {
+              "word": "Girl",
+              "translation": "Niña"
+            },
+            {
+              "word": "Student",
+              "translation": "Estudiante"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Boy",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Girl",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Student",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Boy",
+          "displayWord": "Niño",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Student",
+          "displayWord": "Estudiante",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Girl",
+          "displayWord": "Niña",
+          "successMsg": "¡Traducción exacta!"
+        }
+      ]
+    },
+    {
+      "id": "m1l5",
+      "title": "1.5: Reto Intermedio",
+      "desc": "El primer desafío mezclado.",
+      "icon": "⭐",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Yo soy niño",
+          "target": "I am a boy",
+          "options": [
+            "am",
+            "boy",
+            "a",
+            "I"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "I am a boy",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Yo soy niña",
+          "target": "I am a girl",
+          "options": [
+            "I",
+            "a",
+            "girl",
+            "am"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "I am a girl",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Buenos días, estudiante",
+          "target": "Good morning student",
+          "options": [
+            "morning",
+            "student",
+            "Good"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Good morning student",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m1l6",
+      "title": "1.6: Feliz y Triste",
+      "desc": "Emociones básicas.",
+      "icon": "😊",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "Happy",
+              "translation": "Feliz"
+            },
+            {
+              "word": "Sad",
+              "translation": "Triste"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Happy",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Sad",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Sad",
+          "displayWord": "Triste",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Happy",
+          "displayWord": "Feliz",
+          "successMsg": "¡Traducción exacta!"
+        }
+      ]
+    },
+    {
+      "id": "m1l7",
+      "title": "1.7: Cansado y Listo",
+      "desc": "Cómo te sientes hoy.",
+      "icon": "🔋",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "Tired",
+              "translation": "Cansado"
+            },
+            {
+              "word": "Ready",
+              "translation": "Listo"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Tired",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Ready",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Ready",
+          "displayWord": "Listo",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Tired",
+          "displayWord": "Cansado",
+          "successMsg": "¡Traducción exacta!"
+        }
+      ]
+    },
+    {
+      "id": "m1l8",
+      "title": "1.8: Tú eres...",
+      "desc": "El pronombre \"You\".",
+      "icon": "👉",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "You are",
+              "translation": "Tú eres"
+            },
+            {
+              "word": "You",
+              "translation": "Tú"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "You are",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "You",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "You are",
+          "displayWord": "Tú eres",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "You",
+          "displayWord": "Tú",
+          "successMsg": "¡Traducción exacta!"
+        }
+      ]
+    },
+    {
+      "id": "m1l9",
+      "title": "1.9: Mi nombre es...",
+      "desc": "Presentándote.",
+      "icon": "🏷️",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "My name is",
+              "translation": "Mi nombre es"
+            },
+            {
+              "word": "Name",
+              "translation": "Nombre"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "My name is",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Name",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "My name is",
+          "displayWord": "Mi nombre es",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Name",
+          "displayWord": "Nombre",
+          "successMsg": "¡Traducción exacta!"
+        }
+      ]
+    },
+    {
+      "id": "m1l10",
+      "title": "1.10: Segundo Reto",
+      "desc": "¿Quién eres tú?.",
+      "icon": "🧗",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Tú eres feliz",
+          "target": "You are happy",
+          "options": [
+            "happy",
+            "You",
+            "are"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "You are happy",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Tú estás triste",
+          "target": "You are sad",
+          "options": [
+            "are",
+            "sad",
+            "You"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "You are sad",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Yo estoy listo",
+          "target": "I am ready",
+          "options": [
+            "am",
+            "I",
+            "ready"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "I am ready",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m1l11",
+      "title": "1.11: Rompecabezas I",
+      "desc": "Ordena palabras.",
+      "icon": "🧩",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Hola, mi nombre es Moon",
+          "target": "Hello my name is Moon",
+          "options": [
+            "name",
+            "Hello",
+            "is",
+            "my",
+            "Moon"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Hello my name is Moon",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Yo soy un estudiante feliz",
+          "target": "I am a happy student",
+          "options": [
+            "a",
+            "student",
+            "I",
+            "am",
+            "happy"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "I am a happy student",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Adiós, buenas noches",
+          "target": "Goodbye good night",
+          "options": [
+            "night",
+            "Goodbye",
+            "good"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Goodbye good night",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m1l12",
+      "title": "1.12: Rompecabezas II",
+      "desc": "Armando saludos.",
+      "icon": "🧩",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Yo soy Hiram",
+          "target": "I am Hiram",
+          "options": [
+            "Hiram",
+            "I",
+            "am"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "I am Hiram",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Tú eres un estudiante cansado",
+          "target": "You are a tired student",
+          "options": [
+            "tired",
+            "are",
+            "student",
+            "a",
+            "You"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "You are a tired student",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Buenas madrugadas feliz niña",
+          "target": "Good morning happy girl",
+          "options": [
+            "girl",
+            "happy",
+            "morning",
+            "Good"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Good morning happy girl",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m1l13",
+      "title": "1.13: Traducción I",
+      "desc": "Piensa en inglés.",
+      "icon": "⚡",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Mi nombre es feliz triste",
+          "target": "My name is happy sad",
+          "options": [
+            "happy",
+            "is",
+            "sad",
+            "name",
+            "My"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "My name is happy sad",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Tú eres mi estudiante",
+          "target": "You are my student",
+          "options": [
+            "my",
+            "are",
+            "You",
+            "student"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "You are my student",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Yo estoy listo",
+          "target": "I am ready",
+          "options": [
+            "ready",
+            "am",
+            "I"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "I am ready",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m1l14",
+      "title": "1.14: Traducción II",
+      "desc": "Dominio mental.",
+      "icon": "⚡",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Tú eres un niño",
+          "target": "You are a boy",
+          "options": [
+            "boy",
+            "a",
+            "You",
+            "are"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "You are a boy",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Mi nombre es estudiante",
+          "target": "My name is student",
+          "options": [
+            "student",
+            "is",
+            "name",
+            "My"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "My name is student",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Yo feliz, tú triste",
+          "target": "I happy you sad",
+          "options": [
+            "sad",
+            "happy",
+            "you",
+            "I"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "I happy you sad",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m1l15",
+      "title": "1.15: El Gran Ensamblaje",
+      "desc": "Armado de frases largas.",
+      "icon": "🏗️",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Hola, buenos días mi feliz estudiante",
+          "target": "Hello good morning my happy student",
+          "options": [
+            "student",
+            "my",
+            "happy",
+            "morning",
+            "Hello",
+            "good"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Hello good morning my happy student",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Yo soy un niño listo",
+          "target": "I am a ready boy",
+          "options": [
+            "ready",
+            "a",
+            "am",
+            "boy",
+            "I"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "I am a ready boy",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Adiós mi triste niña",
+          "target": "Goodbye my sad girl",
+          "options": [
+            "my",
+            "sad",
+            "Goodbye",
+            "girl"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Goodbye my sad girl",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m1l16",
+      "title": "1.16: Eco Continuo 1",
+      "desc": "Fluidez en saludos.",
+      "icon": "🗣️",
+      "steps": [
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "Hello Moon I am ready",
+          "displayWord": "Hola Moon yo estoy listo",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "You are a sad boy",
+          "displayWord": "Tú eres un niño triste",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "Good morning my name is Hiram",
+          "displayWord": "Buenos días mi nombre es Hiram",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "I am happy and you are tired",
+          "displayWord": "Yo estoy feliz y tú estás cansado",
+          "successMsg": "¡Perfecto!"
+        }
+      ]
+    },
+    {
+      "id": "m1l17",
+      "title": "1.17: Eco Continuo 2",
+      "desc": "Fluidez en emociones.",
+      "icon": "🗣️",
+      "steps": [
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "Happy boy",
+          "displayWord": "Niño feliz",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "Sad girl",
+          "displayWord": "Niña triste",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "Tired student",
+          "displayWord": "Estudiante cansado",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "Ready Moon",
+          "displayWord": "Moon listo",
+          "successMsg": "¡Perfecto!"
+        }
+      ]
+    },
+    {
+      "id": "m1l18",
+      "title": "1.18: Eco Continuo 3",
+      "desc": "Fluidez personal.",
+      "icon": "🗣️",
+      "steps": [
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "My name is happy",
+          "displayWord": "Mi nombre es feliz",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "You are sad",
+          "displayWord": "Tú eres triste",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "I am ready tired",
+          "displayWord": "Yo estoy listo cansado",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "Hello a good boy",
+          "displayWord": "Hola un buen niño",
+          "successMsg": "¡Perfecto!"
+        }
+      ]
+    },
+    {
+      "id": "m1l19",
+      "title": "1.19: Ensayo General",
+      "desc": "Preparación para el Jefe.",
+      "icon": "🎭",
+      "steps": [
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "Hello my name is Moon",
+          "displayWord": "Hola mi nombre es Moon",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "I am a happy boy",
+          "displayWord": "Yo soy un niño feliz",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "You are a ready student",
+          "displayWord": "Tú eres un estudiante listo",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "Goodbye good night",
+          "displayWord": "Adiós buenas noches",
+          "successMsg": "¡Perfecto!"
+        }
+      ]
+    },
+    {
+      "id": "m1l20",
+      "title": "1.20: La Fogata",
+      "desc": "El Jefe del Campamento.",
+      "icon": "🔥",
+      "steps": [
+        {
+          "type": "echo_chamber",
+          "prompt": "🔥 ¡Bienvenido a La Fogata, el jefe de este nivel! No habrá traducciones, escucha a Moon y responde. Dilo para empezar:",
+          "word": "I am ready",
+          "displayWord": "Estoy listo",
+          "successMsg": "¡Que empiece la prueba!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "Moon te saluda. Responde:",
+          "word": "Hello Moon",
+          "displayWord": "Hola Moon",
+          "successMsg": "¡Genial!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "Moon pregunta quién eres:",
+          "word": "My name is Hiram",
+          "displayWord": "Mi nombre es Hiram",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "Moon pregunta cómo te sientes:",
+          "word": "I am happy",
+          "displayWord": "Estoy feliz",
+          "successMsg": "¡Esa es la actitud!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "Despídete y vete a dormir:",
+          "word": "Goodbye good night",
+          "displayWord": "Adiós buenas noches",
+          "successMsg": "¡Módulo superado!"
+        }
+      ]
+    }
+  ]
+}

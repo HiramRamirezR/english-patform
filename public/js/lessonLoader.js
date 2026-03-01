@@ -1,10 +1,10 @@
 import { MoonsforestEngine } from './moduleEngine.js';
-import { getLessonConfig } from './courseData.js';
 import { auth, db } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { sendDiscordNotification } from './discord.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // 1. Extraer ID de la lección de la URL
     const urlParams = new URLSearchParams(window.location.search);
     const lessonId = urlParams.get('id');
@@ -15,24 +15,34 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // 2. Cargar Configuración desde nuestra "Base de Datos" de lecciones
-    const config = getLessonConfig(lessonId);
+    const moduleId = lessonId.substring(0, 2); // ie 'm1'
+    let configModule;
+    try {
+        const response = await fetch(`/data/${moduleId}.json`);
+        if (!response.ok) throw new Error("Módulo no encontrado");
+        configModule = await response.json();
+    } catch (error) {
+        alert("La base de datos de este módulo no está lista aún.");
+        window.location.href = `module.html?id=${moduleId}`;
+        return;
+    }
 
-    if (config.steps.length === 0) {
+    const lessonConfig = configModule.lessons.find(l => l.id === lessonId);
+
+    if (!lessonConfig || !lessonConfig.steps || lessonConfig.steps.length === 0) {
         alert("Esta lección aún está en construcción.");
-        const mid = lessonId ? lessonId.substring(0, 2) : 'm1';
-        window.location.href = `module.html?id=${mid}`;
+        window.location.href = `module.html?id=${moduleId}`;
         return;
     }
 
     // 3. Pintar en el HTML
-    document.title = `${config.title} | Moonsforest`;
-    document.getElementById('lesson-title').innerText = config.title;
+    document.title = `${lessonConfig.title} | Moonsforest`;
+    document.getElementById('lesson-title').innerText = lessonConfig.title;
 
     // Configurar Botón de Volver
     const btnBack = document.getElementById('btn-back');
     btnBack.addEventListener('click', () => {
-        window.location.href = config.returnUrl;
+        window.location.href = `module.html?id=${moduleId}`;
     });
 
     // 4. Arrancar Autenticación y Motor
@@ -69,6 +79,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             completedLessons: completedLessons
                         });
                         console.log(`¡Progreso guardado!: +${minutes} mins, ${lessonId} completada.`);
+
+                        // Notificar a Discord
+                        const userName = data.name || "Un viajero anónimo";
+                        await sendDiscordNotification(
+                            "🎓 Lección Completada",
+                            `**${userName}** acaba de completar la lección **${lessonConfig.title}** y acumuló +**${minutes}** minutos hablados.`,
+                            5763719 // Verde
+                        );
                     }
                 } catch (error) {
                     console.error("Error actualizando base de datos:", error);
@@ -77,8 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // 5. Iniciar la clase de aprendizaje
-        new MoonsforestEngine('learning-container', config.steps, {
-            returnUrl: config.returnUrl
+        new MoonsforestEngine('learning-container', lessonConfig.steps, {
+            returnUrl: `module.html?id=${moduleId}`
         });
     });
 });

@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { sendDiscordNotification } from './discord.js';
 
 /**
  * Configuración de Firebase
@@ -90,6 +91,13 @@ export const handleLogin = async () => {
                 createdAt: serverTimestamp(),
                 points: 0
             });
+
+            // Notificación a Discord
+            await sendDiscordNotification(
+                "👋 Nuevo Viajero Registrado",
+                `**${user.displayName}** (${user.email}) acaba de unirse a Moonsforest.`,
+                15258703 // Amarillo
+            );
         }
 
         // Redirigir al mapa

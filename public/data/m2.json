@@ -1,0 +1,1071 @@
+{
+  "id": "m2",
+  "title": "Módulo 2: El Bosque de los Animales",
+  "description": "Aprende a describir cosas de la naturaleza.",
+  "lessons": [
+    {
+      "id": "m2l1",
+      "title": "2.1: Es y Son",
+      "desc": "Introducción a objetos y animales.",
+      "icon": "🐾",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "It is",
+              "translation": "Es / Eso es"
+            },
+            {
+              "word": "They are",
+              "translation": "Son / Esos son"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "It is",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "They are",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "They are",
+          "displayWord": "Son / Esos son",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "It is",
+          "displayWord": "Es / Eso es",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Une la frase: \"Eso es, Esos son\"",
+          "target": "It is They are",
+          "options": [
+            "They",
+            "is",
+            "are",
+            "It"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "m2l2",
+      "title": "2.2: Animales Salvajes",
+      "desc": "Conoce a los habitantes.",
+      "icon": "🐻",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "Bear",
+              "translation": "Oso"
+            },
+            {
+              "word": "Wolf",
+              "translation": "Lobo"
+            },
+            {
+              "word": "Bird",
+              "translation": "Pájaro"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Bear",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Wolf",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Bird",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Bear",
+          "displayWord": "Oso",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Wolf",
+          "displayWord": "Lobo",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Bird",
+          "displayWord": "Pájaro",
+          "successMsg": "¡Traducción exacta!"
+        }
+      ]
+    },
+    {
+      "id": "m2l3",
+      "title": "2.3: La Naturaleza",
+      "desc": "Árboles y más.",
+      "icon": "🌳",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "Tree",
+              "translation": "Árbol"
+            },
+            {
+              "word": "Forest",
+              "translation": "Bosque"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Tree",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Forest",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Forest",
+          "displayWord": "Bosque",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Tree",
+          "displayWord": "Árbol",
+          "successMsg": "¡Traducción exacta!"
+        }
+      ]
+    },
+    {
+      "id": "m2l4",
+      "title": "2.4: Tamaños",
+      "desc": "Grande y pequeño.",
+      "icon": "📏",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "Big",
+              "translation": "Grande"
+            },
+            {
+              "word": "Small",
+              "translation": "Pequeño"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Big",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Small",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Big",
+          "displayWord": "Grande",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Small",
+          "displayWord": "Pequeño",
+          "successMsg": "¡Traducción exacta!"
+        }
+      ]
+    },
+    {
+      "id": "m2l5",
+      "title": "2.5: Reto Intermedio",
+      "desc": "Uniendo conceptos.",
+      "icon": "⭐",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Es grande",
+          "target": "It is big",
+          "options": [
+            "big",
+            "It",
+            "is"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "It is big",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Son pequeños",
+          "target": "They are small",
+          "options": [
+            "are",
+            "They",
+            "small"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "They are small",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Oso grande",
+          "target": "Big bear",
+          "options": [
+            "bear",
+            "Big"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Big bear",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m2l6",
+      "title": "2.6: Colores del Bosque",
+      "desc": "Rojo, Azul, Verde.",
+      "icon": "🎨",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "Red",
+              "translation": "Rojo"
+            },
+            {
+              "word": "Blue",
+              "translation": "Azul"
+            },
+            {
+              "word": "Green",
+              "translation": "Verde"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Red",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Blue",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Green",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Red",
+          "displayWord": "Rojo",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Blue",
+          "displayWord": "Azul",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Green",
+          "displayWord": "Verde",
+          "successMsg": "¡Traducción exacta!"
+        }
+      ]
+    },
+    {
+      "id": "m2l7",
+      "title": "2.7: Descubriendo Colores",
+      "desc": "Describiendo con colores.",
+      "icon": "🖌️",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Es rojo",
+          "target": "It is red",
+          "options": [
+            "is",
+            "red",
+            "It"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "It is red",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Son verdes",
+          "target": "They are green",
+          "options": [
+            "green",
+            "are",
+            "They"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "They are green",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Pájaro azul",
+          "target": "Blue bird",
+          "options": [
+            "bird",
+            "Blue"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Blue bird",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m2l8",
+      "title": "2.8: Uniendo Adjetivos",
+      "desc": "Adjetivo + Sustantivo.",
+      "icon": "💡",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Árbol verde",
+          "target": "Green tree",
+          "options": [
+            "tree",
+            "Green"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Green tree",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Lobo grande",
+          "target": "Big wolf",
+          "options": [
+            "wolf",
+            "Big"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Big wolf",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Pájaro pequeño",
+          "target": "Small bird",
+          "options": [
+            "Small",
+            "bird"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Small bird",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m2l9",
+      "title": "2.9: Más Animales",
+      "desc": "Plurales sencillos.",
+      "icon": "🐦",
+      "steps": [
+        {
+          "type": "listen_click",
+          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "cards": [
+            {
+              "word": "Bears",
+              "translation": "Osos"
+            },
+            {
+              "word": "Birds",
+              "translation": "Pájaros"
+            },
+            {
+              "word": "Trees",
+              "translation": "Árboles"
+            }
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Bears",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Birds",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "word": "Trees",
+          "successMsg": "¡Excelente pronunciación!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Birds",
+          "displayWord": "Pájaros",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Trees",
+          "displayWord": "Árboles",
+          "successMsg": "¡Traducción exacta!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "word": "Bears",
+          "displayWord": "Osos",
+          "successMsg": "¡Traducción exacta!"
+        }
+      ]
+    },
+    {
+      "id": "m2l10",
+      "title": "2.10: Segundo Reto",
+      "desc": "Todo junto.",
+      "icon": "🧗",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Son osos grandes",
+          "target": "They are big bears",
+          "options": [
+            "bears",
+            "big",
+            "They",
+            "are"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "They are big bears",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Es un pájaro azul",
+          "target": "It is a blue bird",
+          "options": [
+            "blue",
+            "bird",
+            "It",
+            "is",
+            "a"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "It is a blue bird",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Son árboles verdes",
+          "target": "They are green trees",
+          "options": [
+            "are",
+            "green",
+            "trees",
+            "They"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "They are green trees",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m2l11",
+      "title": "2.11: Rompecabezas I",
+      "desc": "Ordena palabras.",
+      "icon": "🧩",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Mira, es un oso grande",
+          "target": "Look it is a big bear",
+          "options": [
+            "bear",
+            "Look",
+            "big",
+            "it",
+            "is",
+            "a"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Look it is a big bear",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Son lobos",
+          "target": "They are wolves",
+          "options": [
+            "are",
+            "wolves",
+            "They"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "They are wolves",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Es un árbol pequeño",
+          "target": "It is a small tree",
+          "options": [
+            "tree",
+            "small",
+            "It",
+            "is",
+            "a"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "It is a small tree",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m2l12",
+      "title": "2.12: Rompecabezas II",
+      "desc": "Más orden.",
+      "icon": "🧩",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Un pájaro azul pequeño",
+          "target": "A small blue bird",
+          "options": [
+            "blue",
+            "A",
+            "bird",
+            "small"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "A small blue bird",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Son grandes árboles verdes",
+          "target": "They are big green trees",
+          "options": [
+            "trees",
+            "They",
+            "green",
+            "big",
+            "are"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "They are big green trees",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "El bosque es grande",
+          "target": "The forest is big",
+          "options": [
+            "big",
+            "The",
+            "is",
+            "forest"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "The forest is big",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m2l13",
+      "title": "2.13: Traducción I",
+      "desc": "Piensa en inglés.",
+      "icon": "⚡",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Yo veo un oso rojo",
+          "target": "I see a red bear",
+          "options": [
+            "bear",
+            "see",
+            "a",
+            "I",
+            "red"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "I see a red bear",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Es verde y azul",
+          "target": "It is green and blue",
+          "options": [
+            "It",
+            "blue",
+            "and",
+            "green",
+            "is"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "It is green and blue",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Son pájaros felices",
+          "target": "They are happy birds",
+          "options": [
+            "happy",
+            "are",
+            "birds",
+            "They"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "They are happy birds",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m2l14",
+      "title": "2.14: Traducción II",
+      "desc": "Dominio mental.",
+      "icon": "⚡",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "El lobo está cansado",
+          "target": "The wolf is tired",
+          "options": [
+            "is",
+            "tired",
+            "wolf",
+            "The"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "The wolf is tired",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Mira los árboles verdes",
+          "target": "Look at the green trees",
+          "options": [
+            "trees",
+            "the",
+            "at",
+            "Look",
+            "green"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Look at the green trees",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Es un gran día",
+          "target": "It is a big day",
+          "options": [
+            "big",
+            "a",
+            "It",
+            "day",
+            "is"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "It is a big day",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m2l15",
+      "title": "2.15: El Gran Ensamblaje",
+      "desc": "Armado de frases largas.",
+      "icon": "🏗️",
+      "steps": [
+        {
+          "type": "drag_and_drop",
+          "prompt": "Hola lobo, eres grande",
+          "target": "Hello wolf you are big",
+          "options": [
+            "wolf",
+            "you",
+            "big",
+            "Hello",
+            "are"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Hello wolf you are big",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Ellos son pájaros azules y pequeños",
+          "target": "They are small and blue birds",
+          "options": [
+            "and",
+            "small",
+            "They",
+            "birds",
+            "are",
+            "blue"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "They are small and blue birds",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        },
+        {
+          "type": "drag_and_drop",
+          "prompt": "Adiós oso verde",
+          "target": "Goodbye green bear",
+          "options": [
+            "bear",
+            "green",
+            "Goodbye"
+          ]
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "¡Ahora dilo tú mismo!",
+          "word": "Goodbye green bear",
+          "successMsg": "¡Esa es la fluidez que buscamos!"
+        }
+      ]
+    },
+    {
+      "id": "m2l16",
+      "title": "2.16: Eco Continuo 1",
+      "desc": "Fluidez natural.",
+      "icon": "🗣️",
+      "steps": [
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "It is a big bear",
+          "displayWord": "Es un oso grande",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "They are small birds",
+          "displayWord": "Son pájaros pequeños",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "The tree is green",
+          "displayWord": "El árbol es verde",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "Look it is a blue wolf",
+          "displayWord": "Mira es un lobo azul",
+          "successMsg": "¡Perfecto!"
+        }
+      ]
+    },
+    {
+      "id": "m2l17",
+      "title": "2.17: Eco Continuo 2",
+      "desc": "Fluidez visual.",
+      "icon": "🗣️",
+      "steps": [
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "I am a boy and it is a bear",
+          "displayWord": "Yo soy un niño y es un oso",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "They are red trees",
+          "displayWord": "Son árboles rojos",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "The forest is big and green",
+          "displayWord": "El bosque es grande y verde",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "Hello blue bird",
+          "displayWord": "Hola pájaro azul",
+          "successMsg": "¡Perfecto!"
+        }
+      ]
+    },
+    {
+      "id": "m2l18",
+      "title": "2.18: Eco Continuo 3",
+      "desc": "Fluidez de adjetivos.",
+      "icon": "🗣️",
+      "steps": [
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "It is tired",
+          "displayWord": "Está cansado",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "They are happy bears",
+          "displayWord": "Son osos felices",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "You are a big wolf",
+          "displayWord": "Tú eres un lobo grande",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "I see a small green tree",
+          "displayWord": "Yo veo un árbol verde pequeño",
+          "successMsg": "¡Perfecto!"
+        }
+      ]
+    },
+    {
+      "id": "m2l19",
+      "title": "2.19: Ensayo General",
+      "desc": "Preparación para el Jefe.",
+      "icon": "🎭",
+      "steps": [
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "Look it is a big green tree",
+          "displayWord": "Mira es un árbol verde grande",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "They are brown bears",
+          "displayWord": "Son osos cafés",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "Hello small blue bird",
+          "displayWord": "Hola pajarito azul",
+          "successMsg": "¡Perfecto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "word": "The forest is ready",
+          "displayWord": "El bosque está listo",
+          "successMsg": "¡Perfecto!"
+        }
+      ]
+    },
+    {
+      "id": "m2l20",
+      "title": "2.20: La Fogata",
+      "desc": "El Jefe del Río.",
+      "icon": "🔥",
+      "steps": [
+        {
+          "type": "echo_chamber",
+          "prompt": "🔥 El bosque cobra vida. Moon te señala algo. Dilo fuerte:",
+          "word": "Look",
+          "displayWord": "Mira",
+          "successMsg": "¡Atento!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "Dile a Moon qué es:",
+          "word": "It is a big bear",
+          "displayWord": "Es un oso grande",
+          "successMsg": "¡Exacto!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "Moon pregunta por las aves:",
+          "word": "They are blue birds",
+          "displayWord": "Son pájaros azules",
+          "successMsg": "¡Excelente vista!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "Moon pregunta sobre el entorno:",
+          "word": "They are green trees",
+          "displayWord": "Son árboles verdes",
+          "successMsg": "¡Conoces bien el lugar!"
+        },
+        {
+          "type": "echo_chamber",
+          "prompt": "Despídete de los animales:",
+          "word": "Goodbye animals",
+          "displayWord": "Adiós animales",
+          "successMsg": "¡Nivel superado!"
+        }
+      ]
+    }
+  ]
+}

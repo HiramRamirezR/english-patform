@@ -1,9 +1,8 @@
-import { getModuleConfig } from './courseData.js';
 import { auth, db } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const moduleId = urlParams.get('id');
 
@@ -12,7 +11,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    const config = getModuleConfig(moduleId);
+    let config;
+    try {
+        const response = await fetch(`/data/${moduleId}.json`);
+        if (!response.ok) throw new Error("Módulo no encontrado");
+        config = await response.json();
+    } catch (error) {
+        console.error("Error cargando el módulo:", error);
+        document.getElementById('module-title').innerText = "Módulo en construcción";
+        document.getElementById('module-desc').innerText = "Vuelve muy pronto.";
+        return;
+    }
 
     document.title = `${config.title} | Moonsforest`;
     document.getElementById('module-title').innerText = config.title;

@@ -9,68 +9,76 @@ Este documento define la progresión educativa, el vocabulario, y la estructura 
 
 ---
 
-## Módulo 1: Campamento Base (Base Camp)
-**Objetivo:** El alumno pierde el miedo a hablar. Aprende a saludar, decir su nombre y estado de ánimo usando la estructura básica del verbo To Be. (Tiempo estimado: 1-2 semanas de práctica diaria).
+## Estructura de Módulo (20 Lecciones)
+Para garantizar la retención a largo plazo y la maestría del tema, cada módulo consiste en un viaje épico de 20 lecciones. El diseño instruccional sigue este patrón espaciado:
 
-### Lección 1.1: Los Primeros Sonidos
-**Enfoque:** Palabras sueltas. Escuchar y Repetir.
-*   **Vocabulario:** Hello, Hi, Goodbye, Bye.
-*   **Actividades:**
-    1.  **Listen & Click:** Moon dice una palabra ("Hello"). El niño debe elegir la tarjeta de texto correcta ("Hello" vs "Goodbye").
-    2.  **Echo Chamber (Hablar):** Aparece "Hello" en pantalla. El niño presiona el micrófono y lo dice. El sistema detecta "hello" (o variaciones fonéticas aceptables) y lo pinta de verde. Moon felicita: *"Excellent!"*
-    3.  **Echo Chamber (Hablar):** Aparece "Goodbye". El niño lo lee, el micro captura, si está bien, pasa.
-    4.  **Combinación (Hablar):** Se pide al niño decir "Hello" y luego "Goodbye".
-
-### Lección 1.2: ¿Quién soy? (I am)
-**Enfoque:** Estructura de 2 partes (Sujeto + Verbo) y vocabulario personal.
-*   **Vocabulario:** I / am / a boy / a girl.
-*   **Actividades:**
-    1.  **Listen & Read:** Aparecen las frases "I am a boy" / "I am a girl". Moon las pronuncia lentamente.
-    2.  **Drag & Drop (Armar):** El alumno debe arrastrar las palabras `[ am ]`, `[ I ]`, `[ a boy ]` al orden correcto: `[ I ] + [ am ] + [ a boy ]`.
-    3.  **Echo Chamber (Hablar lo nuevo):** Se muestra "I am". El niño debe decirlo. 
-    4.  **La Escalera (Hablar Todo):** Moon pide que el niño repase. 
-        - Dice: "Hello" (Check ✅)
-        - Dice: "I am a boy/girl" (Check ✅)
-        - Moon: *"You are doing great!"*
-
-### Lección 1.3: Conociendo a otros (You are / Name)
-**Enfoque:** Expansión del pronombre y posesivo básico.
-*   **Vocabulario:** You / are / Moon / My name is...
-*   **Actividades:**
-    1.  **Identificación:** Moon dice "You are Moon". El niño debe identificar a quién se refiere.
-    2.  **Drag & Drop (Armar):** Ordenar `[ name ]` `[ is ]` `[ My ]` `[ Hiram ]`.
-    3.  **Echo Chamber (Hablar lo nuevo):** Decir en voz alta "My name is [Nombre del niño]". El STT lo captura (usaremos comodines para el nombre propio o pediremos que deletree/escriba su nombre al inicio de la lección para ayudar al STT).
-    4.  **La Escalera (Hablar Todo):** 
-        - Dice: "Hi" (Check ✅)
-        - Dice: "My name is [Nombre]" (Check ✅)
-        - Dice: "You are Moon" (Check ✅)
-
-### Lección 1.4: ¿Cómo te sientes? (Feelings)
-**Enfoque:** Agregar adjetivos a las estructuras ya dominadas.
-*   **Vocabulario:** Happy, Sad, Tired, Ready.
-*   **Actividades:**
-    1.  **Match Image-Text:** Conectar la carita sonriente con "Happy", la triste con "Sad".
-    2.  **Drag & Drop:** "I am happy". "You are sad".
-    3.  **Echo Chamber (Hablar):** Leer 4 oraciones en voz alta ("I am ready", "I am tired", etc).
-    4.  **La Escalera (Hablar Todo):**
-        - "Hello Moon" (Check ✅)
-        - "My name is [Nombre]" (Check ✅)
-        - "I am a boy/girl" (Check ✅)
-        - "I am happy" (Check ✅)
-        - Moon: *"Fantastic explorer!"*
-
-### Lección 1.5: La Charla de Fogata (Integración Final)
-**Enfoque:** Simulador de conversación fluida. Sin opciones múltiples, solo el micrófono y el cerebro del niño.
-*   **Actividad Única (El Chat Guiado):**
-    - Moon (Audio): *"Hello explorer!"*
-    - Niño (Habla): *"Hi Moon"*
-    - Moon (Audio): *"What is your name?"*
-    - Niño (Habla): *"My name is Hiram"*
-    - Moon (Audio): *"How are you today?"*
-    - Niño (Habla): *"I am happy"*
-    - Moon (Audio): *"You are ready for the next adventure. Goodbye!"*
-    - Niño (Habla): *"Goodbye Moon"*
-*   **Resultado:** Al completar esta simulación al 100%, se desbloquea el botón: **"Evalúate con el Guardián ($60)"** para solicitar la videollamada de certificación humana y pasar al Módulo 2.
+*   **Lecciones 1 al 4 (Presentación):** Introducción del Vocabulario Principal (A, B, C). Repetición pura.
+*   **Lección 5 (Mini-Reto):** Un pequeño desafío intermedio (mezclando A, B, C) sin palabras nuevas, solo para dar un pico de dopamina y evaluar lo visto.
+*   **Lecciones 6 al 10 (Expansores):** Introducción de palabras que modifican o expanden la estructura central (Adjetivos, Colores, Emociones).
+*   **Lecciones 11 al 15 (Engranaje Pesado):** Mucho *Drag & Drop* y traducciones inversas. Cero palabras nuevas, pura gimnasia mental para asentar las estructuras lógicas.
+*   **Lecciones 16 al 19 (Diálogos Dirigidos):** Simuladores de conversación parciales y párrafos cortos.
+*   **Lección 20: El Jefe Final (La Fogata).** Todo el vocabulario del mes arrojado a la vez en una simulación de conversación sin ayuda, a velocidad normal. Al superar esta prueba, el alumno está listo para la certificación humana del nivel.
 
 ---
-*(Los siguientes módulos se agregarán en iteraciones futuras, siguiendo esta misma curva de progresión e intensidad de repetición oral).*
+
+## El Currículo: Módulos 1 al 10
+
+### Módulo 1: Campamento Base (Base Camp)
+*   **Enfoque:** Aprender a saludar, decir su nombre y estado de ánimo usando la estructura básica del verbo To Be. El niño pierde el miedo al micrófono.
+*   **Gramática Central:** I am / You are / My name is...
+*   **Vocabulario Destacado:** Hello, Goodbye, Morning, Night, Boy, Girl, Happy, Sad.
+*   **Meta Conversacional:** *"Hello Moon, my name is Hiram. I am a happy boy."*
+
+### Módulo 2: El Bosque de los Animales
+*   **Enfoque:** Aprender a apuntar y describir cosas de la naturaleza introduciendo la tercera persona y plurales simples.
+*   **Gramática Central:** It is / They are / Adjetivos antes del sustantivo.
+*   **Vocabulario Destacado:** Bear, Wolf, Bird, Tree / Red, Blue, Green / Big, Small.
+*   **Meta Conversacional:** *"Look! It is a big green tree. They are brown bears."*
+
+### Módulo 3: La Cabaña del Campamento
+*   **Enfoque:** Presentar a otras personas (Miembros de la familia o amigos del bosque) usando posesivos.
+*   **Gramática Central:** He is / She is / My / Your / His / Her.
+*   **Vocabulario Destacado:** Mother, Father, Friend, Brother, Sister.
+*   **Meta Conversacional:** *"He is my father. She is your friend."*
+
+### Módulo 4: El Mercado del Río
+*   **Enfoque:** Aprender a expresar gustos y disgustos usando comida de campamento y objetos cotidianos.
+*   **Gramática Central:** I like / I don't like / Do you like?
+*   **Vocabulario Destacado:** Apple, Fish, Water, Marshmallow, Berry.
+*   **Meta Conversacional:** *"I like apples, but I don't like fish. Do you like marshmallows?"*
+
+### Módulo 5: En Movimiento
+*   **Enfoque:** Describir acciones que están sucediendo en este momento introduciendo el gerundio.
+*   **Gramática Central:** Presente Continuo (I am walking, You are running).
+*   **Vocabulario Destacado:** Run, Jump, Swim, Sleep, Walk.
+*   **Meta Conversacional:** *"I am running to the river. You are sleeping in the tent."*
+
+### Módulo 6: La Mochila del Explorador
+*   **Enfoque:** Inventario y posesiones. ¿Qué llevas al bosque?
+*   **Gramática Central:** I have / I don't have / Do you have?
+*   **Vocabulario Destacado:** Backpack, Map, Flashlight, Compass, Tent.
+*   **Meta Conversacional:** *"I have a map, but I don't have a flashlight."*
+
+### Módulo 7: Las Estaciones y el Clima
+*   **Enfoque:** Hablar del clima cambiante y la ropa adecuada para explorar.
+*   **Gramática Central:** It is (weather) / I am wearing.
+*   **Vocabulario Destacado:** Sun, Rain, Snow, Hot, Cold / Jacket, Boots, Hat.
+*   **Meta Conversacional:** *"It is very cold today. I am wearing a warm jacket and boots."*
+
+### Módulo 8: Los Desafíos del Bosque
+*   **Enfoque:** Expresar habilidades físicas y pedir permiso para realizar acciones.
+*   **Gramática Central:** Modal Verb 'Can' (I can / I cannot / Can you?).
+*   **Vocabulario Destacado:** Climb, Fly, See, Hear, Touch.
+*   **Meta Conversacional:** *"I can climb tall trees. Can you fly? No, I cannot fly."*
+
+### Módulo 9: La Búsqueda del Tesoro
+*   **Enfoque:** Dar direcciones e identificar la ubicación espacial de los objetos.
+*   **Gramática Central:** Preposiciones de lugar (In, On, Under, Next to) / Where is...?
+*   **Vocabulario Destacado:** River, Cave, Bridge, Mountain, Rock.
+*   **Meta Conversacional:** *"Where is the bear? The bear is under the big bridge, next to the river."*
+
+### Módulo 10: Relatos de la Fogata
+*   **Enfoque:** Consolidación de rutinas diarias. Qué hace el explorador todos los días.
+*   **Gramática Central:** Presente Simple afirmativo (Third person s recap).
+*   **Vocabulario Destacado:** Wake up, Eat, Walk, Play, Sleep / Every day, Morning, Night.
+*   **Meta Conversacional:** *"Every day, I wake up in the morning. I eat an apple and I play in the forest."*

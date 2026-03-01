@@ -1,6 +1,7 @@
 import { auth, db } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { sendDiscordNotification } from './discord.js';
 
 // Elementos del DOM
 const loadingState = document.getElementById('loading-state');
@@ -60,6 +61,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     status: 'active' // Podríamos usar pending si queremos revisión manual en el futuro
                 }
             });
+
+            // Notificación a Discord
+            await sendDiscordNotification(
+                "🧑‍🏫 Solicitud de Maestro",
+                `**${user.displayName}** acaba de completar su registro como Maestro y está en espera de alumnos.`,
+                10181046 // Morado
+            );
 
             alert('¡Felicidades! Tu perfil de Maestro ha sido activado.');
             window.location.reload(); // Recargar para que el Header también actualice

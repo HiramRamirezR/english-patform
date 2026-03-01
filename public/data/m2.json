@@ -27,27 +27,49 @@
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "It is",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "¡Excelente pronunciación!",
+          "aliases": [
+            "eat is",
+            "id is",
+            "it's"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "They are",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "¡Excelente pronunciación!",
+          "aliases": [
+            "there",
+            "their",
+            "they're",
+            "day are"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "They are",
           "displayWord": "Son / Esos son",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "¡Traducción exacta!",
+          "aliases": [
+            "there",
+            "their",
+            "they're",
+            "day are"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "It is",
           "displayWord": "Es / Eso es",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "¡Traducción exacta!",
+          "aliases": [
+            "eat is",
+            "id is",
+            "it's"
+          ]
         },
         {
           "type": "drag_and_drop",
@@ -90,7 +112,12 @@
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "Bear",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "¡Excelente pronunciación!",
+          "aliases": [
+            "bare",
+            "beer",
+            "pear"
+          ]
         },
         {
           "type": "echo_chamber",
@@ -102,14 +129,24 @@
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "Bird",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "¡Excelente pronunciación!",
+          "aliases": [
+            "beard",
+            "board",
+            "bert"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "Bear",
           "displayWord": "Oso",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "¡Traducción exacta!",
+          "aliases": [
+            "bare",
+            "beer",
+            "pear"
+          ]
         },
         {
           "type": "echo_chamber",
@@ -123,7 +160,12 @@
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "Bird",
           "displayWord": "Pájaro",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "¡Traducción exacta!",
+          "aliases": [
+            "beard",
+            "board",
+            "bert"
+          ]
         }
       ]
     },
@@ -151,7 +193,12 @@
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "Tree",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "¡Excelente pronunciación!",
+          "aliases": [
+            "three",
+            "tea",
+            "free"
+          ]
         },
         {
           "type": "echo_chamber",
@@ -171,7 +218,12 @@
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "Tree",
           "displayWord": "Árbol",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "¡Traducción exacta!",
+          "aliases": [
+            "three",
+            "tea",
+            "free"
+          ]
         }
       ]
     },

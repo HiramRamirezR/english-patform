@@ -22,7 +22,7 @@ const renderHeader = (user, userData = null) => {
         let evaluateBtn = '';
         const isTeacherView = window.location.pathname.includes('teacher.html');
         if (!userData || !isTeacherView) {
-            evaluateBtn = `<button class="btn" style="background-color: var(--accent-warm); color: var(--slate-900); padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 600; border: none; box-shadow: 0 4px 6px -1px rgba(251, 146, 60, 0.4);">Evalúate ($60)</button>`;
+            evaluateBtn = `<button id="evaluate-btn" class="btn" style="background-color: var(--accent-warm); color: var(--slate-900); padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 600; border: none; box-shadow: 0 4px 6px -1px rgba(251, 146, 60, 0.4);">Evalúate ($60)</button>`;
         }
 
         navLinks = `
@@ -68,6 +68,21 @@ const renderHeader = (user, userData = null) => {
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
             logout();
+        });
+    }
+
+    const evaluateBtnEl = document.getElementById('evaluate-btn');
+    if (evaluateBtnEl) {
+        evaluateBtnEl.addEventListener('click', () => {
+            alert('¡Genial! Hemos notificado a nuestro equipo. Te contactaremos pronto para agendar tu evaluación con un Maestro Guardián.');
+            import('../discord.js').then(module => {
+                const displayName = user ? (user.displayName || user.email) : 'Alguien';
+                module.sendDiscordNotification(
+                    "📅 Petición de Evaluación ($60)",
+                    `**${displayName}** ha hecho clic en el botón para solicitar una evaluación uno a uno.`,
+                    15105570 // Naranja
+                );
+            });
         });
     }
 };

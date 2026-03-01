@@ -192,19 +192,46 @@ export class MoonsforestEngine {
             }
 
             this.recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript.toLowerCase().trim();
+                let transcript = event.results[0][0].transcript.toLowerCase().trim();
 
-                // TOLERANCIA ESTRICTA Y HOMÓFONOS (ALIASES):
-                const target = data.word.toLowerCase().replace(/[^a-z0-9 ]/gi, '').trim();
+                // DICCIONARIO GLOBAL DE CORRECCIONES DE STT (Homófonos)
+                // Esto aplica automáticamente a TODAS las lecciones de la plataforma
+                const corrections = {
+                    "eye": "i", "aye": "i", "hi ": "i ", "ai": "i", "hay": "i", "ay": "i", " a ": " i ",
+                    "am": "am", "um": "am", "em": "am", "aim": "am", "ham": "am", "an ": "am ",
+                    "im": "i am", "i'm": "i am",
+                    "halo": "hello", "jello": "hello", "yellow": "hello",
+                    "boil": "boy", "void": "boy", "voy": "boy",
+                    "curl": "girl", "grill": "girl", "earl": "girl",
+                    "jew": "you", "yoo": "you", "hue": "you", "ew": "you",
+                    "ur": "you are", "your": "you are", "you're": "you are",
+                    "reddy": "ready", "reading": "ready", "red": "ready",
+                    "tire red": "tired", "tie red": "tired", "tyre": "tired",
+                    "bare": "bear", "beer": "bear", "pear": "bear",
+                    "beard": "bird", "board": "bird", "bert": "bird",
+                    "three": "tree", "tea": "tree", "free": "tree"
+                };
+
+                // Reemplazamos las palabras mal escuchadas por su versión correcta en inglés
+                for (let [wrong, right] of Object.entries(corrections)) {
+                    // Usamos regex con límites de palabra para no modificar fragmentos internos, 
+                    // o simplemente replaces directos para palabras sueltas.
+                    const regex = new RegExp(`\\b${wrong}\\b`, 'g');
+                    transcript = transcript.replace(regex, right);
+                }
+
                 const cleanTranscript = transcript.replace(/[^a-z0-9 ]/gi, '').trim();
+                const target = data.word.toLowerCase().replace(/[^a-z0-9 ]/gi, '').trim();
 
-                feedback.innerHTML = `Escuché: "<strong>${transcript}</strong>"`;
+                // Imprimir lo que el sistema "Interpretó"
+                feedback.innerHTML = `Escuché y entendí: "<strong>${cleanTranscript}</strong>"`;
 
                 const aliases = data.aliases ? data.aliases.map(a => a.toLowerCase().replace(/[^a-z0-9 ]/gi, '').trim()) : [];
                 const targets = [target, ...aliases];
 
                 const isExactMatch = targets.includes(cleanTranscript);
                 const startsWithMatch = targets.some(t => cleanTranscript.startsWith(t) && (cleanTranscript.length <= t.length + 5));
+
 
                 if (isExactMatch || startsWithMatch) {
                     this.playSound('success');

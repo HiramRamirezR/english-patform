@@ -27,7 +27,13 @@
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "Hello",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "¡Excelente pronunciación!",
+          "aliases": [
+            "halo",
+            "jello",
+            "yellow",
+            "hell low"
+          ]
         },
         {
           "type": "echo_chamber",
@@ -40,7 +46,13 @@
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "Hello",
           "displayWord": "Hola",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "¡Traducción exacta!",
+          "aliases": [
+            "halo",
+            "jello",
+            "yellow",
+            "hell low"
+          ]
         },
         {
           "type": "echo_chamber",
@@ -125,10 +137,6 @@
             {
               "word": "I",
               "translation": "Yo"
-            },
-            {
-              "word": "Am",
-              "translation": "Soy / Estoy"
             }
           ]
         },
@@ -136,31 +144,43 @@
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "I am",
+          "aliases": [
+            "im",
+            "i'm",
+            "hi am",
+            "eye am",
+            "high am"
+          ],
           "successMsg": "¡Excelente pronunciación!"
         },
         {
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "I",
+          "aliases": [
+            "eye",
+            "hi",
+            "aye",
+            "ai",
+            "hay",
+            "a",
+            "ay"
+          ],
           "successMsg": "¡Excelente pronunciación!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
-          "word": "Am",
-          "successMsg": "¡Excelente pronunciación!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
-          "word": "Am",
-          "displayWord": "Soy / Estoy",
-          "successMsg": "¡Traducción exacta!"
         },
         {
           "type": "echo_chamber",
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "I",
+          "aliases": [
+            "eye",
+            "hi",
+            "aye",
+            "ai",
+            "hay",
+            "a",
+            "ay"
+          ],
           "displayWord": "Yo",
           "successMsg": "¡Traducción exacta!"
         },
@@ -168,6 +188,13 @@
           "type": "echo_chamber",
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "I am",
+          "aliases": [
+            "im",
+            "i'm",
+            "hi am",
+            "eye am",
+            "high am"
+          ],
           "displayWord": "Yo soy",
           "successMsg": "¡Traducción exacta!"
         }
@@ -201,40 +228,72 @@
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "Boy",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "¡Excelente pronunciación!",
+          "aliases": [
+            "boil",
+            "void",
+            "voy",
+            "buoy"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "Girl",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "¡Excelente pronunciación!",
+          "aliases": [
+            "curl",
+            "grill",
+            "earl",
+            "gryl"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "Student",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "¡Excelente pronunciación!",
+          "aliases": [
+            "stu dent",
+            "stew dent"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "Boy",
           "displayWord": "Niño",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "¡Traducción exacta!",
+          "aliases": [
+            "boil",
+            "void",
+            "voy",
+            "buoy"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "Student",
           "displayWord": "Estudiante",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "¡Traducción exacta!",
+          "aliases": [
+            "stu dent",
+            "stew dent"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "Girl",
           "displayWord": "Niña",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "¡Traducción exacta!",
+          "aliases": [
+            "curl",
+            "grill",
+            "earl",
+            "gryl"
+          ]
         }
       ]
     },
@@ -368,27 +427,47 @@
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "Tired",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "¡Excelente pronunciación!",
+          "aliases": [
+            "tire red",
+            "tie red",
+            "tyre"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "Ready",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "¡Excelente pronunciación!",
+          "aliases": [
+            "reddy",
+            "reading",
+            "red"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "Ready",
           "displayWord": "Listo",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "¡Traducción exacta!",
+          "aliases": [
+            "reddy",
+            "reading",
+            "red"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "Tired",
           "displayWord": "Cansado",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "¡Traducción exacta!",
+          "aliases": [
+            "tire red",
+            "tie red",
+            "tyre"
+          ]
         }
       ]
     },
@@ -416,27 +495,57 @@
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "You are",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "¡Excelente pronunciación!",
+          "aliases": [
+            "ur",
+            "your",
+            "you're",
+            "ure",
+            "you r"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
           "word": "You",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "¡Excelente pronunciación!",
+          "aliases": [
+            "u",
+            "jew",
+            "yoo",
+            "hue",
+            "ew",
+            "youth"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "You are",
           "displayWord": "Tú eres",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "¡Traducción exacta!",
+          "aliases": [
+            "ur",
+            "your",
+            "you're",
+            "ure",
+            "you r"
+          ]
         },
         {
           "type": "echo_chamber",
           "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
           "word": "You",
           "displayWord": "Tú",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "¡Traducción exacta!",
+          "aliases": [
+            "u",
+            "jew",
+            "yoo",
+            "hue",
+            "ew",
+            "youth"
+          ]
         }
       ]
     },

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo | Moonsforest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+
+<body>
+    <!-- Header Modular -->
+    <div id="main-header"></div>
+
+    <div class="dashboard-container" id="dashboard-content"
+        style="max-width: 1000px; padding: 2rem 1rem; margin: 0 auto;">
+
+        <header class="stats-header" style="justify-content: flex-start; gap: 1rem; margin-bottom: 2rem;">
+            <button class="btn" onclick="window.location.href='mapa.html'"
+                style="padding: 0.5rem 1rem; border: 1px solid var(--slate-300);">← Volver al Bosque</button>
+            <h2 style="font-size: 1.5rem; color: var(--slate-800);" id="module-title">Cargando Módulo...</h2>
+        </header>
+
+        <p style="text-align: center; color: var(--slate-600); margin-bottom: 2rem;" id="module-desc">Por favor espera
+            un momento.</p>
+
+        <!-- The Peak Map (generado dinámicamente) -->
+        <main class="peak-map" id="map-path"
+            style="flex-direction: column; overflow-x: hidden; padding-top: 0; max-width: 600px; margin: 0 auto; gap: 1rem;">
+            <!-- Contenido inyectado por JS -->
+        </main>
+
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/components/header.js"></script>
+    <script type="module" src="/js/moduleLoader.js"></script>
+</body>
+
+</html>

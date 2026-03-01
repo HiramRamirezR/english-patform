@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lección 1.1 | Moonsforest</title>
+    <title>Lección | Moonsforest</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,29 +13,25 @@
 </head>
 
 <body>
-    <!-- Navigation Bar for Modules -->
     <header class="module-header">
-        <button class="btn-back" onclick="window.location.href='module1.html'">← Volver al Módulo 1</button>
-        <div class="module-title">Lección 1.1: Vocabulario</div>
+        <button class="btn-back" id="btn-back">← Volver</button>
+        <div class="module-title" id="lesson-title">Cargando Lección...</div>
         <div class="progress-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
     </header>
 
-    <!-- Main Learning Engine Container -->
     <main class="learning-container" id="learning-container">
         <!-- Content injected dynamically by JS -->
     </main>
 
-    <!-- Moon Feedback Overlay -->
     <div id="moon-support" class="moon-support hidden">
         <div class="moon-message-bubble" id="moon-message">Great job!</div>
         <div class="moon-avatar">🐻‍❄️</div>
     </div>
 
-    <!-- Script for Speech Synthesis & Recognition, plus Activity Engine -->
-    <script type="module" src="/js/moduleEngine.js"></script>
-    <script type="module" src="/js/m1l1.js"></script>
+    <!-- Script for Loader -->
+    <script type="module" src="/js/lessonLoader.js"></script>
 </body>
 
 </html>

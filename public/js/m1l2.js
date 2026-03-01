@@ -46,13 +46,19 @@ function generateLesson(vocabList) {
         });
     });
 
-    // Fase 3: Práctica Estructural (Pares)
+    // Fase 3: Práctica Estructural (Drag & Drop)
     generatedSteps.push({
-        type: 'echo_chamber',
+        type: 'drag_and_drop',
         prompt: `¡Reto Final! Une las frases: "Yo soy estudiante".`,
-        word: 'I am student', // Simplified without 'a' to avoid confusion early on or let's use valid English "I am a student".
-        displayWord: 'Yo soy estudiante.',
-        successMsg: '¡Increíble! Ya estás formando identidades.'
+        target: 'I am student',
+        options: ['student', 'I', 'am', 'Girl']
+    });
+
+    generatedSteps.push({
+        type: 'drag_and_drop',
+        prompt: `Otra más: "Tú eres niño".`,
+        target: 'You are Boy',
+        options: ['Boy', 'are', 'You', 'am']
     });
 
     return generatedSteps;

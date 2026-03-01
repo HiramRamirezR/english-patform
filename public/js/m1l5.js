@@ -37,6 +37,21 @@ function generateLesson(phraseList) {
         });
     });
 
+    // Rompecabezas Final antes del grito de victoria
+    generatedSteps.push({
+        type: 'drag_and_drop',
+        prompt: `🧩 Organiza antes de irte: "Yo soy un buen estudiante"`,
+        target: 'I am a good student',
+        options: ['good', 'I', 'student', 'a', 'am']
+    });
+
+    generatedSteps.push({
+        type: 'drag_and_drop',
+        prompt: `🧩 ¡Último acomodo!: "Escucha al bosque"`,
+        target: 'Listen to the forest',
+        options: ['the', 'Listen', 'forest', 'to']
+    });
+
     generatedSteps.push({
         type: 'echo_chamber',
         prompt: `🎉 ¡Último aliento! Grita de felicidad.`,

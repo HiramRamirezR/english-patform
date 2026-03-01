@@ -49,21 +49,19 @@ function generateLesson(vocabList) {
         });
     });
 
-    // Fase 3: Práctica de Pares (Hablar 2 cosas sin ayuda)
+    // Fase 3: Práctica de Pares (Drag & Drop)
     generatedSteps.push({
-        type: 'echo_chamber',
-        prompt: `¡Reto Final! Une estos dos saludos (dilos en inglés).`,
-        word: 'Hello Good morning',
-        displayWord: 'Hola, Buenos días.',
-        successMsg: '¡Increíble! Ya estás uniendo oraciones.'
+        type: 'drag_and_drop',
+        prompt: `¡Reto Final! Ordena las palabras para formar: "Hola, Buenos días."`,
+        target: 'Hello Good morning',
+        options: ['Hello', 'morning', 'Good', 'Bye']
     });
 
     generatedSteps.push({
-        type: 'echo_chamber',
-        prompt: `Última prueba del día. Despídete para ir a dormir.`,
-        word: 'Goodbye Good night',
-        displayWord: 'Adiós, Buenas noches.',
-        successMsg: '¡Perfecto! Has dominado The Clearing.'
+        type: 'drag_and_drop',
+        prompt: `Última prueba del día. Despídete para ir a dormir: "Adiós, Buenas noches."`,
+        target: 'Goodbye Good night',
+        options: ['night', 'Goodbye', 'Good', 'Hi']
     });
 
     return generatedSteps;

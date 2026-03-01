@@ -220,6 +220,8 @@ body {
 /* Next Button global */
 .btn-next-step {
     margin-top: 3rem;
+    margin-bottom: 6rem;
+    /* Empujar el resto del contenido para que Moon no lo tape */
     padding: 1rem 3rem;
     font-size: 1.2rem;
     opacity: 0;

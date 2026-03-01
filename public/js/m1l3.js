@@ -8,7 +8,7 @@ const vocabulary = [
     { word: 'Speak', translation: 'Hablar' },
     { word: 'Listen', translation: 'Escuchar' },
     { word: 'English', translation: 'Inglés' },
-    { word: 'To', translation: 'A / Hacia' }
+    { word: 'To', translation: 'A / Hacia', aliases: ['two', 'too', 'do'] }
 ];
 
 function generateLesson(vocabList) {
@@ -27,6 +27,7 @@ function generateLesson(vocabList) {
             type: 'echo_chamber',
             prompt: `¡Dale voz al verbo!`,
             word: item.word,
+            aliases: item.aliases,
             successMsg: '¡Esa pronunciación es perfecta!'
         });
     });
@@ -38,6 +39,7 @@ function generateLesson(vocabList) {
             type: 'echo_chamber',
             prompt: `💡 Piensa rápido: ¿Cómo lo dices en inglés?`,
             word: item.word,
+            aliases: item.aliases,
             displayWord: item.translation,
             successMsg: '¡Traducción exacta!'
         });

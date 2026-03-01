@@ -193,14 +193,18 @@ export class MoonsforestEngine {
 
             this.recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript.toLowerCase().trim();
+
+                // TOLERANCIA ESTRICTA Y HOMÓFONOS (ALIASES):
                 const target = data.word.toLowerCase().replace(/[^a-z0-9 ]/gi, '').trim();
                 const cleanTranscript = transcript.replace(/[^a-z0-9 ]/gi, '').trim();
 
                 feedback.innerHTML = `Escuché: "<strong>${transcript}</strong>"`;
 
-                // TOLERANCIA ESTRICTA:
-                const isExactMatch = cleanTranscript === target;
-                const startsWithMatch = cleanTranscript.startsWith(target) && (cleanTranscript.length <= target.length + 5);
+                const aliases = data.aliases ? data.aliases.map(a => a.toLowerCase().replace(/[^a-z0-9 ]/gi, '').trim()) : [];
+                const targets = [target, ...aliases];
+
+                const isExactMatch = targets.includes(cleanTranscript);
+                const startsWithMatch = targets.some(t => cleanTranscript.startsWith(t) && (cleanTranscript.length <= t.length + 5));
 
                 if (isExactMatch || startsWithMatch) {
                     this.playSound('success');

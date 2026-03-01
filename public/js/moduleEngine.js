@@ -124,6 +124,7 @@ export class MoonsforestEngine {
                 solvedCount++;
 
                 if (solvedCount === data.cards.length) {
+                    this.playSound('success');
                     this.showNextButton(box);
                     this.showMoon("Pudiste leerlas todas. ¡Súper!");
                 }
@@ -200,17 +201,20 @@ export class MoonsforestEngine {
                 const startsWithMatch = cleanTranscript.startsWith(target) && (cleanTranscript.length <= target.length + 5);
 
                 if (isExactMatch || startsWithMatch) {
+                    this.playSound('success');
                     echoWord.classList.add('success');
                     echoWord.innerText = data.word; // Revelar inglés si estaba oculto en español
                     micBtn.style.display = 'none'; // ocultar micro
                     this.showMoon(data.successMsg || "¡Ese es el sonido perfecto!");
                     this.showNextButton(box);
                 } else {
+                    this.playSound('error');
                     this.showMoon("¡Casi! Intenta pronunciarlo un par de veces más.");
                 }
             };
 
             this.recognition.onnomatch = () => {
+                this.playSound('error');
                 feedback.innerText = 'No pude escucharte bien. Intenta otra vez.';
                 this.showMoon("Habla un poquito más fuerte.");
             };
@@ -231,6 +235,50 @@ export class MoonsforestEngine {
                 micBtn.classList.remove('listening');
             };
         });
+    }
+
+    // --- SOUND EFFECTS ENGINE (Web Audio API) ---
+    playSound(type) {
+        // Usa la API nativa de audio del navegador sin necesitar archivos MP3
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+
+        try {
+            const ctx = new AudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            if (type === 'success') {
+                // Sonido feliz: Dos notas ascendentes (Arpegio rápido)
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, ctx.currentTime); // Do (C5)
+                osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // Mi (E5)
+
+                gain.gain.setValueAtTime(0, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.05);
+                gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.3);
+
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.3);
+            } else if (type === 'error') {
+                // Sonido de fallo: Tono grave descendente
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.2);
+
+                gain.gain.setValueAtTime(0, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.05);
+                gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.3);
+
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.3);
+            }
+        } catch (e) {
+            console.error("Error reproduciendo sonido:", e);
+        }
     }
 
     renderCompletion() {

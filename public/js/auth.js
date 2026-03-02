@@ -43,6 +43,13 @@ const initApp = () => {
 
     ['google-login', 'hero-cta-free', 'hero-cta-explore'].forEach(setupLogin);
 
+    // Lógica de referidos
+    const urlParams = new URL(window.location.href).searchParams;
+    const refCode = urlParams.get('ref');
+    if (refCode) {
+        localStorage.setItem('moonsforest_ref', refCode);
+    }
+
     // Escuchar cambios en el estado de autenticación
     onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -81,6 +88,8 @@ export const handleLogin = async () => {
 
         if (!userSnap.exists()) {
             console.log("Creando nuevo perfil de usuario (student base)...");
+            const storedRefCode = localStorage.getItem('moonsforest_ref') || null;
+
             await setDoc(userRef, {
                 uid: user.uid,
                 name: user.displayName,
@@ -89,13 +98,15 @@ export const handleLogin = async () => {
                 role: 'student', // Todos nacen como alumno
                 isTeacher: false, // Bandera de switch inactiva
                 createdAt: serverTimestamp(),
-                points: 0
+                points: 0,
+                referredBy: storedRefCode // Si null, no fue referido
             });
 
             // Notificación a Discord
+            const refMsg = storedRefCode ? `\n🎁 *Llegó usando el código de referido:* **${storedRefCode}**` : '';
             await sendDiscordNotification(
                 "👋 Nuevo Viajero Registrado",
-                `**${user.displayName}** (${user.email}) acaba de unirse a Moonsforest.`,
+                `**${user.displayName}** (${user.email}) acaba de unirse a Moonsforest.${refMsg}`,
                 15258703 // Amarillo
             );
         }

@@ -1,6 +1,6 @@
 import { auth, db } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { doc, getDoc, collection, addDoc, query, where, getDocs, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { doc, getDoc, collection, addDoc, query, where, getDocs, deleteDoc, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { sendDiscordNotification } from './discord.js';
 
 // Elementos del DOM para la agenda
@@ -332,6 +332,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentUser = user;
                 currentTeacherProfile = userData;
 
+                // Crear código de referido si no lo tiene configurado (Backward compatibility)
+                if (userData.teacherProfile && !userData.teacherProfile.refCode) {
+                    const base = userData.name ? userData.name.split(' ')[0].toUpperCase().replace(/[^A-Z]/g, '') : 'MF';
+                    const fallbackRefCode = base + Math.floor(1000 + Math.random() * 9000);
+
+                    await setDoc(docRef, {
+                        teacherProfile: {
+                            ...userData.teacherProfile,
+                            refCode: fallbackRefCode
+                        }
+                    }, { merge: true });
+
+                    userData.teacherProfile.refCode = fallbackRefCode;
+                }
+
                 // Cargar UI
                 document.getElementById('teacher-name').textContent = `Prof. ${userData.name.split(' ')[0]}`;
 
@@ -339,6 +354,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (userData.teacherProfile && userData.teacherProfile.zoomLink) {
                     zoomBtn.href = userData.teacherProfile.zoomLink;
                     zoomBtn.style.display = 'inline-block';
+                }
+
+                // Referidos UI
+                const refLinkDisplay = document.getElementById('ref-link-display');
+                const copyRefBtn = document.getElementById('copy-ref-btn');
+                if (refLinkDisplay && userData.teacherProfile && userData.teacherProfile.refCode) {
+                    const uniqueLink = `${window.location.origin}/index.html?ref=${userData.teacherProfile.refCode}`;
+                    refLinkDisplay.value = uniqueLink;
+
+                    copyRefBtn.addEventListener('click', () => {
+                        navigator.clipboard.writeText(uniqueLink).then(() => {
+                            copyRefBtn.textContent = '¡Enlace copiado!';
+                            copyRefBtn.style.background = '#059669'; // Verde success
+                            setTimeout(() => {
+                                copyRefBtn.textContent = 'Copiar mi enlace único';
+                                copyRefBtn.style.background = '#fbbf24';
+                            }, 3000);
+                        });
+                    });
                 }
 
                 // Inicializar Agenda

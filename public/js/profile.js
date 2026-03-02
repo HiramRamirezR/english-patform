@@ -47,6 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const user = auth.currentUser;
             if (!user) throw new Error("No hay usuario autenticado.");
 
+            const generateRefCode = (name) => {
+                const base = name ? name.split(' ')[0].toUpperCase().replace(/[^A-Z]/g, '') : 'MF';
+                return base + Math.floor(1000 + Math.random() * 9000);
+            };
+            const customRefCode = generateRefCode(user.displayName);
+
             const userRef = doc(db, 'users', user.uid);
             await updateDoc(userRef, {
                 isTeacher: true,
@@ -58,7 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     cvLink: teacherCv,
                     clabe: teacherClabe,
                     bank: teacherBank,
-                    status: 'active' // Podríamos usar pending si queremos revisión manual en el futuro
+                    status: 'active', // Podríamos usar pending si queremos revisión manual en el futuro
+                    refCode: customRefCode
                 }
             });
 

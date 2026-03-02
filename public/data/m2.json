@@ -73,7 +73,8 @@
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Une la frase: \"Eso es, Esos son\"",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "It is They are",
           "options": [
             "They",
@@ -81,6 +82,16 @@
             "are",
             "It"
           ]
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "It is": "Es",
+            "They are": "Son"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -166,6 +177,17 @@
             "board",
             "bert"
           ]
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Bear": "Oso",
+            "Wolf": "Lobo",
+            "Bird": "Pájaro"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -224,6 +246,16 @@
             "tea",
             "free"
           ]
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Tree": "Árbol",
+            "Forest": "Bosque"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -272,6 +304,16 @@
           "word": "Small",
           "displayWord": "Pequeño",
           "successMsg": "s_trans"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Big": "Grande",
+            "Small": "Pequeño"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -283,7 +325,8 @@
       "steps": [
         {
           "type": "drag_and_drop",
-          "prompt": "Es grande",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "It is big",
           "options": [
             "big",
@@ -293,13 +336,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "It is big",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Son pequeños",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "They are small",
           "options": [
             "are",
@@ -309,13 +353,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "They are small",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Oso grande",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "Big bear",
           "options": [
             "bear",
@@ -324,9 +369,20 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "Big bear",
           "successMsg": "s_fluency"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "It is big": "Es grande",
+            "They are small": "Son pequeños",
+            "Big bear": "Oso grande"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -392,6 +448,17 @@
           "word": "Green",
           "displayWord": "Verde",
           "successMsg": "s_trans"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Red": "Rojo",
+            "Blue": "Azul",
+            "Green": "Verde"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -403,7 +470,8 @@
       "steps": [
         {
           "type": "drag_and_drop",
-          "prompt": "Es rojo",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "It is red",
           "options": [
             "is",
@@ -413,13 +481,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "It is red",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Son verdes",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "They are green",
           "options": [
             "green",
@@ -429,13 +498,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "They are green",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Pájaro azul",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "Blue bird",
           "options": [
             "bird",
@@ -444,9 +514,20 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "Blue bird",
           "successMsg": "s_fluency"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "It is red": "Es rojo",
+            "They are green": "Son verdes",
+            "Blue bird": "Pájaro azul"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -458,7 +539,8 @@
       "steps": [
         {
           "type": "drag_and_drop",
-          "prompt": "Árbol verde",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "Green tree",
           "options": [
             "tree",
@@ -467,13 +549,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "Green tree",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Lobo grande",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "Big wolf",
           "options": [
             "wolf",
@@ -482,13 +565,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "Big wolf",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Pájaro pequeño",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "Small bird",
           "options": [
             "Small",
@@ -497,9 +581,20 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "Small bird",
           "successMsg": "s_fluency"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Green tree": "Árbol verde",
+            "Big wolf": "Lobo grande",
+            "Small bird": "Pájaro pequeño"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -565,6 +660,17 @@
           "word": "Bears",
           "displayWord": "Osos",
           "successMsg": "s_trans"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Bears": "Osos",
+            "Birds": "Pájaros",
+            "Trees": "Árboles"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -576,7 +682,8 @@
       "steps": [
         {
           "type": "drag_and_drop",
-          "prompt": "Son osos grandes",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "They are big bears",
           "options": [
             "bears",
@@ -587,13 +694,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "They are big bears",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Es un pájaro azul",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "It is a blue bird",
           "options": [
             "blue",
@@ -605,13 +713,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "It is a blue bird",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Son árboles verdes",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "They are green trees",
           "options": [
             "are",
@@ -622,9 +731,20 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "They are green trees",
           "successMsg": "s_fluency"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Big bears": "Osos grandes",
+            "Blue bird": "Pájaro azul",
+            "Green trees": "Árboles verdes"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -636,7 +756,8 @@
       "steps": [
         {
           "type": "drag_and_drop",
-          "prompt": "Mira, es un oso grande",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "Look it is a big bear",
           "options": [
             "bear",
@@ -649,13 +770,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "Look it is a big bear",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Son lobos",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "They are wolves",
           "options": [
             "are",
@@ -665,13 +787,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "They are wolves",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Es un árbol pequeño",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "It is a small tree",
           "options": [
             "tree",
@@ -683,9 +806,20 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "It is a small tree",
           "successMsg": "s_fluency"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Big bear": "Oso grande",
+            "Small tree": "Árbol pequeño",
+            "Wolves": "Lobos"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -697,7 +831,8 @@
       "steps": [
         {
           "type": "drag_and_drop",
-          "prompt": "Un pájaro azul pequeño",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "A small blue bird",
           "options": [
             "blue",
@@ -708,13 +843,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "A small blue bird",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Son grandes árboles verdes",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "They are big green trees",
           "options": [
             "trees",
@@ -726,13 +862,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "They are big green trees",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "El bosque es grande",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "The forest is big",
           "options": [
             "big",
@@ -743,9 +880,20 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "The forest is big",
           "successMsg": "s_fluency"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Small bird": "Pájaro pequeño",
+            "Green trees": "Árboles verdes",
+            "Big forest": "Bosque grande"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -757,7 +905,8 @@
       "steps": [
         {
           "type": "drag_and_drop",
-          "prompt": "Yo veo un oso rojo",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "I see a red bear",
           "options": [
             "bear",
@@ -769,13 +918,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "I see a red bear",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Es verde y azul",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "It is green and blue",
           "options": [
             "It",
@@ -787,13 +937,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "It is green and blue",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Son pájaros felices",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "They are happy birds",
           "options": [
             "happy",
@@ -804,9 +955,20 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "They are happy birds",
           "successMsg": "s_fluency"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "I see": "Yo veo",
+            "Happy birds": "Pájaros felices",
+            "Red bear": "Oso rojo"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -818,7 +980,8 @@
       "steps": [
         {
           "type": "drag_and_drop",
-          "prompt": "El lobo está cansado",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "The wolf is tired",
           "options": [
             "is",
@@ -829,13 +992,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "The wolf is tired",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Mira los árboles verdes",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "Look at the green trees",
           "options": [
             "trees",
@@ -847,13 +1011,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "Look at the green trees",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Es un gran día",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "It is a big day",
           "options": [
             "big",
@@ -865,9 +1030,20 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "It is a big day",
           "successMsg": "s_fluency"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Tired": "Cansado",
+            "Look at": "Mira a",
+            "Big day": "Gran día"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -879,7 +1055,8 @@
       "steps": [
         {
           "type": "drag_and_drop",
-          "prompt": "Hola lobo, eres grande",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "Hello wolf you are big",
           "options": [
             "wolf",
@@ -891,13 +1068,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "Hello wolf you are big",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Ellos son pájaros azules y pequeños",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "They are small and blue birds",
           "options": [
             "and",
@@ -910,13 +1088,14 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "They are small and blue birds",
           "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
-          "prompt": "Adiós oso verde",
+          "prompt": "p_drag",
+          "timer": true,
           "target": "Goodbye green bear",
           "options": [
             "bear",
@@ -926,9 +1105,20 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
+          "prompt": "p_echo",
           "word": "Goodbye green bear",
           "successMsg": "s_fluency"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Hello": "Hola",
+            "Goodbye": "Adiós",
+            "Blue birds": "Pájaros azules"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -940,31 +1130,42 @@
       "steps": [
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "It is a big bear",
           "displayWord": "Es un oso grande",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "They are small birds",
           "displayWord": "Son pájaros pequeños",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "The tree is green",
           "displayWord": "El árbol es verde",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "Look it is a blue wolf",
           "displayWord": "Mira es un lobo azul",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Big bear": "Oso grande",
+            "Small birds": "Pájaros pequeños",
+            "Green tree": "Árbol verde"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -976,31 +1177,42 @@
       "steps": [
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "I am a boy and it is a bear",
           "displayWord": "Yo soy un niño y es un oso",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "They are red trees",
           "displayWord": "Son árboles rojos",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "The forest is big and green",
           "displayWord": "El bosque es grande y verde",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "Hello blue bird",
           "displayWord": "Hola pájaro azul",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Blue bird": "Pájaro azul",
+            "Red trees": "Árboles rojos",
+            "Forest": "Bosque"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -1012,31 +1224,42 @@
       "steps": [
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "It is tired",
           "displayWord": "Está cansado",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "They are happy bears",
           "displayWord": "Son osos felices",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "You are a big wolf",
           "displayWord": "Tú eres un lobo grande",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "I see a small green tree",
           "displayWord": "Yo veo un árbol verde pequeño",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Tired": "Cansado",
+            "Happy bears": "Osos felices",
+            "Big wolf": "Lobo grande"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -1048,31 +1271,42 @@
       "steps": [
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "Look it is a big green tree",
           "displayWord": "Mira es un árbol verde grande",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "They are brown bears",
           "displayWord": "Son osos cafés",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "Hello small blue bird",
           "displayWord": "Hola pajarito azul",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "echo_chamber",
-          "prompt": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+          "prompt": "p_speak_fast",
           "word": "The forest is ready",
           "displayWord": "El bosque está listo",
-          "successMsg": "¡Perfecto!"
+          "successMsg": "s_fluency"
+        },
+        {
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "Ready": "Listo",
+            "Brown bears": "Osos cafés",
+            "Blue bird": "Pajaro azul"
+          },
+          "successMsg": "s_match"
         }
       ]
     },
@@ -1084,38 +1318,23 @@
       "steps": [
         {
           "type": "echo_chamber",
-          "prompt": "🔥 El bosque cobra vida. Moon te señala algo. Dilo fuerte:",
-          "word": "Look",
-          "displayWord": "Mira",
-          "successMsg": "¡Atento!"
+          "prompt": "p_ready",
+          "word": "I am ready",
+          "displayWord": "Estoy listo",
+          "successMsg": "¡Que empiece la prueba!"
         },
         {
-          "type": "echo_chamber",
-          "prompt": "Dile a Moon qué es:",
-          "word": "It is a big bear",
-          "displayWord": "Es un oso grande",
-          "successMsg": "¡Exacto!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "Moon pregunta por las aves:",
-          "word": "They are blue birds",
-          "displayWord": "Son pájaros azules",
-          "successMsg": "¡Excelente vista!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "Moon pregunta sobre el entorno:",
-          "word": "They are green trees",
-          "displayWord": "Son árboles verdes",
-          "successMsg": "¡Conoces bien el lugar!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "Despídete de los animales:",
-          "word": "Goodbye animals",
-          "displayWord": "Adiós animales",
-          "successMsg": "¡Nivel superado!"
+          "type": "matching",
+          "prompt": "p_match",
+          "timer": true,
+          "pairs": {
+            "It is a big bear": "Es un oso grande",
+            "They are blue birds": "Son pájaros azules",
+            "They are green trees": "Son árboles verdes",
+            "Goodbye animals": "Adiós animales",
+            "I see the forest": "Veo el bosque"
+          },
+          "successMsg": "s_match"
         }
       ]
     }

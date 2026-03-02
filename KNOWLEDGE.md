@@ -5,7 +5,7 @@ Este documento define la progresión educativa, el vocabulario, y la estructura 
 - **Menos adornos, más foco:** Interfaz limpia con botones grandes y textos legibles. Sin animaciones que distraigan.
 - **Micro-pasos:** Aprender (1), Repetir (1), Hablar (1). Aprender (2), Hablar (1+2). Aprender (3), Hablar (1+2+3).
 - **Validación Estricta:** El niño no avanza si no lo pronuncia correctamente (usando Web Speech API local).
-- **Moon como Coach:** Frases preestablecidas de aliento constantes ("Great job!", "Try again", "You sound like a native explorer!").
+- **Moon como Coach:** Uso de mensajes de aliento y prompts estandarizados mediante un sistema de recursos globales (`globals.json`), garantizando consistencia en las instrucciones y feedback ("Great job!", "Try again", "You sound like a native explorer!").
 
 ---
 
@@ -24,10 +24,34 @@ Para garantizar la retención a largo plazo y la maestría del tema, cada módul
 ## El Currículo: Módulos 1 al 10
 
 ### Módulo 1: Campamento Base (Base Camp)
-*   **Enfoque:** Aprender a saludar, decir su nombre y estado de ánimo usando la estructura básica del verbo To Be. El niño pierde el miedo al micrófono.
+*   **Enfoque:** Perder el miedo al micrófono, presentarse y expresar estados de ánimo básicos usando la estructura del verbo *To Be*.
+*   **Dinámica Nueva:** Todas las lecciones incluyen un **Reto de Velocidad** (cronómetro visual) y un paso final de **Unión de Pares** (Matching) para asentar el vocabulario.
+
+#### Desglose de Lecciones (20 Pasos hacia la Maestría)
+1.  **1.1: Hola y Adiós** - Vocabulario: *Hello, Goodbye*. (Pares: En/Es).
+2.  **1.2: Mañana y Noche** - Vocabulario: *Good morning, Good night*. (Acumulativo: Saludos).
+3.  **1.3: Yo soy...** - Estructura: *I, I am*.
+4.  **1.4: Niño o Niña** - Vocabulario: *Boy, Girl, Student*.
+5.  **1.5: Reto Intermedio ⭐** - Combinación: *"I am a boy/girl/student"*. Reto de velocidad intenso.
+6.  **1.6: Feliz y Triste** - Emociones: *Happy, Sad*.
+7.  **1.7: Cansado y Listo** - Emociones: *Tired, Ready*.
+8.  **1.8: Tú eres...** - Estructura: *You, You are*.
+9.  **1.9: Mi nombre es...** - Estructura: *My name is...*
+10. **1.10: Segundo Reto 🧗** - Combinación: *"You are happy/sad"*, *"I am ready"*.
+11. **1.11: Rompecabezas I 🧩** - Enfoque en sintaxis: *"Hello, my name is Moon"*.
+12. **1.12: Rompecabezas II 🧩** - Enfoque en adjetivos: *"You are a tired student"*.
+13. **1.13: Traducción I ⚡** - Pensar en inglés: *"My name is..."*, *"I am ready"*.
+14. **1.14: Traducción II ⚡** - Pensar en inglés: *"You are a boy"*, *"I happy, you sad"*.
+15. **1.15: El Gran Ensamblaje 🏗️** - Frases largas: *"Hello, good morning my happy student"*.
+16. **1.16: Eco Continuo 1 🗣️** - Fluidez auditiva y oral: *"Hello Moon, I am ready"*.
+17. **1.17: Eco Continuo 2 🗣️** - Fluidez adjetivos: *"Tired student"*, *"Ready Moon"*.
+18. **1.18: Eco Continuo 3 🗣️** - Fluidez personal: *"My name is happy"*, *"I am ready tired"*.
+19. **1.19: Ensayo General 🎭** - Repaso total de estructuras antes del jefe.
+20. **1.20: La Fogata 🔥 (Jefe Final)** - Simulación de conversación real con Moon sin apoyo visual de traducción. **Examen de Graduación** de pares con todo el vocabulario del módulo.
+
 *   **Gramática Central:** I am / You are / My name is...
-*   **Vocabulario Destacado:** Hello, Goodbye, Morning, Night, Boy, Girl, Happy, Sad.
-*   **Meta Conversacional:** *"Hello Moon, my name is Hiram. I am a happy boy."*
+*   **Vocabulario Destacado:** Hello, Goodbye, Morning, Night, Boy, Girl, Happy, Sad, Tired, Ready.
+*   **Meta Conversacional:** *"Hello Moon, my name is Hiram. I am a happy boy and you are ready."*
 
 ### Módulo 2: El Bosque de los Animales
 *   **Enfoque:** Aprender a apuntar y describir cosas de la naturaleza introduciendo la tercera persona y plurales simples.

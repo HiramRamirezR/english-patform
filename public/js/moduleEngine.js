@@ -8,6 +8,7 @@ export class MoonsforestEngine {
         this.container = document.getElementById(containerId);
         this.data = data;
         this.options = options;
+        this.resources = options.resources || {};
         this.currentStep = 0;
         this.startTime = Date.now();
         this.sessionHistory = []; // Almacenará { type: 'moon'|'child', content: text|blobUrl }
@@ -61,6 +62,10 @@ export class MoonsforestEngine {
 
         const stepData = this.data[this.currentStep];
 
+        // Resolver textos si son llaves de recursos
+        if (stepData.prompt) stepData.prompt = this.resolveText(stepData.prompt);
+        if (stepData.successMsg) stepData.successMsg = this.resolveText(stepData.successMsg);
+
         if (stepData.type === 'listen_click') {
             this.renderListenClick(stepData);
         } else if (stepData.type === 'echo_chamber') {
@@ -72,6 +77,18 @@ export class MoonsforestEngine {
         } else {
             this.container.innerHTML = `<p>Actividad no soportada: ${stepData.type}</p>`;
         }
+    }
+
+    resolveText(text) {
+        if (typeof text !== 'string') return text;
+        // Si empieza con p_ buscar en prompts, si es s_ buscar en successMessages
+        if (text.startsWith('p_') && this.resources.prompts) {
+            return this.resources.prompts[text] || text;
+        }
+        if (text.startsWith('s_') && this.resources.successMessages) {
+            return this.resources.successMessages[text] || text;
+        }
+        return text;
     }
 
     nextStep() {
@@ -489,7 +506,8 @@ export class MoonsforestEngine {
 
         // Desafío de Velocidad
         if (data.timer) {
-            this.startTimer(box, data.timer, () => {
+            const seconds = typeof data.timer === 'number' ? data.timer : 15;
+            this.startTimer(box, seconds, () => {
                 this.showMoon("¡El tiempo voló! Sigue intentándolo hasta lograrlo.");
             });
         }
@@ -651,7 +669,8 @@ export class MoonsforestEngine {
 
         // Desafío de Velocidad
         if (data.timer) {
-            this.startTimer(box, data.timer, () => {
+            const seconds = typeof data.timer === 'number' ? data.timer : 20;
+            this.startTimer(box, seconds, () => {
                 this.showMoon("¡Se acabó el tiempo! No pasa nada, termina a tu ritmo.");
             });
         }
@@ -903,10 +922,18 @@ export class MoonsforestEngine {
     }
 
     showNextButton(parentBox) {
-        // Limpiar timer si existe
+        // Congelar y limpiar timer si existe
         if (this.currentTimerId) {
             clearTimeout(this.currentTimerId);
             this.currentTimerId = null;
+
+            if (this.currentTimerBar) {
+                const currentWidth = window.getComputedStyle(this.currentTimerBar).width;
+                this.currentTimerBar.style.transition = 'none';
+                this.currentTimerBar.style.width = currentWidth;
+                this.currentTimerBar.style.background = 'linear-gradient(90deg, #10b981, #34d399)'; // Verde éxito
+                this.currentTimerBar = null;
+            }
         }
 
         // Avoid duplicate buttons
@@ -925,13 +952,16 @@ export class MoonsforestEngine {
         timerContainer.style.height = '6px';
         timerContainer.style.background = '#e2e8f0';
         timerContainer.style.borderRadius = '99px';
-        timerContainer.style.marginTop = '1rem';
+        timerContainer.style.marginTop = '1.5rem';
+        timerContainer.style.marginBottom = '1.5rem';
         timerContainer.style.overflow = 'hidden';
+        timerContainer.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.1)';
 
         const timerBar = document.createElement('div');
         timerBar.style.height = '100%';
         timerBar.style.width = '100%';
-        timerBar.style.background = '#3b82f6';
+        timerBar.style.background = 'linear-gradient(90deg, #3b82f6, #60a5fa)';
+        timerBar.style.borderRadius = '99px';
         timerBar.style.transition = `width ${seconds}s linear`;
         timerContainer.appendChild(timerBar);
 
@@ -955,6 +985,7 @@ export class MoonsforestEngine {
 
         // Guardar referencia para limpiar si terminan antes
         this.currentTimerId = timeoutId;
+        this.currentTimerBar = timerBar;
     }
 
     showMoon(message) {

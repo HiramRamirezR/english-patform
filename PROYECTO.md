@@ -25,6 +25,8 @@ Plataforma de aprendizaje de inglés en línea, interactiva y gamificada con una
 - [x] Vista de Perfil con opción "Convertirme en Maestro".
 
 ### 3. Experiencia del Alumno (The Forest)
+- **Validación Estricta:** El niño no avanza si no lo pronuncia correctamente (usando Web Speech API local).
+- **Moon como Coach:** Uso de mensajes de aliento y prompts estandarizados mediante un sistema de recursos globales (`globals.json`), garantizando consistencia en las instrucciones y feedback ("Great job!", "Try again", "You sound like a native explorer!").
 - **Lore y Estética:** El alumno es un viajero (Dante) adentrándose en el inmenso "Moonsforest". Para avanzar más profundo en el bosque, debe aprender a comunicarse con el ecosistema probando su dominio del nivel. 
 - **Selección de Personaje:** Al registrarse, el alumno escoge un avatar que es un **animalito del bosque**.
 - **Moon (IA Companion):** Asistente virtual educativo (una osita sabia). Actúa como la guía del bosque (Virgilio). Moon habla directamente con el animalito del alumno.
@@ -36,6 +38,7 @@ Plataforma de aprendizaje de inglés en línea, interactiva y gamificada con una
   - **Fast-Track / Aprobación con el Guardián:** El botón de "Evalúate ($60)" vivirá siempre fijo a la vista en el **Header**. Un alumno puede pulsarlo en cualquier momento para pedir la evaluación humana.
   - **Estructura de Lecciones:** Actividades de micro-learning organizadas en submódulos (vocabulario, estructuras, lecturas, Drag & Drop, y práctica conversacional guiada por Moon).
   - **Arquitectura de Lecciones (Modular):** Las actividades están creadas con componentes frontend reutilizables (Ej. *Listen & Click Box*, *Echo Chamber Mic*, *Drag & Drop Engine*) para escalar a 20+ módulos rápidamente con pura configuración de JSON u objetos JavaScript.
+  - **Sistema de Recursos Globales:** Implementación de `globals.json` para centralizar prompts y mensajes de éxito, permitiendo consistencia visual y textual en toda la plataforma y reduciendo la redundancia de datos en los archivos de los módulos.
   - **Suscripción Premium:** Para explorar todo el mapa, se requiere un pago de **$300 MXN mensuales**.
 
 ### 4. Portal del Maestro (MVP Completado 🚀)

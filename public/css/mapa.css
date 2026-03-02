@@ -304,7 +304,33 @@
     transform: scale(1.05);
 }
 
-/* Weekly Path Styles Consolidated */
+.weekly-path-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    max-width: 500px;
+    border-left: 5px solid #fbbf24;
+}
+
+.weekly-path-card h4 {
+    color: var(--slate-800);
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#weekly-path-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Day Circles base styles */
 .day-circle {
     width: 40px;
     height: 40px;

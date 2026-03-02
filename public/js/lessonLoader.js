@@ -17,15 +17,31 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const moduleId = lessonId.substring(0, 2); // ie 'm1'
     let configModule;
+    let globals;
     try {
-        const response = await fetch(`/data/${moduleId}.json`);
-        if (!response.ok) throw new Error("Módulo no encontrado");
-        configModule = await response.json();
+        const [moduleRes, globalsRes] = await Promise.all([
+            fetch(`/data/${moduleId}.json`),
+            fetch(`/data/globals.json`)
+        ]);
+
+        if (!moduleRes.ok) throw new Error("Módulo no encontrado");
+        configModule = await moduleRes.json();
+
+        if (globalsRes.ok) {
+            globals = await globalsRes.json();
+        }
     } catch (error) {
+        console.error("Error cargando el módulo:", error);
         alert("La base de datos de este módulo no está lista aún.");
         window.location.href = `module.html?id=${moduleId}`;
         return;
     }
+
+    // Mezclar recursos (los del módulo tienen prioridad)
+    const mergedResources = {
+        prompts: { ...(globals?.prompts || {}), ...(configModule.resources?.prompts || {}) },
+        successMessages: { ...(globals?.successMessages || {}), ...(configModule.resources?.successMessages || {}) }
+    };
 
     const lessonConfig = configModule.lessons.find(l => l.id === lessonId);
 
@@ -96,7 +112,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 5. Iniciar la clase de aprendizaje
         new MoonsforestEngine('learning-container', lessonConfig.steps, {
-            returnUrl: `module.html?id=${moduleId}`
+            returnUrl: `module.html?id=${moduleId}`,
+            resources: mergedResources
         });
     });
 });

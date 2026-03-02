@@ -11,7 +11,7 @@
       "steps": [
         {
           "type": "listen_click",
-          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "prompt": "p_listen",
           "cards": [
             {
               "word": "It is",
@@ -25,9 +25,9 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "It is",
-          "successMsg": "¡Excelente pronunciación!",
+          "successMsg": "s_pron",
           "aliases": [
             "eat is",
             "id is",
@@ -36,9 +36,9 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "They are",
-          "successMsg": "¡Excelente pronunciación!",
+          "successMsg": "s_pron",
           "aliases": [
             "there",
             "their",
@@ -48,10 +48,10 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "They are",
           "displayWord": "Son / Esos son",
-          "successMsg": "¡Traducción exacta!",
+          "successMsg": "s_trans",
           "aliases": [
             "there",
             "their",
@@ -61,10 +61,10 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "It is",
           "displayWord": "Es / Eso es",
-          "successMsg": "¡Traducción exacta!",
+          "successMsg": "s_trans",
           "aliases": [
             "eat is",
             "id is",
@@ -92,7 +92,7 @@
       "steps": [
         {
           "type": "listen_click",
-          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "prompt": "p_listen",
           "cards": [
             {
               "word": "Bear",
@@ -110,9 +110,9 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "Bear",
-          "successMsg": "¡Excelente pronunciación!",
+          "successMsg": "s_pron",
           "aliases": [
             "bare",
             "beer",
@@ -121,15 +121,15 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "Wolf",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "s_pron"
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "Bird",
-          "successMsg": "¡Excelente pronunciación!",
+          "successMsg": "s_pron",
           "aliases": [
             "beard",
             "board",
@@ -138,10 +138,10 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "Bear",
           "displayWord": "Oso",
-          "successMsg": "¡Traducción exacta!",
+          "successMsg": "s_trans",
           "aliases": [
             "bare",
             "beer",
@@ -150,17 +150,17 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "Wolf",
           "displayWord": "Lobo",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "s_trans"
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "Bird",
           "displayWord": "Pájaro",
-          "successMsg": "¡Traducción exacta!",
+          "successMsg": "s_trans",
           "aliases": [
             "beard",
             "board",
@@ -177,7 +177,7 @@
       "steps": [
         {
           "type": "listen_click",
-          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "prompt": "p_listen",
           "cards": [
             {
               "word": "Tree",
@@ -191,9 +191,9 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "Tree",
-          "successMsg": "¡Excelente pronunciación!",
+          "successMsg": "s_pron",
           "aliases": [
             "three",
             "tea",
@@ -202,23 +202,23 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "Forest",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "s_pron"
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "Forest",
           "displayWord": "Bosque",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "s_trans"
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "Tree",
           "displayWord": "Árbol",
-          "successMsg": "¡Traducción exacta!",
+          "successMsg": "s_trans",
           "aliases": [
             "three",
             "tea",
@@ -235,7 +235,7 @@
       "steps": [
         {
           "type": "listen_click",
-          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "prompt": "p_listen",
           "cards": [
             {
               "word": "Big",
@@ -249,29 +249,29 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "Big",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "s_pron"
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "Small",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "s_pron"
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "Big",
           "displayWord": "Grande",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "s_trans"
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "Small",
           "displayWord": "Pequeño",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "s_trans"
         }
       ]
     },
@@ -295,7 +295,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "It is big",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -311,7 +311,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "They are small",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -326,7 +326,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "Big bear",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         }
       ]
     },
@@ -338,7 +338,7 @@
       "steps": [
         {
           "type": "listen_click",
-          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "prompt": "p_listen",
           "cards": [
             {
               "word": "Red",
@@ -356,42 +356,42 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "Red",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "s_pron"
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "Blue",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "s_pron"
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "Green",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "s_pron"
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "Red",
           "displayWord": "Rojo",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "s_trans"
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "Blue",
           "displayWord": "Azul",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "s_trans"
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "Green",
           "displayWord": "Verde",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "s_trans"
         }
       ]
     },
@@ -415,7 +415,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "It is red",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -431,7 +431,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "They are green",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -446,7 +446,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "Blue bird",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         }
       ]
     },
@@ -469,7 +469,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "Green tree",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -484,7 +484,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "Big wolf",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -499,7 +499,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "Small bird",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         }
       ]
     },
@@ -511,7 +511,7 @@
       "steps": [
         {
           "type": "listen_click",
-          "prompt": "1. Toca y escucha. ¡Repite en voz alta!",
+          "prompt": "p_listen",
           "cards": [
             {
               "word": "Bears",
@@ -529,42 +529,42 @@
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "Bears",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "s_pron"
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "Birds",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "s_pron"
         },
         {
           "type": "echo_chamber",
-          "prompt": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+          "prompt": "p_echo",
           "word": "Trees",
-          "successMsg": "¡Excelente pronunciación!"
+          "successMsg": "s_pron"
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "Birds",
           "displayWord": "Pájaros",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "s_trans"
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "Trees",
           "displayWord": "Árboles",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "s_trans"
         },
         {
           "type": "echo_chamber",
-          "prompt": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+          "prompt": "p_think",
           "word": "Bears",
           "displayWord": "Osos",
-          "successMsg": "¡Traducción exacta!"
+          "successMsg": "s_trans"
         }
       ]
     },
@@ -589,7 +589,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "They are big bears",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -607,7 +607,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "It is a blue bird",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -624,7 +624,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "They are green trees",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         }
       ]
     },
@@ -651,7 +651,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "Look it is a big bear",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -667,7 +667,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "They are wolves",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -685,7 +685,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "It is a small tree",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         }
       ]
     },
@@ -710,7 +710,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "A small blue bird",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -728,7 +728,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "They are big green trees",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -745,7 +745,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "The forest is big",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         }
       ]
     },
@@ -771,7 +771,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "I see a red bear",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -789,7 +789,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "It is green and blue",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -806,7 +806,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "They are happy birds",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         }
       ]
     },
@@ -831,7 +831,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "The wolf is tired",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -849,7 +849,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "Look at the green trees",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -867,7 +867,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "It is a big day",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         }
       ]
     },
@@ -893,7 +893,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "Hello wolf you are big",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -912,7 +912,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "They are small and blue birds",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         },
         {
           "type": "drag_and_drop",
@@ -928,7 +928,7 @@
           "type": "echo_chamber",
           "prompt": "¡Ahora dilo tú mismo!",
           "word": "Goodbye green bear",
-          "successMsg": "¡Esa es la fluidez que buscamos!"
+          "successMsg": "s_fluency"
         }
       ]
     },

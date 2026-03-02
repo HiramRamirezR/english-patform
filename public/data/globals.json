@@ -1,0 +1,18 @@
+{
+    "prompts": {
+        "p_listen": "1. Toca y escucha. ¡Repite en voz alta!",
+        "p_echo": "¡Tu turno de hablar! Lee esto fuerte y claro.",
+        "p_think": "💡 Pensemos en inglés: ¿Cómo dices esto?",
+        "p_drag": "Une la frase correctamente:",
+        "p_match": "🧩 ¡Reto de Velocidad! Une los pares.",
+        "p_speak_fast": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
+        "p_ready": "🔥 ¡Bienvenido a La Fogata, el jefe de este nivel! No habrá traducciones, escucha a Moon y responde. Dilo para empezar:"
+    },
+    "successMessages": {
+        "s_great": "¡Excelente!",
+        "s_pron": "¡Excelente pronunciación!",
+        "s_trans": "¡Traducción exacta!",
+        "s_fluency": "¡Esa es la fluidez que buscamos!",
+        "s_match": "¡Excelente! Eres un maestro uniendo conceptos."
+    }
+}

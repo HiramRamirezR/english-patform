@@ -10,6 +10,7 @@ export class MoonsforestEngine {
         this.options = options;
         this.currentStep = 0;
         this.startTime = Date.now();
+        this.sessionHistory = []; // Almacenará { type: 'moon'|'child', content: text|blobUrl }
 
         // UI Elements
         this.progressBar = document.getElementById('progress-bar');
@@ -66,6 +67,8 @@ export class MoonsforestEngine {
             this.renderEchoChamber(stepData);
         } else if (stepData.type === 'drag_and_drop') {
             this.renderDragAndDrop(stepData);
+        } else if (stepData.type === 'matching') {
+            this.renderMatching(stepData);
         } else {
             this.container.innerHTML = `<p>Actividad no soportada: ${stepData.type}</p>`;
         }
@@ -223,6 +226,10 @@ export class MoonsforestEngine {
             thermoFill.style.transition = 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.6s ease';
         };
 
+        // Variables para grabación de audio del niño
+        let mediaRecorder;
+        let audioChunks = [];
+
         micBtn.addEventListener('click', async () => {
             if (!this.recognition) {
                 alert("Tu navegador no soporta el reconocimiento de voz. Usa Chrome.");
@@ -263,6 +270,19 @@ export class MoonsforestEngine {
 
                 isRecordingAudio = true;
 
+                // --- INICIO GRABACIÓN PARA EL ECO DE DANTE ---
+                audioChunks = [];
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) audioChunks.push(e.data);
+                };
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    lastAudioUrl = URL.createObjectURL(audioBlob);
+                };
+                mediaRecorder.start();
+                // --------------------------------------------
+
                 javascriptNode.onaudioprocess = () => {
                     if (!isRecordingAudio) return;
                     const array = new Uint8Array(analyser.frequencyBinCount);
@@ -290,9 +310,21 @@ export class MoonsforestEngine {
                 return;
             }
 
-            this.recognition.onresult = (event) => {
+            this.recognition.onresult = async (event) => {
                 attempts++;
                 stopAudioAnalysis(); // Detener el medidor dinámico
+
+                let audioUrl = null;
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    // Esperar a que el recorder se detenga y cree el blob
+                    audioUrl = await new Promise(resolve => {
+                        mediaRecorder.onstop = () => {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                            resolve(URL.createObjectURL(audioBlob));
+                        };
+                        mediaRecorder.stop();
+                    });
+                }
 
                 let transcript = event.results[0][0].transcript.toLowerCase().trim();
                 let confidence = event.results[0][0].confidence || 0.8; // Fallback confidence
@@ -371,6 +403,11 @@ export class MoonsforestEngine {
                 }
 
                 if (isAccepted) {
+                    // Guardar en el historial de la sesión para el final
+                    if (audioUrl) {
+                        this.sessionHistory.push({ type: 'child', content: audioUrl });
+                    }
+
                     this.playSound('success');
                     echoWord.classList.add('success');
                     echoWord.innerText = data.word; // Revelar inglés si estaba oculto en español
@@ -416,6 +453,9 @@ export class MoonsforestEngine {
             // Asegurar siempre que quitamos la clase listening cuando termine
             this.recognition.onend = () => {
                 stopAudioAnalysis();
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                }
                 micBtn.classList.remove('listening');
             };
         });
@@ -446,6 +486,13 @@ export class MoonsforestEngine {
             dropZoneContainer.appendChild(dz);
         });
         box.appendChild(dropZoneContainer);
+
+        // Desafío de Velocidad
+        if (data.timer) {
+            this.startTimer(box, data.timer, () => {
+                this.showMoon("¡El tiempo voló! Sigue intentándolo hasta lograrlo.");
+            });
+        }
 
         // Container for draggable words
         const wordsContainer = document.createElement('div');
@@ -558,6 +605,172 @@ export class MoonsforestEngine {
         this.container.appendChild(box);
     }
 
+    renderMatching(data) {
+        const box = document.createElement('div');
+        box.className = 'activity-box';
+
+        const prompt = document.createElement('div');
+        prompt.className = 'activity-prompt';
+        prompt.innerText = data.prompt || 'Une la palabra en inglés con su significado.';
+        box.appendChild(prompt);
+
+        // Desestructurar todos los items (inglés vs español)
+        let terms = [];
+        let definitions = [];
+        for (let [en, es] of Object.entries(data.pairs)) {
+            terms.push({ text: en, type: 'term', pairId: en });
+            definitions.push({ text: es, type: 'def', pairId: en });
+        }
+
+        // Shuffle arrays
+        terms = terms.sort(() => Math.random() - 0.5);
+        definitions = definitions.sort(() => Math.random() - 0.5);
+
+        // Columnas
+        const columnsContainer = document.createElement('div');
+        columnsContainer.style.display = 'flex';
+        columnsContainer.style.gap = '2rem';
+        columnsContainer.style.justifyContent = 'center';
+        columnsContainer.style.marginTop = '1.5rem';
+
+        const colTerms = document.createElement('div');
+        colTerms.style.display = 'flex';
+        colTerms.style.flexDirection = 'column';
+        colTerms.style.gap = '1rem';
+        colTerms.style.flex = 1;
+
+        const colDefs = document.createElement('div');
+        colDefs.style.display = 'flex';
+        colDefs.style.flexDirection = 'column';
+        colDefs.style.gap = '1rem';
+        colDefs.style.flex = 1;
+
+        columnsContainer.appendChild(colTerms);
+        columnsContainer.appendChild(colDefs);
+        box.appendChild(columnsContainer);
+
+        // Desafío de Velocidad
+        if (data.timer) {
+            this.startTimer(box, data.timer, () => {
+                this.showMoon("¡Se acabó el tiempo! No pasa nada, termina a tu ritmo.");
+            });
+        }
+
+        // Lógica de Estado
+        let selectedItem = null;
+        let matchedPairs = 0;
+        const totalPairs = Object.keys(data.pairs).length;
+
+        const createMatchBtn = (item, parentCol) => {
+            const btn = document.createElement('button');
+            btn.className = 'match-btn';
+            btn.innerText = item.text;
+
+            // Estilos estáticos limpios
+            btn.style.padding = '1rem';
+            btn.style.border = '2px solid var(--slate-200)';
+            btn.style.background = 'white';
+            btn.style.borderRadius = '12px';
+            btn.style.cursor = 'pointer';
+            btn.style.fontSize = '1.1rem';
+            btn.style.fontWeight = '500';
+            btn.style.color = 'var(--text-color)';
+            btn.style.transition = 'all 0.2s';
+            btn.dataset.id = item.pairId;
+            btn.dataset.type = item.type;
+
+            btn.addEventListener('click', () => {
+                // Ignore clicks if already solved
+                if (btn.classList.contains('solved')) return;
+
+                // Clic en sí mismo lo deselecciona
+                if (selectedItem === btn) {
+                    btn.classList.remove('selected');
+                    btn.style.borderColor = 'var(--slate-200)';
+                    btn.style.background = 'white';
+                    selectedItem = null;
+                    return;
+                }
+
+                if (!selectedItem) {
+                    // Seleccionar primero
+                    selectedItem = btn;
+                    btn.classList.add('selected');
+                    btn.style.borderColor = 'var(--primary-medium)';
+                    btn.style.background = '#e0f2fe'; // Azul claro
+                } else {
+                    // Validar si son del mismo lado (cambia selección)
+                    if (selectedItem.dataset.type === btn.dataset.type) {
+                        selectedItem.classList.remove('selected');
+                        selectedItem.style.borderColor = 'var(--slate-200)';
+                        selectedItem.style.background = 'white';
+                        selectedItem = btn;
+                        btn.classList.add('selected');
+                        btn.style.borderColor = 'var(--primary-medium)';
+                        btn.style.background = '#e0f2fe';
+                        return;
+                    }
+
+                    // Evaluar match
+                    if (selectedItem.dataset.id === btn.dataset.id) {
+                        // Correcto
+                        this.playSound('success');
+                        btn.classList.add('solved');
+                        btn.classList.remove('selected');
+                        btn.style.borderColor = 'var(--success)';
+                        btn.style.background = '#ecfdf5';
+                        btn.style.color = '#065f46';
+
+                        selectedItem.classList.add('solved');
+                        selectedItem.classList.remove('selected');
+                        selectedItem.style.borderColor = 'var(--success)';
+                        selectedItem.style.background = '#ecfdf5';
+                        selectedItem.style.color = '#065f46';
+
+                        selectedItem = null;
+                        matchedPairs++;
+
+                        // Check Win Condition
+                        if (matchedPairs === totalPairs) {
+                            setTimeout(() => {
+                                this.showMoon(data.successMsg || "¡Uniste todos los pares perfectamente!");
+                                this.showNextButton(box);
+                            }, 500);
+                        }
+                    } else {
+                        // Incorrecto
+                        this.playSound('error');
+                        // Parpadeo rojo visual en ambos (btn y selectedItem) sin css animations
+                        const wrong1 = selectedItem;
+                        const wrong2 = btn;
+
+                        wrong1.style.borderColor = '#ef4444';
+                        wrong1.style.background = '#fef2f2';
+                        wrong2.style.borderColor = '#ef4444';
+                        wrong2.style.background = '#fef2f2';
+
+                        setTimeout(() => {
+                            wrong1.classList.remove('selected');
+                            wrong1.style.borderColor = 'var(--slate-200)';
+                            wrong1.style.background = 'white';
+                            wrong2.style.borderColor = 'var(--slate-200)';
+                            wrong2.style.background = 'white';
+                        }, 500);
+
+                        selectedItem = null;
+                    }
+                }
+            });
+
+            parentCol.appendChild(btn);
+        };
+
+        terms.forEach(term => createMatchBtn(term, colTerms));
+        definitions.forEach(def => createMatchBtn(def, colDefs));
+
+        this.container.appendChild(box);
+    }
+
 
     // --- SOUND EFFECTS ENGINE (Web Audio API) ---
     playSound(type) {
@@ -615,13 +828,50 @@ export class MoonsforestEngine {
         const targetUrl = this.options.returnUrl || 'mapa.html';
         const box = document.createElement('div');
         box.className = 'activity-box';
+
+        // UI de Felicitación
         box.innerHTML = `
             <div style="font-size: 5rem; margin-bottom: 1rem;">🏞️</div>
             <h2 style="font-size: 2.5rem; color: var(--primary-deep); margin-bottom: 2rem;">¡Lección Completada!</h2>
-            <p style="font-size: 1.2rem; margin-bottom: 3rem; color: var(--slate-600);">Tu desempeño oral ha mejorado bastante.</p>
+            
+            <div id="story-player" style="background: #f1f5f9; padding: 2rem; border-radius: 20px; margin-bottom: 2rem; border: 2px dashed #cbd5e1;">
+                <h3 style="font-size: 1.1rem; color: var(--slate-700); margin-bottom: 1rem;">🎥 Tu aventura del día</h3>
+                <p style="font-size: 0.9rem; color: var(--slate-500); margin-bottom: 1.5rem;">Escucha tu conversación completa con Moon.</p>
+                <button id="play-story-btn" class="btn btn-accent" style="background: #fbbf24; color: #78350f; padding: 1rem 2.5rem; font-weight: 700;">
+                    ▶️ Reproducir mi Conversación
+                </button>
+            </div>
+
             <button class="btn btn-primary" style="padding: 1rem 3rem;" onclick="window.location.href='${targetUrl}'">Volver al Bosque</button>
         `;
         this.container.appendChild(box);
+
+        // Lógica del Reproductor de Historia (Intercalado)
+        const playBtn = document.getElementById('play-story-btn');
+        if (playBtn) {
+            playBtn.addEventListener('click', async () => {
+                playBtn.disabled = true;
+                playBtn.innerText = "🎬 Reproduciendo...";
+
+                for (const item of this.sessionHistory) {
+                    if (item.type === 'moon') {
+                        await new Promise(resolve => {
+                            this.speak(item.content, () => resolve());
+                        });
+                    } else if (item.type === 'child') {
+                        await new Promise(resolve => {
+                            const audio = new Audio(item.content);
+                            audio.onended = resolve;
+                            audio.play().catch(() => resolve()); // Fallback si falla
+                        });
+                    }
+                }
+
+                playBtn.disabled = false;
+                playBtn.innerText = "▶️ Volver a escuchar";
+            });
+        }
+
         this.showMoon("¡Terminaste tu primer entrenamiento! Eres valiente.");
     }
 
@@ -629,20 +879,36 @@ export class MoonsforestEngine {
     /* UTILS                                                                      */
     /* -------------------------------------------------------------------------- */
 
-    speak(text) {
+    speak(text, onEndCallback = null) {
         if ('speechSynthesis' in window) {
+            // Guardar en el historial para el final (solo si no estamos en reproducción final)
+            if (!onEndCallback) {
+                this.sessionHistory.push({ type: 'moon', content: text });
+            }
+
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'en-US';
-            utterance.rate = 0.85; // Un poco más lento para principiantes
-            // Try to find a friendly native voice if possible
+            utterance.rate = 0.85;
             const preferredVoice = this.voices.find(v => v.lang === 'en-US' && v.name.includes('Google'));
             if (preferredVoice) utterance.voice = preferredVoice;
 
+            if (onEndCallback) {
+                utterance.onend = () => onEndCallback();
+            }
+
             window.speechSynthesis.speak(utterance);
+        } else if (onEndCallback) {
+            onEndCallback(); // Fallback
         }
     }
 
     showNextButton(parentBox) {
+        // Limpiar timer si existe
+        if (this.currentTimerId) {
+            clearTimeout(this.currentTimerId);
+            this.currentTimerId = null;
+        }
+
         // Avoid duplicate buttons
         if (parentBox.querySelector('.btn-next-step')) return;
 
@@ -651,6 +917,44 @@ export class MoonsforestEngine {
         nextBtn.innerText = 'Siguiente Actividad →';
         nextBtn.onclick = () => this.nextStep();
         parentBox.appendChild(nextBtn);
+    }
+
+    startTimer(parentBox, seconds, onTimeUp) {
+        const timerContainer = document.createElement('div');
+        timerContainer.style.width = '100%';
+        timerContainer.style.height = '6px';
+        timerContainer.style.background = '#e2e8f0';
+        timerContainer.style.borderRadius = '99px';
+        timerContainer.style.marginTop = '1rem';
+        timerContainer.style.overflow = 'hidden';
+
+        const timerBar = document.createElement('div');
+        timerBar.style.height = '100%';
+        timerBar.style.width = '100%';
+        timerBar.style.background = '#3b82f6';
+        timerBar.style.transition = `width ${seconds}s linear`;
+        timerContainer.appendChild(timerBar);
+
+        // Insertar después del prompt
+        const prompt = parentBox.querySelector('.activity-prompt');
+        if (prompt) {
+            prompt.after(timerContainer);
+        } else {
+            parentBox.prepend(timerContainer);
+        }
+
+        // Iniciar animación
+        setTimeout(() => {
+            timerBar.style.width = '0%';
+        }, 50);
+
+        const timeoutId = setTimeout(() => {
+            if (onTimeUp) onTimeUp();
+            timerBar.style.background = '#f87171'; // Rojo al fallar
+        }, seconds * 1000);
+
+        // Guardar referencia para limpiar si terminan antes
+        this.currentTimerId = timeoutId;
     }
 
     showMoon(message) {

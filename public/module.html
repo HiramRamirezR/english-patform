@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/mapa.css">
 </head>
 
 <body>
@@ -17,12 +17,15 @@
     <div id="main-header"></div>
 
     <div class="dashboard-container" id="dashboard-content"
-        style="max-width: 1000px; padding: 2rem 1rem; margin: 0 auto;">
+        style="max-width: 800px; padding: 2rem 1rem; margin: 0 auto; overflow: visible;">
 
-        <header class="stats-header" style="justify-content: flex-start; gap: 1rem; margin-bottom: 2rem;">
-            <button class="btn" onclick="window.location.href='mapa.html'"
-                style="padding: 0.5rem 1rem; border: 1px solid var(--slate-300);">← Volver al Bosque</button>
-            <h2 style="font-size: 1.5rem; color: var(--slate-800);" id="module-title">Cargando Módulo...</h2>
+        <header class="stats-header"
+            style="justify-content: space-between; gap: 1rem; margin-bottom: 2rem; position: relative; top: 0;">
+            <button class="btn btn-secondary" onclick="window.location.href='mapa.html'"
+                style="padding: 0.5rem 1rem; font-size: 0.9rem;">← Volver</button>
+            <h2 style="font-size: 1.25rem; color: var(--primary-deep); margin: 0; flex: 1; text-align: center;"
+                id="module-title">Cargando Módulo...</h2>
+            <div style="width: 80px;"></div> <!-- Spacing balance -->
         </header>
 
         <p style="text-align: center; color: var(--slate-600); margin-bottom: 2rem;" id="module-desc">Por favor espera
@@ -30,7 +33,7 @@
 
         <!-- The Peak Map (generado dinámicamente) -->
         <main class="peak-map" id="map-path"
-            style="flex-direction: column; overflow-x: hidden; padding-top: 0; max-width: 600px; margin: 0 auto; gap: 1rem;">
+            style="flex-direction: column; overflow-x: hidden; padding-top: 0; max-width: 600px; margin: 0 auto;">
             <!-- Contenido inyectado por JS -->
         </main>
 

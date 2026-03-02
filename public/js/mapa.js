@@ -86,8 +86,42 @@ const setupDashboardUI = () => {
         minutesSpokenDisplay.textContent = minutesToday;
     }
 
+    // Ruta Semanal
+    setupWeeklyPath(currentProfile.weeklyProgress || {});
+
     // Frase inicial
     moonText.innerHTML = `¡Hola viajero! Qué bueno verte, <strong>${currentProfile.avatar}</strong>. Entra al Campamento Base (Módulo 1) para prepararnos.`;
+};
+
+const setupWeeklyPath = (progress) => {
+    const today = new Date();
+    const currentDayIndex = today.getDay(); // 0 (Domingo) a 6 (Sábado)
+    const dayCircles = document.querySelectorAll('.day-circle');
+
+    dayCircles.forEach(circle => {
+        const dayIdx = parseInt(circle.dataset.day);
+
+        // Limpiar estados previos (por si acaso)
+        circle.classList.remove('active', 'today');
+
+        // Marcar hoy
+        if (dayIdx === currentDayIndex) {
+            circle.classList.add('today');
+        }
+
+        // Marcar si hubo progreso ese día (basado en Firestore)
+        // El campo indexado en progress es el número del día 0-6
+        if (progress[dayIdx]) {
+            circle.classList.add('active');
+        }
+    });
+
+    // Si hoy hay minutos hablados pero no está en el progreso, marcarlo activo visualmente
+    const minsToday = parseInt(document.getElementById('minutes-spoken-today')?.textContent || '0');
+    if (minsToday > 0) {
+        const todayCircle = document.querySelector(`.day-circle[data-day="${currentDayIndex}"]`);
+        if (todayCircle) todayCircle.classList.add('active');
+    }
 };
 
 // Auth and DB Check

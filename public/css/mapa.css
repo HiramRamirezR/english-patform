@@ -5,9 +5,8 @@
     min-height: 100vh;
     padding: 2rem 1rem;
     position: relative;
-    max-width: 600px;
     margin: 0 auto;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 /* Base Mountains background (CSS generated) */
@@ -107,7 +106,8 @@
     width: 220px;
     flex: 0 0 auto;
     /* Prevent shrinking in horizontal layout */
-    height: 80px;
+    min-height: 80px;
+    height: auto;
     background: rgba(255, 255, 255, 0.95);
     border-radius: 16px;
     display: flex;
@@ -146,8 +146,7 @@
 
 .module-node.unlocked {
     border-color: var(--primary-medium);
-    transform: scale(1.05);
-    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
 }
 
 .module-node.locked {
@@ -190,6 +189,15 @@
     z-index: 100;
     cursor: pointer;
     animation: float 4s ease-in-out infinite;
+}
+
+/* Mobile: Push Moon a bit so it doesn't cover content */
+@media (max-width: 480px) {
+    .moon-companion {
+        bottom: 1rem;
+        right: 1rem;
+        transform: scale(0.8);
+    }
 }
 
 .moon-bubble {
@@ -294,4 +302,85 @@
     border-color: var(--primary-medium);
     box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
     transform: scale(1.05);
+}
+
+/* Weekly Path Styles Consolidated */
+.day-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    position: relative;
+    border: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+}
+
+.day-circle.active {
+    background: #fef3c7;
+    border-color: #fbbf24;
+    color: #b45309;
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(251, 191, 36, 0.2);
+}
+
+.day-circle.active::after {
+    content: '🔥';
+    position: absolute;
+    top: -12px;
+    right: -8px;
+    font-size: 1.2rem;
+    animation: flameBounce 1.5s infinite;
+}
+
+.day-circle.today {
+    border-color: var(--primary-medium);
+    color: var(--primary-deep);
+}
+
+@keyframes flameBounce {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(-3px) scale(1.1);
+    }
+}
+
+/* Responsiveness for small screens */
+@media (max-width: 480px) {
+    .day-circle {
+        width: 34px;
+        height: 34px;
+        font-size: 0.75rem;
+    }
+
+    .day-circle.active::after {
+        font-size: 1.1rem;
+        top: -11px;
+        right: -7px;
+    }
+
+    /* Reduce horizontal padding on the dashboard container for more space */
+    .dashboard-container {
+        padding: 1rem 0.5rem;
+    }
+
+    /* Target the cards in the section directly via their container padding */
+    .dashboard-stats-widget>div {
+        padding: 1.25rem !important;
+    }
+
+    #weekly-path-container {
+        gap: 0.25rem !important;
+    }
 }

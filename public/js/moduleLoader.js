@@ -57,7 +57,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 node.className = `module-node ${isUnlocked ? 'unlocked' : 'locked'}`;
                 node.style.width = '100%';
                 node.style.height = 'auto';
-                node.style.padding = '1rem';
+                node.style.padding = '1.2rem';
+                node.style.marginBottom = '0.5rem';
 
                 if (isUnlocked) {
                     node.style.cursor = 'pointer';
@@ -66,14 +67,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 // Si está completada, cambia el fondo del ícono a verde
                 const iconBg = isCompleted ? 'var(--success)' : (isUnlocked ? 'var(--primary-light)' : 'var(--slate-200)');
-                const checkmark = isCompleted ? '<span style="color: var(--success); font-weight: bold; margin-left: auto;">✔</span>' : '';
+                const checkmark = isCompleted ? '<span style="color: var(--success); font-weight: bold; font-size: 1.2rem; margin-left: 1rem;">✔</span>' : '';
 
                 node.innerHTML = `
-                    <span class="module-icon" style="background: ${iconBg};">${lesson.icon}</span>
-                    <div style="flex: 1; display:flex; align-items:center;">
-                        <div>
-                            <span class="module-label" style="font-size: 1rem;">${lesson.title}</span>
-                            <p style="font-size: 0.8rem; color: var(--slate-500); margin-top: 0.2rem;">${lesson.desc}</p>
+                    <span class="module-icon" style="background: ${iconBg}; margin-right: 1.25rem;">${lesson.icon}</span>
+                    <div style="flex: 1; display:flex; align-items:center; justify-content: space-between; overflow: hidden;">
+                        <div style="overflow: hidden;">
+                            <span class="module-label" style="font-size: 1.05rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${lesson.title}</span>
+                            <p style="font-size: 0.85rem; color: var(--slate-500); margin-top: 0.2rem; margin-bottom: 0;">${lesson.desc}</p>
                         </div>
                         ${checkmark}
                     </div>

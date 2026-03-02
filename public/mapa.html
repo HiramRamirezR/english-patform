@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/mapa.css">
 </head>
 
 <body>
@@ -62,21 +62,44 @@
 
         <!-- Widget: Minutos Hablados -->
         <section class="dashboard-stats-widget"
-            style="max-width: 1200px; margin: 2rem auto 0; padding: 0 2rem; display: flex; justify-content: center;">
+            style="max-width: 1200px; margin: 2rem auto 0; padding: 0 2rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem;">
+
+            <!-- Minutos -->
             <div
-                style="background: white; border-radius: 20px; padding: 2rem; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 2rem; width: 100%; max-width: 650px; justify-content: space-between; border-left: 5px solid var(--accent-cool);">
+                style="background: white; border-radius: 20px; padding: 2rem; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 2rem; width: 100%; max-width: 450px; justify-content: space-between; border-left: 5px solid var(--accent-cool);">
                 <div style="flex: 1;">
                     <h4
                         style="color: var(--slate-800); margin-bottom: 0.5rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
-                        🎙️ Minutos hablados hoy</h4>
-                    <p style="font-size: 0.9rem; color: var(--slate-500); line-height: 1.4;">A Moonsforest se viene a
-                        hablar. Acumula tiempo frente al micrófono para mejorar tu fluidez.</p>
+                        🎙️ Minutos hoy</h4>
+                    <p style="font-size: 0.8rem; color: var(--slate-500); line-height: 1.4;">Hablar mejora tu fluidez.
+                    </p>
                 </div>
-                <div style="text-align: center; background: #eff6ff; padding: 1rem 1.5rem; border-radius: 16px;">
-                    <div style="font-size: 3rem; font-weight: 700; color: var(--primary-deep); line-height: 1;"
+                <div
+                    style="text-align: center; background: #eff6ff; padding: 1rem; border-radius: 16px; min-width: 100px;">
+                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--primary-deep); line-height: 1;"
                         id="minutes-spoken-today">0</div>
                     <span
-                        style="font-size: 0.85rem; color: var(--primary-medium); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">minutos</span>
+                        style="font-size: 0.7rem; color: var(--primary-medium); font-weight: 600; text-transform: uppercase;">minutos</span>
+                </div>
+            </div>
+
+            <!-- Ruta Semanal -->
+            <div
+                style="background: white; border-radius: 20px; padding: 2rem; box-shadow: var(--shadow-sm); width: 100%; max-width: 600px; border-left: 5px solid #fbbf24;">
+                <h4
+                    style="color: var(--slate-800); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    📅 Ruta Semanal</h4>
+
+                <div id="weekly-path-container"
+                    style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
+                    <!-- Los círculos se generarán por JS -->
+                    <div class="day-circle" data-day="0"><span>D</span></div>
+                    <div class="day-circle" data-day="1"><span>L</span></div>
+                    <div class="day-circle" data-day="2"><span>M</span></div>
+                    <div class="day-circle" data-day="3"><span>M</span></div>
+                    <div class="day-circle" data-day="4"><span>J</span></div>
+                    <div class="day-circle" data-day="5"><span>V</span></div>
+                    <div class="day-circle" data-day="6"><span>S</span></div>
                 </div>
             </div>
         </section>
@@ -209,7 +232,7 @@
     <!-- Firebase & Custom Logic -->
     <script type="module" src="/js/auth.js"></script>
     <script type="module" src="/js/components/header.js"></script>
-    <script type="module" src="/js/dashboard.js"></script>
+    <script type="module" src="/js/mapa.js"></script>
 </body>
 
 </html>

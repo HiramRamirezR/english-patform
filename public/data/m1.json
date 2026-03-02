@@ -69,6 +69,15 @@
             "Goodbye",
             "Hello"
           ]
+        },
+        {
+          "type": "matching",
+          "prompt": "🧩 ¡Une los conceptos! Selecciona una palabra y luego su par correcto.",
+          "pairs": {
+            "Hello": "Hola",
+            "Goodbye": "Adiós"
+          },
+          "successMsg": "¡Excelente! Eres un maestro uniendo conceptos."
         }
       ]
     },

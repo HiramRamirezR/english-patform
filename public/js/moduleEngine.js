@@ -140,6 +140,7 @@ export class MoonsforestEngine {
     }
 
     renderEchoChamber(data) {
+        let attempts = 0; // Añadido para el Filtro de Empatía
         const box = document.createElement('div');
         box.className = 'activity-box';
 
@@ -153,6 +154,40 @@ export class MoonsforestEngine {
         // Si hay una palabra para mostrar (ej. su traducción para forzar memoria), úsala. Si no, usa el inglés directo.
         echoWord.innerText = data.displayWord || data.word;
 
+        // Contenedor principal de métricas visuales
+        const metricsContainer = document.createElement('div');
+        metricsContainer.style.margin = '1rem auto';
+        metricsContainer.style.width = '100%';
+        metricsContainer.style.maxWidth = '250px';
+
+        // Etiqueta para que los niños entiendan qué es la barra
+        const thermoLabel = document.createElement('div');
+        thermoLabel.innerText = "Energía de tu voz ⚡";
+        thermoLabel.style.fontSize = '0.75rem';
+        thermoLabel.style.color = 'var(--slate-500)';
+        thermoLabel.style.marginBottom = '0.4rem';
+        thermoLabel.style.textAlign = 'left';
+        thermoLabel.style.fontWeight = '600';
+        metricsContainer.appendChild(thermoLabel);
+
+        // Termómetro de claridad visual
+        const thermoContainer = document.createElement('div');
+        thermoContainer.style.width = '100%';
+        thermoContainer.style.height = '14px';
+        thermoContainer.style.background = '#e2e8f0';
+        thermoContainer.style.borderRadius = '99px';
+        thermoContainer.style.overflow = 'hidden';
+        thermoContainer.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.1)';
+
+        const thermoFill = document.createElement('div');
+        thermoFill.style.height = '100%';
+        thermoFill.style.width = '0%';
+        thermoFill.style.background = '#cbd5e1'; // Gris platinado inactivo
+        thermoFill.style.transition = 'width 0.1s linear, background-color 0.4s ease';
+        thermoContainer.appendChild(thermoFill);
+        metricsContainer.appendChild(thermoContainer);
+        thermoContainer.appendChild(thermoFill);
+
         // Mic Button
         const micBtn = document.createElement('button');
         micBtn.className = 'mic-btn';
@@ -165,11 +200,30 @@ export class MoonsforestEngine {
 
         box.appendChild(prompt);
         box.appendChild(echoWord);
+        box.appendChild(metricsContainer);
         box.appendChild(micBtn);
         box.appendChild(feedback);
         this.container.appendChild(box);
 
-        micBtn.addEventListener('click', () => {
+        // Variables para el análisis de audio en tiempo real
+        let audioContext;
+        let analyser;
+        let microphoneNode;
+        let javascriptNode;
+        let isRecordingAudio = false;
+
+        const stopAudioAnalysis = () => {
+            isRecordingAudio = false;
+            if (javascriptNode) javascriptNode.disconnect();
+            if (microphoneNode) microphoneNode.disconnect();
+            if (analyser) analyser.disconnect();
+            if (audioContext && audioContext.state !== 'closed') audioContext.close();
+
+            // Volver la transición suave para el resultado final
+            thermoFill.style.transition = 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.6s ease';
+        };
+
+        micBtn.addEventListener('click', async () => {
             if (!this.recognition) {
                 alert("Tu navegador no soporta el reconocimiento de voz. Usa Chrome.");
                 return;
@@ -183,16 +237,74 @@ export class MoonsforestEngine {
             micBtn.classList.add('listening');
             feedback.innerText = 'Listening... Habla ahora.';
 
+            // Resetear visual del termómetro 
+            thermoFill.style.transition = 'width 0.1s linear, background-color 0.1s linear';
+            thermoFill.style.width = '0%';
+            thermoFill.style.background = '#38bdf8'; // Azul claro mientras escucha
+            thermoLabel.innerText = "¡Te estoy escuchando! ⚡";
+
             try {
+                // 1. Iniciar STT
                 this.recognition.start();
+
+                // 2. Iniciar Medidor Volumétrico en tiempo real (Web Audio API)
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                microphoneNode = audioContext.createMediaStreamSource(stream);
+                javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+
+                analyser.smoothingTimeConstant = 0.8;
+                analyser.fftSize = 1024;
+
+                microphoneNode.connect(analyser);
+                analyser.connect(javascriptNode);
+                javascriptNode.connect(audioContext.destination);
+
+                isRecordingAudio = true;
+
+                javascriptNode.onaudioprocess = () => {
+                    if (!isRecordingAudio) return;
+                    const array = new Uint8Array(analyser.frequencyBinCount);
+                    analyser.getByteFrequencyData(array);
+                    let values = 0;
+                    const length = array.length;
+                    for (let i = 0; i < length; i++) {
+                        values += (array[i]);
+                    }
+                    const average = values / length;
+                    // Mapear de 0-100 (un volumen normal hablando de cerca promedia unos 40-60)
+                    let volPercent = Math.min(100, average * 2);
+
+                    // Asegurar un nivel basal bajito para que se vea que está vivo
+                    if (volPercent < 5) volPercent = 5;
+
+                    thermoFill.style.width = `${volPercent}%`;
+                };
+
             } catch (err) {
-                console.error("No se pudo iniciar el reconocimiento:", err);
+                console.error("No se pudo iniciar el reconocimiento o acceso a micro:", err);
                 micBtn.classList.remove('listening');
+                thermoLabel.innerText = "Error con el micrófono ✗";
+                thermoFill.style.background = '#ef4444';
                 return;
             }
 
             this.recognition.onresult = (event) => {
+                attempts++;
+                stopAudioAnalysis(); // Detener el medidor dinámico
+
                 let transcript = event.results[0][0].transcript.toLowerCase().trim();
+                let confidence = event.results[0][0].confidence || 0.8; // Fallback confidence
+
+                // Mostrar resultado estático de confianza 
+                thermoLabel.innerText = "Claridad de tu pronunciación 🎯";
+                let fillPercentage = Math.round(confidence * 100);
+                thermoFill.style.width = `${fillPercentage}%`;
+
+                if (fillPercentage < 50) thermoFill.style.background = '#ef4444'; // Rojo oscuro
+                else if (fillPercentage < 80) thermoFill.style.background = '#f59e0b'; // Amarillo
+                else thermoFill.style.background = '#10b981'; // Verde
 
                 // DICCIONARIO GLOBAL DE CORRECCIONES DE STT (Homófonos)
                 // Esto aplica automáticamente a TODAS las lecciones de la plataforma
@@ -232,39 +344,78 @@ export class MoonsforestEngine {
                 const isExactMatch = targets.includes(cleanTranscript);
                 const startsWithMatch = targets.some(t => cleanTranscript.startsWith(t) && (cleanTranscript.length <= t.length + 5));
 
+                let isAccepted = false;
+                let successMessage = data.successMsg || "¡Ese es el sonido perfecto!";
 
                 if (isExactMatch || startsWithMatch) {
+                    isAccepted = true;
+                    // Forzar visual de éxito al 100%
+                    fillPercentage = Math.max(fillPercentage, 90);
+                    thermoFill.style.width = `${fillPercentage}%`;
+                    thermoFill.style.background = '#10b981';
+                } else if (attempts >= 2) {
+                    // Filtro de Empatía - Intento 2 y 3 (tolerancia media para mitigar frustración)
+                    const containsMatch = targets.some(t => cleanTranscript.includes(t) || (t.length >= 3 && t.includes(cleanTranscript)));
+                    if (containsMatch) {
+                        isAccepted = true;
+                        successMessage = "¡Casi perfecto! Escuché tu gran esfuerzo. ¡Avancemos!";
+                        thermoFill.style.width = `85%`;
+                        thermoFill.style.background = '#84cc16'; // Verde lima
+                    } else if (attempts >= 4) {
+                        // Magia de Moon - Intento 4+ (Tolerancia total para evitar bloqueo del nivel)
+                        isAccepted = true;
+                        successMessage = "¡Esa palabra es muy tramposa! Pero Moon te ayudará con su magia para avanzar.";
+                        thermoFill.style.width = `100%`;
+                        thermoFill.style.background = '#3b82f6'; // Azul mágico de Moon
+                    }
+                }
+
+                if (isAccepted) {
                     this.playSound('success');
                     echoWord.classList.add('success');
                     echoWord.innerText = data.word; // Revelar inglés si estaba oculto en español
                     micBtn.style.display = 'none'; // ocultar micro
-                    this.showMoon(data.successMsg || "¡Ese es el sonido perfecto!");
+                    this.showMoon(successMessage);
                     this.showNextButton(box);
                 } else {
                     this.playSound('error');
-                    this.showMoon("¡Casi! Intenta pronunciarlo un par de veces más.");
+                    let hints = [
+                        "¡Casi! Intenta pronunciarlo un par de veces más.",
+                        "Abre bien la boca y pronuncia fuerte y claro.",
+                        "No te rindas. Recuerda cómo suena y suéltalo fuerte."
+                    ];
+                    this.showMoon(hints[(attempts - 1) % hints.length]);
                 }
             };
 
             this.recognition.onnomatch = () => {
+                stopAudioAnalysis();
                 this.playSound('error');
                 feedback.innerText = 'No pude escucharte bien. Intenta otra vez.';
+                thermoFill.style.width = '0%';
+                thermoLabel.innerText = "No se entendió ⚡";
                 this.showMoon("Habla un poquito más fuerte.");
             };
 
             this.recognition.onerror = (event) => {
+                stopAudioAnalysis();
                 console.error("Recognition Error:", event.error);
                 if (event.error === 'no-speech') {
                     feedback.innerText = 'No detecté voz. ¿Podrías repetirlo?';
+                    thermoFill.style.width = '0%';
+                    thermoLabel.innerText = "Sin sonido ⚡";
                     this.showMoon("No escuché nada. Intenta hablar más cerca del micro.");
                 } else {
                     feedback.innerText = 'Hubo un problema. Intenta otra vez.';
+                    thermoFill.style.width = '0%';
+                    thermoLabel.innerText = "Error ✗";
                     this.showMoon("Revisa el permiso de tu micrófono.");
                 }
             };
 
-            // Asegurar siempre que quitamos la clase listening cuando termine, sin importar por qué terminó
+            // Asegurar siempre que quitamos la clase listening cuando termine
             this.recognition.onend = () => {
+                stopAudioAnalysis();
                 micBtn.classList.remove('listening');
             };
         });

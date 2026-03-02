@@ -398,24 +398,25 @@ export class MoonsforestEngine {
 
                 if (isExactMatch || startsWithMatch) {
                     isAccepted = true;
-                    // Forzar visual de éxito al 100%
-                    fillPercentage = Math.max(fillPercentage, 90);
+                    fillPercentage = Math.max(fillPercentage, 95);
                     thermoFill.style.width = `${fillPercentage}%`;
-                    thermoFill.style.background = '#10b981';
+                    thermoFill.style.background = '#10b981'; // Verde Esmeralda
                 } else if (attempts >= 2) {
-                    // Filtro de Empatía - Intento 2 y 3 (tolerancia media para mitigar frustración)
+                    // Filtro de Empatía - Intento 2 (tolerancia media)
                     const containsMatch = targets.some(t => cleanTranscript.includes(t) || (t.length >= 3 && t.includes(cleanTranscript)));
                     if (containsMatch) {
                         isAccepted = true;
                         successMessage = "¡Casi perfecto! Escuché tu gran esfuerzo. ¡Avancemos!";
-                        thermoFill.style.width = `85%`;
-                        thermoFill.style.background = '#84cc16'; // Verde lima
-                    } else if (attempts >= 4) {
-                        // Magia de Moon - Intento 4+ (Tolerancia total para evitar bloqueo del nivel)
+                        thermoFill.style.width = `90%`;
+                        thermoFill.style.background = '#10b981';
+                        feedback.innerHTML = `Escuché y entendí: "<strong>${data.word.toLowerCase()}</strong>"`;
+                    } else if (attempts >= 3) {
+                        // Magia de Moon - Intento 3 (Pasa porque pasa para evitar frustración)
                         isAccepted = true;
-                        successMessage = "¡Esa palabra es muy tramposa! Pero Moon te ayudará con su magia para avanzar.";
+                        successMessage = "¡Esa frase es un gran reto! Moon te ayuda con su magia para que sigamos explorando.";
                         thermoFill.style.width = `100%`;
-                        thermoFill.style.background = '#3b82f6'; // Azul mágico de Moon
+                        thermoFill.style.background = '#10b981';
+                        feedback.innerHTML = `Escuché y entendí: "<strong>${data.word.toLowerCase()}</strong>"`;
                     }
                 }
 

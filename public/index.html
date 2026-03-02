@@ -116,7 +116,8 @@
                     <p style="color: var(--slate-600); max-width: 600px; margin: 0 auto 2.5rem;">
                         Únete a nuestra red de educadores y ayúdanos a llevar el aprendizaje a nuevas alturas.
                     </p>
-                    <button class="btn btn-primary" style="padding: 1.2rem 3rem; font-size: 1.1rem;">
+                    <button id="hero-cta-teacher" class="btn btn-primary"
+                        style="padding: 1.2rem 3rem; font-size: 1.1rem;">
                         Trabaja con nosotros
                     </button>
                 </div>
@@ -129,6 +130,36 @@
             <p>© <span id="year"></span> English Forest Plataforma.</p>
         </div>
     </footer>
+
+    <!-- Modal para Navegadores En-App (Facebook/Messenger) -->
+    <div id="webview-alert-overlay"
+        style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95); z-index: 10000; padding: 2rem; color: white; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-family: 'Outfit', sans-serif; backdrop-filter: blur(8px);">
+        <div
+            style="background: white; color: #0f172a; padding: 2.5rem 1.5rem; border-radius: 24px; max-width: 400px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🌐</div>
+            <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: #1e3a8a;">¡Navegador no compatible!</h2>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #64748b; margin-bottom: 2rem;">
+                Por seguridad, <strong>Google</strong> no permite iniciar sesión dentro de <strong>Facebook o
+                    Messenger</strong>.
+            </p>
+
+            <div
+                style="background: #eff6ff; padding: 1rem; border-radius: 12px; margin-bottom: 2rem; text-align: left; border-left: 4px solid #3b82f6;">
+                <p style="font-size: 0.85rem; color: #1e40af; font-weight: 600; margin-bottom: 0.5rem;">Pasos para
+                    entrar:</p>
+                <ol style="font-size: 0.85rem; color: #1e40af; padding-left: 1.2rem; margin: 0;">
+                    <li style="margin-bottom: 0.4rem;">Toca los <strong>tres puntitos (•••)</strong> en la esquina.</li>
+                    <li>Selecciona <strong>"Abrir en el navegador"</strong> o <strong>"Abrir en Chrome"</strong>.</li>
+                </ol>
+            </div>
+
+            <button onclick="window.location.reload()"
+                style="width: 100%; background: #3b82f6; color: white; border: none; padding: 1rem; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                Intentar de nuevo <span>🔄</span>
+            </button>
+        </div>
+        <p style="margin-top: 2rem; font-size: 0.8rem; opacity: 0.7;">Moonsforest Security Protocol</p>
+    </div>
 
     <!-- Firebase & Auth Logic -->
     <script type="module" src="/js/auth.js"></script>

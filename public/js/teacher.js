@@ -308,6 +308,79 @@ const loadSlots = async () => {
     }
 };
 
+// Función para cargar los estudiantes referidos
+const loadReferredStudents = async (refCode) => {
+    if (!refCode) return;
+
+    try {
+        const usersCol = collection(db, "users");
+        const qUsers = query(usersCol, where("referredBy", "==", refCode));
+
+        const querySnapshot = await getDocs(qUsers);
+        const referredListEl = document.getElementById('referred-list');
+        const emptyMsgEl = document.getElementById('empty-referred-msg');
+
+        if (querySnapshot.empty) {
+            emptyMsgEl.style.display = 'block';
+            referredListEl.style.display = 'none';
+        } else {
+            emptyMsgEl.style.display = 'none';
+            referredListEl.style.display = 'block';
+            referredListEl.innerHTML = '';
+
+            querySnapshot.forEach((doc) => {
+                const userData = doc.data();
+                const li = document.createElement('li');
+                li.className = 'slot-item';
+                li.style.borderLeft = '5px solid #10b981'; // Verde distintivo
+                li.style.backgroundColor = '#ecfdf5';
+
+                // Formatear fecha de registro
+                let dateStr = 'Fecha desconocida';
+                if (userData.createdAt && userData.createdAt.toDate) {
+                    dateStr = userData.createdAt.toDate().toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+                }
+
+                li.innerHTML = `
+                    <div class="slot-info">
+                        <h4 style="font-size: 1.05rem;">
+                            <span style="font-size: 1.2rem; margin-right: 0.5rem;">${userData.photoURL ? `<img src="${userData.photoURL}" style="width:24px; border-radius:50%; vertical-align:middle;">` : '👤'}</span>
+                            ${userData.name || 'Estudiante'}
+                        </h4>
+                        <p style="margin-top: 0.25rem;">Registrado el: ${dateStr}</p>
+                        ${userData.email ? `<p style="font-size: 0.75rem; margin-top: 0.2rem; color: var(--slate-400);">${userData.email}</p>` : ''}
+                    </div>
+                    <div style="text-align: right;">
+                        <span class="badge-booked" style="background:#10b981; color:white;">Activo</span>
+                    </div>
+                `;
+                referredListEl.appendChild(li);
+            });
+        }
+
+        // Actualizar UI de Ganancias
+        const refCount = querySnapshot.size;
+        const refEarning = refCount * 50;
+
+        const refCountEl = document.getElementById('ref-count');
+        const refEarningsEl = document.getElementById('ref-earnings');
+        const totalEarningsEl = document.getElementById('total-earnings');
+
+        if (refCountEl) refCountEl.textContent = refCount;
+        if (refEarningsEl) refEarningsEl.textContent = refEarning.toFixed(2);
+
+        // Mock de evaluaciones por el momento en 0
+        const evalEarnings = 0 * 50;
+
+        if (totalEarningsEl) {
+            totalEarningsEl.textContent = (refEarning + evalEarnings).toFixed(2);
+        }
+
+    } catch (error) {
+        console.error("Error al cargar referidos:", error);
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     onAuthStateChanged(auth, async (user) => {
         if (!user) {
@@ -377,6 +450,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Inicializar Agenda
                 await loadSlots();
+
+                // Cargar referidos
+                if (userData.teacherProfile && userData.teacherProfile.refCode) {
+                    await loadReferredStudents(userData.teacherProfile.refCode);
+                }
 
             } else {
                 window.location.href = 'mapa.html';

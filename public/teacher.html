@@ -134,20 +134,50 @@
 
         <!-- Columna Principal -->
         <div class="main-column">
-            <div class="stats-card">
-                <div class="stat-item">
-                    <h3>Ganancias Pendientes</h3>
-                    <div class="value"><span class="currency">$</span>0.00 <span class="currency"
-                            style="font-size: 1rem;">MXN</span></div>
-                    <p style="font-size: 0.8rem; color: var(--slate-500); margin-top: 0.5rem;">Corte: El próximo Lunes
-                    </p>
-                    <p style="font-size: 0.8rem; color: var(--slate-500); margin-top: 0.5rem;">Monto mínimo de
-                        transferencia:
-                        $200 MXN</p>
+            <div class="stats-card" style="flex-direction: column; align-items: stretch;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div class="stat-item">
+                        <h3>Ganancias Pendientes</h3>
+                        <div class="value"><span class="currency">$</span><span id="total-earnings">0.00</span> <span
+                                class="currency" style="font-size: 1rem;">MXN</span></div>
+                        <p style="font-size: 0.8rem; color: var(--slate-500); margin-top: 0.5rem;">Corte: El próximo
+                            Lunes</p>
+                    </div>
+                    <div class="stat-item" style="text-align: right;">
+                        <h3>Evaluaciones Históricas</h3>
+                        <div class="value" style="color: var(--slate-700);">0</div>
+                    </div>
                 </div>
-                <div class="stat-item" style="text-align: right;">
-                    <h3>Evaluaciones Históricas</h3>
-                    <div class="value" style="color: var(--slate-700);">0</div>
+
+                <!-- Detalle de Ganancias -->
+                <div
+                    style="background: #f8fafc; border-radius: 12px; padding: 1.5rem; border: 1px solid var(--slate-200);">
+                    <h4 style="font-size: 0.95rem; color: var(--slate-900); margin-bottom: 1rem;">💵 Desglose del mes:
+                    </h4>
+
+                    <div
+                        style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; border-bottom: 1px dashed var(--slate-300); padding-bottom: 0.5rem;">
+                        <div style="color: var(--slate-700); font-size: 0.9rem;">
+                            <strong>🌱 Referidos (<span id="ref-count">0</span> activos)</strong>
+                            <p style="font-size: 0.75rem; color: var(--slate-500); margin-top: 0.25rem;">$50/mes por
+                                alumno activo</p>
+                        </div>
+                        <div style="font-weight: 600; color: #166534;">+$<span id="ref-earnings">0.00</span></div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem;">
+                        <div style="color: var(--slate-700); font-size: 0.9rem;">
+                            <strong>🎓 Evaluaciones Completadas (<span id="eval-count">0</span>)</strong>
+                            <p style="font-size: 0.75rem; color: var(--slate-500); margin-top: 0.25rem;">$50 por sesión
+                                de 20 min</p>
+                        </div>
+                        <div style="font-weight: 600; color: #166534;">+$<span id="eval-earnings">0.00</span></div>
+                    </div>
+
+                    <div style="text-align: right; margin-top: 1rem;">
+                        <p style="font-size: 0.8rem; color: var(--slate-500);">Monto mínimo de transferencia: $300 MXN
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -207,6 +237,23 @@
                 <!-- Lista de Slots Dinámica -->
                 <ul class="slot-list" id="slots-container"></ul>
             </div>
+
+            <!-- Sección de Referidos -->
+            <div class="panel-section" style="margin-top: 2rem;">
+                <div class="panel-header">
+                    <h2>🌱 Mis Estudiantes Referidos</h2>
+                </div>
+                <div id="referred-students-container">
+                    <div id="empty-referred-msg"
+                        style="text-align: center; padding: 2rem 1rem; color: var(--slate-500);">
+                        <p style="font-size: 2rem; margin-bottom: 0.5rem;">👥</p>
+                        <p>Aún no tienes estudiantes referidos.</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.25rem;">Comparte tu enlace único para empezar a
+                            ganar.</p>
+                    </div>
+                    <ul class="slot-list" id="referred-list" style="display: none;"></ul>
+                </div>
+            </div>
         </div>
 
         <!-- Columna Lateral -->
@@ -232,7 +279,7 @@
 
             <div class="panel-section"
                 style="margin-top: 2rem; background: #fffbeb; border: 1px solid #fde68a; text-align: center;">
-                <h3 style="font-size: 1.1rem; color: #b45309; margin-bottom: 0.5rem;">🎁 Programa de Creadores</h3>
+                <h3 style="font-size: 1.1rem; color: #b45309; margin-bottom: 0.5rem;">🎁 Programa de Referidos</h3>
                 <p style="font-size: 0.85rem; color: #92400e; margin-bottom: 1rem;">
                     Por cada alumno que invites, ganarás <strong>$50 MXN residuales mensuales</strong> mientras mantenga
                     su suscripción activa.

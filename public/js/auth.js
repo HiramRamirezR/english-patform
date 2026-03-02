@@ -25,14 +25,14 @@ const initApp = () => {
     console.log("English Peak: Sistema de Auth inicializado.");
 
     // Botones de login
-    const setupLogin = (id) => {
+    const setupLogin = (id, targetRoute = 'mapa.html') => {
         const btn = document.getElementById(id);
         if (btn) {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (auth.currentUser) {
-                    // Si ya está logueado, lo mandamos al mapa directamente
-                    window.location.href = 'mapa.html';
+                    // Si ya está logueado, lo mandamos a su ruta
+                    window.location.href = targetRoute;
                 } else {
                     // Si no, forzamos login
                     handleLogin();
@@ -41,7 +41,10 @@ const initApp = () => {
         }
     };
 
-    ['google-login', 'hero-cta-free', 'hero-cta-explore'].forEach(setupLogin);
+    setupLogin('google-login');
+    setupLogin('hero-cta-free');
+    setupLogin('hero-cta-explore');
+    setupLogin('hero-cta-teacher', 'profile.html');
 
     // Lógica de referidos
     const urlParams = new URL(window.location.href).searchParams;
@@ -75,6 +78,22 @@ let isLoggingIn = false;
 
 export const handleLogin = async () => {
     if (isLoggingIn) return;
+
+    // --- DETECCIÓN DE WEBVIEW DE FACEBOOK/INSTAGRAM ---
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isFacebookApp = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1);
+
+    if (isFacebookApp) {
+        const overlay = document.getElementById('webview-alert-overlay');
+        if (overlay) {
+            overlay.style.display = 'flex';
+        } else {
+            alert("⚠️ ACCESO BLOQUEADO POR NAVEGADOR:\n\nToca los TRES PUNTITOS de la esquina y elige 'Abrir en el navegador' para poder entrar.");
+        }
+        return;
+    }
+    // ----------------------------------------------------
+
     isLoggingIn = true;
 
     try {

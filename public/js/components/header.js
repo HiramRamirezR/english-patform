@@ -21,8 +21,25 @@ const renderHeader = (user, userData = null) => {
 
         let evaluateBtn = '';
         const isTeacherView = window.location.pathname.includes('teacher.html');
+
         if (!userData || !isTeacherView) {
-            evaluateBtn = `<button id="evaluate-btn" class="btn" style="background-color: var(--accent-warm); color: var(--slate-900); padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 600; border: none; box-shadow: 0 4px 6px -1px rgba(251, 146, 60, 0.4);">Evalúate ($60)</button>`;
+            // Lógica para determinar el tipo de evaluación
+            const completedLessons = userData?.completedLessons || [];
+
+            // Encontrar el módulo más alto alcanzado que esté completo (lección 20)
+            const modules = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8', 'm9', 'm10'];
+            let latestModuleFinished = null;
+
+            for (const modId of modules) {
+                if (completedLessons.includes(`${modId}l20`)) {
+                    latestModuleFinished = modId;
+                }
+            }
+
+            const btnLabel = latestModuleFinished ? `Certificar Módulo ${latestModuleFinished.replace('m', '')} ($60)` : `Salto de Nivel ($60)`;
+            const evalType = latestModuleFinished ? `Certificación Módulo ${latestModuleFinished.replace('m', '')}` : `Salto de Nivel (Fast-Track)`;
+
+            evaluateBtn = `<button id="evaluate-btn" data-type="${evalType}" data-mod="${latestModuleFinished || ''}" class="btn" style="background-color: var(--accent-warm); color: var(--slate-900); padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 600; border: none; box-shadow: 0 4px 6px -1px rgba(251, 146, 60, 0.4);">${btnLabel}</button>`;
         }
 
         navLinks = `
@@ -74,15 +91,7 @@ const renderHeader = (user, userData = null) => {
     const evaluateBtnEl = document.getElementById('evaluate-btn');
     if (evaluateBtnEl) {
         evaluateBtnEl.addEventListener('click', () => {
-            alert('¡Genial! Hemos notificado a nuestro equipo. Te contactaremos pronto para agendar tu evaluación con un Maestro Guardián.');
-            import('../discord.js').then(module => {
-                const displayName = user ? (user.displayName || user.email) : 'Alguien';
-                module.sendDiscordNotification(
-                    "📅 Petición de Evaluación ($60)",
-                    `**${displayName}** ha hecho clic en el botón para solicitar una evaluación uno a uno.`,
-                    15105570 // Naranja
-                );
-            });
+            window.location.href = 'evaluacion.html';
         });
     }
 };

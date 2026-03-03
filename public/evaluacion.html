@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación con Guardianes | Moonsforest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        :root {
+            --accent-warm: #fb923c;
+            --accent-soft: #ffedd5;
+            --success-deep: #065f46;
+        }
+
+        .eval-hero {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            background: linear-gradient(to bottom, #f0fdf4, var(--white));
+        }
+
+        .eval-hero h1 {
+            font-size: 2.25rem;
+            color: var(--slate-900);
+            margin-bottom: 1rem;
+        }
+
+        .eval-hero p {
+            color: var(--slate-600);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .goal-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 900px;
+            margin: -2rem auto 4rem;
+            padding: 0 1.5rem;
+        }
+
+        .goal-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .goal-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .goal-card.active {
+            border-color: var(--primary-medium);
+            background: #eff6ff;
+        }
+
+        .goal-card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(0.5);
+        }
+
+        .goal-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .goal-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--slate-900);
+        }
+
+        .goal-card p {
+            font-size: 0.95rem;
+            color: var(--slate-500);
+            line-height: 1.5;
+        }
+
+        .goal-card .status-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            text-transform: uppercase;
+        }
+
+        .badge-ready {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-locked {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Marketplace */
+        .marketplace-header {
+            max-width: 1100px;
+            margin: 0 auto 2rem;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--slate-400);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--slate-200);
+            font-family: inherit;
+            font-size: 0.9rem;
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        .teachers-grid {
+            max-width: 1100px;
+            margin: 0 auto 5rem;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .teacher-card {
+            background: var(--white);
+            border-radius: 20px;
+            border: 1px solid var(--slate-200);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.2s;
+        }
+
+        .teacher-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .teacher-top {
+            padding: 1.5rem;
+            display: flex;
+            gap: 1.25rem;
+            align-items: center;
+            border-bottom: 1px solid var(--slate-50);
+        }
+
+        .teacher-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            flex-shrink: 0;
+            border: 2px solid var(--white);
+            box-shadow: 0 0 0 2px var(--primary-medium);
+        }
+
+        .teacher-info h4 {
+            font-size: 1.15rem;
+            color: var(--slate-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .teacher-info p {
+            font-size: 0.85rem;
+            color: var(--slate-500);
+        }
+
+        .teacher-body {
+            padding: 1.5rem;
+            flex: 1;
+        }
+
+        .teacher-bio {
+            font-size: 0.9rem;
+            color: var(--slate-600);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .slots-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .slot-chip {
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            background: #f1f5f9;
+            color: var(--slate-700);
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .slot-chip:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-medium);
+        }
+
+        .teacher-footer {
+            padding: 1.25rem 1.5rem;
+            background: #fafafa;
+            border-top: 1px solid var(--slate-100);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .video-btn {
+            background: none;
+            border: none;
+            color: var(--primary-deep);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .video-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal Video */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: var(--white);
+            width: 100%;
+            max-width: 800px;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            /* 16:9 */
+            height: 0;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .goal-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .teachers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main-header"></div>
+
+    <section class="eval-hero">
+        <h1>Tu Próximo Gran Paso</h1>
+        <p>Selecciona tu misión y elige al Guardián que te acompañará en esta evaluación 1 a 1.</p>
+    </section>
+
+    <div class="goal-selector">
+        <div id="goal-certify" class="goal-card locked">
+            <span class="status-badge badge-locked">No Disponible</span>
+            <div class="icon">📜</div>
+            <h3>Certificar Módulo</h3>
+            <p>Obtén tu medalla oficial tras completar las 20 lecciones del módulo actual.</p>
+        </div>
+        <div id="goal-jump" class="goal-card active">
+            <span class="status-badge badge-ready">Disponible</span>
+            <div class="icon">🚀</div>
+            <h3>Salto de Nivel</h3>
+            <p>¿Sientes que el nivel es muy bajo? Brinca a módulos avanzados con una evaluación rápida.</p>
+        </div>
+    </div>
+
+    <div class="marketplace-header">
+        <h2 style="font-size: 1.5rem; color: var(--slate-900);">Escoge a tu Guardián</h2>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>Nombre</label>
+                <input type="text" id="filter-name" class="filter-select" placeholder="Buscar maestro..."
+                    style="min-width: 200px;">
+            </div>
+            <div class="filter-group">
+                <label>Día</label>
+                <select id="filter-day" class="filter-select">
+                    <option value="all">Cualquier día</option>
+                    <!-- Dinámico -->
+                </select>
+            </div>
+            <div id="loading-marketplace"
+                style="color: var(--slate-400); font-size: 0.9rem; align-self: flex-end; padding-bottom: 10px; display: none;">
+                Buscando...
+            </div>
+        </div>
+    </div>
+
+    <div id="teachers-grid" class="teachers-grid">
+        <!-- Tarjetas de maestros inyectadas por JS -->
+    </div>
+
+    <!-- Modal Video -->
+    <div id="video-modal" class="modal">
+        <div class="modal-content">
+            <button id="close-modal"
+                style="position: absolute; top: 1rem; right: 1rem; background: var(--white); border: none; font-size: 1.5rem; cursor: pointer; z-index: 10; border-radius: 50%; width: 40px; height: 40px; box-shadow: var(--shadow-md);">✕</button>
+            <div class="video-container" id="modal-video-container">
+                <!-- Iframe inyectado -->
+            </div>
+            <div style="padding: 1.5rem; border-top: 1px solid var(--slate-100);">
+                <h4 id="modal-teacher-name" style="font-size: 1.25rem; color: var(--slate-900);">Prof. Nombre</h4>
+                <p id="modal-teacher-bio" style="font-size: 0.9rem; color: var(--slate-600); margin-top: 0.5rem;">
+                    Cargando...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/components/header.js"></script>
+    <script type="module" src="/js/evaluacion.js"></script>
+</body>
+
+</html>

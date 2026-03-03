@@ -18,6 +18,9 @@ export class MoonsforestEngine {
         this.moonSupport = document.getElementById('moon-support');
         this.moonMessage = document.getElementById('moon-message');
 
+        // Mobile detection to selectively disable recording-based features
+        this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
         // Speech Recognition Setup (soporte cross-browser)
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (SpeechRecognition) {
@@ -229,6 +232,7 @@ export class MoonsforestEngine {
             micBtn.style.display = 'none';
             feedback.innerHTML = `Escuché y entendí: "<strong>${data.word.toLowerCase()}</strong>"`;
             this.showMoon(msg || data.successMsg || "¡Muy bien!");
+            this.showNextButton(box);
         };
 
         let mediaRecorder;
@@ -254,19 +258,20 @@ export class MoonsforestEngine {
             try {
                 this.recognition.start();
 
-                // Intentar grabar el audio para el historial (sin visualizador para evitar conflictos)
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    audioChunks = [];
-                    mediaRecorder = new MediaRecorder(stream);
-                    mediaRecorder.ondataavailable = (e) => {
-                        if (e.data.size > 0) audioChunks.push(e.data);
-                    };
-                    mediaRecorder.start();
-                } catch (recErr) {
-                    console.warn("No se pudo iniciar la grabación, pero el reconocimiento sigue activo:", recErr);
+                // Intentar grabar el audio SOLO en Desktop (evita conflictos en mobile)
+                if (!this.isMobile) {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        audioChunks = [];
+                        mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder.ondataavailable = (e) => {
+                            if (e.data.size > 0) audioChunks.push(e.data);
+                        };
+                        mediaRecorder.start();
+                    } catch (recErr) {
+                        console.warn("No se pudo iniciar la grabación:", recErr);
+                    }
                 }
-
             } catch (err) {
                 console.error("Error al iniciar reconocimiento:", err);
                 micBtn.classList.remove('listening');
@@ -282,7 +287,7 @@ export class MoonsforestEngine {
             this.recognition.onresult = async (event) => {
                 stopVisualPulse();
 
-                // Detener grabación y generar URL
+                // Detener grabación en desktop
                 let audioUrl = null;
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                     audioUrl = await new Promise(resolve => {
@@ -291,7 +296,6 @@ export class MoonsforestEngine {
                             resolve(URL.createObjectURL(audioBlob));
                         };
                         mediaRecorder.stop();
-                        // Detener todos los tracks del stream para liberar el micro
                         mediaRecorder.stream.getTracks().forEach(track => track.stop());
                     });
                 }
@@ -339,7 +343,7 @@ export class MoonsforestEngine {
                 const matches = targets.some(t => cleanTranscript === t || cleanTranscript.startsWith(t) || (attempts >= 2 && cleanTranscript.includes(t)));
 
                 if (matches || attempts >= 3) {
-                    // Guardar audio en el historial si se capturó
+                    // Guardar audio en el historial (desktop)
                     if (audioUrl) this.sessionHistory.push({ type: 'child', content: audioUrl });
 
                     let msg = (attempts >= 3 && !matches)
@@ -762,47 +766,54 @@ export class MoonsforestEngine {
         const box = document.createElement('div');
         box.className = 'activity-box';
 
+        let storyPlayerUI = '';
+        if (!this.isMobile) {
+            storyPlayerUI = `
+                <div id="story-player" style="background: #f1f5f9; padding: 2rem; border-radius: 20px; margin-bottom: 2rem; border: 2px dashed #cbd5e1;">
+                    <h3 style="font-size: 1.1rem; color: var(--slate-700); margin-bottom: 1rem;">🎥 Tu aventura del día</h3>
+                    <p style="font-size: 0.9rem; color: var(--slate-500); margin-bottom: 1.5rem;">Escucha tu conversación completa con Moon.</p>
+                    <button id="play-story-btn" class="btn btn-accent" style="background: #fbbf24; color: #78350f; padding: 1rem 2.5rem; font-weight: 700;">
+                        ▶️ Reproducir mi Conversación
+                    </button>
+                </div>
+            `;
+        }
+
         // UI de Felicitación
         box.innerHTML = `
             <div style="font-size: 5rem; margin-bottom: 1rem;">🏞️</div>
             <h2 style="font-size: 2.5rem; color: var(--primary-deep); margin-bottom: 2rem;">¡Lección Completada!</h2>
-            
-            <div id="story-player" style="background: #f1f5f9; padding: 2rem; border-radius: 20px; margin-bottom: 2rem; border: 2px dashed #cbd5e1;">
-                <h3 style="font-size: 1.1rem; color: var(--slate-700); margin-bottom: 1rem;">🎥 Tu aventura del día</h3>
-                <p style="font-size: 0.9rem; color: var(--slate-500); margin-bottom: 1.5rem;">Escucha tu conversación completa con Moon.</p>
-                <button id="play-story-btn" class="btn btn-accent" style="background: #fbbf24; color: #78350f; padding: 1rem 2.5rem; font-weight: 700;">
-                    ▶️ Reproducir mi Conversación
-                </button>
-            </div>
-
+            ${storyPlayerUI}
             <button class="btn btn-primary" style="padding: 1rem 3rem;" onclick="window.location.href='${targetUrl}'">Volver al Bosque</button>
         `;
         this.container.appendChild(box);
 
-        // Lógica del Reproductor de Historia (Intercalado)
-        const playBtn = document.getElementById('play-story-btn');
-        if (playBtn) {
-            playBtn.addEventListener('click', async () => {
-                playBtn.disabled = true;
-                playBtn.innerText = "🎬 Reproduciendo...";
+        // Lógica del Reproductor de Historia (Solo Desktop)
+        if (!this.isMobile) {
+            const playBtn = document.getElementById('play-story-btn');
+            if (playBtn) {
+                playBtn.addEventListener('click', async () => {
+                    playBtn.disabled = true;
+                    playBtn.innerText = "🎬 Reproduciendo...";
 
-                for (const item of this.sessionHistory) {
-                    if (item.type === 'moon') {
-                        await new Promise(resolve => {
-                            this.speak(item.content, () => resolve());
-                        });
-                    } else if (item.type === 'child') {
-                        await new Promise(resolve => {
-                            const audio = new Audio(item.content);
-                            audio.onended = resolve;
-                            audio.play().catch(() => resolve()); // Fallback si falla
-                        });
+                    for (const item of this.sessionHistory) {
+                        if (item.type === 'moon') {
+                            await new Promise(resolve => {
+                                this.speak(item.content, () => resolve());
+                            });
+                        } else if (item.type === 'child') {
+                            await new Promise(resolve => {
+                                const audio = new Audio(item.content);
+                                audio.onended = resolve;
+                                audio.play().catch(() => resolve());
+                            });
+                        }
                     }
-                }
 
-                playBtn.disabled = false;
-                playBtn.innerText = "▶️ Volver a escuchar";
-            });
+                    playBtn.disabled = false;
+                    playBtn.innerText = "▶️ Volver a escuchar";
+                });
+            }
         }
 
         this.showMoon("¡Terminaste tu primer entrenamiento! Eres valiente.");

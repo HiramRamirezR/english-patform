@@ -229,8 +229,10 @@ export class MoonsforestEngine {
             micBtn.style.display = 'none';
             feedback.innerHTML = `Escuché y entendí: "<strong>${data.word.toLowerCase()}</strong>"`;
             this.showMoon(msg || data.successMsg || "¡Muy bien!");
-            this.showNextButton(box);
         };
+
+        let mediaRecorder;
+        let audioChunks = [];
 
         micBtn.addEventListener('click', async () => {
             if (!this.recognition) {
@@ -251,6 +253,20 @@ export class MoonsforestEngine {
 
             try {
                 this.recognition.start();
+
+                // Intentar grabar el audio para el historial (sin visualizador para evitar conflictos)
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    audioChunks = [];
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.ondataavailable = (e) => {
+                        if (e.data.size > 0) audioChunks.push(e.data);
+                    };
+                    mediaRecorder.start();
+                } catch (recErr) {
+                    console.warn("No se pudo iniciar la grabación, pero el reconocimiento sigue activo:", recErr);
+                }
+
             } catch (err) {
                 console.error("Error al iniciar reconocimiento:", err);
                 micBtn.classList.remove('listening');
@@ -265,6 +281,20 @@ export class MoonsforestEngine {
 
             this.recognition.onresult = async (event) => {
                 stopVisualPulse();
+
+                // Detener grabación y generar URL
+                let audioUrl = null;
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    audioUrl = await new Promise(resolve => {
+                        mediaRecorder.onstop = () => {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                            resolve(URL.createObjectURL(audioBlob));
+                        };
+                        mediaRecorder.stop();
+                        // Detener todos los tracks del stream para liberar el micro
+                        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                    });
+                }
 
                 let transcript = event.results[0][0].transcript.toLowerCase().trim();
                 let confidence = event.results[0][0].confidence || 0.8;
@@ -309,6 +339,9 @@ export class MoonsforestEngine {
                 const matches = targets.some(t => cleanTranscript === t || cleanTranscript.startsWith(t) || (attempts >= 2 && cleanTranscript.includes(t)));
 
                 if (matches || attempts >= 3) {
+                    // Guardar audio en el historial si se capturó
+                    if (audioUrl) this.sessionHistory.push({ type: 'child', content: audioUrl });
+
                     let msg = (attempts >= 3 && !matches)
                         ? "¡Esa frase es un gran reto! Moon te ayuda con su magia para que sigamos explorando."
                         : (attempts === 2 && !matches) ? "¡Casi perfecto! Escuché tu gran esfuerzo. ¡Avancemos!" : null;
@@ -323,6 +356,11 @@ export class MoonsforestEngine {
 
             const handleError = (errorType) => {
                 stopVisualPulse();
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                }
+
                 if (attempts >= 3) {
                     forcePass("¡Moon te escucha con el corazón! Sigamos con la aventura.");
                     return;
@@ -344,6 +382,10 @@ export class MoonsforestEngine {
 
             this.recognition.onend = () => {
                 stopVisualPulse();
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                }
                 micBtn.classList.remove('listening');
             };
         });

@@ -249,14 +249,14 @@ export class MoonsforestEngine {
 
         micBtn.addEventListener('click', async () => {
             if (!this.recognition) {
-                alert("Tu navegador no soporta el reconocimiento de voz. Usa Chrome.");
+                alert("Tu navegador no soporta el reconocimiento de voz. Usa Chrome en Android o Safari en iOS.");
                 return;
             }
 
-            // Si ya está escuchando, no hacemos nada para no trabar la API
-            if (micBtn.classList.contains('listening')) {
-                return;
-            }
+            if (micBtn.classList.contains('listening')) return;
+
+            // Incrementamos intentos al Clic (intención de hablar)
+            attempts++;
 
             micBtn.classList.add('listening');
             feedback.innerText = 'Listening... Habla ahora.';
@@ -264,76 +264,85 @@ export class MoonsforestEngine {
             // Resetear visual del termómetro 
             thermoFill.style.transition = 'width 0.1s linear, background-color 0.1s linear';
             thermoFill.style.width = '0%';
-            thermoFill.style.background = '#38bdf8'; // Azul claro mientras escucha
+            thermoFill.style.background = '#38bdf8';
             thermoLabel.innerText = "¡Te estoy escuchando! ⚡";
 
+            let stream = null;
+
+            const forcePass = (msg) => {
+                this.playSound('success');
+                echoWord.classList.add('success');
+                echoWord.innerText = data.word;
+                micBtn.style.display = 'none';
+                feedback.innerHTML = `Escuché y entendí: "<strong>${data.word.toLowerCase()}</strong>"`;
+                this.showMoon(msg || data.successMsg || "¡Muy bien!");
+                this.showNextButton(box);
+            };
+
             try {
-                // 1. Iniciar STT
+                // 1. Iniciar STT Primero (Prioritario en móviles)
                 this.recognition.start();
 
-                // 2. Iniciar Medidor Volumétrico en tiempo real (Web Audio API)
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                analyser = audioContext.createAnalyser();
-                microphoneNode = audioContext.createMediaStreamSource(stream);
-                javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+                // 2. Iniciar Medidor Volumétrico y Grabación
+                // En móviles, a veces getUserMedia después de recognition.start falla. 
+                // Lo intentamos pero si falla, dejamos que el STT siga solo.
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    analyser = audioContext.createAnalyser();
+                    microphoneNode = audioContext.createMediaStreamSource(stream);
+                    javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
 
-                analyser.smoothingTimeConstant = 0.8;
-                analyser.fftSize = 1024;
+                    analyser.smoothingTimeConstant = 0.8;
+                    analyser.fftSize = 1024;
 
-                microphoneNode.connect(analyser);
-                analyser.connect(javascriptNode);
-                javascriptNode.connect(audioContext.destination);
+                    microphoneNode.connect(analyser);
+                    analyser.connect(javascriptNode);
+                    javascriptNode.connect(audioContext.destination);
 
-                isRecordingAudio = true;
+                    isRecordingAudio = true;
 
-                // --- INICIO GRABACIÓN PARA EL ECO DE DANTE ---
-                audioChunks = [];
-                mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.ondataavailable = (e) => {
-                    if (e.data.size > 0) audioChunks.push(e.data);
-                };
-                mediaRecorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    lastAudioUrl = URL.createObjectURL(audioBlob);
-                };
-                mediaRecorder.start();
-                // --------------------------------------------
+                    // Grabación para el eco
+                    audioChunks = [];
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.ondataavailable = (e) => {
+                        if (e.data.size > 0) audioChunks.push(e.data);
+                    };
+                    mediaRecorder.start();
 
-                javascriptNode.onaudioprocess = () => {
-                    if (!isRecordingAudio) return;
-                    const array = new Uint8Array(analyser.frequencyBinCount);
-                    analyser.getByteFrequencyData(array);
-                    let values = 0;
-                    const length = array.length;
-                    for (let i = 0; i < length; i++) {
-                        values += (array[i]);
-                    }
-                    const average = values / length;
-                    // Mapear de 0-100 (un volumen normal hablando de cerca promedia unos 40-60)
-                    let volPercent = Math.min(100, average * 2);
-
-                    // Asegurar un nivel basal bajito para que se vea que está vivo
-                    if (volPercent < 5) volPercent = 5;
-
-                    thermoFill.style.width = `${volPercent}%`;
-                };
+                    javascriptNode.onaudioprocess = () => {
+                        if (!isRecordingAudio) return;
+                        const array = new Uint8Array(analyser.frequencyBinCount);
+                        analyser.getByteFrequencyData(array);
+                        let values = 0;
+                        for (let i = 0; i < array.length; i++) values += array[i];
+                        const average = values / array.length;
+                        let volPercent = Math.min(100, average * 2);
+                        if (volPercent < 5) volPercent = 5;
+                        thermoFill.style.width = `${volPercent}%`;
+                    };
+                } catch (audioErr) {
+                    console.warn("No se pudo iniciar el visualizador, pero el reconocimiento sigue activo:", audioErr);
+                }
 
             } catch (err) {
-                console.error("No se pudo iniciar el reconocimiento o acceso a micro:", err);
+                console.error("Error crítico al iniciar micro:", err);
                 micBtn.classList.remove('listening');
                 thermoLabel.innerText = "Error con el micrófono ✗";
-                thermoFill.style.background = '#ef4444';
+
+                if (attempts >= 3) {
+                    forcePass("¡Parece que tu micrófono tiene sueño! No te preocupes, Moon te ayuda a seguir adelante.");
+                }
                 return;
             }
 
+
+
             this.recognition.onresult = async (event) => {
-                attempts++;
-                stopAudioAnalysis(); // Detener el medidor dinámico
+                stopAudioAnalysis();
 
                 let audioUrl = null;
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                    // Esperar a que el recorder se detenga y cree el blob
                     audioUrl = await new Promise(resolve => {
                         mediaRecorder.onstop = () => {
                             const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
@@ -344,19 +353,16 @@ export class MoonsforestEngine {
                 }
 
                 let transcript = event.results[0][0].transcript.toLowerCase().trim();
-                let confidence = event.results[0][0].confidence || 0.8; // Fallback confidence
+                let confidence = event.results[0][0].confidence || 0.8;
 
-                // Mostrar resultado estático de confianza 
                 thermoLabel.innerText = "Claridad de tu pronunciación 🎯";
                 let fillPercentage = Math.round(confidence * 100);
                 thermoFill.style.width = `${fillPercentage}%`;
 
-                if (fillPercentage < 50) thermoFill.style.background = '#ef4444'; // Rojo oscuro
-                else if (fillPercentage < 80) thermoFill.style.background = '#f59e0b'; // Amarillo
-                else thermoFill.style.background = '#10b981'; // Verde
+                if (fillPercentage < 50) thermoFill.style.background = '#ef4444';
+                else if (fillPercentage < 80) thermoFill.style.background = '#f59e0b';
+                else thermoFill.style.background = '#10b981';
 
-                // DICCIONARIO GLOBAL DE CORRECCIONES DE STT (Homófonos)
-                // Esto aplica automáticamente a TODAS las lecciones de la plataforma
                 const corrections = {
                     "eye": "i", "aye": "i", "hi ": "i ", "ai": "i", "hay": "i", "ay": "i", " a ": " i ",
                     "am": "am", "um": "am", "em": "am", "aim": "am", "ham": "am", "an ": "am ",
@@ -373,10 +379,7 @@ export class MoonsforestEngine {
                     "three": "tree", "tea": "tree", "free": "tree"
                 };
 
-                // Reemplazamos las palabras mal escuchadas por su versión correcta en inglés
                 for (let [wrong, right] of Object.entries(corrections)) {
-                    // Usamos regex con límites de palabra para no modificar fragmentos internos, 
-                    // o simplemente replaces directos para palabras sueltas.
                     const regex = new RegExp(`\\b${wrong}\\b`, 'g');
                     transcript = transcript.replace(regex, right);
                 }
@@ -384,96 +387,52 @@ export class MoonsforestEngine {
                 const cleanTranscript = transcript.replace(/[^a-z0-9 ]/gi, '').trim();
                 const target = data.word.toLowerCase().replace(/[^a-z0-9 ]/gi, '').trim();
 
-                // Imprimir lo que el sistema "Interpretó"
                 feedback.innerHTML = `Escuché y entendí: "<strong>${cleanTranscript}</strong>"`;
 
                 const aliases = data.aliases ? data.aliases.map(a => a.toLowerCase().replace(/[^a-z0-9 ]/gi, '').trim()) : [];
                 const targets = [target, ...aliases];
 
-                const isExactMatch = targets.includes(cleanTranscript);
-                const startsWithMatch = targets.some(t => cleanTranscript.startsWith(t) && (cleanTranscript.length <= t.length + 5));
+                const matches = targets.some(t => cleanTranscript === t || cleanTranscript.startsWith(t) || (attempts >= 2 && cleanTranscript.includes(t)));
 
-                let isAccepted = false;
-                let successMessage = data.successMsg || "¡Ese es el sonido perfecto!";
+                if (matches || attempts >= 3) {
+                    if (audioUrl) this.sessionHistory.push({ type: 'child', content: audioUrl });
 
-                if (isExactMatch || startsWithMatch) {
-                    isAccepted = true;
-                    fillPercentage = Math.max(fillPercentage, 95);
-                    thermoFill.style.width = `${fillPercentage}%`;
-                    thermoFill.style.background = '#10b981'; // Verde Esmeralda
-                } else if (attempts >= 2) {
-                    // Filtro de Empatía - Intento 2 (tolerancia media)
-                    const containsMatch = targets.some(t => cleanTranscript.includes(t) || (t.length >= 3 && t.includes(cleanTranscript)));
-                    if (containsMatch) {
-                        isAccepted = true;
-                        successMessage = "¡Casi perfecto! Escuché tu gran esfuerzo. ¡Avancemos!";
-                        thermoFill.style.width = `90%`;
-                        thermoFill.style.background = '#10b981';
-                        feedback.innerHTML = `Escuché y entendí: "<strong>${data.word.toLowerCase()}</strong>"`;
-                    } else if (attempts >= 3) {
-                        // Magia de Moon - Intento 3 (Pasa porque pasa para evitar frustración)
-                        isAccepted = true;
-                        successMessage = "¡Esa frase es un gran reto! Moon te ayuda con su magia para que sigamos explorando.";
-                        thermoFill.style.width = `100%`;
-                        thermoFill.style.background = '#10b981';
-                        feedback.innerHTML = `Escuché y entendí: "<strong>${data.word.toLowerCase()}</strong>"`;
-                    }
-                }
+                    let msg = (attempts >= 3 && !matches)
+                        ? "¡Esa frase es un gran reto! Moon te ayuda con su magia para que sigamos explorando."
+                        : (attempts === 2 && !matches) ? "¡Casi perfecto! Escuché tu gran esfuerzo. ¡Avancemos!" : null;
 
-                if (isAccepted) {
-                    // Guardar en el historial de la sesión para el final
-                    if (audioUrl) {
-                        this.sessionHistory.push({ type: 'child', content: audioUrl });
-                    }
-
-                    this.playSound('success');
-                    echoWord.classList.add('success');
-                    echoWord.innerText = data.word; // Revelar inglés si estaba oculto en español
-                    micBtn.style.display = 'none'; // ocultar micro
-                    this.showMoon(successMessage);
-                    this.showNextButton(box);
+                    forcePass(msg);
                 } else {
                     this.playSound('error');
-                    let hints = [
-                        "¡Casi! Intenta pronunciarlo un par de veces más.",
-                        "Abre bien la boca y pronuncia fuerte y claro.",
-                        "No te rindas. Recuerda cómo suena y suéltalo fuerte."
-                    ];
+                    let hints = ["¡Casi! Intenta pronunciarlo de nuevo.", "Abre bien la boca y habla fuerte.", "¡Un esfuerzo más! Tú puedes."];
                     this.showMoon(hints[(attempts - 1) % hints.length]);
                 }
             };
 
-            this.recognition.onnomatch = () => {
+            const handleError = (errorType) => {
                 stopAudioAnalysis();
-                this.playSound('error');
-                feedback.innerText = 'No pude escucharte bien. Intenta otra vez.';
-                thermoFill.style.width = '0%';
-                thermoLabel.innerText = "No se entendió ⚡";
-                this.showMoon("Habla un poquito más fuerte.");
-            };
+                if (attempts >= 3) {
+                    forcePass("¡Moon te escucha con el corazón! Sigamos con la aventura.");
+                    return;
+                }
 
-            this.recognition.onerror = (event) => {
-                stopAudioAnalysis();
-                console.error("Recognition Error:", event.error);
-                if (event.error === 'no-speech') {
+                this.playSound('error');
+                thermoFill.style.width = '0%';
+                if (errorType === 'no-speech') {
                     feedback.innerText = 'No detecté voz. ¿Podrías repetirlo?';
-                    thermoFill.style.width = '0%';
-                    thermoLabel.innerText = "Sin sonido ⚡";
-                    this.showMoon("No escuché nada. Intenta hablar más cerca del micro.");
+                    this.showMoon("No escuché nada. Intenta hablar más fuerte.");
                 } else {
-                    feedback.innerText = 'Hubo un problema. Intenta otra vez.';
-                    thermoFill.style.width = '0%';
-                    thermoLabel.innerText = "Error ✗";
+                    feedback.innerText = 'Hubo un problema con el micro. Intenta otra vez.';
                     this.showMoon("Revisa el permiso de tu micrófono.");
                 }
             };
 
-            // Asegurar siempre que quitamos la clase listening cuando termine
+            this.recognition.onnomatch = () => handleError('no-match');
+            this.recognition.onerror = (event) => handleError(event.error);
+
             this.recognition.onend = () => {
                 stopAudioAnalysis();
-                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                    mediaRecorder.stop();
-                }
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
                 micBtn.classList.remove('listening');
             };
         });

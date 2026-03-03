@@ -160,7 +160,7 @@ export class MoonsforestEngine {
     }
 
     renderEchoChamber(data) {
-        let attempts = 0; // Añadido para el Filtro de Empatía
+        let attempts = 0;
         const box = document.createElement('div');
         box.className = 'activity-box';
 
@@ -168,19 +168,15 @@ export class MoonsforestEngine {
         prompt.className = 'activity-prompt';
         prompt.innerText = data.prompt || 'Haz clic y habla.';
 
-        // Big Word
         const echoWord = document.createElement('div');
         echoWord.className = 'echo-word';
-        // Si hay una palabra para mostrar (ej. su traducción para forzar memoria), úsala. Si no, usa el inglés directo.
         echoWord.innerText = data.displayWord || data.word;
 
-        // Contenedor principal de métricas visuales
         const metricsContainer = document.createElement('div');
         metricsContainer.style.margin = '1rem auto';
         metricsContainer.style.width = '100%';
         metricsContainer.style.maxWidth = '250px';
 
-        // Etiqueta para que los niños entiendan qué es la barra
         const thermoLabel = document.createElement('div');
         thermoLabel.innerText = "Energía de tu voz ⚡";
         thermoLabel.style.fontSize = '0.75rem';
@@ -190,7 +186,6 @@ export class MoonsforestEngine {
         thermoLabel.style.fontWeight = '600';
         metricsContainer.appendChild(thermoLabel);
 
-        // Termómetro de claridad visual
         const thermoContainer = document.createElement('div');
         thermoContainer.style.width = '100%';
         thermoContainer.style.height = '14px';
@@ -202,18 +197,15 @@ export class MoonsforestEngine {
         const thermoFill = document.createElement('div');
         thermoFill.style.height = '100%';
         thermoFill.style.width = '0%';
-        thermoFill.style.background = '#cbd5e1'; // Gris platinado inactivo
+        thermoFill.style.background = '#cbd5e1';
         thermoFill.style.transition = 'width 0.1s linear, background-color 0.4s ease';
         thermoContainer.appendChild(thermoFill);
         metricsContainer.appendChild(thermoContainer);
-        thermoContainer.appendChild(thermoFill);
 
-        // Mic Button
         const micBtn = document.createElement('button');
         micBtn.className = 'mic-btn';
         micBtn.innerHTML = '🎤';
 
-        // Feedback Text
         const feedback = document.createElement('div');
         feedback.className = 'speech-feedback';
         feedback.innerText = 'Presiona el micrófono para hablar';
@@ -225,27 +217,20 @@ export class MoonsforestEngine {
         box.appendChild(feedback);
         this.container.appendChild(box);
 
-        // Variables para el análisis de audio en tiempo real
-        let audioContext;
-        let analyser;
-        let microphoneNode;
-        let javascriptNode;
-        let isRecordingAudio = false;
-
-        const stopAudioAnalysis = () => {
-            isRecordingAudio = false;
-            if (javascriptNode) javascriptNode.disconnect();
-            if (microphoneNode) microphoneNode.disconnect();
-            if (analyser) analyser.disconnect();
-            if (audioContext && audioContext.state !== 'closed') audioContext.close();
-
-            // Volver la transición suave para el resultado final
+        const stopVisualPulse = () => {
+            thermoFill.classList.remove('pulse-animation-active');
             thermoFill.style.transition = 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.6s ease';
         };
 
-        // Variables para grabación de audio del niño
-        let mediaRecorder;
-        let audioChunks = [];
+        const forcePass = (msg) => {
+            this.playSound('success');
+            echoWord.classList.add('success');
+            echoWord.innerText = data.word;
+            micBtn.style.display = 'none';
+            feedback.innerHTML = `Escuché y entendí: "<strong>${data.word.toLowerCase()}</strong>"`;
+            this.showMoon(msg || data.successMsg || "¡Muy bien!");
+            this.showNextButton(box);
+        };
 
         micBtn.addEventListener('click', async () => {
             if (!this.recognition) {
@@ -255,102 +240,31 @@ export class MoonsforestEngine {
 
             if (micBtn.classList.contains('listening')) return;
 
-            // Incrementamos intentos al Clic (intención de hablar)
             attempts++;
-
             micBtn.classList.add('listening');
             feedback.innerText = 'Listening... Habla ahora.';
 
-            // Resetear visual del termómetro 
-            thermoFill.style.transition = 'width 0.1s linear, background-color 0.1s linear';
-            thermoFill.style.width = '0%';
+            // Start CSS pulse animation instead of AudioContext analysis
+            thermoFill.classList.add('pulse-animation-active');
             thermoFill.style.background = '#38bdf8';
             thermoLabel.innerText = "¡Te estoy escuchando! ⚡";
 
-            let stream = null;
-
-            const forcePass = (msg) => {
-                this.playSound('success');
-                echoWord.classList.add('success');
-                echoWord.innerText = data.word;
-                micBtn.style.display = 'none';
-                feedback.innerHTML = `Escuché y entendí: "<strong>${data.word.toLowerCase()}</strong>"`;
-                this.showMoon(msg || data.successMsg || "¡Muy bien!");
-                this.showNextButton(box);
-            };
-
             try {
-                // 1. Iniciar STT Primero (Prioritario en móviles)
                 this.recognition.start();
-
-                // 2. Iniciar Medidor Volumétrico y Grabación
-                // En móviles, a veces getUserMedia después de recognition.start falla. 
-                // Lo intentamos pero si falla, dejamos que el STT siga solo.
-                try {
-                    stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    analyser = audioContext.createAnalyser();
-                    microphoneNode = audioContext.createMediaStreamSource(stream);
-                    javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
-
-                    analyser.smoothingTimeConstant = 0.8;
-                    analyser.fftSize = 1024;
-
-                    microphoneNode.connect(analyser);
-                    analyser.connect(javascriptNode);
-                    javascriptNode.connect(audioContext.destination);
-
-                    isRecordingAudio = true;
-
-                    // Grabación para el eco
-                    audioChunks = [];
-                    mediaRecorder = new MediaRecorder(stream);
-                    mediaRecorder.ondataavailable = (e) => {
-                        if (e.data.size > 0) audioChunks.push(e.data);
-                    };
-                    mediaRecorder.start();
-
-                    javascriptNode.onaudioprocess = () => {
-                        if (!isRecordingAudio) return;
-                        const array = new Uint8Array(analyser.frequencyBinCount);
-                        analyser.getByteFrequencyData(array);
-                        let values = 0;
-                        for (let i = 0; i < array.length; i++) values += array[i];
-                        const average = values / array.length;
-                        let volPercent = Math.min(100, average * 2);
-                        if (volPercent < 5) volPercent = 5;
-                        thermoFill.style.width = `${volPercent}%`;
-                    };
-                } catch (audioErr) {
-                    console.warn("No se pudo iniciar el visualizador, pero el reconocimiento sigue activo:", audioErr);
-                }
-
             } catch (err) {
-                console.error("Error crítico al iniciar micro:", err);
+                console.error("Error al iniciar reconocimiento:", err);
                 micBtn.classList.remove('listening');
-                thermoLabel.innerText = "Error con el micrófono ✗";
+                stopVisualPulse();
 
                 if (attempts >= 3) {
                     forcePass("¡Parece que tu micrófono tiene sueño! No te preocupes, Moon te ayuda a seguir adelante.");
+                } else {
+                    this.showMoon("Ocurrió un error con el micro. Inténtalo de nuevo.");
                 }
-                return;
             }
 
-
-
             this.recognition.onresult = async (event) => {
-                stopAudioAnalysis();
-
-                let audioUrl = null;
-                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                    audioUrl = await new Promise(resolve => {
-                        mediaRecorder.onstop = () => {
-                            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                            resolve(URL.createObjectURL(audioBlob));
-                        };
-                        mediaRecorder.stop();
-                    });
-                }
+                stopVisualPulse();
 
                 let transcript = event.results[0][0].transcript.toLowerCase().trim();
                 let confidence = event.results[0][0].confidence || 0.8;
@@ -395,8 +309,6 @@ export class MoonsforestEngine {
                 const matches = targets.some(t => cleanTranscript === t || cleanTranscript.startsWith(t) || (attempts >= 2 && cleanTranscript.includes(t)));
 
                 if (matches || attempts >= 3) {
-                    if (audioUrl) this.sessionHistory.push({ type: 'child', content: audioUrl });
-
                     let msg = (attempts >= 3 && !matches)
                         ? "¡Esa frase es un gran reto! Moon te ayuda con su magia para que sigamos explorando."
                         : (attempts === 2 && !matches) ? "¡Casi perfecto! Escuché tu gran esfuerzo. ¡Avancemos!" : null;
@@ -410,7 +322,7 @@ export class MoonsforestEngine {
             };
 
             const handleError = (errorType) => {
-                stopAudioAnalysis();
+                stopVisualPulse();
                 if (attempts >= 3) {
                     forcePass("¡Moon te escucha con el corazón! Sigamos con la aventura.");
                     return;
@@ -431,12 +343,12 @@ export class MoonsforestEngine {
             this.recognition.onerror = (event) => handleError(event.error);
 
             this.recognition.onend = () => {
-                stopAudioAnalysis();
-                if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+                stopVisualPulse();
                 micBtn.classList.remove('listening');
             };
         });
     }
+
 
     renderDragAndDrop(data) {
         const box = document.createElement('div');

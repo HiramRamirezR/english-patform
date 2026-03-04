@@ -1,3 +1,6 @@
+import { db } from './auth.js';
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
 /**
  * Module Learning Engine 🌲
  * Combina TTS y STT usando Web APIs nativas, sin requerir APIs de pago.
@@ -17,6 +20,9 @@ export class MoonsforestEngine {
         this.progressBar = document.getElementById('progress-bar');
         this.moonSupport = document.getElementById('moon-support');
         this.moonMessage = document.getElementById('moon-message');
+
+        // Add Report Button to UI
+        this.addReportButton();
 
         // Mobile detection to selectively disable recording-based features
         this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -209,16 +215,35 @@ export class MoonsforestEngine {
         micBtn.className = 'mic-btn';
         micBtn.innerHTML = '🎤';
 
+        const listenBtn = document.createElement('button');
+        listenBtn.className = 'listen-btn-echo';
+        listenBtn.innerHTML = '🔊';
+        listenBtn.title = 'Escuchar de nuevo';
+
         const feedback = document.createElement('div');
         feedback.className = 'speech-feedback';
         feedback.innerText = 'Presiona el micrófono para hablar';
 
         box.appendChild(prompt);
         box.appendChild(echoWord);
+        box.appendChild(listenBtn); // Insert before metrics
         box.appendChild(metricsContainer);
         box.appendChild(micBtn);
         box.appendChild(feedback);
         this.container.appendChild(box);
+
+        // Logic for listening to the word
+        listenBtn.addEventListener('click', () => {
+            if (listenBtn.disabled) return;
+            micBtn.disabled = true;
+            listenBtn.disabled = true;
+            feedback.innerText = 'Escuchando a Moon...';
+            this.speak(data.word, () => {
+                micBtn.disabled = false;
+                listenBtn.disabled = false;
+                feedback.innerText = 'Presiona el micrófono para hablar';
+            });
+        });
 
         const stopVisualPulse = () => {
             thermoFill.classList.remove('pulse-animation-active');
@@ -230,6 +255,7 @@ export class MoonsforestEngine {
             echoWord.classList.add('success');
             echoWord.innerText = data.word;
             micBtn.style.display = 'none';
+            listenBtn.style.display = 'none';
             feedback.innerHTML = `Escuché y entendí: "<strong>${data.word.toLowerCase()}</strong>"`;
             this.showMoon(msg || data.successMsg || "¡Muy bien!");
             this.showNextButton(box);
@@ -244,10 +270,11 @@ export class MoonsforestEngine {
                 return;
             }
 
-            if (micBtn.classList.contains('listening')) return;
+            if (micBtn.classList.contains('listening') || micBtn.disabled) return;
 
             attempts++;
             micBtn.classList.add('listening');
+            listenBtn.disabled = true;
             feedback.innerText = 'Listening... Habla ahora.';
 
             // Start CSS pulse animation instead of AudioContext analysis
@@ -346,6 +373,13 @@ export class MoonsforestEngine {
                     // Guardar audio en el historial (desktop)
                     if (audioUrl) this.sessionHistory.push({ type: 'child', content: audioUrl });
 
+                    if (attempts >= 3 && !matches) {
+                        this.logFrustration('frustration_auto', {
+                            attempts: attempts,
+                            lastTranscript: transcript
+                        });
+                    }
+
                     let msg = (attempts >= 3 && !matches)
                         ? "¡Esa frase es un gran reto! Moon te ayuda con su magia para que sigamos explorando."
                         : (attempts === 2 && !matches) ? "¡Casi perfecto! Escuché tu gran esfuerzo. ¡Avancemos!" : null;
@@ -391,6 +425,7 @@ export class MoonsforestEngine {
                     mediaRecorder.stream.getTracks().forEach(track => track.stop());
                 }
                 micBtn.classList.remove('listening');
+                listenBtn.disabled = false;
             };
         });
     }
@@ -825,6 +860,8 @@ export class MoonsforestEngine {
 
     speak(text, onEndCallback = null) {
         if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); // Cancel ongoing speech
+
             // Guardar en el historial para el final (solo si no estamos en reproducción final)
             if (!onEndCallback) {
                 this.sessionHistory.push({ type: 'moon', content: text });
@@ -922,5 +959,65 @@ export class MoonsforestEngine {
     hideMoon() {
         if (!this.moonSupport) return;
         this.moonSupport.classList.add('hidden');
+    }
+
+    addReportButton() {
+        const reportBtn = document.createElement('button');
+        reportBtn.id = 'report-issue-btn';
+        reportBtn.innerHTML = '🚩 Reportar problema';
+        reportBtn.title = "¿Algo no funciona? Repórtalo para que Moon aprenda.";
+        reportBtn.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            color: #64748b;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        `;
+        reportBtn.onmouseover = () => reportBtn.style.background = "#fee2e2";
+        reportBtn.onmouseout = () => reportBtn.style.background = "rgba(255, 255, 255, 0.8)";
+
+        reportBtn.onclick = () => {
+            const reason = prompt("¿Qué problema tuviste? (Ej: No reconoce mi voz, la traducción está mal, no cargó la imagen)");
+            if (reason) {
+                this.logFrustration('manual_report', { reason });
+                alert("¡Gracias! Moon ya está revisando tu reporte. 🌲✨");
+            }
+        };
+
+        document.body.appendChild(reportBtn);
+    }
+
+    async logFrustration(type, extra = {}) {
+        try {
+            const stepData = this.data[this.currentStep] || {};
+            const report = {
+                type: type, // 'frustration_auto' or 'manual_report'
+                lessonId: this.options.lessonId || 'unknown',
+                moduleId: this.options.moduleId || 'unknown',
+                stepIndex: this.currentStep,
+                targetWord: stepData.word || stepData.target || 'N/A',
+                userId: this.options.userId || 'anonymous',
+                timestamp: serverTimestamp(),
+                viewport: `${window.innerWidth}x${window.innerHeight}`,
+                userAgent: navigator.userAgent,
+                ...extra
+            };
+
+            await addDoc(collection(db, 'reports'), report);
+            console.log("Frustration logged:", type);
+        } catch (err) {
+            console.error("Error logging frustration:", err);
+        }
     }
 }

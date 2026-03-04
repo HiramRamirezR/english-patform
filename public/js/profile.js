@@ -76,12 +76,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 10181046 // Morado
             );
 
-            alert('¡Felicidades! Tu perfil de Maestro ha sido activado.');
+            await Swal.fire({
+                title: '¡Felicidades!',
+                text: 'Tu perfil de Maestro ha sido activado. ¡Bienvenido al equipo!',
+                icon: 'success',
+                confirmButtonColor: '#059669'
+            });
             window.location.reload(); // Recargar para que el Header también actualice
 
         } catch (error) {
             console.error("Error al actualizar perfil a maestro:", error);
-            alert("Hubo un error al guardar tu información. Por favor, revisa tu conexión e intenta de nuevo.");
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un error al guardar tu información. Por favor, revisa tu conexión e intenta de nuevo.',
+                icon: 'error',
+                confirmButtonColor: '#ef4444'
+            });
             submitProvider.innerText = 'Activar mi Perfil de Maestro';
             submitProvider.disabled = false;
         }

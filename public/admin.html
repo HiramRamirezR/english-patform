@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Moonsforest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        :root {
+            --admin-sidebar-width: 260px;
+            --admin-bg: #f0f4f8;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(255, 255, 255, 0.3);
+        }
+
+        body {
+            background: var(--admin-bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-layout {
+            display: grid;
+            grid-template-columns: var(--admin-sidebar-width) 1fr;
+            min-height: calc(100vh - 72px);
+        }
+
+        /* Sidebar Sidebar */
+        .admin-sidebar {
+            background: var(--primary-deep);
+            color: white;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sidebar-item {
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-item:hover,
+        .sidebar-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .sidebar-item.active {
+            background: var(--primary-medium);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Content Area */
+        .admin-content {
+            padding: 2rem;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.8rem;
+            color: var(--slate-900);
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.2s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .kpi-label {
+            color: var(--slate-500);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary-deep);
+        }
+
+        .kpi-trend {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trend-up {
+            color: #10b981;
+        }
+
+        .trend-down {
+            color: #ef4444;
+        }
+
+        /* Report Tables/Lists */
+        .report-section {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--slate-700);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-pending {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+
+        #security-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--primary-deep);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 992px) {
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-sidebar {
+                position: fixed;
+                left: -100%;
+                top: 72px;
+                bottom: 0;
+                width: 260px;
+                z-index: 1000;
+                transition: left 0.3s ease;
+                display: flex;
+            }
+
+            .sidebar-open .admin-sidebar {
+                left: 0;
+            }
+
+            .admin-content {
+                padding: 1rem;
+            }
+
+            .mobile-menu-toggle {
+                display: flex !important;
+            }
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: var(--primary-deep);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Utility for horizontal scroll */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+    </style>
+</head>
+
+<body class="">
+    <div id="security-overlay">Verificando credenciales mágicas... 🌲🔒</div>
+
+    <!-- Header Modular -->
+    <div id="main-header"></div>
+
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="admin-sidebar">
+            <a href="#overview" class="sidebar-item active">📊 Dashboard</a>
+            <a href="#students" class="sidebar-item">🎒 Alumnos</a>
+            <a href="#teachers" class="sidebar-item">👩‍🏫 Maestros</a>
+            <a href="#finances" class="sidebar-item">💰 Finanzas</a>
+            <a href="#content" class="sidebar-item">📝 Contenido (CMS)</a>
+            <a href="#technical" class="sidebar-item">⚙️ Técnico</a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <button class="mobile-menu-toggle" id="mobile-toggle">
+                ☰ Menú Admin
+            </button>
+            <!-- Sección: Overview -->
+            <div id="overview-view" class="section-view">
+                <header class="dashboard-header">
+                    <div>
+                        <h1>Dashboard Principal</h1>
+                        <p style="color: var(--slate-500);">Bienvenido al centro de mando de Moonsforest.</p>
+                    </div>
+                    <div class="btn btn-primary" id="refresh-dashboard"
+                        style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                        Actualizar Datos
+                    </div>
+                </header>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Alumnos Activos</div>
+                        <div class="kpi-value" id="kpi-students-count">--</div>
+                        <div class="kpi-trend"></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Ingresos del Mes</div>
+                        <div class="kpi-value" id="kpi-revenue-monthly">$0.00</div>
+                        <div class="kpi-trend"></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Minutos Hablados (Hoy)</div>
+                        <div class="kpi-value" id="kpi-minutes-today">0</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Evaluaciones Pendientes</div>
+                        <div class="kpi-value" id="kpi-eval-pending">0</div>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="report-section">
+                        <div class="section-title">
+                            Últimas Suscripciones
+                            <a href="#students" style="font-size: 0.8rem; color: var(--primary-medium);">Ver todas</a>
+                        </div>
+                        <div id="recent-subs-list" style="color: var(--slate-500); font-size: 0.9rem;">
+                            Conectando con el bosque...
+                        </div>
+                    </div>
+
+                    <div class="report-section">
+                        <div class="section-title">
+                            Mejores Embajadores (Referidos)
+                            <a href="#finances" style="font-size: 0.8rem; color: var(--primary-medium);">Ver
+                                detalles</a>
+                        </div>
+                        <div id="top-referrers-list" style="color: var(--slate-500); font-size: 0.9rem;">
+                            Cargando rankings...
+                        </div>
+                    </div>
+
+                    <div class="report-section">
+                        <div class="section-title">
+                            🎙️ Minutos del Día (Detalle)
+                        </div>
+                        <div id="minutes-breakdown-list" style="color: var(--slate-500); font-size: 0.9rem;">
+                            Aún no hay actividad hoy.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección: Alumnos -->
+            <div id="students-view" class="section-view" style="display: none;">
+                <header class="dashboard-header">
+                    <div>
+                        <h1>Gestión de Alumnos</h1>
+                        <p style="color: var(--slate-500);">Listado completo y progreso detallado.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="search-student" placeholder="Buscar por nombre o email..."
+                            style="padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--slate-200); width: 300px;">
+                    </div>
+                </header>
+
+                <div class="report-section table-responsive">
+                    <table style="width: 100%; border-collapse: collapse; min-width: 800px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--slate-100); text-align: left;">
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">ALUMNO</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">PROGRESO</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">HABLA (HOY)</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">MIN TOTALES</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">ESTADO</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sección: Maestros -->
+            <div id="teachers-view" class="section-view" style="display: none;">
+                <header class="dashboard-header">
+                    <div>
+                        <h1>Gestión de Maestros</h1>
+                        <p style="color: var(--slate-500);">Disponibilidad, evaluaciones y nómina semanal.</p>
+                    </div>
+                </header>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Maestros Activos</div>
+                        <div class="kpi-value" id="kpi-teachers-count">--</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Slots Totales (Semana)</div>
+                        <div class="kpi-value" id="kpi-slots-week">--</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Por Pagar (Corte Lunes)</div>
+                        <div class="kpi-value" id="kpi-total-payout">$0.00</div>
+                    </div>
+                </div>
+
+                <div class="report-section table-responsive">
+                    <table style="width: 100%; border-collapse: collapse; min-width: 900px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--slate-100); text-align: left;">
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">MAESTRO</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">SLOTS LIBRES
+                                </th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">RESERVAS</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">REFERIDOS</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">GANANCIA SEMANA
+                                </th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">HISTÓRICO</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teachers-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sección: Finanzas -->
+            <div id="finances-view" class="section-view" style="display: none;">
+                <header class="dashboard-header">
+                    <div>
+                        <h1>Finanzas y Nómina</h1>
+                        <p style="color: var(--slate-500);">Corte de caja de Lunes (Umbral $300).</p>
+                    </div>
+                </header>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Fondo de Garantía MF</div>
+                        <div class="kpi-value" id="kpi-mf-funds">$ --</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Pendiente por Pagar</div>
+                        <div class="kpi-value" id="kpi-pending-payout">$ --</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Maestros sobre Umbral</div>
+                        <div class="kpi-value" id="kpi-teachers-ready">--</div>
+                    </div>
+                </div>
+
+                <div class="report-section table-responsive">
+                    <div class="section-title">Nómina Semanal (Corte Proyectado)</div>
+                    <table style="width: 100%; border-collapse: collapse; min-width: 800px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--slate-100); text-align: left;">
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">MAESTRO</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">GANANCIA</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">ESTADO</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">ACCIÓN</th>
+                            </tr>
+                        </thead>
+                        <tbody id="finances-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sección: Contenido (CMS) -->
+            <div id="content-view" class="section-view" style="display: none;">
+                <header class="dashboard-header">
+                    <div>
+                        <h1>Gestión de Contenido</h1>
+                        <p style="color: var(--slate-500);">Módulos, lecciones y assets del sistema.</p>
+                    </div>
+                </header>
+                <div class="report-section">
+                    <div style="padding: 2rem; text-align: center;">
+                        <h3>🚧 Motor de Contenidos Activo</h3>
+                        <p>Los módulos se cargan dinámicamente desde <code>moduleEngine.js</code>.</p>
+                        <div class="btn btn-primary" style="margin-top: 1rem;">Editar Módulos (JSON)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección: Técnico -->
+            <div id="technical-view" class="section-view" style="display: none;">
+                <header class="dashboard-header">
+                    <div>
+                        <h1>Panel Técnico</h1>
+                        <p style="color: var(--slate-500);">Salud del sistema e integraciones.</p>
+                    </div>
+                </header>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Firebase Status</div>
+                        <div class="kpi-value" style="color: #10b981;">Online</div>
+                    </div>
+                </div>
+
+                <div class="report-section table-responsive">
+                    <div class="section-title">🛑 Lecciones Problemáticas (Filtro de Frustración)</div>
+                    <table style="width: 100%; border-collapse: collapse; min-width: 800px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--slate-100); text-align: left;">
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">LECCIÓN</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">TARGET</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">FALLOS</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">ÚLTIMO ERROR
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="technical-reports-body">
+                            <tr>
+                                <td colspan="4" style="text-align:center; padding: 2rem; color: var(--slate-400);">
+                                    Buscando
+                                    anomalías en el bosque...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="/js/admin.js"></script>
+    <script type="module" src="/js/components/header.js"></script>
+</body>
+
+</html>

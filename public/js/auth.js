@@ -88,7 +88,12 @@ export const handleLogin = async () => {
         if (overlay) {
             overlay.style.display = 'flex';
         } else {
-            alert("⚠️ ACCESO BLOQUEADO POR NAVEGADOR:\n\nToca los TRES PUNTITOS de la esquina y elige 'Abrir en el navegador' para poder entrar.");
+            Swal.fire({
+                title: 'Navegador No Compatible',
+                text: "Toca los TRES PUNTITOS de la esquina y elige 'Abrir en el navegador' para poder entrar con Google.",
+                icon: 'warning',
+                confirmButtonColor: '#3b82f6'
+            });
         }
         return;
     }
@@ -136,7 +141,12 @@ export const handleLogin = async () => {
         // Ignorar errores de cancelación para no asustar al usuario
         if (error.code !== 'auth/cancelled-popup-request' && error.code !== 'auth/popup-closed-by-user') {
             console.error("Error en login:", error.code, error.message);
-            alert("Error al iniciar sesión: " + error.message);
+            Swal.fire({
+                title: 'Error de Autenticación',
+                text: 'No pudimos iniciar tu sesión: ' + error.message,
+                icon: 'error',
+                confirmButtonColor: '#ef4444'
+            });
         }
     } finally {
         isLoggingIn = false;
@@ -145,9 +155,43 @@ export const handleLogin = async () => {
 
 // Función para cerrar sesión
 export const logout = () => {
+    localStorage.removeItem('impersonate_id');
     signOut(auth).then(() => {
         window.location.href = 'index.html';
     });
+}
+
+/**
+ * 🕵️ Obtiene el usuario "efectivo" (suplantado si eres admin)
+ */
+export const getEffectiveUser = async () => {
+    const user = auth.currentUser;
+    if (!user) return null;
+
+    const impId = localStorage.getItem('impersonate_id');
+    if (impId) {
+        // Verificar si el usuario REAL es admin antes de permitir el impersonate
+        const realDoc = await getDoc(doc(db, 'users', user.uid));
+        if (realDoc.exists() && realDoc.data().isAdmin) {
+            console.log("🕵️ Modo Impersonate Activo:", impId);
+
+            // Añadir banner visual de que estás suplantando
+            if (!document.getElementById('impersonate-banner')) {
+                const banner = document.createElement('div');
+                banner.id = 'impersonate-banner';
+                banner.innerHTML = `
+                    Estás viendo la plataforma como <strong>${impId}</strong> 
+                    <button onclick="localStorage.removeItem('impersonate_id'); window.location.reload();" 
+                            style="margin-left: 1rem; background: white; color: red; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer;">
+                        Salir
+                    </button>`;
+                banner.style.cssText = "position: fixed; top: 0; left: 0; right: 0; background: #ef4444; color: white; text-align: center; padding: 8px; font-size: 0.8rem; z-index: 10000; font-family: sans-serif;";
+                document.body.appendChild(banner);
+            }
+            return { uid: impId, isImpersonated: true };
+        }
+    }
+    return { uid: user.uid, isImpersonated: false };
 }
 
 // Ejecutar inicialización

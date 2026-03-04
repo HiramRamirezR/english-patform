@@ -42,9 +42,15 @@ const renderHeader = (user, userData = null) => {
             evaluateBtn = `<button id="evaluate-btn" data-type="${evalType}" data-mod="${latestModuleFinished || ''}" class="btn" style="background-color: var(--accent-warm); color: var(--slate-900); padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 600; border: none; box-shadow: 0 4px 6px -1px rgba(251, 146, 60, 0.4);">${btnLabel}</button>`;
         }
 
+        let adminLink = '';
+        if (userData && userData.isAdmin) {
+            adminLink = `<a href="admin.html" style="color: var(--accent-orange); text-decoration: none; font-weight: 700; border: 1px solid var(--accent-orange); padding: 0.2rem 0.6rem; border-radius: 6px;">Admin</a>`;
+        }
+
         navLinks = `
             ${evaluateBtn}
             ${teacherBtn}
+            ${adminLink}
             <a href="index.html" style="color: var(--slate-700); text-decoration: none; font-weight: 500;">Home</a>
             <a href="mapa.html" style="color: var(--slate-700); text-decoration: none; font-weight: 500;">Mapa</a>
             <a href="profile.html" style="color: var(--slate-700); text-decoration: none; font-weight: 500;">Perfil</a>

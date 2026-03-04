@@ -1,6 +1,6 @@
 import { auth, db } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { doc, getDoc, collection, addDoc, query, where, getDocs, deleteDoc, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { doc, getDoc, collection, addDoc, query, where, getDocs, deleteDoc, serverTimestamp, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { sendDiscordNotification } from './discord.js';
 
 // Elementos del DOM para la agenda
@@ -13,6 +13,22 @@ const selectedCountIndicator = document.getElementById('selected-count');
 const saveBtn = document.getElementById('save-slot-btn');
 const slotsContainer = document.getElementById('slots-container');
 const emptyMsg = document.getElementById('empty-agenda-msg');
+
+// Centro de Evaluación
+const evalModal = document.getElementById('eval-center-modal');
+const closeEvalBtn = document.getElementById('close-eval-modal');
+const evalStudentName = document.getElementById('eval-student-name');
+const evalModuleTitle = document.getElementById('eval-module-title');
+const evalVocabList = document.getElementById('eval-vocab-list');
+const evalConvList = document.getElementById('eval-conv-list');
+const evalForm = document.getElementById('eval-submission-form');
+const evalComments = document.getElementById('eval-comments');
+const btnPass = document.getElementById('btn-eval-pass');
+const btnFail = document.getElementById('btn-eval-fail');
+const submitEvalBtn = document.getElementById('submit-eval-btn');
+
+let currentEvalSlot = null;
+let evalResult = null; // 'pass' or 'fail'
 
 let currentUser = null;
 let currentTeacherProfile = null;
@@ -173,9 +189,19 @@ predefinedSlotsForm.addEventListener('submit', async (e) => {
 
         // Feedback
         if (skippedCount > 0) {
-            alert(`✅ Se crearon ${savedCount} horarios.\n⚠️ Se omitieron ${skippedCount} horarios porque chocaban con disponibilidad existente.`);
+            Swal.fire({
+                title: 'Agenda Actualizada',
+                html: `✅ Se crearon <b>${savedCount}</b> horarios.<br>⚠️ Se omitieron <b>${skippedCount}</b> porque ya tenías disponibilidad en esos rangos.`,
+                icon: 'info',
+                confirmButtonColor: '#2563eb'
+            });
         } else if (savedCount > 0) {
-            console.log(`Todos los slots (${savedCount}) guardados exitosamente.`);
+            Swal.fire({
+                title: '¡Éxito!',
+                text: `Se han abierto ${savedCount} bloques de evaluación correctamente.`,
+                icon: 'success',
+                confirmButtonColor: '#059669'
+            });
         }
 
         if (savedCount > 0) {
@@ -194,7 +220,7 @@ predefinedSlotsForm.addEventListener('submit', async (e) => {
 
     } catch (error) {
         console.error("Error al guardar múltiples slots:", error);
-        alert("Ocurrió un error general guardando la agenda.");
+        Swal.fire('Error', 'Ocurrió un error al guardar tu disponibilidad comercial.', 'error');
     } finally {
         saveBtn.disabled = false;
         saveBtn.textContent = 'Abrir Horarios Seleccionados';
@@ -271,18 +297,31 @@ const loadSlots = async () => {
                 endDate.setHours(h, m + 20);
                 const endTimeStr = `${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`;
 
-                const badge = slot.status === 'available'
+                const isBooked = slot.status === 'booked';
+                const badge = !isBooked
                     ? `<span class="badge-pending" style="background: white; border: 1px solid #fcd34d;">Libre</span>`
-                    : `<span class="badge-booked">Ocupado</span>`;
+                    : `<span class="badge-booked" style="background: #10b981; color: white;">Ocupado</span>`;
 
-                let deleteBtn = slot.status === 'available'
-                    ? `<button class="btn btn-delete-slot" data-id="${slot.id}" style="border: 1px solid rgba(225, 29, 72, 0.3); color: #e11d48; padding: 0.4rem 0.8rem; font-size: 0.8rem; background: white; cursor: pointer; transition: all 0.2s;">✖</button>`
+                const studentDetails = isBooked ? `
+                    <div style="margin-top: 0.6rem; display: flex; align-items: center; gap: 0.6rem; background: rgba(255,255,255,0.6); padding: 0.5rem; border-radius: 10px; border: 1px solid rgba(16, 185, 129, 0.2);">
+                        <span style="font-size: 1.4rem;">${slot.studentAvatar || '👤'}</span>
+                        <div style="line-height: 1.2;">
+                            <p style="font-size: 0.85rem; font-weight: 700; color: var(--slate-900);">${slot.studentName || 'Estudiante'}</p>
+                            <p style="font-size: 0.7rem; color: var(--slate-500);">${slot.studentEmail || ''}</p>
+                            <p style="font-size: 0.75rem; color: #065f46; font-weight: 700; margin-top: 0.2rem;">🎯 ${slot.evaluationType || 'Evaluación General'}</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="window.enterEvaluation('${slot.id}')" style="width: 100%; margin-top: 0.5rem; font-size: 0.8rem; padding: 0.5rem;">Evaluar Alumno</button>
+                ` : `<p style="margin-top: 0.25rem; font-size: 0.85rem; color: var(--slate-500);">Evaluación Módulo (20 min)</p>`;
+
+                let deleteBtn = !isBooked
+                    ? `<button class="btn btn-delete-slot" data-id="${slot.id}" style="border: 1px solid rgba(225, 29, 72, 0.3); color: #e11d48; padding: 0.4rem 0.8rem; font-size: 0.8rem; background: white; cursor: pointer; transition: all 0.2s; border-radius: 8px;">✖</button>`
                     : ``;
 
                 li.innerHTML = `
-                    <div class="slot-info">
+                    <div class="slot-info" style="flex: 1;">
                         <h4 style="font-size: 1.05rem;"><span style="color: var(--slate-500); font-weight: 500;">${formatearFechaCorta(slot.date)} |</span> ${slot.startTime} - ${endTimeStr} hrs</h4>
-                        <p style="margin-top: 0.25rem;">Evaluación Módulo (20 min)</p>
+                        ${studentDetails}
                     </div>
                     <div style="display: flex; gap: 1rem; align-items: center;">
                         ${badge}
@@ -295,10 +334,26 @@ const loadSlots = async () => {
             // Asignar eliminación
             document.querySelectorAll('.btn-delete-slot').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
-                    const slotId = e.target.getAttribute('data-id');
-                    if (confirm("¿Estás seguro de que quieres eliminar este horario libre?")) {
-                        await deleteDoc(doc(db, "slots", slotId));
-                        loadSlots();
+                    const slotId = e.currentTarget.getAttribute('data-id');
+
+                    const result = await Swal.fire({
+                        title: '¿Eliminar horario?',
+                        text: "Esta acción no se puede deshacer.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#ef4444',
+                        cancelButtonColor: '#64748b',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    });
+
+                    if (result.isConfirmed) {
+                        try {
+                            await deleteDoc(doc(db, "slots", slotId));
+                            loadSlots();
+                        } catch (error) {
+                            Swal.fire('Error', 'No se pudo eliminar el slot.', 'error');
+                        }
                     }
                 });
             });
@@ -465,3 +520,154 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+// --- Lógica del Centro de Evaluación ---
+
+window.enterEvaluation = async (slotId) => {
+    try {
+        Swal.fire({ title: 'Cargando datos...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+        const slotSnap = await getDoc(doc(db, 'slots', slotId));
+        if (!slotSnap.exists()) return;
+        currentEvalSlot = { id: slotSnap.id, ...slotSnap.data() };
+
+        // 1. Preparar UI básica
+        evalStudentName.textContent = `Estudiante: ${currentEvalSlot.studentName || 'Cargando...'}`;
+        evalModal.style.display = 'flex';
+        evalVocabList.innerHTML = 'Cargando...';
+        evalConvList.innerHTML = 'Cargando...';
+        evalComments.value = '';
+        evalResult = null;
+        updateEvalButtons();
+
+        // 2. Determinar Módulo (Basado en el tipo de evaluación)
+        let moduleId = 'm1'; // Default
+        if (currentEvalSlot.evaluationType?.includes('2')) moduleId = 'm2';
+
+        // 3. Cargar Datos del Módulo
+        const response = await fetch(`/data/${moduleId}.json`);
+        const moduleData = await response.json();
+
+        evalModuleTitle.textContent = moduleData.title || `Guía del Módulo ${moduleId.toUpperCase()}`;
+
+        // 4. Extraer Vocabulario (Cards de listen_click)
+        const vocab = new Set();
+        moduleData.lessons.forEach(lesson => {
+            lesson.steps.forEach(step => {
+                if (step.type === 'listen_click' && step.cards) {
+                    step.cards.forEach(c => vocab.add(`${c.word} (${c.translation})`));
+                }
+            });
+        });
+
+        evalVocabList.innerHTML = Array.from(vocab).slice(0, 15).map(v => `
+            <span style="background: white; border: 1px solid var(--slate-200); padding: 4px 10px; border-radius: 99px; font-size: 0.8rem; color: var(--slate-700);">${v}</span>
+        `).join('');
+
+        // 5. Extraer Conversaciones (Drag & Drop targets)
+        const convs = [];
+        moduleData.lessons.forEach(lesson => {
+            lesson.steps.forEach(step => {
+                if (step.type === 'drag_and_drop' && step.target) {
+                    convs.push({ target: step.target, prompt: step.prompt });
+                }
+            });
+        });
+
+        evalConvList.innerHTML = convs.slice(0, 6).map(c => `
+            <div style="background: white; border: 1px solid var(--slate-100); padding: 0.8rem; border-radius: 12px;">
+                <p style="font-size: 0.75rem; color: var(--slate-500); margin-bottom: 0.25rem;">Contexto: ${c.prompt}</p>
+                <p style="font-size: 0.95rem; font-weight: 600; color: var(--slate-800);">"${c.target}"</p>
+            </div>
+        `).join('');
+
+        Swal.close();
+    } catch (error) {
+        console.error("Error al abrir centro de evaluación:", error);
+        Swal.fire('Error', 'No pudimos cargar los datos de la evaluación.', 'error');
+    }
+};
+
+const updateEvalButtons = () => {
+    btnPass.style.background = evalResult === 'pass' ? '#059669' : 'white';
+    btnPass.style.color = evalResult === 'pass' ? 'white' : '#059669';
+
+    btnFail.style.background = evalResult === 'fail' ? '#ef4444' : 'white';
+    btnFail.style.color = evalResult === 'fail' ? 'white' : '#ef4444';
+
+    submitEvalBtn.disabled = !evalResult;
+};
+
+btnPass.onclick = () => { evalResult = 'pass'; updateEvalButtons(); };
+btnFail.onclick = () => { evalResult = 'fail'; updateEvalButtons(); };
+
+evalForm.onsubmit = async (e) => {
+    e.preventDefault();
+    if (!evalResult || !currentEvalSlot) return;
+
+    try {
+        submitEvalBtn.disabled = true;
+        submitEvalBtn.textContent = 'Enviando...';
+
+        const rubric = Array.from(document.querySelectorAll('input[name="rubric"]:checked')).map(i => i.value);
+        const comments = evalComments.value;
+        const moduleId = currentEvalSlot.evaluationType?.includes('2') ? 'm2' : 'm1';
+        const nextModule = moduleId === 'm1' ? 'm2' : (moduleId === 'm2' ? 'm3' : null);
+
+        // 1. Actualizar Slot
+        const slotRef = doc(db, 'slots', currentEvalSlot.id);
+        await updateDoc(slotRef, {
+            status: 'completed',
+            evaluationResult: {
+                result: evalResult,
+                rubric,
+                comments,
+                evaluatedAt: serverTimestamp()
+            }
+        });
+
+        // 2. Actualizar Estudiante
+        const studentRef = doc(db, 'users', currentEvalSlot.studentId);
+        const updateData = {
+            evaluations: arrayUnion({
+                moduleId,
+                result: evalResult,
+                comments,
+                date: new Date()
+            })
+        };
+
+        if (evalResult === 'pass' && nextModule) {
+            updateData.unlockedModules = arrayUnion(nextModule);
+        }
+
+        await updateDoc(studentRef, updateData);
+
+        // 3. Notificar Discord
+        sendDiscordNotification(
+            evalResult === 'pass' ? "🎉 Evaluación APROBADA" : "⚠️ Evaluación - Refuerzo Necesario",
+            `**Alumno:** ${currentEvalSlot.studentName}\n**Módulo:** ${moduleId}\n**Resultado:** ${evalResult.toUpperCase()}\n**Comentarios:** ${comments}`,
+            evalResult === 'pass' ? 3066993 : 15158332
+        );
+
+        await Swal.fire('¡Éxito!', 'El resultado ha sido guardado y el alumno ha sido notificado.', 'success');
+        evalModal.style.display = 'none';
+        loadSlots(); // Recargar agenda
+
+    } catch (error) {
+        console.error("Error al enviar evaluación:", error);
+        Swal.fire('Error', 'No se pudo guardar el resultado.', 'error');
+        submitEvalBtn.disabled = false;
+        submitEvalBtn.textContent = 'Enviar Resultado';
+    }
+};
+
+closeEvalBtn.onclick = () => {
+    evalModal.style.display = 'none';
+};
+
+// Cerrar al hacer clic fuera
+window.onclick = (event) => {
+    if (event.target === evalModal) {
+        evalModal.style.display = 'none';
+    }
+};

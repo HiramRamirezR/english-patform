@@ -1,6 +1,6 @@
-import { auth, db } from './auth.js';
+import { auth, db, getEffectiveUser } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { doc, getDoc, updateDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // DOM Elements
 const avatarModal = document.getElementById('avatar-modal');
@@ -48,7 +48,12 @@ saveAvatarBtn.addEventListener('click', async () => {
 
     } catch (error) {
         console.error("Error guardando avatar:", error);
-        alert('Ocurrió un error. Intenta de nuevo.');
+        Swal.fire({
+            title: '¡Ups!',
+            text: 'Ocurrió un error al guardar tu avatar. Intenta de nuevo.',
+            icon: 'error',
+            confirmButtonColor: '#ef4444'
+        });
         saveAvatarBtn.disabled = false;
         saveAvatarBtn.textContent = 'Comenzar Aventura';
     }
@@ -89,8 +94,78 @@ const setupDashboardUI = () => {
     // Ruta Semanal
     setupWeeklyPath(currentProfile.weeklyProgress || {});
 
+    // Desbloquear Módulos
+    setupModuleUnlocks(currentProfile.unlockedModules || ['m1']);
+
     // Frase inicial
     moonText.innerHTML = `¡Hola viajero! Qué bueno verte, <strong>${currentProfile.avatar}</strong>. Entra al Campamento Base (Módulo 1) para prepararnos.`;
+
+    // Cargar Citas
+    loadAppointments();
+};
+
+const setupModuleUnlocks = (unlocked) => {
+    const nodes = document.querySelectorAll('.module-node');
+    nodes.forEach(node => {
+        const id = node.getAttribute('data-id');
+        if (unlocked.includes(id)) {
+            node.classList.remove('locked');
+            node.classList.add('unlocked');
+            node.onclick = () => window.location.href = `module.html?id=${id}`;
+        } else {
+            node.classList.remove('unlocked');
+            node.classList.add('locked');
+            node.onclick = null;
+        }
+    });
+};
+
+const loadAppointments = async () => {
+    const widget = document.getElementById('appointment-widget');
+    const details = document.getElementById('appointment-details');
+    const actions = document.getElementById('appointment-actions');
+
+    if (!currentUser || !widget) return;
+
+    try {
+        const q = query(collection(db, "slots"), where("studentId", "==", currentUser.uid), where("status", "==", "booked"));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            widget.style.display = 'none';
+            return;
+        }
+
+        // Tomar la cita más cercana (por ahora la primera)
+        const appointment = querySnapshot.docs[0].data();
+        const teacherRef = doc(db, 'users', appointment.teacherId);
+        const teacherSnap = await getDoc(teacherRef);
+        const teacherData = teacherSnap.exists() ? teacherSnap.data() : null;
+
+        widget.style.display = 'flex';
+        details.innerHTML = `
+            Evaluación: <strong>${appointment.evaluationType || 'General'}</strong><br>
+            Con: <strong>Prof. ${appointment.teacherName || 'Guardián'}</strong><br>
+            Fecha: <strong>${appointment.date} a las ${appointment.startTime} hrs</strong>
+        `;
+
+        actions.innerHTML = '';
+        if (teacherData?.teacherProfile?.zoomLink) {
+            const link = document.createElement('a');
+            link.href = teacherData.teacherProfile.zoomLink;
+            link.target = '_blank';
+            link.className = 'btn';
+            link.style.background = '#f97316';
+            link.style.color = 'white';
+            link.style.fontSize = '0.85rem';
+            link.style.padding = '0.6rem 1.2rem';
+            link.textContent = '➡️ Entrar a la Sala';
+            actions.appendChild(link);
+        }
+
+    } catch (error) {
+        console.error("Error cargando citas:", error);
+    }
 };
 
 const setupWeeklyPath = (progress) => {
@@ -132,18 +207,19 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        currentUser = user;
+        // Obtener usuario efectivo (soporta impersonate)
+        const effectiveUser = await getEffectiveUser();
+        currentUser = effectiveUser;
 
         try {
-            const docRef = doc(db, 'users', user.uid);
+            const docRef = doc(db, 'users', currentUser.uid);
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {
                 currentProfile = docSnap.data();
                 setupDashboardUI();
             } else {
-                console.warn("Perfil de usuario no enontrado en Firestore.");
-                // Forzar re-login o manejar error
+                console.warn("Perfil de usuario no encontrado en Firestore.");
             }
 
         } catch (error) {

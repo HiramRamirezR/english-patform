@@ -1,5 +1,5 @@
 import { MoonsforestEngine } from './moduleEngine.js';
-import { auth, db } from './auth.js';
+import { auth, db, getEffectiveUser } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { sendDiscordNotification } from './discord.js';
@@ -62,18 +62,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // 4. Arrancar Autenticación y Motor
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
         if (!user) {
             window.location.href = 'index.html';
             return;
         }
+
+        const effectiveUser = await getEffectiveUser();
+        const effectiveUid = effectiveUser.uid;
 
         // Listener de progresión
         document.addEventListener('lessonCompleted', async (e) => {
             const minutes = e.detail.minutes;
             if (minutes > 0) {
                 try {
-                    const userRef = doc(db, 'users', user.uid);
+                    const userRef = doc(db, 'users', effectiveUid);
                     const userSnap = await getDoc(userRef);
                     if (userSnap.exists()) {
                         const data = userSnap.data();
@@ -96,13 +99,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                         });
                         console.log(`¡Progreso guardado!: +${minutes} mins, ${lessonId} completada.`);
 
-                        // Notificar a Discord
-                        const userName = data.name || "Un viajero anónimo";
-                        await sendDiscordNotification(
-                            "🎓 Lección Completada",
-                            `**${userName}** acaba de completar la lección **${lessonConfig.title}** y acumuló +**${minutes}** minutos hablados.`,
-                            5763719 // Verde
-                        );
+                        // Notificar a Discord (Opcional: No notificar si es impersonated)
+                        if (!effectiveUser.isImpersonated) {
+                            const userName = data.name || "Un viajero anónimo";
+                            await sendDiscordNotification(
+                                "🎓 Lección Completada",
+                                `**${userName}** acaba de completar la lección **${lessonConfig.title}** y acumuló +**${minutes}** minutos hablados.`,
+                                5763719 // Verde
+                            );
+                        }
                     }
                 } catch (error) {
                     console.error("Error actualizando base de datos:", error);
@@ -113,7 +118,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 5. Iniciar la clase de aprendizaje
         new MoonsforestEngine('learning-container', lessonConfig.steps, {
             returnUrl: `module.html?id=${moduleId}`,
-            resources: mergedResources
+            resources: mergedResources,
+            userId: effectiveUid,
+            lessonId: lessonId,
+            moduleId: moduleId
         });
     });
 });

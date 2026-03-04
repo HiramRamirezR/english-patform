@@ -96,6 +96,22 @@
                     <div class="day-circle" data-day="6"><span>S</span></div>
                 </div>
             </div>
+
+            <!-- Próxima Evaluación (Dinámico) -->
+            <div id="appointment-widget"
+                style="display: none; background: #fff7ed; border-radius: 20px; padding: 1.5rem 2rem; box-shadow: var(--shadow-sm); align-items: center; gap: 2rem; width: 100%; max-width: 950px; justify-content: space-between; border-left: 5px solid #f97316;">
+                <div style="flex: 1;">
+                    <h4
+                        style="color: #9a3412; margin-bottom: 0.5rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        🎯 Próxima Evaluación</h4>
+                    <p id="appointment-details" style="font-size: 0.85rem; color: #c2410c; line-height: 1.4;">
+                        Cargando detalles de tu cita...
+                    </p>
+                </div>
+                <div id="appointment-actions" style="display: flex; gap: 1rem; align-items: center;">
+                    <!-- Botón de Zoom dinámico -->
+                </div>
+            </div>
         </section>
 
         <!-- The Peak Map Area -->
@@ -108,104 +124,103 @@
 
             <!-- The Peak Map -->
             <main class="peak-map" id="map-path">
-                <!-- Módulo 1 Abierto -->
-                <div class="module-node unlocked" onclick="window.location.href='module.html?id=m1'"
+                <div class="module-node unlocked" data-id="m1" onclick="window.location.href='module.html?id=m1'"
                     style="margin-left: 1rem;">
                     <span class="module-icon">🏕️</span>
                     <span class="module-label">Módulo 1: Campamento Base</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m2">
                     <span class="module-icon">🌉</span>
                     <span class="module-label">Módulo 2: El Puente Colgante</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m3">
                     <span class="module-icon">🌊</span>
                     <span class="module-label">Módulo 3: El Río Susurrante</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m4">
                     <span class="module-icon">🦇</span>
                     <span class="module-label">Módulo 4: Las Cuevas de Eco</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m5">
                     <span class="module-icon">🪨</span>
                     <span class="module-label">Módulo 5: Las Rocas Parlantes</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m6">
                     <span class="module-icon">🌲</span>
                     <span class="module-label">Módulo 6: El Bosque Denso</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m7">
                     <span class="module-icon">🦊</span>
                     <span class="module-label">Módulo 7: La Madriguera del Zorro</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m8">
                     <span class="module-icon">🦉</span>
                     <span class="module-label">Módulo 8: El Nido del Búho</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m9">
                     <span class="module-icon">🌧️</span>
                     <span class="module-label">Módulo 9: Tormenta de Verano</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m10">
                     <span class="module-icon">🌈</span>
                     <span class="module-label">Módulo 10: El Claro del Arcoíris</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m11">
                     <span class="module-icon">🐝</span>
                     <span class="module-label">Módulo 11: El Valle de las Abejas</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m12">
                     <span class="module-icon">🍄</span>
                     <span class="module-label">Módulo 12: El Círculo de Hongos</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m13">
                     <span class="module-icon">🦋</span>
                     <span class="module-label">Módulo 13: El Jardín Secreto</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m14">
                     <span class="module-icon">🐍</span>
                     <span class="module-label">Módulo 14: El Camino de la Serpiente</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m15">
                     <span class="module-icon">🐸</span>
                     <span class="module-label">Módulo 15: El Estanque del Sapo</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m16">
                     <span class="module-icon">🕸️</span>
                     <span class="module-label">Módulo 16: La Telaraña de Plata</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m17">
                     <span class="module-icon">🐾</span>
                     <span class="module-label">Módulo 17: Huellas en el Barro</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m18">
                     <span class="module-icon">🪵</span>
                     <span class="module-label">Módulo 18: El Tronco Hueco</span>
                 </div>
 
-                <div class="module-node locked">
+                <div class="module-node locked" data-id="m19">
                     <span class="module-icon">🔥</span>
                     <span class="module-label">Módulo 19: La Antigua Fogata</span>
                 </div>
 
-                <div class="module-node locked" style="margin-right: 2rem;">
+                <div class="module-node locked" data-id="m20" style="margin-right: 2rem;">
                     <span class="module-icon">🌳</span>
                     <span class="module-label">Módulo 20: El Árbol Gigante</span>
                 </div>
@@ -224,6 +239,7 @@
     </div>
 
     <!-- Firebase & Custom Logic -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="/js/auth.js"></script>
     <script type="module" src="/js/components/header.js"></script>
     <script type="module" src="/js/mapa.js"></script>

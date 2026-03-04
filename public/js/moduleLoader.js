@@ -1,4 +1,4 @@
-import { auth, db } from './auth.js';
+import { auth, db, getEffectiveUser } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -36,8 +36,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
+        // Suplantación de identidad para soporte
+        const effectiveUser = await getEffectiveUser();
+        const effectiveUid = effectiveUser.uid;
+
         try {
-            const userRef = doc(db, 'users', user.uid);
+            const userRef = doc(db, 'users', effectiveUid);
             const userSnap = await getDoc(userRef);
             let completedLessons = [];
 

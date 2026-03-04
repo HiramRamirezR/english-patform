@@ -1,6 +1,6 @@
 import { auth, db } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { collection, query, where, getDocs, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // DOM Elements
 const goalCertify = document.getElementById('goal-certify');
@@ -164,22 +164,86 @@ window.openVideoModal = (teacherId) => {
     videoModal.style.display = 'flex';
 };
 
-window.payForSlot = (slotId, teacherId, date, time) => {
+window.payForSlot = async (slotId, teacherId, date, time) => {
     const teacher = allTeachers.find(t => t.id === teacherId);
 
-    const confirmMsg = `¿Quieres agendar tu evaluación con el Prof. ${teacher.name.split(' ')[0]}?\n\nFecha: ${date}\nHora: ${time}\nCosto: $60 MXN`;
+    const result = await Swal.fire({
+        title: '¿Confirmar Evaluación?',
+        html: `
+            <div style="text-align: left; background: #f8fafc; padding: 1.5rem; border-radius: 16px; margin-top: 1rem; border: 1px solid var(--slate-200);">
+                <p style="margin-bottom: 0.5rem;"><strong>Guardián:</strong> Prof. ${teacher.name.split(' ')[0]}</p>
+                <p style="margin-bottom: 0.5rem;"><strong>Fecha:</strong> ${date}</p>
+                <p style="margin-bottom: 0.5rem;"><strong>Hora:</strong> ${time} hrs</p>
+                <p style="margin-top: 1rem; font-weight: 800; color: var(--success-deep); font-size: 1.1rem;">Inversión: $60 MXN</p>
+            </div>
+        `,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, agendar ahora',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#2563eb',
+        cancelButtonColor: '#64748b',
+        borderRadius: '24px'
+    });
 
-    if (confirm(confirmMsg)) {
-        alert('🎉 ¡Casi listo! \n\nEstamos generando tu enlace de pago seguro con Mercado Pago...\n\n(En un entorno real, aquí te redirigiríamos a la pasarela).');
+    if (result.isConfirmed) {
+        try {
+            // Mostrar estado de carga
+            Swal.fire({
+                title: 'Procesando reserva...',
+                text: 'Estamos asegurando tu lugar en el bosque.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
 
-        import('./discord.js').then(module => {
+            // 0. Obtener tipo de evaluación (Goal)
+            const activeGoal = document.querySelector('.goal-card.active h3')?.textContent || 'Evaluación';
+
+            // 1. Actualizar el Slot en Firestore
+            const slotRef = doc(db, 'slots', slotId);
+            await updateDoc(slotRef, {
+                status: 'booked',
+                studentId: currentUser.uid,
+                studentName: currentUser.displayName || 'Estudiante',
+                studentEmail: currentUser.email,
+                studentAvatar: userData?.avatar || '👤',
+                evaluationType: activeGoal,
+                bookedAt: new Date()
+            });
+
+            // 2. Notificación Discord
+            const { sendDiscordNotification } = await import('./discord.js');
             const displayName = currentUser ? (currentUser.displayName || currentUser.email) : 'Alguien';
-            module.sendDiscordNotification(
-                "💰 Intención de Pago ($60)",
-                `**${displayName}** ha intentado agendar una sesión:\n\n**Maestro:** Prof. ${teacher.name}\n**Horario:** ${date} ${time} hrs`,
-                3447003 // Azul
+
+            sendDiscordNotification(
+                "💰 Evaluación Agendada",
+                `**${displayName}** ha reservado una sesión:\n\n**Maestro:** Prof. ${teacher.name}\n**Horario:** ${date} ${time} hrs`,
+                3066993 // Verde
             );
-        });
+
+            // 3. Éxito
+            await Swal.fire({
+                title: '¡Reserva Exitosa!',
+                text: 'Tu evaluación ha sido agendada correctamente. Los detalles han sido enviados a tu guía.',
+                icon: 'success',
+                confirmButtonColor: '#059669',
+                borderRadius: '24px'
+            });
+
+            // Recargar datos para que el slot desaparezca
+            loadMarketplaceData();
+
+        } catch (error) {
+            console.error("Error al procesar reserva:", error);
+            Swal.fire({
+                title: '¡Ups!',
+                text: 'No pudimos completar la reserva. Por favor intenta de nuevo.',
+                icon: 'error',
+                confirmButtonColor: '#ef4444'
+            });
+        }
     }
 };
 
@@ -192,6 +256,22 @@ closeModal.onclick = () => {
 // Event Listeners para Filtros
 filterName.oninput = renderMarketplace;
 filterDay.onchange = renderMarketplace;
+
+// Lógica de selección de Misión (Goal)
+const setupGoalSelection = () => {
+    [goalCertify, goalJump].forEach(card => {
+        card.addEventListener('click', () => {
+            if (card.classList.contains('locked')) return;
+
+            // Remover active de los otros
+            goalCertify.classList.remove('active');
+            goalJump.classList.remove('active');
+
+            // Añadir active al clickeado
+            card.classList.add('active');
+        });
+    });
+};
 
 // Verificar Progreso para desbloquear Certificación
 const updateGoalStates = () => {
@@ -226,6 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (snap.exists()) {
             userData = snap.data();
             updateGoalStates();
+            setupGoalSelection();
         }
 
         loadMarketplaceData();

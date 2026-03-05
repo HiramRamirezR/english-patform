@@ -216,11 +216,13 @@ window.payForSlot = async (slotId, teacherId, date, time) => {
             // 2. Notificación Discord
             const { sendDiscordNotification } = await import('./discord.js');
             const displayName = currentUser ? (currentUser.displayName || currentUser.email) : 'Alguien';
+            const teacherDiscordId = teacher.teacherProfile?.discordId || null;
 
             sendDiscordNotification(
-                "💰 Evaluación Agendada",
-                `**${displayName}** ha reservado una sesión:\n\n**Maestro:** Prof. ${teacher.name}\n**Horario:** ${date} ${time} hrs`,
-                3066993 // Verde
+                "💰 Sesión Reservada Contigo",
+                `¡Hola Prof. ${teacher.name.split(' ')[0]}!\n\n**${displayName}** ha reservado una evaluación:\n\n**Fecha:** ${date}\n**Hora:** ${time} hrs\n**Misión:** ${activeGoal}`,
+                3066993, // Verde
+                teacherDiscordId // Enviamos DM si el maestro tiene Discord ID
             );
 
             // 3. Éxito

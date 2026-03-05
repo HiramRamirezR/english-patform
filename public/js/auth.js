@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { sendDiscordNotification } from './discord.js';
 
 /**
@@ -126,13 +126,37 @@ export const handleLogin = async () => {
                 referredBy: storedRefCode // Si null, no fue referido
             });
 
-            // Notificación a Discord
+            // Notificación a Discord (General)
             const refMsg = storedRefCode ? `\n🎁 *Llegó usando el código de referido:* **${storedRefCode}**` : '';
             await sendDiscordNotification(
                 "👋 Nuevo Viajero Registrado",
                 `**${user.displayName}** (${user.email}) acaba de unirse a Moonsforest.${refMsg}`,
                 15258703 // Amarillo
             );
+
+            // Si fue referido, buscar al maestro para mandarle su DM
+            if (storedRefCode) {
+                try {
+                    const q = query(collection(db, "users"), where("teacherProfile.refCode", "==", storedRefCode));
+                    const teacherSnap = await getDocs(q);
+
+                    if (!teacherSnap.empty) {
+                        const teacherData = teacherSnap.docs[0].data();
+                        const discordId = teacherData.teacherProfile?.discordId;
+
+                        if (discordId) {
+                            await sendDiscordNotification(
+                                "🎁 Tienes un nuevo Alumno Referido",
+                                `¡Hola Prof. ${teacherData.name.split(' ')[0]}!\n\nUn nuevo viajero (**${user.displayName}**) acaba de registrarse usando tu código de referido.\n\n¡Sigue así! 🌲✨`,
+                                15844367, // Dorado
+                                discordId
+                            );
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error notificando referido al maestro:", err);
+                }
+            }
         }
 
         // Redirigir al mapa

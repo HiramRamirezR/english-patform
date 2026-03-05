@@ -1,6 +1,6 @@
 import { auth, db } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { sendDiscordNotification } from './discord.js';
 
 // Elementos del DOM
@@ -51,20 +51,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const userRef = doc(db, 'users', user.uid);
             const userSnap = await getDoc(userRef);
-            const existingData = userSnap.data();
+            const existingData = userSnap.data() || {}; // Asegurar objeto vacío si no existe
 
             const generateRefCode = (name) => {
                 const base = name ? name.split(' ')[0].toUpperCase().replace(/[^A-Z]/g, '') : 'MF';
                 return base + Math.floor(1000 + Math.random() * 9000);
             };
 
-            // Mantener refCode existente o generar uno nuevo
+            // Mantener refCode existente o generar uno nuevo (Acceso seguro)
             const refCode = existingData.teacherProfile?.refCode || generateRefCode(user.displayName);
 
-            await updateDoc(userRef, {
+            await setDoc(userRef, {
                 isTeacher: true,
                 teacherProfile: {
-                    ...existingData.teacherProfile,
+                    ...(existingData.teacherProfile || {}),
                     bio: teacherBio,
                     video: teacherVideo || null,
                     zoomLink: teacherZoom,
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     status: existingData.teacherProfile?.status || 'active',
                     refCode: refCode
                 }
-            });
+            }, { merge: true });
 
             // Notificación a Discord (Solo si es nuevo)
             if (!existingData.isTeacher) {

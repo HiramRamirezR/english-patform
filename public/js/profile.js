@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Mantener refCode existente o generar uno nuevo (Acceso seguro)
             const refCode = existingData.teacherProfile?.refCode || generateRefCode(user.displayName);
 
+            // 1. Guardar perfil completo en 'users' (Privado)
             await setDoc(userRef, {
                 isTeacher: true,
                 teacherProfile: {
@@ -77,6 +78,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     refCode: refCode
                 }
             }, { merge: true });
+
+            // 2. Guardar SOLO datos públicos en 'teachers' (Público para alumnos)
+            const publicTeacherRef = doc(db, 'teachers', user.uid);
+            await setDoc(publicTeacherRef, {
+                uid: user.uid,
+                name: user.displayName,
+                photoURL: user.photoURL,
+                bio: teacherBio,
+                video: teacherVideo || null,
+                zoomLink: teacherZoom,
+                refCode: refCode,
+                discordId: teacherDiscord || null, // Necesario para notificaciones de referidos
+                status: existingData.teacherProfile?.status || 'active',
+                updatedAt: new Date()
+            });
 
             // Notificación a Discord (Solo si es nuevo)
             if (!existingData.isTeacher) {

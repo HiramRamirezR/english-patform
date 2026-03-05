@@ -1,8 +1,9 @@
 import { auth, db } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import {
-    doc, getDoc, collection, getDocs, query, where, limit, orderBy, getCountFromServer
+    doc, getDoc, collection, getDocs, query, where, limit, orderBy, getCountFromServer, updateDoc
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { sendDiscordNotification } from './discord.js';
 
 const securityOverlay = document.getElementById('security-overlay');
 const adminSidebar = document.getElementById('admin-sidebar');
@@ -354,7 +355,7 @@ async function loadFinances() {
                     </td>
                     <td style="padding: 1rem;">
                         <button class="btn" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; background: ${earned >= 300 ? 'var(--primary-deep)' : 'var(--slate-200)'}; color: ${earned >= 300 ? 'white' : 'var(--slate-500)'}; border: none;" 
-                                ${earned < 300 ? 'disabled' : ''} onclick="alert('Procesando pago a ${teacher.id}')">
+                                ${earned < 300 ? 'disabled' : ''} onclick="window.markAsPaid('${teacher.id}', '${teacher.name}', ${earned})">
                             Marcar Pagado
                         </button>
                     </td>
@@ -372,6 +373,47 @@ async function loadFinances() {
         tableBody.innerHTML = `<tr><td colspan="4" style="color:red; text-align:center;">Error: ${error.message}</td></tr>`;
     }
 }
+
+/**
+ * 💸 Marcar como pagado y enviar notificación de Moon
+ */
+window.markAsPaid = async (teacherId, teacherName, amount) => {
+    const confirmation = await Swal.fire({
+        title: '¿Confirmar Pago?',
+        text: `¿Has transferido $${amount.toFixed(2)} a ${teacherName}? Moon le enviará un aviso de inmediato.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, enviar notificación',
+        cancelButtonText: 'No todavía',
+        confirmButtonColor: '#059669'
+    });
+
+    if (confirmation.isConfirmed) {
+        try {
+            // 1. Obtener Discord ID del maestro
+            const teacherRef = doc(db, 'users', teacherId);
+            const snap = await getDoc(teacherRef);
+            const teacherData = snap.data();
+            const discordId = teacherData?.teacherProfile?.discordId;
+
+            if (discordId) {
+                await sendDiscordNotification(
+                    "💰 ¡Pago Recibido!",
+                    `¡Hola Prof. ${teacherName.split(' ')[0]}!\n\nTu pago semanal ha sido procesado por **$${amount.toFixed(2)} MXN**.\n\n¡Gracias por tu gran trabajo en Moonsforest! 🌲✨`,
+                    3066993, // Verde
+                    discordId
+                );
+
+                Swal.fire('¡Éxito!', 'Pago registrado y notificación enviada a Moon.', 'success');
+            } else {
+                Swal.fire('Aviso', 'Pago simulado con éxito, pero el maestro no tiene Discord ID configurado.', 'info');
+            }
+        } catch (err) {
+            console.error("Error al procesar pago:", err);
+            Swal.fire('Error', 'No pudimos procesar el comando.', 'error');
+        }
+    }
+};
 
 /**
  * 👩‍🏫 Teachers Management Logic

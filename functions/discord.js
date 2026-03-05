@@ -7,33 +7,46 @@ exports.handler = async function (event, context) {
     }
 
     const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
-    const WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
+    const ADMIN_WEBHOOK = process.env.DISCORD_WEBHOOK_URL;
+    const TEACHERS_WEBHOOK = process.env.DISCORD_TEACHERS_WEBHOOK_URL;
+    const TEST_WEBHOOK = process.env.DISCORD_TEST_WEBHOOK_URL;
 
     console.log("--- Inicio Proceso Discord ---");
     console.log("Token Detectado:", DISCORD_BOT_TOKEN ? "SÍ (longitud: " + DISCORD_BOT_TOKEN.length + ")" : "NO");
 
     try {
         const payload = JSON.parse(event.body);
-        const { recipient_id, ...embedData } = payload;
+        const { recipient_id, channel, content, ...embedData } = payload;
         let results = [];
 
+        // Decidir a qué webhook enviar
+        let targetWebhook = ADMIN_WEBHOOK;
+        if (channel === 'teachers') targetWebhook = TEACHERS_WEBHOOK;
+        if (channel === 'test') targetWebhook = TEST_WEBHOOK;
+
+        console.log("Target Channel:", channel || "admin");
         console.log("Recipient ID:", recipient_id || "Ninguno (Solo Webhook)");
 
-        // --- PASO 1: ENVIAR SIEMPRE AL WEBHOOK ---
-        try {
-            const webhookResponse = await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(embedData)
-            });
-            if (webhookResponse.ok) {
-                results.push('Webhook OK');
-                console.log("✅ Webhook enviado correctamente.");
-            } else {
-                console.error("❌ Error Webhook Status:", webhookResponse.status);
+        // --- PASO 1: ENVIAR AL WEBHOOK ---
+        if (targetWebhook) {
+            try {
+                const webhookResponse = await fetch(targetWebhook, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        content: content || null,
+                        ...embedData
+                    })
+                });
+                if (webhookResponse.ok) {
+                    results.push('Webhook OK');
+                    console.log("✅ Webhook enviado correctamente.");
+                } else {
+                    console.error("❌ Error Webhook Status:", webhookResponse.status);
+                }
+            } catch (webhookErr) {
+                console.error("Fallo crítico Webhook:", webhookErr);
             }
-        } catch (webhookErr) {
-            console.error("Fallo crítico Webhook:", webhookErr);
         }
 
         // --- PASO 2: ENVIAR DM SI HAY UN ID ---

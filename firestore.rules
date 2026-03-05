@@ -7,25 +7,32 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      // Usamos el token personalizado o el campo en Firestore si ya lo activaste
-      return isSignedIn() && (
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true
-      );
+      // Usamos get() de forma segura: verificamos si el documento existe antes de leer datos
+      // y usamos .get() con valor por defecto para evitar errores si el campo no existe.
+      return isSignedIn() && 
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('isAdmin', false) == true;
     }
     
-    // Reglas para la colección de usuarios
+    // Reglas para la colección de usuarios (PRIVADA)
     match /users/{userId} {
-      // Admin puede leer todos los perfiles de usuario
-      allow read: if isAdmin();
-      // Un usuario solo puede leer y modificar su propio documento
       allow read: if isSignedIn() && request.auth.uid == userId;
+      allow read: if isAdmin();
       
       allow create: if isSignedIn() && request.auth.uid == userId 
                       && !request.resource.data.keys().contains('isAdmin');
       
       allow update: if (isAdmin()) || 
                       (isSignedIn() && request.auth.uid == userId 
-                      && (request.resource.data.isAdmin == resource.data.isAdmin || !request.resource.data.keys().contains('isAdmin')));
+                      && (request.resource.data.get('isAdmin', resource.data.get('isAdmin', false)) == resource.data.get('isAdmin', false)));
+    }
+
+    // Reglas para la colección de maestros (PÚBLICA para alumnos)
+    match /teachers/{teacherId} {
+      // Cualquier alumno puede ver los perfiles de maestros para referidos o agendar
+      allow read: if isSignedIn();
+      // Solo el propio maestro o admin puede crear/modificar su perfil público
+      allow write: if isSignedIn() && (isAdmin() || request.auth.uid == teacherId);
     }
 
     // Reglas para la colección de slots / agenda
@@ -35,7 +42,7 @@ service cloud.firestore {
       allow update, delete: if isSignedIn() && (isAdmin() || request.auth.uid == resource.data.teacherId);
     }
     
-    // Por seguridad, bloqueamos cualquier otra colección no definida
+    // Por seguridad, bloqueamos cualquier otra colección no definida (solo admin)
     match /{document=**} {
       allow read, write: if isAdmin();
     }

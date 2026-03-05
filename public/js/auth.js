@@ -137,20 +137,44 @@ export const handleLogin = async () => {
             // Si fue referido, buscar al maestro para mandarle su DM
             if (storedRefCode) {
                 try {
-                    const q = query(collection(db, "users"), where("teacherProfile.refCode", "==", storedRefCode));
+                    // Usamos la colección pública 'teachers' para que el alumno tenga permiso
+                    const q = query(collection(db, "teachers"), where("refCode", "==", storedRefCode));
                     const teacherSnap = await getDocs(q);
 
                     if (!teacherSnap.empty) {
-                        const teacherData = teacherSnap.docs[0].data();
-                        const discordId = teacherData.teacherProfile?.discordId;
+                        const teacherDoc = teacherSnap.docs[0];
+                        const teacherData = teacherDoc.data();
+                        const discordId = teacherData.discordId;
+
+                        // Intentamos contar referidos totales para hitos
+                        // NOTA: Esto podría fallar en las reglas si no permitimos listar usuarios.
+                        // Lo envolvemos para que no bloquee el flujo principal.
+                        let totalReferrals = 0;
+                        try {
+                            const qCount = query(collection(db, "users"), where("referredBy", "==", storedRefCode));
+                            const referralsSnap = await getDocs(qCount);
+                            totalReferrals = referralsSnap.size;
+                        } catch (e) { console.warn("No se pudo contar el hito de referidos (permisos)."); }
 
                         if (discordId) {
+                            // 1. Mensaje de nuevo referido
                             await sendDiscordNotification(
                                 "🎁 Tienes un nuevo Alumno Referido",
                                 `¡Hola Prof. ${teacherData.name.split(' ')[0]}!\n\nUn nuevo viajero (**${user.displayName}**) acaba de registrarse usando tu código de referido.\n\n¡Sigue así! 🌲✨`,
                                 15844367, // Dorado
                                 discordId
                             );
+
+                            // 2. Lógica de Hitos (Milestones)
+                            const milestones = [5, 10, 20, 50, 100];
+                            if (milestones.includes(totalReferrals)) {
+                                await sendDiscordNotification(
+                                    "🏆 ¡Hito de Referidos Alcanzado!",
+                                    `¡Increíble Prof. ${teacherData.name.split(' ')[0]}!\n\nHas alcanzado los **${totalReferrals} alumnos referidos**. Eres una pieza fundamental para el crecimiento del bosque.\n\n¡Felicidades por este gran logro! 🚀🎒`,
+                                    16711680, // Rojo/Rosa brillante
+                                    discordId
+                                );
+                            }
                         }
                     }
                 } catch (err) {

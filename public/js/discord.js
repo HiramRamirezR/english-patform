@@ -4,13 +4,17 @@
  * Envia un mensaje rico (Embed) a Discord
  * @param {string} title Titulo de la notificación
  * @param {string} description Texto explicativo corto
- * @param {number} color Código de color base 10 (ej. Verde = 5763719, Azul = 3447003, Rojo = 15548997, Dorado = 15844367)
- * @param {string} recipientId Opcional: ID de usuario para enviar por DM (vía Bot)
+ * @param {number} color Código de color base 10
+ * @param {string} recipientId ID de usuario para DM
+ * @param {string} channel 'admin' o 'teachers'
+ * @param {string} content Texto fuera del embed (ej: @everyone)
  */
-export async function sendDiscordNotification(title, description, color = 3447003, recipientId = null) {
+export async function sendDiscordNotification(title, description, color = 3447003, recipientId = null, channel = 'admin', content = null) {
     try {
         const payload = {
-            recipient_id: recipientId, // Si es null, la función usará el Webhook por defecto
+            recipient_id: recipientId,
+            channel: channel,
+            content: content,
             embeds: [
                 {
                     title: title,

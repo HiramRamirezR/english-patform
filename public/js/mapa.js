@@ -138,7 +138,8 @@ const loadAppointments = async () => {
 
         // Tomar la cita más cercana (por ahora la primera)
         const appointment = querySnapshot.docs[0].data();
-        const teacherRef = doc(db, 'users', appointment.teacherId);
+        // Usamos 'teachers' para que el alumno tenga permiso de ver el Zoom link
+        const teacherRef = doc(db, 'teachers', appointment.teacherId);
         const teacherSnap = await getDoc(teacherRef);
         const teacherData = teacherSnap.exists() ? teacherSnap.data() : null;
 
@@ -150,9 +151,9 @@ const loadAppointments = async () => {
         `;
 
         actions.innerHTML = '';
-        if (teacherData?.teacherProfile?.zoomLink) {
+        if (teacherData?.zoomLink) {
             const link = document.createElement('a');
-            link.href = teacherData.teacherProfile.zoomLink;
+            link.href = teacherData.zoomLink;
             link.target = '_blank';
             link.className = 'btn';
             link.style.background = '#f97316';

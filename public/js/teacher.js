@@ -1,7 +1,8 @@
 import { auth, db } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc, collection, addDoc, query, where, getDocs, deleteDoc, serverTimestamp, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { sendDiscordNotification } from './discord.js';
+const ADMIN_WEBHOOK_COLOR = 3447003; // Azul
+const DISCORD_CHANNEL = 'test'; // Cambiar a 'teachers' o 'admin' en producción
 
 // Elementos del DOM para la agenda
 const toggleFormBtn = document.getElementById('toggle-slot-form-btn');
@@ -182,6 +183,41 @@ predefinedSlotsForm.addEventListener('submit', async (e) => {
                     createdAt: serverTimestamp()
                 });
                 savedCount++;
+
+                // --- 🔍 Revisar si alguien solicitó este horario exacto ---
+                try {
+                    const qRequests = query(
+                        collection(db, "availabilityRequests"),
+                        where("requestedDate", "==", slotDate),
+                        where("requestedTime", "==", timeStr),
+                        where("status", "==", "open")
+                    );
+                    const requestSnap = await getDocs(qRequests);
+
+                    for (const reqDoc of requestSnap.docs) {
+                        const reqData = reqDoc.data();
+
+                        // 1. Marcar solicitud como 'satisfied'
+                        await updateDoc(doc(db, "availabilityRequests", reqDoc.id), {
+                            status: 'satisfied',
+                            satisfiedBy: currentUser.uid,
+                            satisfiedAt: serverTimestamp()
+                        });
+
+                        // 2. Notificar (Admin/Logs) que se cumplió un deseo
+                        const { sendDiscordNotification } = await import('./discord.js');
+                        await sendDiscordNotification(
+                            "✨ ¡Deseo Cumplido!",
+                            `¡Gran noticia! El Prof. **${currentTeacherProfile.name}** ha abierto el horario solicitado por **${reqData.studentName}**.\n\n**Fecha:** ${slotDate}\n**Hora:** ${timeStr} hrs`,
+                            65280, // Verde brillante
+                            null,
+                            DISCORD_CHANNEL
+                        );
+                    }
+                } catch (matchErr) {
+                    console.warn("Error al buscar matches de solicitudes:", matchErr);
+                }
+
                 // Añadirlo temporalmente a la lista local para que el siguiente loop lo considere ocupado
                 existingMinutes.push(newMinutes);
             }
@@ -208,7 +244,9 @@ predefinedSlotsForm.addEventListener('submit', async (e) => {
             sendDiscordNotification(
                 "📆 Nuevos Horarios de Evaluación",
                 `**${currentTeacherProfile.name || currentUser.displayName}** acaba de abrir **${savedCount}** bloques nuevos para el día ${slotDate}.`,
-                3447003 // Azul
+                3447003, // Azul
+                null,
+                DISCORD_CHANNEL
             );
         }
 
@@ -232,6 +270,7 @@ const loadSlots = async () => {
     if (!currentUser) return;
 
     try {
+        // --- PASO 1: Mis Slots ---
         const slotsCol = collection(db, "slots");
         const qSlots = query(slotsCol, where("teacherId", "==", currentUser.uid));
 
@@ -243,7 +282,39 @@ const loadSlots = async () => {
             slotsArray.push({ id: doc.id, ...doc.data() });
         });
 
-        // Ordenar en cliente para no requerir index compuesto
+        // --- PASO 2: Misiones de Rescate ---
+        const qRescues = query(slotsCol, where("status", "==", "needs_sub"));
+        const rescueSnapshot = await getDocs(qRescues);
+        const rescueList = document.getElementById('rescue-list');
+        const rescueSection = document.getElementById('rescue-missions-section');
+        rescueList.innerHTML = '';
+        let hasRescues = false;
+
+        rescueSnapshot.forEach((doc) => {
+            const data = doc.data();
+            if (data.teacherId !== currentUser.uid) {
+                hasRescues = true;
+                const slot = { id: doc.id, ...data };
+                const li = document.createElement('li');
+                li.className = 'slot-item';
+                li.style.borderLeft = '5px solid #f59e0b';
+                li.style.backgroundColor = '#fffbeb';
+
+                li.innerHTML = `
+                    <div class="slot-info">
+                        <h4 style="color: #b45309;"><span style="font-weight: 500;">${slot.date} |</span> ${slot.startTime} hrs</h4>
+                        <p style="color: #92400e; font-weight: 700;">👤 Alumno: ${slot.studentName}</p>
+                        <p style="font-size: 0.75rem;">Ex-guía: ${slot.teacherName}</p>
+                    </div>
+                    <button class="btn" onclick="window.takeRescueMission('${slot.id}')" style="background: #f59e0b; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px;">🚀 Tomar Evaluación</button>
+                `;
+                rescueList.appendChild(li);
+            }
+        });
+
+        rescueSection.style.display = hasRescues ? 'block' : 'none';
+
+        // Ordenar mis slots
         slotsArray.sort((a, b) => {
             if (a.date === b.date) {
                 return a.startTime.localeCompare(b.startTime);
@@ -258,12 +329,10 @@ const loadSlots = async () => {
             emptyMsg.style.display = 'none';
             slotsContainer.style.display = 'block';
 
-            // Generar paleta de colores más distintivos para diferenciar los días de un vistazo
             const colorPalette = ['#e0f2fe', '#f3e8ff', '#fef9c3', '#dcfce7', '#ffe4e6'];
             const dateColors = {};
             let colorIndex = 0;
 
-            // Helper local para formato corto de fecha
             const formatearFechaCorta = (dateStr) => {
                 const [y, m, d] = dateStr.split('-');
                 const dateObj = new Date(y, m - 1, d);
@@ -274,44 +343,52 @@ const loadSlots = async () => {
                 const li = document.createElement('li');
                 li.className = 'slot-item';
 
-                // Asignar color por fecha
                 if (!dateColors[slot.date]) {
                     dateColors[slot.date] = colorPalette[colorIndex % colorPalette.length];
                     colorIndex++;
                 }
                 li.style.backgroundColor = dateColors[slot.date];
 
-                // Color de borde más intenso basado en el fondo
                 const borderColor = dateColors[slot.date]
-                    .replace('#e0f2fe', '#0ea5e9') // blue
-                    .replace('#f3e8ff', '#a855f7') // purple
-                    .replace('#fef9c3', '#eab308') // yellow
-                    .replace('#dcfce7', '#22c55e') // green
-                    .replace('#ffe4e6', '#f43f5e'); // rose
+                    .replace('#e0f2fe', '#0ea5e9')
+                    .replace('#f3e8ff', '#a855f7')
+                    .replace('#fef9c3', '#eab308')
+                    .replace('#dcfce7', '#22c55e')
+                    .replace('#ffe4e6', '#f43f5e');
 
                 li.style.borderLeft = `5px solid ${borderColor}`;
 
-                // Calcular hora fin (+20 min)
                 const [h, m] = slot.startTime.split(':').map(Number);
                 const endDate = new Date();
                 endDate.setHours(h, m + 20);
                 const endTimeStr = `${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`;
 
-                const isBooked = slot.status === 'booked';
-                const badge = !isBooked
-                    ? `<span class="badge-pending" style="background: white; border: 1px solid #fcd34d;">Libre</span>`
-                    : `<span class="badge-booked" style="background: #10b981; color: white;">Ocupado</span>`;
+                const isBooked = slot.status === 'booked' || slot.status === 'needs_sub';
+                const isNeedsSub = slot.status === 'needs_sub';
+
+                let badge = '';
+                if (slot.status === 'available') {
+                    badge = `<span class="badge-pending" style="background: white; border: 1px solid #fcd34d;">Libre</span>`;
+                } else if (slot.status === 'booked') {
+                    badge = `<span class="badge-booked" style="background: #10b981; color: white;">Ocupado</span>`;
+                } else if (slot.status === 'needs_sub') {
+                    badge = `<span class="badge-booked" style="background: #f59e0b; color: white;">🚑 Buscando Suplente</span>`;
+                }
+
+                const manageBtn = (isBooked && !isNeedsSub) ? `
+                    <button class="btn" onclick="window.manageReservation('${slot.id}')" style="background: white; border: 1px solid var(--slate-300); color: var(--slate-600); font-size: 0.75rem; padding: 0.3rem 0.6rem; margin-top: 0.5rem; border-radius: 6px; cursor: pointer; display: block; width: 100%;">⚙️ Gestionar inconveniente</button>
+                ` : '';
 
                 const studentDetails = isBooked ? `
                     <div style="margin-top: 0.6rem; display: flex; align-items: center; gap: 0.6rem; background: rgba(255,255,255,0.6); padding: 0.5rem; border-radius: 10px; border: 1px solid rgba(16, 185, 129, 0.2);">
                         <span style="font-size: 1.4rem;">${slot.studentAvatar || '👤'}</span>
                         <div style="line-height: 1.2;">
                             <p style="font-size: 0.85rem; font-weight: 700; color: var(--slate-900);">${slot.studentName || 'Estudiante'}</p>
-                            <p style="font-size: 0.7rem; color: var(--slate-500);">${slot.studentEmail || ''}</p>
                             <p style="font-size: 0.75rem; color: #065f46; font-weight: 700; margin-top: 0.2rem;">🎯 ${slot.evaluationType || 'Evaluación General'}</p>
                         </div>
                     </div>
-                    <button class="btn btn-primary" onclick="window.enterEvaluation('${slot.id}')" style="width: 100%; margin-top: 0.5rem; font-size: 0.8rem; padding: 0.5rem;">Evaluar Alumno</button>
+                    ${!isNeedsSub ? `<button class="btn btn-primary" onclick="window.enterEvaluation('${slot.id}')" style="width: 100%; margin-top: 0.5rem; font-size: 0.8rem; padding: 0.5rem;">Evaluar Alumno</button>` : '<p style="font-size: 0.75rem; color: #b45309; margin-top: 0.5rem; font-weight: 600;">⚠️ Has solicitado un suplente para esta sesión.</p>'}
+                    ${manageBtn}
                 ` : `<p style="margin-top: 0.25rem; font-size: 0.85rem; color: var(--slate-500);">Evaluación Módulo (20 min)</p>`;
 
                 let deleteBtn = !isBooked
@@ -320,7 +397,7 @@ const loadSlots = async () => {
 
                 li.innerHTML = `
                     <div class="slot-info" style="flex: 1;">
-                        <h4 style="font-size: 1.05rem;"><span style="color: var(--slate-500); font-weight: 500;">${formatearFechaCorta(slot.date)} |</span> ${slot.startTime} - ${endTimeStr} hrs</h4>
+                        <h4 style="font-size: 1.05rem;"><span style="color: var(--slate-500); font-weight: 500;">${formatearFechaCorta(slot.date)} |</span> ${slot.startTime} hrs</h4>
                         ${studentDetails}
                     </div>
                     <div style="display: flex; gap: 1rem; align-items: center;">
@@ -328,9 +405,7 @@ const loadSlots = async () => {
                         ${deleteBtn}
                     </div>
                 `;
-                slotsContainer.appendChild(li);
             });
-
             // Asignar eliminación
             document.querySelectorAll('.btn-delete-slot').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
@@ -646,7 +721,9 @@ evalForm.onsubmit = async (e) => {
         sendDiscordNotification(
             evalResult === 'pass' ? "🎉 Evaluación APROBADA" : "⚠️ Evaluación - Refuerzo Necesario",
             `**Alumno:** ${currentEvalSlot.studentName}\n**Módulo:** ${moduleId}\n**Resultado:** ${evalResult.toUpperCase()}\n**Comentarios:** ${comments}`,
-            evalResult === 'pass' ? 3066993 : 15158332
+            evalResult === 'pass' ? 3066993 : 15158332,
+            null,
+            DISCORD_CHANNEL
         );
 
         await Swal.fire('¡Éxito!', 'El resultado ha sido guardado y el alumno ha sido notificado.', 'success');
@@ -663,6 +740,126 @@ evalForm.onsubmit = async (e) => {
 
 closeEvalBtn.onclick = () => {
     evalModal.style.display = 'none';
+};
+
+// --- Lógica de Gestión de Inconvenientes ---
+
+window.manageReservation = async (slotId) => {
+    const slotSnap = await getDoc(doc(db, 'slots', slotId));
+    if (!slotSnap.exists()) return;
+    const slotData = slotSnap.id ? { id: slotSnap.id, ...slotSnap.data() } : null;
+
+    const { value: action } = await Swal.fire({
+        title: 'Gestionar inconveniente',
+        text: `¿Qué deseas hacer con la sesión de ${slotData.studentName}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#2563eb',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Opciones',
+        cancelButtonText: 'Volver',
+        input: 'radio',
+        inputOptions: {
+            'sub': '🚑 Pedir un Suplente (Otro maestro cubre)',
+            'cancel': '❌ Cancelar y devolver crédito al alumno'
+        },
+        inputValidator: (value) => {
+            if (!value) return 'Debes seleccionar una opción';
+        }
+    });
+
+    if (action === 'sub') {
+        const confirm = await Swal.fire({
+            title: '¿Confirmar suplencia?',
+            text: 'Se enviará una alerta a los demás maestros en Discord para que alguien tome esta sesión.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, pedir ayuda',
+            confirmButtonColor: '#f59e0b'
+        });
+
+        if (confirm.isConfirmed) {
+            await updateDoc(doc(db, 'slots', slotId), { status: 'needs_sub' });
+
+            sendDiscordNotification(
+                "🚨 ¡EMERGENCIA EN EL BOSQUE!",
+                `**${currentTeacherProfile.name}** no puede asistir a su evaluación.\n\n**Alumno:** ${slotData.studentName}\n**Día:** ${slotData.date}\n**Hora:** ${slotData.startTime} hrs\n\n¿Algún guardián puede cubrir esta misión? 🎒`,
+                16744448, // Naranja
+                null,
+                DISCORD_CHANNEL,
+                "@everyone"
+            );
+
+            Swal.fire('Solicitud enviada', 'Tus compañeros han sido notificados.', 'success');
+            loadSlots();
+        }
+    } else if (action === 'cancel') {
+        const confirm = await Swal.fire({
+            title: '¿Confirmar cancelación?',
+            text: 'El horario quedará libre y se le notificará al alumno que su pago será válido para otra ocasión (Crédito Moonsforest).',
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, cancelar sesión'
+        });
+
+        if (confirm.isConfirmed) {
+            // 1. Dar crédito al alumno
+            const studentRef = doc(db, 'users', slotData.studentId);
+            const studentSnap = await getDoc(studentRef);
+            const currentCredits = studentSnap.exists() ? (studentSnap.data().evalCredits || 0) : 0;
+
+            await updateDoc(studentRef, { evalCredits: currentCredits + 1 });
+
+            // 2. Liberar el slot (o borrarlo)
+            await deleteDoc(doc(db, 'slots', slotId));
+
+            // 3. Notificar Discord
+            sendDiscordNotification(
+                "❌ Evaluación Cancelada (Reembolso)",
+                `El Prof. **${currentTeacherProfile.name}** canceló la sesión de **${slotData.studentName}**.\nSe le ha otorgado un crédito de evaluación al alumno.`,
+                15158332, // Rojo
+                null,
+                DISCORD_CHANNEL
+            );
+
+            Swal.fire('Cancelado', 'El alumno ha recibido un crédito para agendar después.', 'success');
+            loadSlots();
+        }
+    }
+};
+
+window.takeRescueMission = async (slotId) => {
+    const result = await Swal.fire({
+        title: '¿Tomar esta misión?',
+        text: 'Te convertirás en el nuevo guía de este alumno para esta sesión.',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: '¡Sí, yo lo cubro!',
+        confirmButtonColor: '#059669'
+    });
+
+    if (result.isConfirmed) {
+        try {
+            await updateDoc(doc(db, 'slots', slotId), {
+                teacherId: currentUser.uid,
+                teacherName: currentTeacherProfile.name,
+                status: 'booked'
+            });
+
+            sendDiscordNotification(
+                "✨ Misión Rescatada",
+                `¡Buenas noticias! El Prof. **${currentTeacherProfile.name}** ha tomado la evaluación que buscaba suplente.`,
+                3066993, // Verde
+                null,
+                DISCORD_CHANNEL
+            );
+
+            Swal.fire('¡Misión tomada!', 'Ahora esta sesión aparece en tu agenda.', 'success');
+            loadSlots();
+        } catch (error) {
+            Swal.fire('Error', 'No pudimos procesar el rescate.', 'error');
+        }
+    }
 };
 
 // Cerrar al hacer clic fuera

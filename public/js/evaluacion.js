@@ -88,7 +88,14 @@ const renderMarketplace = () => {
     });
 
     if (filteredTeachers.length === 0) {
-        teachersGrid.innerHTML = '<p style="color: var(--slate-400); text-align:center; grid-column: 1/-1; padding: 3rem;">No se encontraron maestros con estos filtros.</p>';
+        teachersGrid.innerHTML = `
+            <div class="no-slots-cta">
+                <div style="font-size: 3rem;">🕵️‍♂️</div>
+                <h3>¿No encuentras el horario que buscas?</h3>
+                <p>Nuestros guardianes están listos para guiarte. Cuéntanos qué día y hora necesitas y Moon les avisará de inmediato para ver quién puede abrir un espacio para ti.</p>
+                <button class="btn-request" onclick="window.requestCustomSlot()">Solicitar Horario Especial</button>
+            </div>
+        `;
         return;
     }
 
@@ -134,6 +141,113 @@ const renderMarketplace = () => {
         `;
         teachersGrid.appendChild(card);
     });
+
+    // Añadir CTA al final también si hay resultados pero quizá ninguno le convence
+    const finalCta = document.createElement('div');
+    finalCta.className = 'no-slots-cta';
+    finalCta.style.marginTop = '2rem';
+    finalCta.style.padding = '2rem';
+    finalCta.innerHTML = `
+        <h4 style="color: #9a3412; margin-bottom: 0.5rem;">¿Ninguno te acomoda?</h4>
+        <p style="font-size: 0.85rem;">Pide un horario personalizado y Moon buscará a un guardián disponible.</p>
+        <button class="btn-request" style="padding: 0.5rem 1.5rem; margin-top: 1rem; font-size: 0.85rem;" onclick="window.requestCustomSlot()">Pedir otro horario</button>
+    `;
+    teachersGrid.appendChild(finalCta);
+};
+
+// Solicitar Horario Especial
+window.requestCustomSlot = async () => {
+    const { value: formValues } = await Swal.fire({
+        title: 'Solicitar Horario Especial',
+        html: `
+            <div style="text-align: left; overflow: hidden;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem;">Día deseado:</label>
+                <input type="date" id="swal-date" class="swal2-input" style="margin: 0; width: 100%; box-sizing: border-box; font-family: inherit; padding: 0.625em 1em;">
+                
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.5rem;">Hora aproximada (Ej: 15:30):</label>
+                <input type="time" id="swal-time" class="swal2-input" style="margin: 0; width: 100%; box-sizing: border-box; font-family: inherit;">
+                
+                <p style="font-size: 0.75rem; color: #64748b; margin-top: 1.25rem; line-height: 1.4;">
+                    Moon enviará tu solicitud a los maestros en Discord. Si alguien puede, te avisaremos o abrirá el espacio.
+                </p>
+            </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Enviar a Moon 🐻‍❄️',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#f97316',
+        preConfirm: () => {
+            const date = document.getElementById('swal-date').value;
+            const time = document.getElementById('swal-time').value;
+            if (!date || !time) {
+                Swal.showValidationMessage('Por favor llena ambos campos');
+            }
+            return { date, time };
+        }
+    });
+
+    if (formValues) {
+        try {
+            const { date, time } = formValues;
+
+            // 1. Verificar si por casualidad ya existe un slot que coincida
+            const match = allSlots.find(s => s.date === date && s.startTime === time);
+
+            if (match) {
+                const teacher = allTeachers.find(t => t.id === match.teacherId);
+                Swal.fire({
+                    title: '¡Encontramos uno!',
+                    text: `El Prof. ${teacher.name} ya tiene ese horario disponible. ¿Quieres agendarlo?`,
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ver horario',
+                }).then((res) => {
+                    if (res.isConfirmed) {
+                        filterDay.value = date;
+                        filterName.value = teacher.name;
+                        renderMarketplace();
+                    }
+                });
+                return;
+            }
+
+            // 2. Guardar solicitud en Firestore
+            const { addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+            await addDoc(collection(db, "availabilityRequests"), {
+                studentId: currentUser.uid,
+                studentName: currentUser.displayName || 'Estudiante',
+                requestedDate: date,
+                requestedTime: time,
+                status: 'open',
+                createdAt: serverTimestamp()
+            });
+
+            // 3. Notificar a Discord (Canal General de Maestros con @everyone)
+            const { sendDiscordNotification } = await import('./discord.js');
+            const teacherUrl = `${window.location.origin}/teacher.html`;
+
+            await sendDiscordNotification(
+                "🌲 ¡Bosque Vacío! - Nueva Solicitud",
+                `Un alumno está buscando un horario que no encontró:\n\n**Alumno:** ${currentUser.displayName}\n**Día:** ${date}\n**Hora:** ${time} hrs\n\n¿Algún maestro puede abrir este espacio? 🎒✨\n\n[👉 Abrir Horario en mi Agenda](${teacherUrl})`,
+                16744448, // Naranja Moonsforest
+                null,     // No es DM
+                'teachers', // Canal de maestros
+                '@everyone' // Tagging
+            );
+
+            Swal.fire({
+                title: '¡Solicitud Enviada!',
+                text: 'Moon ya les avisó a los maestros en Discord. Mantente atento a la plataforma.',
+                icon: 'success',
+                confirmButtonColor: '#f97316'
+            });
+
+        } catch (error) {
+            console.error("Error al enviar solicitud:", error);
+            Swal.fire('Error', 'No pudimos enviar tu solicitud. Intenta de nuevo.', 'error');
+        }
+    }
 };
 
 // Lógica de Video Modal
@@ -167,6 +281,8 @@ window.openVideoModal = (teacherId) => {
 window.payForSlot = async (slotId, teacherId, date, time) => {
     const teacher = allTeachers.find(t => t.id === teacherId);
 
+    const hasCredit = userData && userData.evalCredits > 0;
+
     const result = await Swal.fire({
         title: '¿Confirmar Evaluación?',
         html: `
@@ -174,7 +290,10 @@ window.payForSlot = async (slotId, teacherId, date, time) => {
                 <p style="margin-bottom: 0.5rem;"><strong>Guardián:</strong> Prof. ${teacher.name.split(' ')[0]}</p>
                 <p style="margin-bottom: 0.5rem;"><strong>Fecha:</strong> ${date}</p>
                 <p style="margin-bottom: 0.5rem;"><strong>Hora:</strong> ${time} hrs</p>
-                <p style="margin-top: 1rem; font-weight: 800; color: var(--success-deep); font-size: 1.1rem;">Inversión: $60 MXN</p>
+                <p style="margin-top: 1rem; font-weight: 800; color: ${hasCredit ? '#059669' : 'var(--success-deep)'}; font-size: 1.1rem;">
+                    ${hasCredit ? '🎫 Usar mi Crédito (Gratis)' : 'Inversión: $60 MXN'}
+                </p>
+                ${hasCredit ? `<p style="font-size: 0.75rem; color: var(--slate-500); margin-top: 0.25rem;">Te quedan ${userData.evalCredits} créditos.</p>` : ''}
             </div>
         `,
         icon: 'question',
@@ -212,6 +331,13 @@ window.payForSlot = async (slotId, teacherId, date, time) => {
                 evaluationType: activeGoal,
                 bookedAt: new Date()
             });
+
+            // 1.5 Descontar crédito si se usó
+            if (hasCredit) {
+                const studentRef = doc(db, 'users', currentUser.uid);
+                await updateDoc(studentRef, { evalCredits: userData.evalCredits - 1 });
+                userData.evalCredits -= 1; // Update local state
+            }
 
             // 2. Notificación Discord
             const { sendDiscordNotification } = await import('./discord.js');

@@ -317,6 +317,49 @@
             height: 100%;
         }
 
+        .no-slots-cta {
+            grid-column: 1 / -1;
+            background: #fff8f1;
+            border: 2px dashed #fdba74;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .no-slots-cta h3 {
+            color: #9a3412;
+            font-size: 1.35rem;
+        }
+
+        .no-slots-cta p {
+            color: #c2410c;
+            font-size: 0.95rem;
+            max-width: 500px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .btn-request {
+            background: #f97316;
+            color: white;
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.2);
+        }
+
+        .btn-request:hover {
+            background: #ea580c;
+            transform: scale(1.02);
+        }
+
         @media (max-width: 768px) {
             .goal-selector {
                 grid-template-columns: 1fr;

@@ -19,12 +19,14 @@ service cloud.firestore {
       allow read: if isSignedIn() && request.auth.uid == userId;
       allow read: if isAdmin();
       
+      // Permitir create solo si isAdmin no existe o es false (nunca puede crearse como admin)
       allow create: if isSignedIn() && request.auth.uid == userId 
-                      && !request.resource.data.keys().contains('isAdmin');
+                      && request.resource.data.get('isAdmin', false) == false;
       
+      // Permitir update solo si isAdmin resultante es false (el usuario no puede escalarse a admin)
       allow update: if (isAdmin()) || 
                       (isSignedIn() && request.auth.uid == userId 
-                      && (request.resource.data.get('isAdmin', resource.data.get('isAdmin', false)) == resource.data.get('isAdmin', false)));
+                      && request.resource.data.get('isAdmin', false) == false);
     }
 
     // Reglas para la colección de maestros (PÚBLICA para alumnos)

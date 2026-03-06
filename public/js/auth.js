@@ -121,6 +121,7 @@ export const handleLogin = async () => {
                 photoURL: user.photoURL,
                 role: 'student', // Todos nacen como alumno
                 isTeacher: false, // Bandera de switch inactiva
+                isAdmin: false,   // Siempre explícito para que las reglas de Firestore lo evalúen correctamente
                 createdAt: serverTimestamp(),
                 points: 0,
                 referredBy: storedRefCode // Si null, no fue referido

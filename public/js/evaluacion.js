@@ -41,8 +41,8 @@ const initDateFilters = () => {
 // Cargar Datos de Firestore
 const loadMarketplaceData = async () => {
     try {
-        // 1. Cargar Maestros
-        const qTeachers = query(collection(db, "users"), where("isTeacher", "==", true));
+        // 1. Cargar Maestros certificados (approved by admin only)
+        const qTeachers = query(collection(db, "users"), where("isTeacher", "==", true), where("certified", "==", true));
         const teacherSnap = await getDocs(qTeachers);
         allTeachers = [];
         teacherSnap.forEach(doc => {

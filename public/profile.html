@@ -226,11 +226,27 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="teacher-video">Video de Presentación (Opcional)</label>
+                            <label for="teacher-video">🎥 Video de Presentación (Opcional)</label>
                             <input type="url" id="teacher-video" class="form-control"
-                                placeholder="https://youtube.com/watch?v=...">
-                            <span class="help-text">Una URL de YouTube. Es totalmente opcional, pero ayuda mucho a los
-                                alumnos.</span>
+                                placeholder="https://loom.com/share/... o https://youtube.com/watch?v=...">
+                            <span class="help-text">Un video corto presentándote. Los alumnos lo verán antes de
+                                agendarte.
+                                <strong style="color: var(--primary-medium);">Recomendamos Loom</strong> — es rápido,
+                                gratis y no necesitas editar nada.
+                            </span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="teacher-loom">🎙️ Video de Entrevista Loom *</label>
+                            <input type="url" id="teacher-loom" class="form-control" required
+                                placeholder="https://loom.com/share/...">
+                            <span class="help-text">
+                                Graba tu entrevista en inglés siguiendo las instrucciones de esta página:
+                                <a href="/interview.html" target="_blank"
+                                    style="color: var(--primary-medium); font-weight: 600;">📋 Ver preguntas y cómo
+                                    grabar →</a>
+                                <br>Pega aquí el link de tu video de Loom.
+                            </span>
                         </div>
 
                         <div class="form-group">
@@ -301,6 +317,7 @@
 
     <!-- Firebase & Auth Logic -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="/js/errorTracker.js"></script>
     <script type="module" src="/js/auth.js"></script>
     <script type="module" src="/js/components/header.js"></script>
     <script type="module" src="/js/profile.js"></script>

@@ -416,6 +416,95 @@ window.markAsPaid = async (teacherId, teacherName, amount) => {
 };
 
 /**
+ * ✅ Certificar Maestro
+ */
+window.certifyTeacher = async (teacherId, teacherName, discordId) => {
+    const confirmation = await Swal.fire({
+        title: `¿Certificar a ${teacherName.split(' ')[0]}?`,
+        text: 'Moon le enviará un DM de felicitación y quedará visible en el marketplace.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '✅ Sí, certificar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#059669'
+    });
+
+    if (!confirmation.isConfirmed) return;
+
+    try {
+        // 1. Actualizar en Firestore
+        const userRef = doc(db, 'users', teacherId);
+        const teacherRef = doc(db, 'teachers', teacherId);
+        // Use setDoc+merge so it works even if the public 'teachers' doc doesn't exist yet
+        const { setDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+        await Promise.all([
+            updateDoc(userRef, { certified: true }),
+            setDoc(teacherRef, { certified: true }, { merge: true })
+        ]);
+
+        // 2. Mandar DM de Moon si tiene Discord
+        if (discordId) {
+            await sendDiscordNotification(
+                '🌟 ¡Felicidades! Eres Guardiano Certificado',
+                `¡Hola Prof. ${teacherName.split(' ')[0]}!\n\nEl equipo de **Moonsforest** ha revisado tu entrevista y estamos felices de darte la bienvenida oficial.\n\n✅ Tu perfil ahora es **visible para los alumnos** en el marketplace.\n📝 Abre tus horarios en tu agenda y empieza a recibir evaluaciones.\n\n¡Gracias por unirte al bosque! 🌲✨`,
+                3066993, // Verde
+                discordId
+            );
+        }
+
+        await Swal.fire('¡Certificado!', `${teacherName.split(' ')[0]} ahora es un Guardiano Certificado. ${discordId ? 'Moon le aviso por Discord.' : 'No tiene Discord configurado.'}`, 'success');
+        loadTeachers(); // Refrescar tabla
+
+    } catch (err) {
+        console.error('Error al certificar maestro:', err);
+        Swal.fire('Error', 'No se pudo certificar al maestro.', 'error');
+    }
+};
+
+/**
+ * ❌ Rechazar Maestro
+ */
+window.rejectTeacher = async (teacherId, teacherName, discordId) => {
+    const { value: reason, isConfirmed } = await Swal.fire({
+        title: `Rechazar a ${teacherName.split(' ')[0]}`,
+        input: 'textarea',
+        inputLabel: 'Motivo (opcional, se incluirá en el DM de Moon):',
+        inputPlaceholder: 'Ej: Tu nivel de inglés aún no cumple el estándar necesario para evaluar niños...',
+        inputAttributes: { rows: 3 },
+        showCancelButton: true,
+        confirmButtonText: '🚫 Rechazar y notificar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#dc2626'
+    });
+
+    if (!isConfirmed) return;
+
+    try {
+        const defaultReason = 'Tu nivel de inglés actual no cumple el estándar que necesitamos para garantizar la mejor experiencia a nuestros alumnos.';
+        const finalReason = reason?.trim() || defaultReason;
+
+        // 2. Mandar DM de Moon si tiene Discord
+        if (discordId) {
+            await sendDiscordNotification(
+                '🌲 Actualización sobre tu solicitud en Moonsforest',
+                `¡Hola Prof. ${teacherName.split(' ')[0]}!\n\nGracias por tomarte el tiempo de grabar tu entrevista y por tu interés en unirte a nuestro equipo.\n\nDespues de revisar tu video de forma personal, hemos decidido no continuar con tu solicitud en este momento.\n\n💬 *${finalReason}*\n\nTe animamos a seguir practicando y a volver a aplicar más adelante. ¡Las puertas del bosque siempre estarán abiertas! 🌲`,
+                15158332, // Rojo amable
+                discordId
+            );
+            await Swal.fire('¡Notificado!', `Moon le mandó el mensaje a ${teacherName.split(' ')[0]} por Discord.`, 'info');
+        } else {
+            await Swal.fire('Sin Discord', `${teacherName.split(' ')[0]} no tiene Discord configurado. Contáctalo manualmente.`, 'warning');
+        }
+
+        loadTeachers();
+
+    } catch (err) {
+        console.error('Error al rechazar maestro:', err);
+        Swal.fire('Error', 'No se pudo enviar la notificación.', 'error');
+    }
+};
+
+/**
  * 👩‍🏫 Teachers Management Logic
  */
 async function loadTeachers() {
@@ -450,14 +539,22 @@ async function loadTeachers() {
             const teacherSlots = slots.filter(s => s.teacherId === teacher.id);
             const openSlots = teacherSlots.filter(s => s.status === 'available').length;
             const bookedSlots = teacherSlots.filter(s => s.status === 'booked').length;
-
-            // Count referrals
             const teacherReferrals = teacherRefCode ? students.filter(s => s.referredBy === teacherRefCode).length : 0;
-
-            // Estimated Earnings (Placeholder logic)
             const referralEarnings = teacherReferrals * 50;
-            const evalEarnings = bookedSlots * 30; // Suponiendo $30 para el maestro por evaluación de $60
+            const evalEarnings = bookedSlots * 30;
             const totalEst = referralEarnings + evalEarnings;
+
+            const isCertified = teacher.certified === true;
+            const discordId = teacher.teacherProfile?.discordId || null;
+            const loomLink = teacher.teacherProfile?.loomInterview || null;
+
+            const certBadge = isCertified
+                ? `<span style="background:#dcfce7; color:#166534; padding: 3px 10px; border-radius: 99px; font-size: 0.72rem; font-weight: 700;">\u2705 Certificado</span>`
+                : `<span style="background:#fef9c3; color:#854d0e; padding: 3px 10px; border-radius: 99px; font-size: 0.72rem; font-weight: 700;">\u23f3 Pendiente</span>`;
+
+            const loomBtn = loomLink
+                ? `<a href="${loomLink}" target="_blank" style="font-size: 0.72rem; color: #2563eb; font-weight: 600; text-decoration: none;">🎙️ Ver Loom</a>`
+                : `<span style="font-size: 0.72rem; color: #94a3b8;">Sin video</span>`;
 
             return `
                 <tr style="border-bottom: 1px solid var(--slate-50);">
@@ -470,14 +567,24 @@ async function loadTeachers() {
                             </div>
                         </div>
                     </td>
+                    <td style="padding: 1rem; text-align: center;">
+                        <div>${certBadge}</div>
+                        <div style="margin-top: 6px;">${loomBtn}</div>
+                    </td>
                     <td style="padding: 1rem; text-align: center;">${openSlots}</td>
                     <td style="padding: 1rem; text-align: center;">${bookedSlots}</td>
                     <td style="padding: 1rem; text-align: center;">${teacherReferrals}</td>
                     <td style="padding: 1rem; font-weight: 600; color: #10b981;">$${totalEst.toFixed(2)}</td>
-                    <td style="padding: 1rem;">$ ${totalEst.toFixed(2)}</td>
                     <td style="padding: 1rem;">
-                        <button class="btn" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; border: 1px solid var(--slate-300);" 
-                                onclick="alert('Detalle Maestro ${teacher.id}')">Ver Agenda</button>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                            ${!isCertified
+                    ? `<button class="btn" style="padding: 0.2rem 0.6rem; font-size: 0.68rem; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; font-weight: 700;"
+                                        onclick="certifyTeacher('${teacher.id}', '${teacher.name}', '${discordId}')">\u2705 Aprobar</button>
+                                   <button class="btn" style="padding: 0.2rem 0.6rem; font-size: 0.68rem; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; font-weight: 700;"
+                                        onclick="rejectTeacher('${teacher.id}', '${teacher.name}', '${discordId}')">\u274c Rechazar</button>`
+                    : `<span style="font-size: 0.72rem; color: #94a3b8;">Activo</span>`
+                }
+                        </div>
                     </td>
                 </tr>
             `;

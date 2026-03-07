@@ -1,18 +1,18 @@
 {
     "prompts": {
-        "p_listen": "1. Toca y escucha. ¡Repite en voz alta!",
-        "p_echo": "¡Tu turno de hablar! Lee esto fuerte y claro.",
-        "p_think": "💡 Pensemos en inglés: ¿Cómo dices esto?",
-        "p_drag": "Une la frase correctamente:",
-        "p_match": "🧩 ¡Reto de Velocidad! Une los pares.",
-        "p_speak_fast": "🗣️ Habla como un nativo. Traduce y dilo rápido:",
-        "p_ready": "🔥 ¡Bienvenido a La Fogata, el jefe de este nivel! No habrá traducciones, escucha a Moon y responde. Dilo para empezar:"
+        "p_listen": "1. Tap and listen. Repeat out loud! / ¡Toca, escucha y repite!",
+        "p_echo": "Your turn to speak! Say it loud and clear. / ¡Di la palabra fuerte y claro!",
+        "p_think": "💡 Think in English! How do you say this?",
+        "p_drag": "Build the sentence correctly! / ¡Construye la oración:",
+        "p_match": "🧩 Speed Challenge! Match the pairs. / ¡Une los pares rápido!",
+        "p_speak_fast": "🗣️ Speak like a native. Translate and say it fast! / Traduce y dilo rápido:",
+        "p_ready": "🔥 Welcome to The Bonfire — no translations, listen to Moon and respond. Say this to begin:"
     },
     "successMessages": {
-        "s_great": "¡Excelente!",
-        "s_pron": "¡Excelente pronunciación!",
-        "s_trans": "¡Traducción exacta!",
-        "s_fluency": "¡Esa es la fluidez que buscamos!",
-        "s_match": "¡Excelente! Eres un maestro uniendo conceptos."
+        "s_great":   { "en": "Excellent work!",           "es": "¡Excelente!" },
+        "s_pron":    { "en": "Great pronunciation!",      "es": "¡Excelente pronunciación!" },
+        "s_trans":   { "en": "Exact translation!",        "es": "¡Traducción exacta!" },
+        "s_fluency": { "en": "That's the fluency we want!", "es": "¡Esa es la fluidez!" },
+        "s_match":   { "en": "You're a master at connecting concepts!", "es": "¡Excelente conexión!" }
     }
 }

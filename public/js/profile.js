@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const teacherBio = document.getElementById('teacher-bio').value;
         const teacherVideo = document.getElementById('teacher-video').value;
+        const teacherLoom = document.getElementById('teacher-loom').value;
         const teacherZoom = document.getElementById('teacher-zoom').value;
         const teacherWhatsapp = document.getElementById('teacher-whatsapp').value;
         const teacherCv = document.getElementById('teacher-cv').value;
@@ -62,12 +63,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const refCode = existingData.teacherProfile?.refCode || generateRefCode(user.displayName);
 
             // 1. Guardar perfil completo en 'users' (Privado)
+            // IMPORTANTE: incluimos name/email/photoURL para sanar registros incompletos.
+            // El primer onAuthStateChanged a veces llega antes de que Google cargue el
+            // displayName, dejando name:null. Al llegar aquí, el perfil ya está garantizado.
             await setDoc(userRef, {
                 isTeacher: true,
+                name: user.displayName || existingData.name || 'Sin nombre',
+                email: user.email || existingData.email || '',
+                photoURL: user.photoURL || existingData.photoURL || null,
                 teacherProfile: {
                     ...(existingData.teacherProfile || {}),
                     bio: teacherBio,
                     video: teacherVideo || null,
+                    loomInterview: teacherLoom || null,
                     zoomLink: teacherZoom,
                     whatsapp: teacherWhatsapp,
                     cvLink: teacherCv,
@@ -76,7 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     bank: teacherBank,
                     status: existingData.teacherProfile?.status || 'active',
                     refCode: refCode
-                }
+                },
+                // Only set certified:false on first registration, never overwrite if already true
+                ...(existingData.isTeacher ? {} : { certified: false })
             }, { merge: true });
 
             // 2. Guardar SOLO datos públicos en 'teachers' (Público para alumnos)
@@ -91,24 +101,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 refCode: refCode,
                 discordId: teacherDiscord || null, // Necesario para notificaciones de referidos
                 status: existingData.teacherProfile?.status || 'active',
+                certified: existingData.certified || false, // Propagate cert status
                 updatedAt: new Date()
             });
 
             // Notificación a Discord (Solo si es nuevo)
             if (!existingData.isTeacher) {
                 await sendDiscordNotification(
-                    "🧑‍🏫 Solicitud de Maestro",
-                    `**${user.displayName}** acaba de completar su registro como Maestro y está en espera de alumnos.`,
+                    "🧑‍🏫 Nueva Solicitud de Maestro — Revisión Pendiente",
+                    `**${user.displayName}** ha completado su registro y está esperando certificación.\n\n**Email:** ${user.email}\n**Loom Interview:** ${teacherLoom ? `[Ver Video](${teacherLoom})` : '⚠️ No enviado'}\n\n_Entra al Admin Panel → Maestros para aprobar o rechazar._`,
                     10181046 // Morado
                 );
             }
 
-            await Swal.fire({
-                title: existingData.isTeacher ? '¡Perfil Actualizado!' : '¡Felicidades!',
-                text: existingData.isTeacher ? 'Tus datos se han guardado correctamente.' : 'Tu perfil de Maestro ha sido activado. ¡Bienvenido al equipo!',
-                icon: 'success',
-                confirmButtonColor: '#059669'
-            });
+            // Mensaje de éxito diferenciado: nuevo vs. actualización
+            if (existingData.isTeacher) {
+                await Swal.fire({
+                    title: '¡Perfil Actualizado!',
+                    text: 'Tus datos se han guardado correctamente.',
+                    icon: 'success',
+                    confirmButtonColor: '#059669'
+                });
+            } else {
+                await Swal.fire({
+                    title: '🌟 ¡Registro Completado!',
+                    html: `
+                        <p style="margin-bottom: 1rem; color: #334155;">Tu solicitud ha sido enviada. Nuestro equipo va a revisar tu entrevista de forma personal.</p>
+                        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 1rem; text-align: left;">
+                            <p style="font-weight: 700; color: #166534; margin-bottom: 0.5rem;">\u23f3 ¿Qué sigue?</p>
+                            <p style="font-size: 0.9rem; color: #15803d; line-height: 1.5;">Recibiás un mensaje directo de Moon en Discord cuando tu solicitud sea aprobada o rechazada. Este proceso puede tomar de <strong>3 a 7 días hábiles</strong>.</p>
+                        </div>
+                    `,
+                    icon: 'success',
+                    confirmButtonColor: '#059669',
+                    confirmButtonText: '¡Entendido!'
+                });
+            }
             window.location.reload();
 
         } catch (error) {
@@ -154,7 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const profile = userData.teacherProfile || {};
                     const fields = [
                         { key: 'bio', label: 'Biografía', public: true },
-                        { key: 'video', label: 'Video de Presentación', public: true },
+                        { key: 'video', label: 'Video YouTube', public: true },
+                        { key: 'loomInterview', label: 'Entrevista Loom', public: false },
                         { key: 'zoomLink', label: 'Enlace Video-sala', public: true },
                         { key: 'whatsapp', label: 'WhatsApp', public: false },
                         { key: 'cvLink', label: 'CV / LinkedIn', public: false },
@@ -215,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const profile = userData.teacherProfile || {};
                         document.getElementById('teacher-bio').value = profile.bio || '';
                         document.getElementById('teacher-video').value = profile.video || '';
+                        document.getElementById('teacher-loom').value = profile.loomInterview || '';
                         document.getElementById('teacher-zoom').value = profile.zoomLink || '';
                         document.getElementById('teacher-whatsapp').value = profile.whatsapp || '';
                         document.getElementById('teacher-cv').value = profile.cvLink || '';

@@ -519,13 +519,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
+            // 🔑 Forzar refresco del token para evitar errores de permisos
+            // por condición de carrera cuando el usuario acaba de registrarse.
+            await user.getIdToken(true);
+
             const docRef = doc(db, 'users', user.uid);
-            const docSnap = await getDoc(docRef);
+            let docSnap;
+
+            try {
+                docSnap = await getDoc(docRef);
+            } catch (permError) {
+                // Si el primer intento falla por permisos (token aún propagándose),
+                // esperamos 1.5s y reintentamos UNA sola vez antes de rendirse.
+                if (permError.code === 'permission-denied') {
+                    console.warn("Token aún propagándose, reintentando en 1.5s...");
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    await user.getIdToken(true); // segundo refresco
+                    docSnap = await getDoc(docRef);
+                } else {
+                    throw permError; // Otro tipo de error, lo dejamos subir
+                }
+            }
 
             if (docSnap.exists()) {
                 const userData = docSnap.data();
 
                 if (!userData.isTeacher) {
+                    // El usuario existe pero definitivamente NO es maestro
                     alert("Acceso denegado. No tienes permisos de maestro.");
                     window.location.href = 'mapa.html';
                     return;
@@ -587,11 +607,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
             } else {
+                // El documento no existe (usuario muy nuevo), redirigir
                 window.location.href = 'mapa.html';
             }
         } catch (error) {
             console.error("Error comprobando portal de maestros:", error);
-            window.location.href = 'mapa.html';
+            // Solo redirigimos si es un error definitivo de acceso.
+            // Errores de red o desconocidos muestran mensaje para no confundir al usuario.
+            if (error.code === 'permission-denied') {
+                alert("No tienes permisos para acceder al portal de maestros.");
+                window.location.href = 'mapa.html';
+            } else {
+                alert("Ocurrió un error de conexión. Por favor recarga la página.");
+            }
         }
     });
 });

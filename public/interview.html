@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Interview | Moonsforest</title>
+    <meta name="description"
+        content="Record your Loom interview to join the Moonsforest team of certified English evaluators.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --forest-deep: #052e16;
+            --forest-mid: #14532d;
+            --forest-light: #166534;
+            --forest-glow: #22c55e;
+            --forest-pale: #dcfce7;
+            --gold: #f59e0b;
+            --gold-light: #fef3c7;
+            --moon: #e2e8f0;
+            --moon-glow: rgba(226, 232, 240, 0.15);
+            --slate-900: #0f172a;
+            --slate-700: #334155;
+            --slate-500: #64748b;
+            --slate-200: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--forest-deep);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── Starfield Background ── */
+        .starfield {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: white;
+            animation: twinkle 3s infinite ease-in-out alternate;
+        }
+
+        @keyframes twinkle {
+            from {
+                opacity: 0.2;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0.9;
+                transform: scale(1.4);
+            }
+        }
+
+        /* ── Forest Floor CSS ── */
+        .forest-floor {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 220px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .tree-css {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .tree-css::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Dark trees */
+        .t1 {
+            border-left: 18px solid transparent;
+            border-right: 18px solid transparent;
+            border-bottom: 60px solid #052e16;
+            left: 2%;
+        }
+
+        .t2 {
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 42px solid #052e16;
+            left: 8%;
+            bottom: 18px;
+        }
+
+        .t3 {
+            border-left: 22px solid transparent;
+            border-right: 22px solid transparent;
+            border-bottom: 75px solid #052e16;
+            left: 14%;
+        }
+
+        .t4 {
+            border-left: 9px solid transparent;
+            border-right: 9px solid transparent;
+            border-bottom: 30px solid #0a3d20;
+            left: 20%;
+            bottom: 30px;
+        }
+
+        .t5 {
+            border-left: 16px solid transparent;
+            border-right: 16px solid transparent;
+            border-bottom: 55px solid #052e16;
+            left: 28%;
+        }
+
+        .t6 {
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 68px solid #0a3d20;
+            right: 30%;
+        }
+
+        .t7 {
+            border-left: 13px solid transparent;
+            border-right: 13px solid transparent;
+            border-bottom: 45px solid #052e16;
+            right: 20%;
+            bottom: 15px;
+        }
+
+        .t8 {
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 80px solid #052e16;
+            right: 10%;
+        }
+
+        .t9 {
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 35px solid #0a3d20;
+            right: 4%;
+            bottom: 28px;
+        }
+
+        /* Moon Glow */
+        .moon-orb {
+            position: fixed;
+            top: 3rem;
+            right: 5rem;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #f1f5f9 0%, #cbd5e1 60%, transparent 100%);
+            box-shadow: 0 0 40px 20px rgba(203, 213, 225, 0.2), 0 0 80px 40px rgba(203, 213, 225, 0.08);
+            animation: moonFloat 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes moonFloat {
+            from {
+                transform: translateY(0px);
+            }
+
+            to {
+                transform: translateY(-12px);
+            }
+        }
+
+        /* ── Page Content ── */
+        .page-wrap {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4rem 1.5rem 14rem;
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 3.5rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: -0.02em;
+        }
+
+        .logo-text span {
+            color: var(--forest-glow);
+        }
+
+        /* Hero Title */
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: var(--forest-glow);
+            padding: 0.4rem 1rem;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            font-weight: 800;
+            text-align: center;
+            line-height: 1.15;
+            max-width: 700px;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        h1 .accent {
+            color: var(--forest-glow);
+        }
+
+        h1 .accent-gold {
+            color: var(--gold);
+        }
+
+        .hero-sub {
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.05rem;
+            max-width: 560px;
+            line-height: 1.65;
+            margin-bottom: 3.5rem;
+        }
+
+        /* ── Main Card ── */
+        .card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 680px;
+            width: 100%;
+            backdrop-filter: blur(12px);
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-sub {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 1.75rem;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+        }
+
+        /* ── Question Cards ── */
+        .questions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .question-item {
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .question-item:hover {
+            border-color: rgba(34, 197, 94, 0.35);
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .question-number {
+            min-width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: var(--forest-glow);
+            font-weight: 800;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .question-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.5;
+            padding-top: 0.35rem;
+        }
+
+        .question-hint {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 0.4rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* ── Divider ── */
+        .divider {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 0.8rem;
+            margin: 0.5rem 0 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ── Steps ── */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .step-dot {
+            min-width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-body strong {
+            display: block;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.2rem;
+        }
+
+        .step-body p {
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.45;
+        }
+
+        /* ── CTAs ── */
+        .cta-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-width: 680px;
+            width: 100%;
+        }
+
+        .btn-loom {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: var(--forest-glow);
+            color: var(--forest-deep);
+            font-weight: 800;
+            font-size: 1.05rem;
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 30px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-loom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(34, 197, 94, 0.45);
+            background: #16a34a;
+        }
+
+        .btn-loom svg {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+        .btn-profile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+            font-size: 0.92rem;
+            padding: 0.85rem 2rem;
+            border-radius: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s;
+        }
+
+        .btn-profile:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            color: var(--white);
+        }
+
+        /* ── Footer note ── */
+        .footer-note {
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.3);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            max-width: 500px;
+        }
+
+        /* Tips card */
+        .tips-card {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .tips-icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .tips-body strong {
+            font-size: 0.9rem;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .tips-body ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .tips-body li {
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.55);
+            font-family: 'Inter', sans-serif;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .tips-body li::before {
+            content: '·';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        @media (max-width: 600px) {
+            .page-wrap {
+                padding: 2.5rem 1rem 12rem;
+            }
+
+            .card {
+                padding: 1.75rem 1.25rem;
+            }
+
+            h1 {
+                font-size: 1.9rem;
+            }
+
+            .moon-orb {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Starfield -->
+    <div class="starfield" id="starfield"></div>
+
+    <!-- Moon -->
+    <div class="moon-orb"></div>
+
+    <!-- Forest Floor -->
+    <div class="forest-floor">
+        <div class="tree-css t1"></div>
+        <div class="tree-css t2"></div>
+        <div class="tree-css t3"></div>
+        <div class="tree-css t4"></div>
+        <div class="tree-css t5"></div>
+        <div class="tree-css t6"></div>
+        <div class="tree-css t7"></div>
+        <div class="tree-css t8"></div>
+        <div class="tree-css t9"></div>
+    </div>
+
+    <div class="page-wrap">
+
+        <!-- Logo -->
+        <a href="/index.html" class="logo">
+            <span class="logo-icon">🌲</span>
+            <span class="logo-text">Moon<span>sforest</span></span>
+        </a>
+
+        <!-- Hero -->
+        <div class="hero-badge">🎙️ Guardian Certification</div>
+
+        <h1>Your path to becoming a<br><span class="accent-gold">Certified Guardian</span></h1>
+
+        <p class="hero-sub">
+            Record a short Loom video answering the questions below so our team can evaluate
+            your English fluency and teaching skills. It only takes 3–5 minutes.
+        </p>
+
+        <!-- QUESTIONS CARD -->
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="card-title">🎯 Your Interview Questions</div>
+            <p class="card-sub">Answer <strong style="color: white;">in English</strong>. Speak naturally — we're
+                evaluating your fluency, vocabulary, and confidence, not a rehearsed script.</p>
+
+            <div class="questions-list">
+                <div class="question-item">
+                    <div class="question-number">1</div>
+                    <div>
+                        <div class="question-text">Tell me about yourself and your experience teaching English.</div>
+                        <div class="question-hint">We want to know your background, certifications, and how long you've
+                            been teaching.</div>
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-number">2</div>
+                    <div>
+                        <div class="question-text">Describe a challenging situation you've faced in a classroom and how
+                            you handled it.</div>
+                        <div class="question-hint">Show us your problem-solving skills and how you connect with
+                            students.</div>
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-number">3</div>
+                    <div>
+                        <div class="question-text">How would you explain the difference between "have been doing" and
+                            "have done" to a 10-year-old?</div>
+                        <div class="question-hint">We evaluate how you simplify grammar in a way kids can understand.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TIPS CARD -->
+        <div class="card" style="padding: 1.5rem 2rem; margin-bottom: 1.5rem;">
+            <div class="tips-card">
+                <div class="tips-icon">💡</div>
+                <div class="tips-body">
+                    <strong>Tips for a great recording</strong>
+                    <ul>
+                        <li>Use a quiet room with good lighting facing your face</li>
+                        <li>Aim for 3 to 5 minutes total — don't over-prepare</li>
+                        <li>Enable both camera and microphone in Loom</li>
+                        <li>Speak naturally, as if talking to a student</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- HOW TO RECORD CARD -->
+        <!-- HOW TO RECORD CARD -->
+        <div class="card" style="margin-bottom: 2rem;">
+            <div class="card-title">📋 Cómo grabar y enviar tu video</div>
+            <p class="card-sub" style="margin-bottom: 1.5rem;">Sólo 4 pasos y listo — elige la herramienta que prefieras
+                abajo.</p>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-dot">1</div>
+                    <div class="step-body">
+                        <strong>Elige una herramienta y graba</strong>
+                        <p>Haz clic en una de las opciones de abajo. Vidyard no requiere descargas. YouTube lo puedes
+                            grabar directo desde tu teléfono.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-dot">2</div>
+                    <div class="step-body">
+                        <strong>Responde las 3 preguntas de arriba</strong>
+                        <p>Respóndelas en inglés de forma natural. No necesitas ser perfecto — solo ser tú mismo.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-dot">3</div>
+                    <div class="step-body">
+                        <strong>Copia el link de tu video</strong>
+                        <p>Vidyard y YouTube generan un link compartible automáticamente. En YouTube, súbelo como
+                            <strong style="color: #f59e0b;">"No listado"</strong> para que solo tú y nosotros lo veamos.
+                        </p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-dot">4</div>
+                    <div class="step-body">
+                        <strong>Pégalo en tu perfil de Maestro</strong>
+                        <p>Ve a tu perfil en Moonsforest, abre el campo <em>"Video de Entrevista"</em>, pega el link y
+                            guarda. ¡Listo!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="cta-group">
+
+            <p
+                style="text-align:center; font-size: 0.85rem; color: rgba(255,255,255,0.45); margin-bottom: 0.25rem; font-family: 'Inter', sans-serif;">
+                Elige la opción que te resulte más fácil
+            </p>
+
+            <!-- Opción 1: Vidyard (mejor opción web, sin descargas) -->
+            <a href="https://www.vidyard.com/free-video-recorder/" target="_blank" rel="noopener noreferrer"
+                class="btn-loom">
+                <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="4" />
+                    <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                </svg>
+                🌟 Grabar en Vidyard (recomendado — sin descargas)
+            </a>
+
+            <!-- Opción 2: YouTube (todos lo conocen) -->
+            <a href="https://www.youtube.com/upload" target="_blank" rel="noopener noreferrer" style="display:flex; align-items:center; justify-content:center; gap:0.6rem;
+                       background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+                       color: rgba(255,255,255,0.85); font-weight:600; font-size:0.92rem;
+                       padding:0.9rem 2rem; border-radius:16px; text-decoration:none; transition:all 0.25s;">
+                📱 Grabar con el cel y subir a YouTube (video no listado)
+            </a>
+
+            <!-- Opción 3: Screencastify -->
+            <a href="https://www.screencastify.com" target="_blank" rel="noopener noreferrer" style="display:flex; align-items:center; justify-content:center; gap:0.6rem;
+                       background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+                       color: rgba(255,255,255,0.5); font-weight:500; font-size:0.82rem;
+                       padding:0.7rem 2rem; border-radius:16px; text-decoration:none; transition:all 0.25s;">
+                También puedes usar Screencastify (extensión de Chrome)
+            </a>
+
+            <a href="/profile.html" class="btn-profile">
+                ← Pegar el link en mi perfil de Maestro
+            </a>
+        </div>
+
+        <p class="footer-note">
+            Our team personally reviews every video. Your certification decision will be communicated
+            via Discord DM within <strong style="color: rgba(255,255,255,0.55);">3 to 7 business days</strong>. 🌲
+        </p>
+
+    </div>
+
+    <script>
+        // Generate starfield
+        const starfield = document.getElementById('starfield');
+        const starCount = 80;
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const size = Math.random() * 2.5 + 0.5;
+            star.style.cssText = `
+                width: ${size}px;
+                height: ${size}px;
+                top: ${Math.random() * 100}%;
+                left: ${Math.random() * 100}%;
+                animation-delay: ${Math.random() * 4}s;
+                animation-duration: ${2 + Math.random() * 3}s;
+                opacity: ${Math.random() * 0.6 + 0.1};
+            `;
+            starfield.appendChild(star);
+        }
+    </script>
+</body>
+
+</html>

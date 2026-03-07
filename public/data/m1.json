@@ -15,11 +15,13 @@
           "cards": [
             {
               "word": "Hello",
-              "translation": "Hola"
+              "translation": "Hola",
+              "emoji": "👋"
             },
             {
               "word": "Goodbye",
-              "translation": "Adiós"
+              "translation": "Adiós",
+              "emoji": "👋✨"
             }
           ]
         },
@@ -95,11 +97,13 @@
           "cards": [
             {
               "word": "Good morning",
-              "translation": "Buenos días"
+              "translation": "Buenos días",
+              "emoji": "☀️"
             },
             {
               "word": "Good night",
-              "translation": "Buenas noches"
+              "translation": "Buenas noches",
+              "emoji": "🌙"
             }
           ]
         },
@@ -154,11 +158,13 @@
           "cards": [
             {
               "word": "I am",
-              "translation": "Yo soy"
+              "translation": "Yo soy",
+              "emoji": "👤"
             },
             {
               "word": "I",
-              "translation": "Yo"
+              "translation": "Yo",
+              "emoji": "👆"
             }
           ]
         },
@@ -245,15 +251,18 @@
           "cards": [
             {
               "word": "Boy",
-              "translation": "Niño"
+              "translation": "Niño",
+              "emoji": "👦"
             },
             {
               "word": "Girl",
-              "translation": "Niña"
+              "translation": "Niña",
+              "emoji": "👧"
             },
             {
               "word": "Student",
-              "translation": "Estudiante"
+              "translation": "Estudiante",
+              "emoji": "📚"
             }
           ]
         },
@@ -401,8 +410,38 @@
           "successMsg": "s_fluency"
         },
         {
+          "type": "fill_in_blank",
+          "prompt": "💡 Complete the sentence — choose the right word:",
+          "sentence": "I ___ a boy.",
+          "answer": "am",
+          "options": [
+            "am",
+            "is",
+            "are"
+          ],
+          "successMsg": {
+            "en": "Perfect! 'am' goes with 'I'.",
+            "es": "¡Correcto! 'am' va con 'I'."
+          }
+        },
+        {
+          "type": "fill_in_blank",
+          "prompt": "💡 Complete the sentence:",
+          "sentence": "___ morning, student!",
+          "answer": "Good",
+          "options": [
+            "Good",
+            "Hello",
+            "Goodbye"
+          ],
+          "successMsg": {
+            "en": "Excellent! You know your greetings!",
+            "es": "¡Excelente! Conoces los saludos."
+          }
+        },
+        {
           "type": "matching",
-          "prompt": "🧩 Reto Final de la Lección",
+          "prompt": "🧩 Final Challenge!",
           "timer": true,
           "pairs": {
             "Hello": "Hola",
@@ -425,11 +464,13 @@
           "cards": [
             {
               "word": "Happy",
-              "translation": "Feliz"
+              "translation": "Feliz",
+              "emoji": "😊"
             },
             {
               "word": "Sad",
-              "translation": "Triste"
+              "translation": "Triste",
+              "emoji": "😢"
             }
           ]
         },
@@ -484,11 +525,13 @@
           "cards": [
             {
               "word": "Tired",
-              "translation": "Cansado"
+              "translation": "Cansado",
+              "emoji": "😴"
             },
             {
               "word": "Ready",
-              "translation": "Listo"
+              "translation": "Listo",
+              "emoji": "💥"
             }
           ]
         },
@@ -563,11 +606,13 @@
           "cards": [
             {
               "word": "You are",
-              "translation": "Tú eres"
+              "translation": "Tú eres",
+              "emoji": "👉"
             },
             {
               "word": "You",
-              "translation": "Tú"
+              "translation": "Tú",
+              "emoji": "👤"
             }
           ]
         },
@@ -652,11 +697,13 @@
           "cards": [
             {
               "word": "My name is",
-              "translation": "Mi nombre es"
+              "translation": "Mi nombre es",
+              "emoji": "🏷️"
             },
             {
               "word": "Name",
-              "translation": "Nombre"
+              "translation": "Nombre",
+              "emoji": "💭"
             }
           ]
         },

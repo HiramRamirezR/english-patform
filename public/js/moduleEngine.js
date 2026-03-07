@@ -83,8 +83,10 @@ export class MoonsforestEngine {
             this.renderDragAndDrop(stepData);
         } else if (stepData.type === 'matching') {
             this.renderMatching(stepData);
+        } else if (stepData.type === 'fill_in_blank') {
+            this.renderFillInBlank(stepData);
         } else {
-            this.container.innerHTML = `<p>Actividad no soportada: ${stepData.type}</p>`;
+            this.container.innerHTML = `<p>Unsupported activity: ${stepData.type}</p>`;
         }
     }
 
@@ -110,13 +112,12 @@ export class MoonsforestEngine {
     /* -------------------------------------------------------------------------- */
 
     renderListenClick(data) {
-        // Wrapper
         const box = document.createElement('div');
         box.className = 'activity-box';
 
         const prompt = document.createElement('div');
         prompt.className = 'activity-prompt';
-        prompt.innerText = data.prompt || 'Escucha y repite mentalmente.';
+        prompt.innerText = data.prompt || 'Tap each card and listen!';
         box.appendChild(prompt);
 
         const grid = document.createElement('div');
@@ -127,6 +128,14 @@ export class MoonsforestEngine {
         data.cards.forEach(card => {
             const cardEl = document.createElement('div');
             cardEl.className = 'flashcard';
+
+            // Optional emoji
+            if (card.emoji) {
+                const emojiEl = document.createElement('div');
+                emojiEl.className = 'flashcard-emoji';
+                emojiEl.innerText = card.emoji;
+                cardEl.appendChild(emojiEl);
+            }
 
             const content = document.createElement('div');
             content.className = 'flashcard-content';
@@ -142,22 +151,20 @@ export class MoonsforestEngine {
             // Logic
             cardEl.addEventListener('click', () => {
                 if (cardEl.classList.contains('solved')) {
-                    this.speak(card.word); // Speak again if they want
+                    this.speak(card.word);
                     return;
                 }
 
-                // First click: Reveal and Speak
                 cardEl.classList.add('flipped');
                 this.speak(card.word);
-
-                // If the activity requires clicking all to proceed
                 cardEl.classList.add('solved');
                 solvedCount++;
 
                 if (solvedCount === data.cards.length) {
                     this.playSound('success');
+                    this.triggerSuccessBurst();
                     this.showNextButton(box);
-                    this.showMoon("Pudiste leerlas todas. ¡Súper!");
+                    this.showMoon({ en: "You heard them all. Super!", es: "¡Las escuchaste todas!" });
                 }
             });
 
@@ -252,12 +259,14 @@ export class MoonsforestEngine {
 
         const forcePass = (msg) => {
             this.playSound('success');
+            this.triggerSuccessBurst();
             echoWord.classList.add('success');
             echoWord.innerText = data.word;
             micBtn.style.display = 'none';
             listenBtn.style.display = 'none';
-            feedback.innerHTML = `Escuché y entendí: "<strong>${data.word.toLowerCase()}</strong>"`;
-            this.showMoon(msg || data.successMsg || "¡Muy bien!");
+            feedback.innerHTML = `I heard: "<strong>${data.word.toLowerCase()}</strong>" ✓`;
+            const moonMsg = msg || data.successMsg || { en: "Well done!", es: "¡Muy bien!" };
+            this.showMoon(moonMsg);
             this.showNextButton(box);
         };
 
@@ -381,13 +390,19 @@ export class MoonsforestEngine {
                     }
 
                     let msg = (attempts >= 3 && !matches)
-                        ? "¡Esa frase es un gran reto! Moon te ayuda con su magia para que sigamos explorando."
-                        : (attempts === 2 && !matches) ? "¡Casi perfecto! Escuché tu gran esfuerzo. ¡Avancemos!" : null;
+                        ? { en: "That phrase is a big challenge! Moon's magic helps you move forward.", es: "¡Difícil! Sigamos explorando." }
+                        : (attempts === 2 && !matches)
+                            ? { en: "So close! I heard your great effort. Let's go!", es: "¡Casi perfecto! ¡Avancemos!" }
+                            : null;
 
                     forcePass(msg);
                 } else {
                     this.playSound('error');
-                    let hints = ["¡Casi! Intenta pronunciarlo de nuevo.", "Abre bien la boca y habla fuerte.", "¡Un esfuerzo más! Tú puedes."];
+                    let hints = [
+                        { en: "Almost! Try saying it again.", es: "¡Casi! Inténtalo de nuevo." },
+                        { en: "Open your mouth wide and speak loud!", es: "¡Abre la boca y habla fuerte!" },
+                        { en: "One more try! You can do it!", es: "¡Un intento más! Tú puedes." }
+                    ];
                     this.showMoon(hints[(attempts - 1) % hints.length]);
                 }
             };
@@ -400,18 +415,18 @@ export class MoonsforestEngine {
                 }
 
                 if (attempts >= 3) {
-                    forcePass("¡Moon te escucha con el corazón! Sigamos con la aventura.");
+                    forcePass({ en: "Moon hears you with her heart! Let's keep exploring.", es: "¡Sigamos la aventura!" });
                     return;
                 }
 
                 this.playSound('error');
                 thermoFill.style.width = '0%';
                 if (errorType === 'no-speech') {
-                    feedback.innerText = 'No detecté voz. ¿Podrías repetirlo?';
-                    this.showMoon("No escuché nada. Intenta hablar más fuerte.");
+                    feedback.innerText = "I didn't hear you. Could you say it again?";
+                    this.showMoon({ en: "I didn't hear anything. Try speaking louder!", es: "No escuché nada. ¡Habla más fuerte!" });
                 } else {
-                    feedback.innerText = 'Hubo un problema con el micro. Intenta otra vez.';
-                    this.showMoon("Revisa el permiso de tu micrófono.");
+                    feedback.innerText = 'Microphone issue. Please try again.';
+                    this.showMoon({ en: "Check your microphone permissions.", es: "Revisa el permiso de tu micrófono." });
                 }
             };
 
@@ -560,7 +575,8 @@ export class MoonsforestEngine {
             if (allFilled) {
                 if (currentSentence.join(' ') === data.target) {
                     this.playSound('success');
-                    this.showMoon("¡Exacto! Así se construye la frase.");
+                    this.triggerSuccessBurst();
+                    this.showMoon({ en: "Exactly! That's how you build the sentence.", es: "¡Exacto! Así se construye." });
 
                     // Style them inside the box to show success
                     dropZones.forEach(dz => dz.firstChild.classList.add('success'));
@@ -568,7 +584,7 @@ export class MoonsforestEngine {
                     this.showNextButton(box);
                 } else {
                     this.playSound('error');
-                    this.showMoon("Hmm... esa no es la estructura correcta. Cámbialas de lugar.");
+                    this.showMoon({ en: "Hmm... that's not quite right. Swap them around!", es: "Cámbialas de lugar." });
                 }
             }
         };
@@ -576,157 +592,280 @@ export class MoonsforestEngine {
         this.container.appendChild(box);
     }
 
-    renderMatching(data) {
+    /**
+     * Fill in the Blank activity
+     * JSON shape: { type: "fill_in_blank", sentence: "I ___ happy.", answer: "am", options: ["am","is","are"], prompt: "..." }
+     * Use ___ (three underscores) to mark the blank in the sentence.
+     */
+    renderFillInBlank(data) {
         const box = document.createElement('div');
         box.className = 'activity-box';
 
         const prompt = document.createElement('div');
         prompt.className = 'activity-prompt';
-        prompt.innerText = data.prompt || 'Une la palabra en inglés con su significado.';
+        prompt.innerText = data.prompt || 'Choose the correct word to complete the sentence.';
         box.appendChild(prompt);
 
-        // Desestructurar todos los items (inglés vs español)
-        let terms = [];
-        let definitions = [];
-        for (let [en, es] of Object.entries(data.pairs)) {
-            terms.push({ text: en, type: 'term', pairId: en });
-            definitions.push({ text: es, type: 'def', pairId: en });
-        }
+        // Sentence display with blank highlighted
+        const sentenceEl = document.createElement('div');
+        sentenceEl.className = 'fib-sentence';
+        const parts = data.sentence.split('___');
+        const blankSpan = `<span class="fib-blank" id="fib-blank">___</span>`;
+        sentenceEl.innerHTML = parts.join(blankSpan);
+        box.appendChild(sentenceEl);
 
-        // Shuffle arrays
-        terms = terms.sort(() => Math.random() - 0.5);
-        definitions = definitions.sort(() => Math.random() - 0.5);
+        // Shuffle options
+        const options = [...data.options].sort(() => Math.random() - 0.5);
 
-        // Columnas
-        const columnsContainer = document.createElement('div');
-        columnsContainer.style.display = 'flex';
-        columnsContainer.style.gap = '2rem';
-        columnsContainer.style.justifyContent = 'center';
-        columnsContainer.style.marginTop = '1.5rem';
+        const optionsGrid = document.createElement('div');
+        optionsGrid.className = 'fib-options';
+        box.appendChild(optionsGrid);
 
-        const colTerms = document.createElement('div');
-        colTerms.style.display = 'flex';
-        colTerms.style.flexDirection = 'column';
-        colTerms.style.gap = '1rem';
-        colTerms.style.flex = 1;
+        const feedback = document.createElement('div');
+        feedback.className = 'speech-feedback';
+        box.appendChild(feedback);
 
-        const colDefs = document.createElement('div');
-        colDefs.style.display = 'flex';
-        colDefs.style.flexDirection = 'column';
-        colDefs.style.gap = '1rem';
-        colDefs.style.flex = 1;
+        let answered = false;
 
-        columnsContainer.appendChild(colTerms);
-        columnsContainer.appendChild(colDefs);
-        box.appendChild(columnsContainer);
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'fib-option-btn';
+            btn.innerText = opt;
 
-        // Desafío de Velocidad
+            btn.addEventListener('click', () => {
+                if (answered) return;
+                answered = true;
+
+                // Update blank text
+                const blankEl = document.getElementById('fib-blank');
+
+                if (opt === data.answer) {
+                    // ✅ Correct
+                    this.playSound('success');
+                    this.triggerSuccessBurst();
+
+                    btn.classList.add('fib-correct');
+                    if (blankEl) {
+                        blankEl.textContent = opt;
+                        blankEl.classList.add('fib-blank-solved');
+                    }
+                    // Speak the full completed sentence
+                    const fullSentence = data.sentence.replace('___', opt);
+                    this.speak(fullSentence);
+
+                    feedback.innerHTML = `✓ <strong>${opt}</strong> — correct!`;
+                    feedback.style.color = '#86efac';
+
+                    const msg = data.successMsg || { en: "Exactly right! Well done.", es: "¡Exacto! Muy bien." };
+                    setTimeout(() => {
+                        this.showMoon(msg);
+                        this.showNextButton(box);
+                    }, 600);
+                } else {
+                    // ❌ Wrong
+                    this.playSound('error');
+                    btn.classList.add('fib-wrong');
+                    btn.disabled = true;
+
+                    feedback.innerHTML = `✗ Try again — that's not it.`;
+                    feedback.style.color = '#fca5a5';
+
+                    this.showMoon({ en: "Not quite! Look at the other options.", es: "¡Piénsalo bien! Mira las otras opciones." });
+
+                    // Re-allow trying
+                    answered = false;
+                    setTimeout(() => {
+                        btn.classList.remove('fib-wrong');
+                        btn.disabled = true; // keep wrong option disabled
+                        feedback.innerHTML = '';
+                    }, 800);
+                }
+            });
+
+            optionsGrid.appendChild(btn);
+        });
+
+        this.container.appendChild(box);
+    }
+
+    renderMatching(data) {
+
+        const box = document.createElement('div');
+        box.className = 'activity-box';
+
+        const prompt = document.createElement('div');
+        prompt.className = 'activity-prompt';
+        prompt.innerText = data.prompt || 'Match each word with its meaning.';
+        box.appendChild(prompt);
+
+        // Speed timer
         if (data.timer) {
             const seconds = typeof data.timer === 'number' ? data.timer : 20;
             this.startTimer(box, seconds, () => {
-                this.showMoon("¡Se acabó el tiempo! No pasa nada, termina a tu ritmo.");
+                this.showMoon({ en: "Time's up! No worries, keep going.", es: "Sin presión, termina a tu ritmo." });
             });
         }
 
-        // Lógica de Estado
+        // Build a single flat pool: all terms + all definitions, shuffled TOGETHER
+        let allItems = [];
+        for (let [en, es] of Object.entries(data.pairs)) {
+            allItems.push({ text: en, type: 'term', pairId: en });
+            allItems.push({ text: es, type: 'def', pairId: en });
+        }
+        // Fisher-Yates shuffle for true randomness
+        for (let i = allItems.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allItems[i], allItems[j]] = [allItems[j], allItems[i]];
+        }
+
+        // Dynamic grid columns
+        const total = allItems.length;
+        const cols = total <= 4 ? 2 : total <= 6 ? 3 : 4;
+
+        const grid = document.createElement('div');
+        grid.style.cssText = `
+            display: grid;
+            grid-template-columns: repeat(${cols}, 1fr);
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            width: 100%;
+            max-width: 580px;
+            margin-left: auto;
+            margin-right: auto;
+        `;
+        box.appendChild(grid);
+
         let selectedItem = null;
         let matchedPairs = 0;
         const totalPairs = Object.keys(data.pairs).length;
 
-        const createMatchBtn = (item, parentCol) => {
+        // Unique accent per pair
+        const pairAccents = [
+            { border: '#22c55e', bg: 'rgba(34,197,94,0.18)', text: '#bbf7d0' },
+            { border: '#38bdf8', bg: 'rgba(56,189,248,0.18)', text: '#bae6fd' },
+            { border: '#f59e0b', bg: 'rgba(245,158,11,0.18)', text: '#fde68a' },
+            { border: '#a78bfa', bg: 'rgba(167,139,250,0.18)', text: '#ddd6fe' },
+            { border: '#f472b6', bg: 'rgba(244,114,182,0.18)', text: '#fbcfe8' },
+            { border: '#34d399', bg: 'rgba(52,211,153,0.18)', text: '#a7f3d0' },
+        ];
+        const accentMap = {};
+        Object.keys(data.pairs).forEach((key, i) => {
+            accentMap[key] = pairAccents[i % pairAccents.length];
+        });
+
+        const resetStyle = (btn) => {
+            btn.style.borderColor = 'rgba(255,255,255,0.15)';
+            btn.style.background = 'rgba(255,255,255,0.05)';
+            btn.style.color = 'rgba(255,255,255,0.85)';
+            btn.style.transform = 'scale(1)';
+            btn.style.boxShadow = 'none';
+        };
+
+        const selectStyle = (btn) => {
+            btn.style.borderColor = '#22c55e';
+            btn.style.background = 'rgba(34,197,94,0.2)';
+            btn.style.color = '#bbf7d0';
+            btn.style.transform = 'scale(1.05)';
+            btn.style.boxShadow = '0 0 16px rgba(34,197,94,0.35)';
+        };
+
+        allItems.forEach(item => {
             const btn = document.createElement('button');
             btn.className = 'match-btn';
             btn.innerText = item.text;
-
-            // Estilos estáticos limpios
-            btn.style.padding = '1rem';
-            btn.style.border = '2px solid var(--slate-200)';
-            btn.style.background = 'white';
-            btn.style.borderRadius = '12px';
-            btn.style.cursor = 'pointer';
-            btn.style.fontSize = '1.1rem';
-            btn.style.fontWeight = '500';
-            btn.style.color = 'var(--text-color)';
-            btn.style.transition = 'all 0.2s';
             btn.dataset.id = item.pairId;
             btn.dataset.type = item.type;
 
+            btn.style.cssText = `
+                padding: 0.9rem 0.6rem;
+                border: 1.5px solid rgba(255,255,255,0.15);
+                background: rgba(255,255,255,0.05);
+                border-radius: 14px;
+                cursor: pointer;
+                font-size: 1rem;
+                font-weight: 600;
+                color: rgba(255,255,255,0.85);
+                transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+                font-family: 'Outfit', sans-serif;
+                backdrop-filter: blur(4px);
+                min-height: 58px;
+                word-break: break-word;
+                text-align: center;
+                line-height: 1.3;
+            `;
+
             btn.addEventListener('click', () => {
-                // Ignore clicks if already solved
                 if (btn.classList.contains('solved')) return;
 
-                // Clic en sí mismo lo deselecciona
+                // Deselect self
                 if (selectedItem === btn) {
                     btn.classList.remove('selected');
-                    btn.style.borderColor = 'var(--slate-200)';
-                    btn.style.background = 'white';
+                    resetStyle(btn);
                     selectedItem = null;
                     return;
                 }
 
                 if (!selectedItem) {
-                    // Seleccionar primero
                     selectedItem = btn;
                     btn.classList.add('selected');
-                    btn.style.borderColor = 'var(--primary-medium)';
-                    btn.style.background = '#e0f2fe'; // Azul claro
+                    selectStyle(btn);
                 } else {
-                    // Validar si son del mismo lado (cambia selección)
+                    // Same type → swap selection
                     if (selectedItem.dataset.type === btn.dataset.type) {
                         selectedItem.classList.remove('selected');
-                        selectedItem.style.borderColor = 'var(--slate-200)';
-                        selectedItem.style.background = 'white';
+                        resetStyle(selectedItem);
                         selectedItem = btn;
                         btn.classList.add('selected');
-                        btn.style.borderColor = 'var(--primary-medium)';
-                        btn.style.background = '#e0f2fe';
+                        selectStyle(btn);
                         return;
                     }
 
-                    // Evaluar match
                     if (selectedItem.dataset.id === btn.dataset.id) {
-                        // Correcto
+                        // ✅ Correct match
                         this.playSound('success');
-                        btn.classList.add('solved');
-                        btn.classList.remove('selected');
-                        btn.style.borderColor = 'var(--success)';
-                        btn.style.background = '#ecfdf5';
-                        btn.style.color = '#065f46';
+                        const accent = accentMap[btn.dataset.id];
 
-                        selectedItem.classList.add('solved');
-                        selectedItem.classList.remove('selected');
-                        selectedItem.style.borderColor = 'var(--success)';
-                        selectedItem.style.background = '#ecfdf5';
-                        selectedItem.style.color = '#065f46';
+                        [btn, selectedItem].forEach(b => {
+                            b.classList.add('solved');
+                            b.classList.remove('selected');
+                            b.style.borderColor = accent.border;
+                            b.style.background = accent.bg;
+                            b.style.color = accent.text;
+                            b.style.boxShadow = `0 0 12px ${accent.border}55`;
+                            b.style.cursor = 'default';
+                            b.style.animation = 'matchPop 0.4s cubic-bezier(0.175,0.885,0.32,1.275)';
+                        });
 
                         selectedItem = null;
                         matchedPairs++;
 
-                        // Check Win Condition
                         if (matchedPairs === totalPairs) {
                             setTimeout(() => {
-                                this.showMoon(data.successMsg || "¡Uniste todos los pares perfectamente!");
+                                this.triggerSuccessBurst();
+                                const msg = data.successMsg || { en: "You matched all pairs perfectly!", es: "¡Todos los pares correctos!" };
+                                this.showMoon(msg);
                                 this.showNextButton(box);
-                            }, 500);
+                            }, 350);
                         }
                     } else {
-                        // Incorrecto
+                        // ❌ Wrong
                         this.playSound('error');
-                        // Parpadeo rojo visual en ambos (btn y selectedItem) sin css animations
-                        const wrong1 = selectedItem;
-                        const wrong2 = btn;
+                        const w1 = selectedItem;
+                        const w2 = btn;
 
-                        wrong1.style.borderColor = '#ef4444';
-                        wrong1.style.background = '#fef2f2';
-                        wrong2.style.borderColor = '#ef4444';
-                        wrong2.style.background = '#fef2f2';
+                        [w1, w2].forEach(b => {
+                            b.classList.remove('selected');
+                            b.style.borderColor = '#ef4444';
+                            b.style.background = 'rgba(239,68,68,0.15)';
+                            b.style.color = '#fca5a5';
+                            b.style.animation = 'matchShake 0.35s ease';
+                        });
 
                         setTimeout(() => {
-                            wrong1.classList.remove('selected');
-                            wrong1.style.borderColor = 'var(--slate-200)';
-                            wrong1.style.background = 'white';
-                            wrong2.style.borderColor = 'var(--slate-200)';
-                            wrong2.style.background = 'white';
+                            [w1, w2].forEach(b => {
+                                b.style.animation = '';
+                                resetStyle(b);
+                            });
                         }, 500);
 
                         selectedItem = null;
@@ -734,11 +873,8 @@ export class MoonsforestEngine {
                 }
             });
 
-            parentCol.appendChild(btn);
-        };
-
-        terms.forEach(term => createMatchBtn(term, colTerms));
-        definitions.forEach(def => createMatchBtn(def, colDefs));
+            grid.appendChild(btn);
+        });
 
         this.container.appendChild(box);
     }
@@ -790,52 +926,73 @@ export class MoonsforestEngine {
 
     renderCompletion() {
         this.progressBar.style.width = '100%';
-        this.container.innerHTML = ''; // Limpiar el contenedor anterior
+        this.container.innerHTML = '';
 
         // Calcular minutos y lanzar evento
         const endTime = Date.now();
         const minutesSpent = Math.max(1, Math.round((endTime - this.startTime) / 60000));
+        const totalSteps = this.data.length;
         document.dispatchEvent(new CustomEvent('lessonCompleted', { detail: { minutes: minutesSpent } }));
 
         const targetUrl = this.options.returnUrl || 'mapa.html';
+
+        // Epic confetti burst on load
+        setTimeout(() => this.triggerSuccessBurst(true), 300);
+        setTimeout(() => this.triggerSuccessBurst(true), 700);
+
         const box = document.createElement('div');
-        box.className = 'activity-box';
+        box.className = 'completion-box';
 
-        let storyPlayerUI = '';
-        if (!this.isMobile) {
-            storyPlayerUI = `
-                <div id="story-player" style="background: #f1f5f9; padding: 2rem; border-radius: 20px; margin-bottom: 2rem; border: 2px dashed #cbd5e1;">
-                    <h3 style="font-size: 1.1rem; color: var(--slate-700); margin-bottom: 1rem;">🎥 Tu aventura del día</h3>
-                    <p style="font-size: 0.9rem; color: var(--slate-500); margin-bottom: 1.5rem;">Escucha tu conversación completa con Moon.</p>
-                    <button id="play-story-btn" class="btn btn-accent" style="background: #fbbf24; color: #78350f; padding: 1rem 2.5rem; font-weight: 700;">
-                        ▶️ Reproducir mi Conversación
-                    </button>
-                </div>
-            `;
-        }
+        // Story player (desktop only)
+        const hasHistory = this.sessionHistory.length > 0 && !this.isMobile;
+        const storyPlayerHTML = hasHistory ? `
+            <div class="story-player-card">
+                <div class="story-player-title">🎙️ Today's Adventure</div>
+                <div class="story-player-sub">Listen to your complete conversation with Moon.</div>
+                <button id="play-story-btn" class="btn-play-story">▶️ Play My Session</button>
+            </div>
+        ` : '';
 
-        // UI de Felicitación
         box.innerHTML = `
-            <div style="font-size: 5rem; margin-bottom: 1rem;">🏞️</div>
-            <h2 style="font-size: 2.5rem; color: var(--primary-deep); margin-bottom: 2rem;">¡Lección Completada!</h2>
-            ${storyPlayerUI}
-            <button class="btn btn-primary" style="padding: 1rem 3rem;" onclick="window.location.href='${targetUrl}'">Volver al Bosque</button>
+            <div class="completion-trophy">🏆</div>
+            <h2 class="completion-title">Lesson <span>Complete!</span></h2>
+            <p class="completion-subtitle">You just leveled up your English. Keep exploring the forest!</p>
+
+            <div class="completion-stats">
+                <div class="stat-pill">
+                    <div class="stat-pill-value">${minutesSpent}</div>
+                    <div class="stat-pill-label">Minutes<br>Speaking</div>
+                </div>
+                <div class="stat-pill">
+                    <div class="stat-pill-value">${totalSteps}</div>
+                    <div class="stat-pill-label">Activities<br>Completed</div>
+                </div>
+                <div class="stat-pill">
+                    <div class="stat-pill-value">🌟</div>
+                    <div class="stat-pill-label">XP<br>Earned</div>
+                </div>
+            </div>
+
+            ${storyPlayerHTML}
+
+            <button class="btn-return-forest" onclick="window.location.href='${targetUrl}'">
+                🌲 Back to the Forest
+            </button>
         `;
+
         this.container.appendChild(box);
 
-        // Lógica del Reproductor de Historia (Solo Desktop)
-        if (!this.isMobile) {
+        // Story player logic
+        if (hasHistory) {
             const playBtn = document.getElementById('play-story-btn');
             if (playBtn) {
                 playBtn.addEventListener('click', async () => {
                     playBtn.disabled = true;
-                    playBtn.innerText = "🎬 Reproduciendo...";
+                    playBtn.innerText = '🎬 Playing...';
 
                     for (const item of this.sessionHistory) {
                         if (item.type === 'moon') {
-                            await new Promise(resolve => {
-                                this.speak(item.content, () => resolve());
-                            });
+                            await new Promise(resolve => this.speak(item.content, () => resolve()));
                         } else if (item.type === 'child') {
                             await new Promise(resolve => {
                                 const audio = new Audio(item.content);
@@ -846,12 +1003,12 @@ export class MoonsforestEngine {
                     }
 
                     playBtn.disabled = false;
-                    playBtn.innerText = "▶️ Volver a escuchar";
+                    playBtn.innerText = '▶️ Play Again';
                 });
             }
         }
 
-        this.showMoon("¡Terminaste tu primer entrenamiento! Eres valiente.");
+        this.showMoon({ en: "You finished your training! You're brave.", es: "¡Terminaste! Eres valiente." });
     }
 
     /* -------------------------------------------------------------------------- */
@@ -884,7 +1041,6 @@ export class MoonsforestEngine {
     }
 
     showNextButton(parentBox) {
-        // Congelar y limpiar timer si existe
         if (this.currentTimerId) {
             clearTimeout(this.currentTimerId);
             this.currentTimerId = null;
@@ -893,17 +1049,17 @@ export class MoonsforestEngine {
                 const currentWidth = window.getComputedStyle(this.currentTimerBar).width;
                 this.currentTimerBar.style.transition = 'none';
                 this.currentTimerBar.style.width = currentWidth;
-                this.currentTimerBar.style.background = 'linear-gradient(90deg, #10b981, #34d399)'; // Verde éxito
+                this.currentTimerBar.style.background = 'linear-gradient(90deg, #22c55e, #4ade80)';
                 this.currentTimerBar = null;
             }
         }
 
-        // Avoid duplicate buttons
         if (parentBox.querySelector('.btn-next-step')) return;
 
         const nextBtn = document.createElement('button');
-        nextBtn.className = 'btn btn-primary btn-next-step visible';
-        nextBtn.innerText = 'Siguiente Actividad →';
+        nextBtn.className = 'btn-next-step visible';
+        const isLast = this.currentStep >= this.data.length - 1;
+        nextBtn.innerText = isLast ? '🏁 Finish Lesson!' : 'Next Activity →';
         nextBtn.onclick = () => this.nextStep();
         parentBox.appendChild(nextBtn);
     }
@@ -952,8 +1108,38 @@ export class MoonsforestEngine {
 
     showMoon(message) {
         if (!this.moonSupport) return;
-        this.moonMessage.innerText = message;
+
+        // message can be a string or { en: '...', es: '...' }
+        let enText, esText;
+        if (typeof message === 'object' && message !== null && message.en) {
+            enText = message.en;
+            esText = message.es || '';
+        } else {
+            // Legacy plain string — treat as English
+            enText = String(message);
+            esText = '';
+        }
+
+        this.moonMessage.innerHTML = `
+            <span class="moon-msg-en">${enText}</span>
+            ${esText ? `<span class="moon-msg-es">${esText}</span>` : ''}
+        `;
         this.moonSupport.classList.remove('hidden');
+
+        // Speak Moon's message in English using TTS
+        this.speakMoon(enText);
+    }
+
+    speakMoon(text) {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.9;
+        utterance.pitch = 1.1; // slightly warmer voice for Moon
+        const preferredVoice = this.voices.find(v => v.lang === 'en-US' && v.name.includes('Google'));
+        if (preferredVoice) utterance.voice = preferredVoice;
+        window.speechSynthesis.speak(utterance);
     }
 
     hideMoon() {
@@ -961,37 +1147,66 @@ export class MoonsforestEngine {
         this.moonSupport.classList.add('hidden');
     }
 
+    triggerSuccessBurst(big = false) {
+        const burst = document.createElement('div');
+        burst.className = 'success-burst';
+        document.body.appendChild(burst);
+
+        const colors = ['#22c55e', '#f59e0b', '#3b82f6', '#a855f7', '#ec4899', '#fbbf24'];
+        const count = big ? 40 : 18;
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.className = 'burst-particle';
+            const angle = (i / count) * 360 * (Math.PI / 180);
+            const dist = (big ? 200 : 120) + Math.random() * (big ? 200 : 80);
+            const dx = Math.cos(angle) * dist;
+            const dy = Math.sin(angle) * dist - (big ? 100 : 50);
+            p.style.cssText = `
+                left: ${cx}px; top: ${cy}px;
+                background: ${colors[i % colors.length]};
+                --dx: ${dx}px; --dy: ${dy}px;
+                width: ${Math.random() * 10 + 6}px;
+                height: ${Math.random() * 10 + 6}px;
+                border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+                animation-duration: ${0.7 + Math.random() * 0.5}s;
+                animation-delay: ${Math.random() * 0.15}s;
+            `;
+            burst.appendChild(p);
+        }
+
+        setTimeout(() => burst.remove(), 1200);
+    }
+
     addReportButton() {
         const reportBtn = document.createElement('button');
         reportBtn.id = 'report-issue-btn';
-        reportBtn.innerHTML = '🚩 Reportar problema';
-        reportBtn.title = "¿Algo no funciona? Repórtalo para que Moon aprenda.";
+        reportBtn.innerHTML = '🚩 Report issue';
+        reportBtn.title = "Something not working? Let Moon know!";
         reportBtn.style.cssText = `
             position: fixed;
             bottom: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid #e2e8f0;
-            padding: 8px 12px;
+            left: 20px;
+            padding: 8px 14px;
             border-radius: 99px;
             font-size: 0.75rem;
-            color: #64748b;
             cursor: pointer;
             z-index: 1000;
             display: flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             transition: all 0.2s;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
         `;
-        reportBtn.onmouseover = () => reportBtn.style.background = "#fee2e2";
-        reportBtn.onmouseout = () => reportBtn.style.background = "rgba(255, 255, 255, 0.8)";
 
         reportBtn.onclick = () => {
-            const reason = prompt("¿Qué problema tuviste? (Ej: No reconoce mi voz, la traducción está mal, no cargó la imagen)");
+            const reason = prompt("What happened? (e.g. Voice not recognized, wrong translation, didn't load)");
             if (reason) {
                 this.logFrustration('manual_report', { reason });
-                alert("¡Gracias! Moon ya está revisando tu reporte. 🌲✨");
+                alert("Thank you! Moon is already reviewing your report. 🌲✨");
             }
         };
 

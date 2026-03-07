@@ -5,17 +5,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lección | Moonsforest</title>
+    <meta name="description" content="Aprende inglés con Moonsforest. Repite, escucha y practica con Moon.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/css/module.css">
 </head>
 
 <body>
+
+    <!-- Starfield -->
+    <div class="starfield" id="starfield"></div>
+
+    <!-- Moon Orb -->
+    <div class="moon-orb"></div>
+
+    <!-- Forest Floor (CSS trees) -->
+    <div class="forest-floor">
+        <div class="tree-css t1"></div>
+        <div class="tree-css t2"></div>
+        <div class="tree-css t3"></div>
+        <div class="tree-css t4"></div>
+        <div class="tree-css t5"></div>
+        <div class="tree-css t5b"></div>
+        <div class="tree-css t6"></div>
+        <div class="tree-css t7"></div>
+        <div class="tree-css t8"></div>
+        <div class="tree-css t9"></div>
+        <div class="tree-css t10"></div>
+    </div>
+
     <header class="module-header">
-        <button class="btn-back" id="btn-back">← Volver</button>
-        <div class="module-title" id="lesson-title">Cargando Lección...</div>
+        <button class="btn-back" id="btn-back">← Back</button>
+        <div class="module-title" id="lesson-title">Loading Lesson...</div>
         <div class="progress-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
@@ -26,12 +50,36 @@
     </main>
 
     <div id="moon-support" class="moon-support hidden">
-        <div class="moon-message-bubble" id="moon-message">Great job!</div>
+        <div class="moon-message-bubble" id="moon-message">
+            <span class="moon-msg-en">Great job!</span>
+        </div>
         <div class="moon-avatar">🐻‍❄️</div>
     </div>
 
     <!-- Script for Loader -->
     <script type="module" src="/js/lessonLoader.js"></script>
+
+    <script>
+        // Generate starfield
+        const starfield = document.getElementById('starfield');
+        const starCount = 90;
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const size = Math.random() * 2.5 + 0.5;
+            star.style.cssText = `
+                width: ${size}px;
+                height: ${size}px;
+                top: ${Math.random() * 100}%;
+                left: ${Math.random() * 100}%;
+                animation-delay: ${Math.random() * 5}s;
+                animation-duration: ${2 + Math.random() * 3}s;
+                opacity: ${Math.random() * 0.5 + 0.1};
+            `;
+            starfield.appendChild(star);
+        }
+    </script>
+
 </body>
 
 </html>

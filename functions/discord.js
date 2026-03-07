@@ -10,6 +10,7 @@ exports.handler = async function (event, context) {
     const ADMIN_WEBHOOK = process.env.DISCORD_WEBHOOK_URL;
     const TEACHERS_WEBHOOK = process.env.DISCORD_TEACHERS_WEBHOOK_URL;
     const TEST_WEBHOOK = process.env.DISCORD_TEST_WEBHOOK_URL;
+    const ERRORES_WEBHOOK = process.env.DISCORD_ERRORES_CODIGO_WEBHOOK_URL;
 
     console.log("--- Inicio Proceso Discord ---");
     console.log("Token Detectado:", DISCORD_BOT_TOKEN ? "SÍ (longitud: " + DISCORD_BOT_TOKEN.length + ")" : "NO");
@@ -23,6 +24,7 @@ exports.handler = async function (event, context) {
         let targetWebhook = ADMIN_WEBHOOK;
         if (channel === 'teachers') targetWebhook = TEACHERS_WEBHOOK;
         if (channel === 'test') targetWebhook = TEST_WEBHOOK;
+        if (channel === 'errores') targetWebhook = ERRORES_WEBHOOK;
 
         console.log("Target Channel:", channel || "admin");
         console.log("Recipient ID:", recipient_id || "Ninguno (Solo Webhook)");

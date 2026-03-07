@@ -54,14 +54,37 @@ const initApp = () => {
     }
 
     // Escuchar cambios en el estado de autenticación
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
         if (user) {
             console.log("Usuario autenticado:", user.displayName);
 
             // Actualizar nombre en el dashboard si existe el elemento
             const userNameEl = document.getElementById('user-name');
-            if (userNameEl) {
+            if (userNameEl && user.displayName) {
                 userNameEl.textContent = `¡Hola, ${user.displayName.split(' ')[0]}!`;
+            }
+
+            // 🩹 Auto-sanación silenciosa: si el doc en Firestore tiene name/email
+            // nulos (por la condición de carrera del primer login), los corregimos
+            // con los datos frescos de Google Auth que ya están disponibles aquí.
+            try {
+                const userRef = doc(db, 'users', user.uid);
+                const userSnap = await getDoc(userRef);
+                if (userSnap.exists()) {
+                    const data = userSnap.data();
+                    const needsHealing = (!data.name || !data.email) && user.displayName;
+                    if (needsHealing) {
+                        console.log("🩹 Sanando perfil incompleto:", user.displayName);
+                        const { updateDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+                        await updateDoc(userRef, {
+                            name: data.name || user.displayName,
+                            email: data.email || user.email,
+                            photoURL: data.photoURL || user.photoURL || null,
+                        });
+                    }
+                }
+            } catch (e) {
+                // Silencioso: no bloqueamos la UI si esto falla
             }
         } else {
             console.log("No hay sesión activa.");

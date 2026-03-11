@@ -1767,17 +1767,35 @@ export class MoonsforestEngine {
             </div>
         `;
 
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.style.display = 'flex';
+        buttonsContainer.style.flexDirection = 'column';
+        buttonsContainer.style.gap = '0.75rem';
+        buttonsContainer.style.marginTop = '1rem';
+        buttonsContainer.style.width = '100%';
+
+        const btnRepeat = document.createElement('button');
+        btnRepeat.className = 'btn-continue-forest';
+        btnRepeat.style.background = 'transparent';
+        btnRepeat.style.border = '2px solid rgba(255, 255, 255, 0.2)';
+        btnRepeat.style.color = 'white';
+        btnRepeat.innerText = '🔄 Volver a Intentar';
+        btnRepeat.onclick = () => window.location.reload();
+
         const btn = document.createElement('button');
         btn.className = 'btn-continue-forest';
-        btn.innerText = 'Continue the Adventure →';
+        btn.innerText = 'Salir al Mapa →';
         btn.onclick = () => window.location.href = targetUrl;
+
+        buttonsContainer.appendChild(btnRepeat);
+        buttonsContainer.appendChild(btn);
 
         box.appendChild(avatar);
         box.appendChild(title);
         box.appendChild(starsContainer);
         box.appendChild(msg);
         box.appendChild(stats);
-        box.appendChild(btn);
+        box.appendChild(buttonsContainer);
 
         overlay.appendChild(box);
         document.body.appendChild(overlay);

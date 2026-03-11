@@ -49,12 +49,19 @@ const loadMarketplaceData = async () => {
             allTeachers.push({ id: doc.id, ...doc.data() });
         });
 
-        // 2. Cargar Slots disponibles
+        // 2. Cargar Slots disponibles (y en el futuro)
         const qSlots = query(collection(db, "slots"), where("status", "==", "available"));
         const slotSnap = await getDocs(qSlots);
+        const now = new Date();
+
         allSlots = [];
         slotSnap.forEach(doc => {
-            allSlots.push({ id: doc.id, ...doc.data() });
+            const data = doc.data();
+            const slotTime = new Date(`${data.date}T${data.startTime}`);
+            // Solamente agregar slots que todavía no empiezan
+            if (slotTime > now) {
+                allSlots.push({ id: doc.id, ...data });
+            }
         });
 
         renderMarketplace();
@@ -157,12 +164,13 @@ const renderMarketplace = () => {
 
 // Solicitar Horario Especial
 window.requestCustomSlot = async () => {
+    const todayStr = new Date().toISOString().split('T')[0];
     const { value: formValues } = await Swal.fire({
         title: 'Solicitar Horario Especial',
         html: `
             <div style="text-align: left; overflow: hidden;">
                 <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem;">Día deseado:</label>
-                <input type="date" id="swal-date" class="swal2-input" style="margin: 0; width: 100%; box-sizing: border-box; font-family: inherit; padding: 0.625em 1em;">
+                <input type="date" id="swal-date" class="swal2-input" min="${todayStr}" style="margin: 0; width: 100%; box-sizing: border-box; font-family: inherit; padding: 0.625em 1em;">
                 
                 <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.5rem;">Hora aproximada (Ej: 15:30):</label>
                 <input type="time" id="swal-time" class="swal2-input" style="margin: 0; width: 100%; box-sizing: border-box; font-family: inherit;">

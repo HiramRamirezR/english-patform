@@ -17,6 +17,17 @@ const teacherForm = document.getElementById('teacher-form');
 const cancelTeacherBtn = document.getElementById('cancel-teacher-btn');
 const submitProvider = document.getElementById('submit-teacher-btn');
 
+// Elementos de edición de Student
+const editProfileBtn = document.getElementById('edit-profile-btn');
+const editProfileForm = document.getElementById('edit-profile-form');
+const cancelEditProfileBtn = document.getElementById('cancel-edit-profile-btn');
+const saveEditProfileBtn = document.getElementById('save-edit-profile-btn');
+const editNameInput = document.getElementById('edit-name-input');
+const displayAvatarProfile = document.getElementById('display-avatar-profile');
+const miniAvatarOptions = document.querySelectorAll('.mini-avatar-option');
+let currentSelectedAvatar = '👤';
+let currentUserDoc = null;
+
 document.addEventListener('DOMContentLoaded', () => {
     // Manejo de la UI del Formulario
     teacherFormBtn.addEventListener('click', () => {
@@ -28,6 +39,91 @@ document.addEventListener('DOMContentLoaded', () => {
         teacherForm.classList.remove('show-form');
         teacherForm.style.display = 'none'; // Asegurar que se oculta
         teacherIntro.style.display = 'block'; // Volver a mostrar el intro/checklist
+    });
+
+    // --- Lógica Editar Perfil Estudiante ---
+    editProfileBtn.addEventListener('click', () => {
+        editProfileForm.style.display = 'block';
+        editProfileBtn.style.display = 'none';
+
+        // Cargar datos actuales
+        if (currentUserDoc && currentUserDoc.name) {
+            editNameInput.value = currentUserDoc.name;
+        }
+
+        if (currentUserDoc && currentUserDoc.avatar) {
+            currentSelectedAvatar = currentUserDoc.avatar;
+            miniAvatarOptions.forEach(opt => {
+                if (opt.getAttribute('data-avatar') === currentSelectedAvatar) {
+                    opt.classList.add('selected');
+                } else {
+                    opt.classList.remove('selected');
+                }
+            });
+        }
+    });
+
+    cancelEditProfileBtn.addEventListener('click', () => {
+        editProfileForm.style.display = 'none';
+        editProfileBtn.style.display = 'block';
+    });
+
+    miniAvatarOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+            miniAvatarOptions.forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+            currentSelectedAvatar = opt.getAttribute('data-avatar');
+        });
+    });
+
+    saveEditProfileBtn.addEventListener('click', async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        saveEditProfileBtn.disabled = true;
+        saveEditProfileBtn.textContent = 'Guardando...';
+
+        const newName = editNameInput.value.trim();
+
+        try {
+            const userRef = doc(db, 'users', user.uid);
+            const updates = { avatar: currentSelectedAvatar };
+            if (newName) updates.name = newName;
+
+            import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js").then(async ({ updateDoc }) => {
+                await updateDoc(userRef, updates);
+
+                // Actualizar interfaz al vuelo
+                if (newName) profileName.textContent = newName;
+                displayAvatarProfile.textContent = currentSelectedAvatar;
+
+                // Actualizar currentUserDoc en memoria
+                if (currentUserDoc) {
+                    currentUserDoc.name = newName || currentUserDoc.name;
+                    currentUserDoc.avatar = currentSelectedAvatar;
+                }
+
+                // Ocultar formulario
+                editProfileForm.style.display = 'none';
+                editProfileBtn.style.display = 'block';
+
+                Swal.fire({
+                    title: '¡Perfil Actualizado!',
+                    text: 'Tus datos básicos se guardaron con éxito.',
+                    icon: 'success',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            });
+
+        } catch (error) {
+            console.error("Error actualizando perfil base:", error);
+        } finally {
+            saveEditProfileBtn.disabled = false;
+            saveEditProfileBtn.textContent = 'Guardar Cambios';
+        }
     });
 
     // Guardar el perfil de maestro
@@ -172,6 +268,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (docSnap.exists()) {
                 const userData = docSnap.data();
+                currentUserDoc = userData; // Guardar ref globa
+
+                if (userData.avatar) {
+                    displayAvatarProfile.textContent = userData.avatar;
+                }
+
+                if (userData.name) {
+                    profileName.textContent = userData.name;
+                }
 
                 // Cambiar la UI si ya es maestro
                 if (userData.isTeacher) {

@@ -145,7 +145,7 @@
                     </div>
                     <div class="stat-item" style="text-align: right;">
                         <h3>Evaluaciones Históricas</h3>
-                        <div class="value" style="color: var(--slate-700);">0</div>
+                        <div class="value" style="color: var(--slate-700);" id="historical-eval-count">0</div>
                     </div>
                 </div>
 
@@ -175,7 +175,8 @@
                     </div>
 
                     <div style="text-align: right; margin-top: 1rem;">
-                        <p style="font-size: 0.8rem; color: var(--slate-500);">Monto mínimo de transferencia: $300 MXN
+                        <p style="font-size: 0.8rem; color: var(--slate-500);">💳 Transferencias enviadas
+                            automáticamente cada lunes (Saldo mínimo: $300 MXN)
                         </p>
                     </div>
                 </div>
@@ -220,7 +221,16 @@
                             </select>
                         </div>
 
-                        <div style="margin-bottom: 1.5rem;">
+                        <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <button type="button" id="btn-repeat-yesterday" class="btn"
+                                style="background: #f1f5f9; color: var(--slate-700); font-size: 0.8rem; flex: 1; min-width: 120px; border: 1px solid var(--slate-200);">📅
+                                Repetir ayer</button>
+                            <button type="button" id="btn-clear-selection" class="btn"
+                                style="background: white; border: 1px solid var(--slate-200); color: var(--slate-500); font-size: 0.8rem; flex: 1; min-width: 120px;">✕
+                                Limpiar</button>
+                        </div>
+
+                        <div style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
                             <label
                                 style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--slate-700); margin-bottom: 0.5rem;">Horarios
                                 Disponibles:</label>
@@ -231,12 +241,12 @@
                             </div>
                         </div>
 
-                        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                        <div style="display: flex; gap: 1rem; justify-content: flex-end; align-items: center;">
                             <span id="selected-count"
-                                style="align-self: center; font-size: 0.85rem; color: var(--slate-500); display: none;">0
+                                style="font-size: 0.85rem; color: var(--slate-500); display: none;">0
                                 seleccionados</span>
-                            <button type="submit" id="save-slot-btn" class="btn btn-primary" disabled>Abrir Horarios
-                                Seleccionados</button>
+                            <button type="submit" id="save-slot-btn" class="btn btn-primary"
+                                style="padding: 0.8rem 1.5rem;" disabled>Abrir Horarios Seleccionados</button>
                         </div>
                     </form>
                 </div>
@@ -250,6 +260,33 @@
 
                 <!-- Lista de Slots Dinámica -->
                 <ul class="slot-list" id="slots-container"></ul>
+            </div>
+
+            <!-- Sección de Misiones de Rescate (Si hay suplencias pendientes) -->
+            <div id="rescue-missions-section" class="panel-section"
+                style="margin-top: 2rem; border: 2px solid #f59e0b; background: #fffbeb; display: none;">
+
+                <div class="panel-header" style="margin-bottom: 1rem;">
+                    <h2 style="color: #b45309;">🚑 Misiones de Rescate Disponibles</h2>
+                    <p style="font-size: 0.85rem; color: #92400e;">Un compañero tuvo un inconveniente y necesita que
+                        alguien cubra esta sesión.</p>
+                </div>
+                <ul class="slot-list" id="rescue-list"></ul>
+            </div>
+
+            <!-- Reservaciones Pasadas / Historial -->
+            <div class="panel-section" style="margin-top: 2rem;">
+                <div class="panel-header">
+                    <h2>📖 Historial de Evaluaciones</h2>
+                </div>
+                <div id="historical-eval-container">
+                    <div id="empty-historical-msg"
+                        style="text-align: center; padding: 2rem 1rem; color: var(--slate-500);">
+                        <p style="font-size: 2rem; margin-bottom: 0.5rem;">📜</p>
+                        <p>Aún no has completado evaluaciones.</p>
+                    </div>
+                    <ul class="slot-list" id="historical-eval-list" style="display: none;"></ul>
+                </div>
             </div>
 
             <!-- Sección de Referidos -->
@@ -274,24 +311,21 @@
         <div class="side-column">
             <div class="panel-section" style="background: #eff6ff; border: 1px solid #bfdbfe;">
                 <h2 style="font-size: 1.1rem; margin-bottom: 1rem; color: #1e40af;">📚 Guías de Evaluación</h2>
-                <p style="font-size: 0.85rem; color: #1e3a8a; margin-bottom: 1rem;">Consulta qué evaluar en cada misión.
+                <p style="font-size: 0.85rem; color: #1e3a8a; margin-bottom: 1rem;">Consulta qué evaluar en cada
+                    misión.
                 </p>
-                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div id="evaluation-guides-container" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <!-- Los botones de la guía se inyectan acá con JS -->
                     <button class="btn guide-btn" onclick="Swal.fire({
                         title: 'Guía: Salto de Nivel',
                         html: '<div style=\'text-align:left; font-size:0.9rem;\'><b>Objetivo:</b> Validar si el alumno tiene fluidez para brincar módulos.<br><br><b>Puntos clave:</b><br>1. Confianza al hablar.<br>2. Uso de estructuras básicas (I am, I have, present simple).<br>3. Vocabulario de supervivencia.</div>',
                         icon: 'info'
                     })"
                         style="background:white; color:#1e40af; border:1px solid #bfdbfe; font-size:0.8rem; padding:0.5rem;">🚀
-                        Salto de Nivel</button>
-
-                    <button class="btn guide-btn" onclick="Swal.fire({
-                        title: 'Guía: Certificar Módulo 1',
-                        html: '<div style=\'text-align:left; font-size:0.9rem;\'><b>Objetivo:</b> Validar conocimientos del Campamento Base.<br><br><b>Puntos clave:</b><br>1. Saludos y presentaciones.<br>2. Colores y animales del bosque.<br>3. Verbo To Be en contexto.</div>',
-                        icon: 'info'
-                    })"
-                        style="background:white; color:#1e40af; border:1px solid #bfdbfe; font-size:0.8rem; padding:0.5rem;">📜
-                        Certificar M1</button>
+                        Salto/Evaluación Inicial</button>
+                    <p style="text-align:center; font-size:0.8rem; color:var(--slate-500); margin-top:0.5rem;">
+                        Cargando
+                        temarios oficiales...</p>
                 </div>
             </div>
 
@@ -308,17 +342,22 @@
                 style="margin-top: 2rem; background: #f8fafc; border: 1px dashed var(--slate-300); text-align: center;">
                 <p style="font-size: 2rem; margin-bottom: 0.5rem;">👨‍🏫</p>
                 <h3 id="teacher-name" style="font-size: 1rem; margin-bottom: 0.5rem;">Cargando perfil...</h3>
-                <p style="font-size: 0.8rem; color: var(--slate-500); margin-bottom: 1rem;">Tu sala de evaluaciones:</p>
+                <p style="font-size: 0.8rem; color: var(--slate-500); margin-bottom: 1rem;">Tu sala de evaluaciones:
+                </p>
                 <a href="#" id="zoom-link-display" target="_blank" class="btn"
-                    style="background: white; border: 1px solid var(--primary-medium); color: var(--primary-medium); font-size: 0.8rem; padding: 0.4rem 0.8rem; display: none;">Entrar
+                    style="background: white; border: 1px solid var(--primary-medium); color: var(--primary-medium); font-size: 0.8rem; padding: 0.4rem 0.8rem; display: none; margin-bottom: 0.5rem;">Entrar
                     a mi sala</a>
+                <a href="profile.html" class="btn"
+                    style="background: transparent; color: var(--slate-600); font-size: 0.75rem; text-decoration: underline; padding: 0.4rem; display: block;">Modificar
+                    link o perfil</a>
             </div>
 
             <div class="panel-section"
                 style="margin-top: 2rem; background: #fffbeb; border: 1px solid #fde68a; text-align: center;">
                 <h3 style="font-size: 1.1rem; color: #b45309; margin-bottom: 0.5rem;">🎁 Programa de Referidos</h3>
                 <p style="font-size: 0.85rem; color: #92400e; margin-bottom: 1rem;">
-                    Por cada alumno que invites, ganarás <strong>$50 MXN residuales mensuales</strong> mientras mantenga
+                    Por cada alumno que invites, ganarás <strong>$50 MXN residuales mensuales</strong> mientras
+                    mantenga
                     su suscripción activa.
                 </p>
                 <input type="text" id="ref-link-display" readonly
@@ -382,30 +421,63 @@
                         <div style="margin-bottom: 1.5rem;">
                             <label
                                 style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--slate-700); margin-bottom: 0.75rem;">RUBRICA
-                                ORAL</label>
+                                ORAL (1 - Mejora a 5 - Excelente)</label>
 
-                            <label
-                                style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem; cursor: pointer; font-size: 0.9rem; color: var(--slate-600);">
-                                <input type="checkbox" name="rubric" value="pronunciation"
-                                    style="width: 18px; height: 18px;">
-                                Pronunciación Clara
-                            </label>
-                            <label
-                                style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem; cursor: pointer; font-size: 0.9rem; color: var(--slate-600);">
-                                <input type="checkbox" name="rubric" value="fluency" style="width: 18px; height: 18px;">
-                                Fluidez y Ritmo
-                            </label>
-                            <label
-                                style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem; cursor: pointer; font-size: 0.9rem; color: var(--slate-600);">
-                                <input type="checkbox" name="rubric" value="grammar" style="width: 18px; height: 18px;">
-                                Construcción Gramatical
-                            </label>
-                            <label
-                                style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem; cursor: pointer; font-size: 0.9rem; color: var(--slate-600);">
-                                <input type="checkbox" name="rubric" value="listening"
-                                    style="width: 18px; height: 18px;">
-                                Comprensión Auditiva
-                            </label>
+                            <div style="margin-bottom: 0.8rem;">
+                                <div
+                                    style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.2rem; color: var(--slate-600);">
+                                    <span>Pronunciación Clara</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <label><input type="radio" name="rubric_pronunciation" value="1" required> 1</label>
+                                    <label><input type="radio" name="rubric_pronunciation" value="2"> 2</label>
+                                    <label><input type="radio" name="rubric_pronunciation" value="3"> 3</label>
+                                    <label><input type="radio" name="rubric_pronunciation" value="4"> 4</label>
+                                    <label><input type="radio" name="rubric_pronunciation" value="5"> 5</label>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 0.8rem;">
+                                <div
+                                    style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.2rem; color: var(--slate-600);">
+                                    <span>Fluidez y Ritmo</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <label><input type="radio" name="rubric_fluency" value="1" required> 1</label>
+                                    <label><input type="radio" name="rubric_fluency" value="2"> 2</label>
+                                    <label><input type="radio" name="rubric_fluency" value="3"> 3</label>
+                                    <label><input type="radio" name="rubric_fluency" value="4"> 4</label>
+                                    <label><input type="radio" name="rubric_fluency" value="5"> 5</label>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 0.8rem;">
+                                <div
+                                    style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.2rem; color: var(--slate-600);">
+                                    <span>Construcción Gramatical</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <label><input type="radio" name="rubric_grammar" value="1" required> 1</label>
+                                    <label><input type="radio" name="rubric_grammar" value="2"> 2</label>
+                                    <label><input type="radio" name="rubric_grammar" value="3"> 3</label>
+                                    <label><input type="radio" name="rubric_grammar" value="4"> 4</label>
+                                    <label><input type="radio" name="rubric_grammar" value="5"> 5</label>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 0.8rem;">
+                                <div
+                                    style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.2rem; color: var(--slate-600);">
+                                    <span>Comprensión Auditiva</span>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <label><input type="radio" name="rubric_listening" value="1" required> 1</label>
+                                    <label><input type="radio" name="rubric_listening" value="2"> 2</label>
+                                    <label><input type="radio" name="rubric_listening" value="3"> 3</label>
+                                    <label><input type="radio" name="rubric_listening" value="4"> 4</label>
+                                    <label><input type="radio" name="rubric_listening" value="5"> 5</label>
+                                </div>
+                            </div>
                         </div>
 
                         <div style="margin-bottom: 1.5rem;">

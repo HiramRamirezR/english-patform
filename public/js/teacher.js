@@ -1,4 +1,5 @@
 import { auth, db } from './auth.js';
+import { sendDiscordNotification } from './discord.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc, collection, addDoc, query, where, getDocs, deleteDoc, serverTimestamp, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 const ADMIN_WEBHOOK_COLOR = 3447003; // Azul
@@ -14,6 +15,10 @@ const selectedCountIndicator = document.getElementById('selected-count');
 const saveBtn = document.getElementById('save-slot-btn');
 const slotsContainer = document.getElementById('slots-container');
 const emptyMsg = document.getElementById('empty-agenda-msg');
+
+const btnClear = document.getElementById('btn-clear-selection');
+const btnRepeatYesterday = document.getElementById('btn-repeat-yesterday');
+
 
 // Centro de Evaluación
 const evalModal = document.getElementById('eval-center-modal');
@@ -61,9 +66,18 @@ const populateDateSelect = () => {
 };
 
 // Generar botones de hora de 8am a 8pm en bloques de 20 / 30 mins
-const populateTimeGrid = () => {
-    timeGrid.innerHTML = '';
+const populateTimeGrid = async () => {
+    timeGrid.innerHTML = '<p style="font-size:0.7rem; color:var(--slate-400);">Cargando horarios...</p>';
     selectedTimes.clear();
+
+    // Traer slots actuales del día para marcarlos como ocupados
+    const slotDate = dateSelect.value;
+    const q = query(collection(db, "slots"), where("teacherId", "==", currentUser.uid), where("date", "==", slotDate));
+    const snap = await getDocs(q);
+    const occupied = new Set();
+    snap.forEach(d => occupied.add(d.data().startTime));
+
+    timeGrid.innerHTML = '';
     updateUI();
 
     // Permitiendo densidad máxima: 3 slots por hora (cada 20 mins sin descanso entre ellos)
@@ -77,13 +91,26 @@ const populateTimeGrid = () => {
             btn.style.padding = '0.5rem';
             btn.style.fontSize = '0.8rem';
             btn.style.border = '1px solid var(--slate-300)';
-            btn.style.background = 'white';
-            btn.style.color = 'var(--slate-700)';
-            btn.style.cursor = 'pointer';
-            btn.style.borderRadius = '6px';
+
+            const isOccupied = occupied.has(timeStr);
+            if (isOccupied) {
+                btn.style.background = '#f8fafc';
+                btn.style.color = '#cbd5e1';
+                btn.style.borderColor = '#e2e8f0';
+                btn.style.cursor = 'not-allowed';
+                btn.disabled = true;
+                btn.title = 'Ya tienes este horario abierto';
+            } else {
+                btn.style.background = 'white';
+                btn.style.color = 'var(--slate-700)';
+                btn.style.cursor = 'pointer';
+                btn.style.borderRadius = '6px';
+            }
+
             btn.style.transition = 'all 0.2s';
 
             btn.addEventListener('click', () => {
+                if (isOccupied) return;
                 if (selectedTimes.has(timeStr)) {
                     selectedTimes.delete(timeStr);
                     btn.style.background = 'white';
@@ -114,6 +141,66 @@ const updateUI = () => {
         saveBtn.disabled = true;
     }
 };
+
+const updateGridButtonsVisuals = () => {
+    const buttons = timeGrid.querySelectorAll('button');
+    buttons.forEach(btn => {
+        const timeStr = btn.innerText;
+        if (selectedTimes.has(timeStr)) {
+            btn.style.background = 'var(--primary-medium)';
+            btn.style.color = 'white';
+            btn.style.borderColor = 'var(--primary-medium)';
+        } else {
+            btn.style.background = 'white';
+            btn.style.color = 'var(--slate-700)';
+            btn.style.borderColor = 'var(--slate-300)';
+        }
+    });
+    updateUI();
+};
+
+
+
+
+if (btnClear) {
+    btnClear.addEventListener('click', () => {
+        selectedTimes.clear();
+        updateGridButtonsVisuals();
+    });
+}
+
+if (btnRepeatYesterday) {
+    btnRepeatYesterday.addEventListener('click', async () => {
+        if (!currentUser) return;
+        try {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+            const q = query(collection(db, "slots"), where("teacherId", "==", currentUser.uid), where("date", "==", yesterdayStr));
+            const snap = await getDocs(q);
+
+            if (snap.empty) {
+                Swal.fire({
+                    title: 'Sin datos',
+                    text: 'No abriste horarios el día de ayer para repetir.',
+                    icon: 'info'
+                });
+                return;
+            }
+
+            snap.forEach(doc => {
+                selectedTimes.add(doc.data().startTime);
+            });
+            updateGridButtonsVisuals();
+            Swal.fire('¡Listo!', 'Se han copiado tus horarios de ayer.', 'success');
+        } catch (error) {
+            console.error(error);
+        }
+    });
+}
+
+
 
 // Mostrar / Ocultar formulario
 toggleFormBtn.addEventListener('click', () => {
@@ -205,7 +292,6 @@ predefinedSlotsForm.addEventListener('submit', async (e) => {
                         });
 
                         // 2. Notificar (Admin/Logs) que se cumplió un deseo
-                        const { sendDiscordNotification } = await import('./discord.js');
                         await sendDiscordNotification(
                             "✨ ¡Deseo Cumplido!",
                             `¡Gran noticia! El Prof. **${currentTeacherProfile.name}** ha abierto el horario solicitado por **${reqData.studentName}**.\n\n**Fecha:** ${slotDate}\n**Hora:** ${timeStr} hrs`,
@@ -270,16 +356,20 @@ const loadSlots = async () => {
     if (!currentUser) return;
 
     try {
-        // --- PASO 1: Mis Slots ---
         const slotsCol = collection(db, "slots");
         const qSlots = query(slotsCol, where("teacherId", "==", currentUser.uid));
 
         const querySnapshot = await getDocs(qSlots);
         slotsContainer.innerHTML = '';
+        const todayStr = new Date().toISOString().split('T')[0];
         const slotsArray = [];
 
         querySnapshot.forEach((doc) => {
-            slotsArray.push({ id: doc.id, ...doc.data() });
+            const data = doc.data();
+            // Filtrar fechas pasadas en JS para evitar requerir índices compuestos en Firestore
+            if (data.date >= todayStr) {
+                slotsArray.push({ id: doc.id, ...data });
+            }
         });
 
         // --- PASO 2: Misiones de Rescate ---
@@ -327,8 +417,9 @@ const loadSlots = async () => {
             slotsContainer.style.display = 'none';
         } else {
             emptyMsg.style.display = 'none';
-            slotsContainer.style.display = 'block';
-
+            slotsContainer.style.display = 'grid';
+            slotsContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
+            slotsContainer.style.gap = '1rem';
             const colorPalette = ['#e0f2fe', '#f3e8ff', '#fef9c3', '#dcfce7', '#ffe4e6'];
             const dateColors = {};
             let colorIndex = 0;
@@ -368,43 +459,51 @@ const loadSlots = async () => {
 
                 let badge = '';
                 if (slot.status === 'available') {
-                    badge = `<span class="badge-pending" style="background: white; border: 1px solid #fcd34d;">Libre</span>`;
+                    badge = `<span class="badge-pending" style="background: white; border: 1px solid rgba(0,0,0,0.1); color: var(--slate-600); font-size: 0.7rem; padding: 0.2rem 0.5rem;">Libre</span>`;
                 } else if (slot.status === 'booked') {
-                    badge = `<span class="badge-booked" style="background: #10b981; color: white;">Ocupado</span>`;
+                    badge = `<span class="badge-booked" style="background: #10b981; color: white; font-size: 0.7rem; padding: 0.2rem 0.5rem;">Ocupado</span>`;
                 } else if (slot.status === 'needs_sub') {
-                    badge = `<span class="badge-booked" style="background: #f59e0b; color: white;">🚑 Buscando Suplente</span>`;
+                    badge = `<span class="badge-booked" style="background: #f59e0b; color: white; font-size: 0.7rem; padding: 0.2rem 0.5rem;">🚑 Suplente</span>`;
                 }
-
                 const manageBtn = (isBooked && !isNeedsSub) ? `
-                    <button class="btn" onclick="window.manageReservation('${slot.id}')" style="background: white; border: 1px solid var(--slate-300); color: var(--slate-600); font-size: 0.75rem; padding: 0.3rem 0.6rem; margin-top: 0.5rem; border-radius: 6px; cursor: pointer; display: block; width: 100%;">⚙️ Gestionar inconveniente</button>
+                    <button class="btn" onclick="window.manageReservation('${slot.id}')" style="background: white; border: 1px solid var(--slate-300); color: var(--slate-600); font-size: 0.7rem; padding: 0.3rem 0.6rem; margin-top: 0.4rem; border-radius: 6px; cursor: pointer; display: block; width: 100%;">⚙️ Problema</button>
                 ` : '';
 
                 const studentDetails = isBooked ? `
-                    <div style="margin-top: 0.6rem; display: flex; align-items: center; gap: 0.6rem; background: rgba(255,255,255,0.6); padding: 0.5rem; border-radius: 10px; border: 1px solid rgba(16, 185, 129, 0.2);">
-                        <span style="font-size: 1.4rem;">${slot.studentAvatar || '👤'}</span>
-                        <div style="line-height: 1.2;">
-                            <p style="font-size: 0.85rem; font-weight: 700; color: var(--slate-900);">${slot.studentName || 'Estudiante'}</p>
-                            <p style="font-size: 0.75rem; color: #065f46; font-weight: 700; margin-top: 0.2rem;">🎯 ${slot.evaluationType || 'Evaluación General'}</p>
+                    <div style="margin-top: 0.4rem; display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.6); padding: 0.4rem; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.1);">
+                        <span style="font-size: 1.2rem;">${slot.studentAvatar || '👤'}</span>
+                        <div style="line-height: 1.1; overflow: hidden;">
+                            <p style="font-size: 0.8rem; font-weight: 700; color: var(--slate-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${slot.studentName || 'Estudiante'}</p>
+                            <p style="font-size: 0.65rem; color: #065f46; font-weight: 700; margin-top: 0.1rem;">🎯 ${slot.evaluationType || 'Evaluación'}</p>
                         </div>
                     </div>
-                    ${!isNeedsSub ? `<button class="btn btn-primary" onclick="window.enterEvaluation('${slot.id}')" style="width: 100%; margin-top: 0.5rem; font-size: 0.8rem; padding: 0.5rem;">Evaluar Alumno</button>` : '<p style="font-size: 0.75rem; color: #b45309; margin-top: 0.5rem; font-weight: 600;">⚠️ Has solicitado un suplente para esta sesión.</p>'}
+                    ${!isNeedsSub ? `<button class="btn btn-primary" onclick="window.enterEvaluation('${slot.id}')" style="width: 100%; margin-top: 0.4rem; font-size: 0.75rem; padding: 0.4rem;">Evaluar</button>` : '<p style="font-size: 0.65rem; color: #b45309; margin-top: 0.4rem; font-weight: 600;">⚠️ Buscando suplente</p>'}
                     ${manageBtn}
-                ` : `<p style="margin-top: 0.25rem; font-size: 0.85rem; color: var(--slate-500);">Evaluación Módulo (20 min)</p>`;
+                ` : `<p style="margin-top: 0.25rem; font-size: 0.8rem; color: var(--slate-500);">Libre para reserva</p>`;
 
                 let deleteBtn = !isBooked
-                    ? `<button class="btn btn-delete-slot" data-id="${slot.id}" style="border: 1px solid rgba(225, 29, 72, 0.3); color: #e11d48; padding: 0.4rem 0.8rem; font-size: 0.8rem; background: white; cursor: pointer; transition: all 0.2s; border-radius: 8px;">✖</button>`
+                    ? `<button class="btn btn-delete-slot" data-id="${slot.id}" style="border: 1px solid rgba(225, 29, 72, 0.3); color: #e11d48; padding: 0.2rem 0.5rem; font-size: 0.7rem; background: white; cursor: pointer; border-radius: 6px; position:absolute; bottom: 0.8rem; right: 0.8rem;">✕</button>`
                     : ``;
 
+                li.style.flexDirection = 'column';
+                li.style.alignItems = 'stretch';
+                li.style.gap = '0.4rem';
+                li.style.padding = '0.8rem';
+                li.style.position = 'relative';
+
                 li.innerHTML = `
-                    <div class="slot-info" style="flex: 1;">
-                        <h4 style="font-size: 1.05rem;"><span style="color: var(--slate-500); font-weight: 500;">${formatearFechaCorta(slot.date)} |</span> ${slot.startTime} hrs</h4>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                         <h4 style="font-size: 0.85rem; margin:0;"><span style="color: var(--slate-500); font-weight: 500;">${formatearFechaCorta(slot.date)} |</span> ${slot.startTime}</h4>
+                         ${badge}
+                    </div>
+                    
+                    <div class="slot-body" style="flex: 1; padding-bottom: 1.5rem;">
                         ${studentDetails}
                     </div>
-                    <div style="display: flex; gap: 1rem; align-items: center;">
-                        ${badge}
-                        ${deleteBtn}
-                    </div>
+                    
+                    ${deleteBtn}
                 `;
+                slotsContainer.appendChild(li);
             });
             // Asignar eliminación
             document.querySelectorAll('.btn-delete-slot').forEach(btn => {
@@ -438,58 +537,61 @@ const loadSlots = async () => {
     }
 };
 
-// Función para cargar los estudiantes referidos
-const loadReferredStudents = async (refCode) => {
-    if (!refCode) return;
+// Función para cargar referidos y ganancias totales
+const loadStatsAndReferredStudents = async (refCode, uid) => {
+    let refCount = 0;
+    let evalCount = 0;
 
     try {
-        const usersCol = collection(db, "users");
-        const qUsers = query(usersCol, where("referredBy", "==", refCode));
+        if (refCode) {
+            const usersCol = collection(db, "users");
+            const qUsers = query(usersCol, where("referredBy", "==", refCode));
 
-        const querySnapshot = await getDocs(qUsers);
-        const referredListEl = document.getElementById('referred-list');
-        const emptyMsgEl = document.getElementById('empty-referred-msg');
+            const querySnapshot = await getDocs(qUsers);
+            const referredListEl = document.getElementById('referred-list');
+            const emptyMsgEl = document.getElementById('empty-referred-msg');
 
-        if (querySnapshot.empty) {
-            emptyMsgEl.style.display = 'block';
-            referredListEl.style.display = 'none';
-        } else {
-            emptyMsgEl.style.display = 'none';
-            referredListEl.style.display = 'block';
-            referredListEl.innerHTML = '';
+            if (querySnapshot.empty) {
+                emptyMsgEl.style.display = 'block';
+                referredListEl.style.display = 'none';
+            } else {
+                emptyMsgEl.style.display = 'none';
+                referredListEl.style.display = 'block';
+                referredListEl.innerHTML = '';
 
-            querySnapshot.forEach((doc) => {
-                const userData = doc.data();
-                const li = document.createElement('li');
-                li.className = 'slot-item';
-                li.style.borderLeft = '5px solid #10b981'; // Verde distintivo
-                li.style.backgroundColor = '#ecfdf5';
+                querySnapshot.forEach((doc) => {
+                    const userData = doc.data();
+                    const li = document.createElement('li');
+                    li.className = 'slot-item';
+                    li.style.borderLeft = '5px solid #10b981'; // Verde distintivo
+                    li.style.backgroundColor = '#ecfdf5';
 
-                // Formatear fecha de registro
-                let dateStr = 'Fecha desconocida';
-                if (userData.createdAt && userData.createdAt.toDate) {
-                    dateStr = userData.createdAt.toDate().toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
-                }
+                    // Formatear fecha de registro
+                    let dateStr = 'Fecha desconocida';
+                    if (userData.createdAt && userData.createdAt.toDate) {
+                        dateStr = userData.createdAt.toDate().toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+                    }
 
-                li.innerHTML = `
-                    <div class="slot-info">
-                        <h4 style="font-size: 1.05rem;">
-                            <span style="font-size: 1.2rem; margin-right: 0.5rem;">${userData.photoURL ? `<img src="${userData.photoURL}" style="width:24px; border-radius:50%; vertical-align:middle;">` : '👤'}</span>
-                            ${userData.name || 'Estudiante'}
-                        </h4>
-                        <p style="margin-top: 0.25rem;">Registrado el: ${dateStr}</p>
-                        ${userData.email ? `<p style="font-size: 0.75rem; margin-top: 0.2rem; color: var(--slate-400);">${userData.email}</p>` : ''}
-                    </div>
-                    <div style="text-align: right;">
-                        <span class="badge-booked" style="background:#10b981; color:white;">Activo</span>
-                    </div>
-                `;
-                referredListEl.appendChild(li);
-            });
+                    li.innerHTML = `
+                    < div class="slot-info" >
+                            <h4 style="font-size: 1.05rem;">
+                                <span style="font-size: 1.2rem; margin-right: 0.5rem;">${userData.photoURL ? `<img src="${userData.photoURL}" style="width:24px; border-radius:50%; vertical-align:middle;">` : '👤'}</span>
+                                ${userData.name || 'Estudiante'}
+                            </h4>
+                            <p style="margin-top: 0.25rem;">Registrado el: ${dateStr}</p>
+                            ${userData.email ? `<p style="font-size: 0.75rem; margin-top: 0.2rem; color: var(--slate-400);">${userData.email}</p>` : ''}
+                        </div >
+    <div style="text-align: right;">
+        <span class="badge-booked" style="background:#10b981; color:white;">Activo</span>
+    </div>
+`;
+                    referredListEl.appendChild(li);
+                });
+            }
+            refCount = querySnapshot.size;
         }
 
-        // Actualizar UI de Ganancias
-        const refCount = querySnapshot.size;
+
         const refEarning = refCount * 50;
 
         const refCountEl = document.getElementById('ref-count');
@@ -499,8 +601,72 @@ const loadReferredStudents = async (refCode) => {
         if (refCountEl) refCountEl.textContent = refCount;
         if (refEarningsEl) refEarningsEl.textContent = refEarning.toFixed(2);
 
-        // Mock de evaluaciones por el momento en 0
-        const evalEarnings = 0 * 50;
+        // Evaluaciones completadas
+        const slotsCol = collection(db, "slots");
+        const qSlotsCompleted = query(slotsCol, where("teacherId", "==", uid), where("status", "==", "completed"));
+        const completedSnapshot = await getDocs(qSlotsCompleted);
+        evalCount = completedSnapshot.size;
+
+        const historicalListEl = document.getElementById('historical-eval-list');
+        const emptyHistMsgEl = document.getElementById('empty-historical-msg');
+
+        if (completedSnapshot.empty) {
+            if (emptyHistMsgEl) emptyHistMsgEl.style.display = 'block';
+            if (historicalListEl) historicalListEl.style.display = 'none';
+        } else {
+            if (emptyHistMsgEl) emptyHistMsgEl.style.display = 'none';
+            if (historicalListEl) {
+                historicalListEl.style.display = 'block';
+                historicalListEl.innerHTML = '';
+
+                const histArray = [];
+                completedSnapshot.forEach(doc => histArray.push({ id: doc.id, ...doc.data() }));
+                histArray.sort((a, b) => {
+                    const dateA = a.evaluationResult?.evaluatedAt?.toMillis() || 0;
+                    const dateB = b.evaluationResult?.evaluatedAt?.toMillis() || 0;
+                    return dateB - dateA;
+                });
+
+                histArray.forEach(slot => {
+                    const li = document.createElement('li');
+                    li.className = 'slot-item';
+                    li.style.borderLeft = '5px solid #3b82f6';
+                    li.style.backgroundColor = '#f8fafc';
+
+                    const evalRes = slot.evaluationResult || {};
+                    const resultBadge = evalRes.result === 'pass'
+                        ? '<span class="badge-booked" style="background:#059669; color:white;">Aprobado</span>'
+                        : '<span class="badge-booked" style="background:#ef4444; color:white;">No Pasó</span>';
+
+                    let dateStr = slot.date;
+                    if (evalRes.evaluatedAt && evalRes.evaluatedAt.toDate) {
+                        dateStr = evalRes.evaluatedAt.toDate().toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }).replace('.', '');
+                    }
+
+                    li.innerHTML = `
+    < div class="slot-info" style = "flex:1;" >
+                            <h4 style="font-size: 1.05rem;"><span style="color:var(--slate-500); font-weight:500;">${dateStr} |</span> ${slot.startTime} hrs</h4>
+                            <p style="margin-top: 0.25rem; font-weight:600; color:var(--slate-800);">👤 ${slot.studentName || 'Estudiante'}</p>
+                            <p style="font-size: 0.75rem; margin-top: 0.25rem;">Módulo: ${slot.evaluationType || 'General'}</p>
+                            <p style="font-size: 0.8rem; margin-top: 0.5rem; color:var(--slate-600);"><strong style="color:var(--slate-700);">Tus comentarios:</strong> "${evalRes.comments || 'Sin comentarios'}"</p>
+                        </div >
+    <div style="text-align: right; display:flex; flex-direction:column; gap:0.5rem; justify-content:center;">
+        ${resultBadge}
+    </div>
+`;
+                    historicalListEl.appendChild(li);
+                });
+            }
+        }
+
+        const evalEarnings = evalCount * 50;
+        const evalCountEl = document.getElementById('eval-count');
+        const evalEarningsEl = document.getElementById('eval-earnings');
+        const historicalEvalCountEl = document.getElementById('historical-eval-count');
+
+        if (evalCountEl) evalCountEl.textContent = evalCount;
+        if (evalEarningsEl) evalEarningsEl.textContent = evalEarnings.toFixed(2);
+        if (historicalEvalCountEl) historicalEvalCountEl.textContent = evalCount;
 
         if (totalEarningsEl) {
             totalEarningsEl.textContent = (refEarning + evalEarnings).toFixed(2);
@@ -510,6 +676,80 @@ const loadReferredStudents = async (refCode) => {
         console.error("Error al cargar referidos:", error);
     }
 };
+
+const loadOfficialGuides = async () => {
+    const container = document.getElementById('evaluation-guides-container');
+    if (!container) return;
+
+    try {
+        container.innerHTML = '<p style="text-align:center; font-size:0.8rem; color:var(--slate-500);">Cargando temarios oficiales...</p>';
+
+        // Cargar módulos disponibles (m1, m2 por ahora)
+        const modules = ['m1', 'm2'];
+        let html = '';
+
+        for (const mid of modules) {
+            try {
+                const res = await fetch(`/ data / ${mid}.json`);
+                if (!res.ok) continue;
+                const data = await res.json();
+
+                // Extraer vocabulario clave (primeras 8 palabras)
+                const vocab = new Set();
+                data.lessons.forEach(l => {
+                    // Si tiene pasos estáticos (como m1)
+                    if (l.steps) {
+                        l.steps.forEach(s => {
+                            if (s.type === 'listen_click' && s.cards) {
+                                s.cards.forEach(c => vocab.add(c.word));
+                            }
+                        });
+                    }
+                    // Si tiene vocab_new (como m2, m3...)
+                    if (l.vocab_new) {
+                        l.vocab_new.forEach(v => {
+                            if (typeof v === 'string') vocab.add(v);
+                            else if (v.en) vocab.add(v.en);
+                        });
+                    }
+                });
+
+                let vocabSummary = Array.from(vocab).slice(0, 10).join(', ');
+                if (!vocabSummary) vocabSummary = "Habilidades básicas del módulo";
+
+                // Escapar comillas simples para que no rompan el JS del onclick
+                const safeTitle = data.title.replace(/'/g, "\\'");
+                const safeDesc = data.description.replace(/'/g, "\\'");
+
+                html += `
+    < button class="btn guide-btn" onclick = "Swal.fire({
+title: 'Guía: ${safeTitle}',
+    html: '<div style=&quot;text-align:left; font-size:0.9rem;&quot;>' +
+        '<b>Objetivo:</b> ${safeDesc}<br><br>' +
+        '<b>Vocabulario Clave:</b><br>${vocabSummary}...<br><br>' +
+        '<b>Puntos a evaluar:</b><br>' +
+        '1. Pronunciación de las palabras objetivo.<br>' +
+        '2. Capacidad de respuesta a los prompts de Moon.<br>' +
+        '3. Confianza al usar los pronombres del módulo.' +
+        '</div>',
+        icon: 'info'
+                    }) "
+style = "background:white; color:#1e40af; border:1px solid #bfdbfe; font-size:0.8rem; padding:0.5rem; text-align:left;" >
+                    📘 ${data.title}
+                    </button >
+    `;
+            } catch (e) {
+                console.error(`Error cargando guía ${mid}: `, e);
+            }
+        }
+
+        container.innerHTML = html;
+    } catch (error) {
+        console.error("Error cargando guías:", error);
+        container.innerHTML = '<p style="font-size:0.7rem; color:red;">Error al cargar guías.</p>';
+    }
+};
+
 
 document.addEventListener('DOMContentLoaded', () => {
     onAuthStateChanged(auth, async (user) => {
@@ -571,7 +811,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // Cargar UI
-                document.getElementById('teacher-name').textContent = `Prof. ${userData.name.split(' ')[0]}`;
+                document.getElementById('teacher-name').textContent = `Prof.${userData.name.split(' ')[0]} `;
 
                 const zoomBtn = document.getElementById('zoom-link-display');
                 if (userData.teacherProfile && userData.teacherProfile.zoomLink) {
@@ -601,10 +841,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Inicializar Agenda
                 await loadSlots();
 
-                // Cargar referidos
-                if (userData.teacherProfile && userData.teacherProfile.refCode) {
-                    await loadReferredStudents(userData.teacherProfile.refCode);
-                }
+                // Cargar estadísticas y referidos
+                await loadStatsAndReferredStudents(userData.teacherProfile?.refCode, user.uid);
+
+                // Cargar Guías
+                await loadOfficialGuides();
+
 
             } else {
                 // El documento no existe (usuario muy nuevo), redirigir
@@ -711,10 +953,16 @@ evalForm.onsubmit = async (e) => {
         submitEvalBtn.disabled = true;
         submitEvalBtn.textContent = 'Enviando...';
 
-        const rubric = Array.from(document.querySelectorAll('input[name="rubric"]:checked')).map(i => i.value);
+        const rubric = {
+            pronunciation: document.querySelector('input[name="rubric_pronunciation"]:checked')?.value || '1',
+            fluency: document.querySelector('input[name="rubric_fluency"]:checked')?.value || '1',
+            grammar: document.querySelector('input[name="rubric_grammar"]:checked')?.value || '1',
+            listening: document.querySelector('input[name="rubric_listening"]:checked')?.value || '1',
+        };
         const comments = evalComments.value;
-        const moduleId = currentEvalSlot.evaluationType?.includes('2') ? 'm2' : 'm1';
-        const nextModule = moduleId === 'm1' ? 'm2' : (moduleId === 'm2' ? 'm3' : null);
+        const moduleId = currentEvalSlot.evaluationType?.match(/Módulo\s(\d+)/i)?.[1] ? `m${currentEvalSlot.evaluationType.match(/Módulo\s(\d+)/i)[1]}` : (currentEvalSlot.evaluationType?.match(/M(\d+)/i)?.[1] ? `m${currentEvalSlot.evaluationType.match(/M(\d+)/i)[1]}` : 'm1');
+        const nextModuleNum = parseInt(moduleId.replace('m', '')) + 1;
+        const nextModule = `m${nextModuleNum}`;
 
         // 1. Actualizar Slot
         const slotRef = doc(db, 'slots', currentEvalSlot.id);
@@ -735,6 +983,7 @@ evalForm.onsubmit = async (e) => {
                 moduleId,
                 result: evalResult,
                 comments,
+                rubric,
                 date: new Date()
             })
         };

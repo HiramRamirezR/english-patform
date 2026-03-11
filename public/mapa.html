@@ -65,21 +65,19 @@
             style="max-width: 1200px; margin: 2rem auto 0; padding: 0 2rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem;">
 
             <!-- Minutos -->
-            <div
-                style="background: white; border-radius: 20px; padding: 2rem; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 2rem; width: 100%; max-width: 450px; justify-content: space-between; border-left: 5px solid var(--accent-cool);">
+            <div class="minutes-card">
                 <div style="flex: 1;">
                     <h4
-                        style="color: var(--slate-800); margin-bottom: 0.5rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        style="color: #f8fafc; margin-bottom: 0.5rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
                         🎙️ Minutos hoy</h4>
-                    <p style="font-size: 0.8rem; color: var(--slate-500); line-height: 1.4;">Hablar mejora tu fluidez.
+                    <p style="font-size: 0.8rem; color: #cbd5e1; line-height: 1.4;">Hablar mejora tu fluidez.
                     </p>
                 </div>
-                <div
-                    style="text-align: center; background: #eff6ff; padding: 1rem; border-radius: 16px; min-width: 100px;">
-                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--primary-deep); line-height: 1;"
+                <div class="minutes-display">
+                    <div style="font-size: 2.5rem; font-weight: 700; color: #38bdf8; line-height: 1;"
                         id="minutes-spoken-today">0</div>
                     <span
-                        style="font-size: 0.7rem; color: var(--primary-medium); font-weight: 600; text-transform: uppercase;">minutos</span>
+                        style="font-size: 0.7rem; color: #7dd3fc; font-weight: 600; text-transform: uppercase;">minutos</span>
                 </div>
             </div>
 
@@ -98,13 +96,12 @@
             </div>
 
             <!-- Próxima Evaluación (Dinámico) -->
-            <div id="appointment-widget"
-                style="display: none; background: #fff7ed; border-radius: 20px; padding: 1.5rem 2rem; box-shadow: var(--shadow-sm); align-items: center; gap: 2rem; width: 100%; max-width: 950px; justify-content: space-between; border-left: 5px solid #f97316;">
+            <div id="appointment-widget" class="appointment-card" style="display: none;">
                 <div style="flex: 1;">
                     <h4
-                        style="color: #9a3412; margin-bottom: 0.5rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        style="color: #fca5a5; margin-bottom: 0.5rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
                         🎯 Próxima Evaluación</h4>
-                    <p id="appointment-details" style="font-size: 0.85rem; color: #c2410c; line-height: 1.4;">
+                    <p id="appointment-details" style="font-size: 0.85rem; color: #fecaca; line-height: 1.4;">
                         Cargando detalles de tu cita...
                     </p>
                 </div>

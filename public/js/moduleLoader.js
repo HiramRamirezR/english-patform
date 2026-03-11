@@ -44,11 +44,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             const userRef = doc(db, 'users', effectiveUid);
             const userSnap = await getDoc(userRef);
             let completedLessons = [];
+            let moduleStars = {};
 
             if (userSnap.exists()) {
                 const data = userSnap.data();
                 completedLessons = data.completedLessons || [];
+                moduleStars = data.moduleStars || {};
             }
+
+            // Práctica Diaria Infinita
+            const practiceNode = document.createElement('div');
+            practiceNode.className = `module-node unlocked`;
+            practiceNode.style.width = '100%';
+            practiceNode.style.height = 'auto';
+            practiceNode.style.padding = '1.2rem';
+            practiceNode.style.marginBottom = '2rem';
+            practiceNode.style.border = '2px dashed var(--forest-glow)';
+            practiceNode.style.cursor = 'pointer';
+            practiceNode.onclick = () => window.location.href = `lesson.html?id=daily_practice&module=${moduleId}`;
+            practiceNode.innerHTML = `
+                <span class="module-icon" style="background: var(--forest-glow); margin-right: 1.25rem;">✨</span>
+                <div style="flex: 1; display:flex; align-items:center; justify-content: space-between; overflow: hidden;">
+                    <div style="overflow: hidden; padding-right: 0.5rem;">
+                        <span class="module-label" style="font-size: 1.15rem; color: #fff; display: block;">Práctica Diaria Infinita</span>
+                        <p style="font-size: 0.85rem; color: var(--slate-300); margin-top: 0.2rem; margin-bottom: 0;">Domina lo aprendido con retos aleatorios.</p>
+                    </div>
+                </div>
+            `;
+            mapPath.appendChild(practiceNode);
 
             // Renderizar Mapa
             config.lessons.forEach((lesson, index) => {
@@ -71,12 +94,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 // Si está completada, cambia el fondo del ícono a verde
                 const iconBg = isCompleted ? 'var(--success)' : (isUnlocked ? 'var(--primary-light)' : 'var(--slate-200)');
-                const checkmark = isCompleted ? '<span style="color: var(--success); font-weight: bold; font-size: 1.2rem; margin-left: 1rem;">✔</span>' : '';
+
+                const starsCount = moduleStars[lesson.id] || 0;
+                let starsHtml = '';
+                if (isCompleted) {
+                    for (let i = 0; i < 3; i++) {
+                        starsHtml += `<span style="color: ${i < starsCount ? '#facc15' : 'var(--slate-300)'}; font-size: 1rem; text-shadow: 0 1px 1px rgba(0,0,0,0.1); margin-left: 2px;">⭐</span>`;
+                    }
+                    if (starsCount === 0) {
+                        // Caso legacy (las completó antes de las estrellas)
+                        starsHtml = '<span style="color: var(--success); font-weight: bold; font-size: 1.2rem; margin-left: 1rem;">✔</span>';
+                    }
+                }
+
+                const checkmark = isCompleted ? `<div style="display:flex; align-items:center;">${starsHtml}</div>` : '';
 
                 node.innerHTML = `
                     <span class="module-icon" style="background: ${iconBg}; margin-right: 1.25rem;">${lesson.icon}</span>
                     <div style="flex: 1; display:flex; align-items:center; justify-content: space-between; overflow: hidden;">
-                        <div style="overflow: hidden;">
+                        <div style="overflow: hidden; padding-right: 0.5rem;">
                             <span class="module-label" style="font-size: 1.05rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${lesson.title}</span>
                             <p style="font-size: 0.85rem; color: var(--slate-500); margin-top: 0.2rem; margin-bottom: 0;">${lesson.desc}</p>
                         </div>

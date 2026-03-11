@@ -1039,6 +1039,769 @@ body {
     color: #fca5a5 !important;
 }
 
+/* ══════════════════════════════════════════════════════════════
+   MOON — INTERSTITIAL MODE (entre actividades)
+   Toma el centro de la pantalla por 4-6 segundos
+   ══════════════════════════════════════════════════════════════ */
+
+.moon-interstitial-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(5, 46, 22, 0.82);
+    backdrop-filter: blur(12px);
+    animation: moonOverlayIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.moon-interstitial-overlay.closing {
+    animation: moonOverlayOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes moonOverlayIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes moonOverlayOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.moon-interstitial-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 420px;
+    width: 90%;
+    padding: 2.5rem 2rem;
+    animation: moonCardIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes moonCardIn {
+    from {
+        transform: scale(0.7) translateY(40px);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.moon-interstitial-avatar {
+    font-size: 7rem;
+    line-height: 1;
+    filter: drop-shadow(0 0 40px rgba(203, 213, 225, 0.5));
+    animation: moonAvatarFloat 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes moonAvatarFloat {
+    from {
+        transform: translateY(0) rotate(-3deg);
+    }
+
+    to {
+        transform: translateY(-12px) rotate(3deg);
+    }
+}
+
+.moon-interstitial-message {
+    text-align: center;
+    background: rgba(5, 46, 22, 0.7);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 24px;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 0 60px rgba(34, 197, 94, 0.1);
+}
+
+.moon-interstitial-en {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+}
+
+.moon-interstitial-es {
+    display: block;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 400;
+    margin-top: 0.5rem;
+}
+
+.moon-interstitial-continue {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 500;
+    animation: pulse 1.8s ease-in-out infinite;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MOON — STORY INTRO MODE (apertura narrativa de la lección)
+   ══════════════════════════════════════════════════════════════ */
+
+.story-intro-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, rgba(20, 83, 45, 0.6) 0%, rgba(5, 46, 22, 0.95) 100%);
+    backdrop-filter: blur(8px);
+    animation: moonOverlayIn 0.5s ease;
+}
+
+.story-intro-overlay.closing {
+    animation: moonOverlayOut 0.5s ease forwards;
+}
+
+.story-intro-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    max-width: 500px;
+    width: 92%;
+    padding: 3rem 2.5rem;
+    text-align: center;
+}
+
+.story-intro-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--forest-glow);
+    opacity: 0.8;
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    padding: 0.35rem 1rem;
+    border-radius: 99px;
+}
+
+.story-intro-avatar {
+    font-size: 8rem;
+    line-height: 1;
+    filter: drop-shadow(0 0 60px rgba(203, 213, 225, 0.6));
+    animation: moonAvatarFloat 3s ease-in-out infinite alternate;
+}
+
+.story-intro-text-en {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+}
+
+.story-intro-text-es {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 400;
+    line-height: 1.5;
+    margin-top: 0.75rem;
+}
+
+.story-intro-stars {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: -0.5rem;
+}
+
+.story-star {
+    font-size: 1.2rem;
+    animation: starAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.story-star:nth-child(2) {
+    animation-delay: 0.12s;
+}
+
+.story-star:nth-child(3) {
+    animation-delay: 0.24s;
+}
+
+@keyframes starAppear {
+    from {
+        transform: scale(0) rotate(-30deg);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1) rotate(0);
+        opacity: 1;
+    }
+}
+
+.story-intro-btn {
+    background: linear-gradient(135deg, var(--forest-glow), #16a34a);
+    color: var(--forest-deep);
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 8px 32px rgba(34, 197, 94, 0.5);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: -0.01em;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s both;
+}
+
+.story-intro-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 14px 48px rgba(34, 197, 94, 0.65);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MOON — CINEMATIC COMPLETION (al terminar la lección)
+   Reemplaza la pantalla de completion actual
+   ══════════════════════════════════════════════════════════════ */
+
+.lesson-complete-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at 50% 60%, rgba(34, 197, 94, 0.12) 0%, rgba(5, 46, 22, 0.97) 70%);
+    backdrop-filter: blur(16px);
+    animation: moonOverlayIn 0.6s ease;
+}
+
+.lesson-complete-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 480px;
+    width: 92%;
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    animation: moonCardIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s both;
+}
+
+.lesson-complete-avatar {
+    font-size: 9rem;
+    line-height: 1;
+    filter: drop-shadow(0 0 60px rgba(203, 213, 225, 0.6));
+    animation: completionDance 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes completionDance {
+    0% {
+        transform: scale(0) rotate(-20deg);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.2) rotate(10deg);
+    }
+
+    75% {
+        transform: scale(0.95) rotate(-5deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(0);
+        opacity: 1;
+    }
+}
+
+.lesson-complete-title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+}
+
+.lesson-complete-title span {
+    color: var(--forest-glow);
+}
+
+.lesson-complete-subtitle {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.5;
+    max-width: 300px;
+}
+
+/* Stars row for completion */
+.lesson-complete-stars {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    margin: 0.5rem 0;
+}
+
+.lc-star {
+    font-size: 3rem;
+    opacity: 0;
+    transform: scale(0) rotate(-20deg);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.6));
+}
+
+.lc-star.active {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.lc-star.dim {
+    opacity: 0.15;
+    filter: none;
+}
+
+/* Stats row for completion */
+.lesson-complete-stats {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.lc-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 0.75rem 1.5rem;
+    flex: 1;
+    min-width: 80px;
+}
+
+.lc-stat-val {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--forest-glow);
+    line-height: 1;
+}
+
+.lc-stat-label {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 500;
+    text-align: center;
+}
+
+.lesson-complete-moon-msg {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.75);
+    font-style: italic;
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: 16px;
+    padding: 1rem 1.5rem;
+    max-width: 340px;
+    line-height: 1.5;
+}
+
+.lesson-complete-moon-msg span {
+    display: block;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.3);
+    font-style: normal;
+    font-weight: 400;
+    margin-top: 0.3rem;
+}
+
+.btn-continue-forest {
+    background: linear-gradient(135deg, var(--forest-glow), #16a34a);
+    color: var(--forest-deep);
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 16px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 8px 32px rgba(34, 197, 94, 0.5);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: -0.01em;
+    width: 100%;
+    max-width: 320px;
+}
+
+.btn-continue-forest:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 48px rgba(34, 197, 94, 0.65);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NUEVA ACTIVIDAD: Speed Speak (Habla rápido antes del timer)
+   ══════════════════════════════════════════════════════════════ */
+
+.speed-speak-box,
+.boss-battle-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    text-align: center;
+    animation: fadeInUp 0.45s ease;
+}
+
+.speed-word-display {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.02em;
+}
+
+.speed-target-display {
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -3px;
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
+    transition: color 0.3s, text-shadow 0.3s;
+    animation: fadeInUp 0.35s ease;
+}
+
+.speed-target-display.success-word {
+    color: var(--forest-glow);
+    text-shadow: 0 0 40px rgba(34, 197, 94, 0.5);
+}
+
+.speed-target-display.fail-word {
+    color: #ef4444;
+    text-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
+}
+
+.speed-timer-track {
+    width: 100%;
+    max-width: 360px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+    overflow: hidden;
+    margin: 0 auto; /* To ensure it stays centered */
+}
+
+.speed-timer-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--forest-glow), #4ade80);
+    transition: background-color 0.5s;
+}
+
+.speed-score-track {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.speed-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.speed-dot.hit {
+    background: var(--forest-glow);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+    transform: scale(1.3);
+}
+
+.speed-dot.miss {
+    background: #ef4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+}
+
+.speed-feedback {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.45);
+    min-height: 1.5rem;
+    transition: color 0.3s;
+}
+
+.speed-speak-mic {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--forest-glow), #16a34a);
+    border: none;
+    color: white;
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 32px rgba(34, 197, 94, 0.5);
+    transition: all 0.25s;
+    margin: 0 auto;
+}
+
+.speed-speak-mic.active {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+    animation: micPulse 1.2s infinite;
+}
+
+.speed-speak-mic:disabled {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NUEVA ACTIVIDAD: Picture It (Imagen → Palabra)
+   ══════════════════════════════════════════════════════════════ */
+
+.picture-it-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.picture-it-card {
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-family: 'Outfit', sans-serif;
+}
+
+.picture-it-card:hover:not(.pi-locked) {
+    transform: translateY(-6px) scale(1.04);
+    border-color: rgba(34, 197, 94, 0.5);
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
+}
+
+.picture-it-card.pi-correct {
+    border-color: var(--forest-glow);
+    background: rgba(34, 197, 94, 0.15);
+    animation: matchPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.picture-it-card.pi-wrong {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    animation: matchShake 0.4s ease;
+}
+
+.picture-it-card.pi-locked {
+    cursor: default;
+    pointer-events: none;
+}
+
+.pi-emoji {
+    font-size: 3.5rem;
+    line-height: 1;
+    transition: transform 0.3s;
+}
+
+.picture-it-card:hover:not(.pi-locked) .pi-emoji {
+    transform: scale(1.2);
+}
+
+.pi-word {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: -0.01em;
+}
+
+.picture-it-card.pi-correct .pi-word {
+    color: #bbf7d0;
+}
+
+.pi-listen-btn {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(56, 189, 248, 0.1));
+    border: 1.5px solid rgba(56, 189, 248, 0.4);
+    color: #7dd3fc;
+    padding: 0.7rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Outfit', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 auto;
+}
+
+.pi-listen-btn:hover {
+    transform: scale(1.06);
+    background: rgba(56, 189, 248, 0.25);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NUEVA ACTIVIDAD: Memory Flip (Voltea pares con voz)
+   ══════════════════════════════════════════════════════════════ */
+
+.memory-grid {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 480px;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    cursor: pointer;
+    perspective: 600px;
+    position: relative;
+}
+
+.memory-card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 16px;
+}
+
+.memory-card.flipped .memory-card-inner {
+    transform: rotateY(180deg);
+}
+
+.memory-card.matched .memory-card-inner {
+    transform: rotateY(180deg);
+}
+
+.memory-card-front,
+.memory-card-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+}
+
+.memory-card-front {
+    background: rgba(34, 197, 94, 0.1);
+    border: 2px solid rgba(34, 197, 94, 0.25);
+    font-size: 2rem;
+}
+
+.memory-card-back {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    transform: rotateY(180deg);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    text-align: center;
+    line-height: 1.3;
+    font-family: 'Outfit', sans-serif;
+}
+
+.memory-card.matched .memory-card-front,
+.memory-card.matched .memory-card-back {
+    border-color: var(--forest-glow);
+    background: rgba(34, 197, 94, 0.18);
+}
+
+.memory-card.matched .memory-card-back {
+    color: #bbf7d0;
+}
+
+.memory-card:hover:not(.matched):not(.flipped) .memory-card-front {
+    transform: scale(1.04);
+    border-color: rgba(34, 197, 94, 0.5);
+}
+
+.memory-wrong-flash {
+    animation: memoryWrongFlash 0.5s ease;
+}
+
+@keyframes memoryWrongFlash {
+
+    0%,
+    100% {
+        border-color: rgba(239, 68, 68, 0.6);
+        background: rgba(239, 68, 68, 0.15);
+    }
+
+    50% {
+        border-color: rgba(239, 68, 68, 0.2);
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SISTEMA DE ESTRELLAS (Pulse Animation for Echo Chamber)
+   ══════════════════════════════════════════════════════════════ */
+
+@keyframes pulse-animation {
+
+    0%,
+    100% {
+        width: 30%;
+    }
+
+    50% {
+        width: 70%;
+    }
+}
+
+.pulse-animation-active {
+    animation: pulse-animation 0.8s ease-in-out infinite;
+}
+
 /* ── Mobile Responsiveness ── */
 @media (max-width: 600px) {
     .module-header {

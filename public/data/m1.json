@@ -6,9 +6,19 @@
     {
       "id": "m1l1",
       "title": "1.1: Hola y Adiós",
-      "desc": "Saludos básicos.",
+      "desc": "Saludos básicos y exploración.",
       "icon": "👋",
+      "vocab_new": [
+        "Hello",
+        "Goodbye"
+      ],
+      "vocab_review": [],
       "steps": [
+        {
+          "type": "story_moment",
+          "en": "Welcome to the Base Camp! Let's learn to say Hello and Goodbye.",
+          "es": "¡Bienvenido al Campamento Base! Vamos a aprender a saludar y despedirnos."
+        },
         {
           "type": "listen_click",
           "prompt": "p_listen",
@@ -21,7 +31,7 @@
             {
               "word": "Goodbye",
               "translation": "Adiós",
-              "emoji": "👋✨"
+              "emoji": "✨"
             }
           ]
         },
@@ -29,59 +39,49 @@
           "type": "echo_chamber",
           "prompt": "p_echo",
           "word": "Hello",
-          "successMsg": "s_pron",
-          "aliases": [
-            "halo",
-            "jello",
-            "yellow",
-            "hell low"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Goodbye",
           "successMsg": "s_pron"
         },
         {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Hello",
-          "displayWord": "Hola",
-          "successMsg": "s_trans",
-          "aliases": [
-            "halo",
-            "jello",
-            "yellow",
-            "hell low"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Goodbye",
-          "displayWord": "Adiós",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "Une la frase: \"Hola, Adiós\"",
-          "timer": true,
-          "target": "Hello Goodbye",
+          "type": "picture_it",
+          "prompt": "Tap the picture of the word Moon says!",
+          "word_to_find": "Hello",
           "options": [
+            "Hello",
+            "Goodbye",
+            "I am",
+            "Happy"
+          ],
+          "emojisMap": {
+            "Hello": "👋",
+            "Goodbye": "✨",
+            "I am": "👤",
+            "Happy": "😊"
+          }
+        },
+        {
+          "type": "interstitial_moon",
+          "message": {
+            "en": "You're doing fantastic! Ready for a quick challenge?",
+            "es": "¡Lo haces fantástico! ¿Listo para un reto rápido?"
+          }
+        },
+        {
+          "type": "speed_speak",
+          "prompt": "Say the words fast before the bar goes red!",
+          "seconds_per_word": 5,
+          "words": [
+            "Hello",
             "Goodbye",
             "Hello"
           ]
         },
         {
-          "type": "matching",
-          "prompt": "🧩 ¡Reto de Velocidad! Une los pares antes de que se acabe el tiempo.",
-          "timer": true,
+          "type": "memory_flip",
+          "prompt": "Find the matching pairs! Listen closely.",
           "pairs": {
-            "Hello": "Hola",
-            "Goodbye": "Adiós"
-          },
-          "successMsg": "s_match"
+            "Hello": "👋",
+            "Goodbye": "✨"
+          }
         }
       ]
     },
@@ -90,60 +90,29 @@
       "title": "1.2: Mañana y Noche",
       "desc": "Saludos de todo el día.",
       "icon": "☀️",
-      "steps": [
-        {
-          "type": "listen_click",
-          "prompt": "p_listen",
-          "cards": [
-            {
-              "word": "Good morning",
-              "translation": "Buenos días",
-              "emoji": "☀️"
-            },
-            {
-              "word": "Good night",
-              "translation": "Buenas noches",
-              "emoji": "🌙"
-            }
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Good morning",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Good night",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Good night",
-          "displayWord": "Buenas noches",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Good morning",
-          "displayWord": "Buenos días",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Good morning": "Buenos días",
-            "Good night": "Buenas noches",
-            "Hello": "Hola",
-            "Goodbye": "Adiós"
-          }
-        }
+      "vocab_new": [
+        "Good morning",
+        "Good night"
+      ],
+      "vocab_review": [
+        "Hello",
+        "Goodbye"
+      ],
+      "story": {
+        "en": "The sun is up! Let's say Good morning, and when the moon is out, we say Good night.",
+        "es": "¡El sol salió! Decimos Buenos días, y cuando la luna sale, decimos Buenas noches."
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "interstitial_moon",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "drag_and_drop",
+        "matching"
       ]
     },
     {
@@ -151,92 +120,28 @@
       "title": "1.3: Yo soy...",
       "desc": "Introducción a \"I am\".",
       "icon": "👤",
-      "steps": [
-        {
-          "type": "listen_click",
-          "prompt": "p_listen",
-          "cards": [
-            {
-              "word": "I am",
-              "translation": "Yo soy",
-              "emoji": "👤"
-            },
-            {
-              "word": "I",
-              "translation": "Yo",
-              "emoji": "👆"
-            }
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "I am",
-          "aliases": [
-            "im",
-            "i'm",
-            "hi am",
-            "eye am",
-            "high am"
-          ],
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "I",
-          "aliases": [
-            "eye",
-            "hi",
-            "aye",
-            "ai",
-            "hay",
-            "a",
-            "ay"
-          ],
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "I",
-          "aliases": [
-            "eye",
-            "hi",
-            "aye",
-            "ai",
-            "hay",
-            "a",
-            "ay"
-          ],
-          "displayWord": "Yo",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "I am",
-          "aliases": [
-            "im",
-            "i'm",
-            "hi am",
-            "eye am",
-            "high am"
-          ],
-          "displayWord": "Yo soy",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "matching",
-          "prompt": "🧩 ¡Reto de Velocidad!",
-          "timer": true,
-          "pairs": {
-            "I": "Yo",
-            "I am": "Yo soy",
-            "Hello": "Hola",
-            "Good morning": "Buenos días"
-          }
-        }
+      "vocab_new": [
+        "I am",
+        "I"
+      ],
+      "vocab_review": [
+        "Hello",
+        "Good morning"
+      ],
+      "story": {
+        "en": "Today we will talk about ourselves! Let's say: I am.",
+        "es": "¡Hoy hablaremos de nosotros mismos! Vamos a decir: Yo soy."
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "interstitial_moon",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -244,110 +149,29 @@
       "title": "1.4: Niño o Niña",
       "desc": "Vocabulario de identidad.",
       "icon": "👦",
-      "steps": [
-        {
-          "type": "listen_click",
-          "prompt": "p_listen",
-          "cards": [
-            {
-              "word": "Boy",
-              "translation": "Niño",
-              "emoji": "👦"
-            },
-            {
-              "word": "Girl",
-              "translation": "Niña",
-              "emoji": "👧"
-            },
-            {
-              "word": "Student",
-              "translation": "Estudiante",
-              "emoji": "📚"
-            }
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Boy",
-          "successMsg": "s_pron",
-          "aliases": [
-            "boil",
-            "void",
-            "voy",
-            "buoy"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Girl",
-          "successMsg": "s_pron",
-          "aliases": [
-            "curl",
-            "grill",
-            "earl",
-            "gryl"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Student",
-          "successMsg": "s_pron",
-          "aliases": [
-            "stu dent",
-            "stew dent"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Boy",
-          "displayWord": "Niño",
-          "successMsg": "s_trans",
-          "aliases": [
-            "boil",
-            "void",
-            "voy",
-            "buoy"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Student",
-          "displayWord": "Estudiante",
-          "successMsg": "s_trans",
-          "aliases": [
-            "stu dent",
-            "stew dent"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Girl",
-          "displayWord": "Niña",
-          "successMsg": "s_trans",
-          "aliases": [
-            "curl",
-            "grill",
-            "earl",
-            "gryl"
-          ]
-        },
-        {
-          "type": "matching",
-          "prompt": "🧩 ¡Reto de Velocidad!",
-          "timer": true,
-          "pairs": {
-            "Boy": "Niño",
-            "Girl": "Niña",
-            "Student": "Estudiante",
-            "I am": "Yo soy"
-          }
-        }
+      "vocab_new": [
+        "Boy",
+        "Girl",
+        "Student"
+      ],
+      "vocab_review": [
+        "I am",
+        "I"
+      ],
+      "story": {
+        "en": "Are you a boy or a girl? We are all students!",
+        "es": "¿Eres niño o niña? ¡Todos somos estudiantes!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "interstitial_moon",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -457,60 +281,28 @@
       "title": "1.6: Feliz y Triste",
       "desc": "Emociones básicas.",
       "icon": "😊",
-      "steps": [
-        {
-          "type": "listen_click",
-          "prompt": "p_listen",
-          "cards": [
-            {
-              "word": "Happy",
-              "translation": "Feliz",
-              "emoji": "😊"
-            },
-            {
-              "word": "Sad",
-              "translation": "Triste",
-              "emoji": "😢"
-            }
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Happy",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Sad",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Sad",
-          "displayWord": "Triste",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Happy",
-          "displayWord": "Feliz",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "matching",
-          "prompt": "🧩 ¡Reto de Velocidad!",
-          "timer": true,
-          "pairs": {
-            "Happy": "Feliz",
-            "Sad": "Triste",
-            "Boy": "Niño",
-            "Girl": "Niña"
-          }
-        }
+      "vocab_new": [
+        "Happy",
+        "Sad"
+      ],
+      "vocab_review": [
+        "Boy",
+        "Girl"
+      ],
+      "story": {
+        "en": "How are you feeling today? Are you happy or sad?",
+        "es": "¿Cómo te sientes hoy? ¿Estás feliz o triste?"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "interstitial_moon",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -518,80 +310,28 @@
       "title": "1.7: Cansado y Listo",
       "desc": "Cómo te sientes hoy.",
       "icon": "🔋",
-      "steps": [
-        {
-          "type": "listen_click",
-          "prompt": "p_listen",
-          "cards": [
-            {
-              "word": "Tired",
-              "translation": "Cansado",
-              "emoji": "😴"
-            },
-            {
-              "word": "Ready",
-              "translation": "Listo",
-              "emoji": "💥"
-            }
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Tired",
-          "successMsg": "s_pron",
-          "aliases": [
-            "tire red",
-            "tie red",
-            "tyre"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Ready",
-          "successMsg": "s_pron",
-          "aliases": [
-            "reddy",
-            "reading",
-            "red"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Ready",
-          "displayWord": "Listo",
-          "successMsg": "s_trans",
-          "aliases": [
-            "reddy",
-            "reading",
-            "red"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Tired",
-          "displayWord": "Cansado",
-          "successMsg": "s_trans",
-          "aliases": [
-            "tire red",
-            "tie red",
-            "tyre"
-          ]
-        },
-        {
-          "type": "matching",
-          "prompt": "🧩 ¡Reto de Velocidad!",
-          "timer": true,
-          "pairs": {
-            "Ready": "Listo",
-            "Tired": "Cansado",
-            "Happy": "Feliz",
-            "Sad": "Triste"
-          }
-        }
+      "vocab_new": [
+        "Tired",
+        "Ready"
+      ],
+      "vocab_review": [
+        "Happy",
+        "Sad"
+      ],
+      "story": {
+        "en": "Are you tired from all the learning? I am ready!",
+        "es": "¿Estás cansado de tanto aprender? ¡Yo estoy listo!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "interstitial_moon",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -747,73 +487,93 @@
       ]
     },
     {
+      "id": "m1l8",
+      "title": "1.8: Tú eres...",
+      "desc": "El pronombre \"You\".",
+      "icon": "👉",
+      "vocab_new": [
+        "You",
+        "You are"
+      ],
+      "vocab_review": [
+        "I",
+        "I am"
+      ],
+      "story": {
+        "en": "Who are you? You are my student!",
+        "es": "¿Quién eres tú? ¡Tú eres mi estudiante!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "interstitial_moon",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
+      ]
+    },
+    {
+      "id": "m1l9",
+      "title": "1.9: Mi nombre es...",
+      "desc": "Presentándote.",
+      "icon": "🏷️",
+      "vocab_new": [
+        "Name",
+        "My name is"
+      ],
+      "vocab_review": [
+        "Hello",
+        "Good morning"
+      ],
+      "story": {
+        "en": "My name is Moon. What is your name?",
+        "es": "Mi nombre es Moon. ¿Cuál es tu nombre?"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "interstitial_moon",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
+      ]
+    },
+    {
       "id": "m1l10",
       "title": "1.10: Segundo Reto",
       "desc": "¿Quién eres tú?.",
       "icon": "🧗",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "Tú eres feliz",
-          "timer": true,
-          "target": "You are happy",
-          "options": [
-            "happy",
-            "You",
-            "are"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "You are happy",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "Tú estás triste",
-          "timer": true,
-          "target": "You are sad",
-          "options": [
-            "are",
-            "sad",
-            "You"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "You are sad",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "Yo estoy listo",
-          "timer": true,
-          "target": "I am ready",
-          "options": [
-            "am",
-            "I",
-            "ready"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "I am ready",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "🧩 Reto de Maestría",
-          "timer": true,
-          "pairs": {
-            "Happy": "Feliz",
-            "Sad": "Triste",
-            "Ready": "Listo",
-            "Tired": "Cansado"
-          }
-        }
+      "vocab_new": [
+        "You are happy",
+        "You are sad",
+        "I am ready",
+        "Happy"
+      ],
+      "vocab_review": [
+        "Sad",
+        "Ready",
+        "Tired"
+      ],
+      "story": {
+        "en": "Let us practice some phrases!",
+        "es": "¡Vamos a practicar frases!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching",
+        "boss_battle"
       ]
     },
     {
@@ -821,73 +581,29 @@
       "title": "1.11: Rompecabezas I",
       "desc": "Ordena palabras.",
       "icon": "🧩",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "Hola, mi nombre es Moon",
-          "timer": true,
-          "target": "Hello my name is Moon",
-          "options": [
-            "name",
-            "Hello",
-            "is",
-            "my",
-            "Moon"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "Hello my name is Moon",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "Yo soy un estudiante feliz",
-          "timer": true,
-          "target": "I am a happy student",
-          "options": [
-            "a",
-            "student",
-            "I",
-            "am",
-            "happy"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "I am a happy student",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "Adiós, buenas noches",
-          "timer": true,
-          "target": "Goodbye good night",
-          "options": [
-            "night",
-            "Goodbye",
-            "good"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "Goodbye good night",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "🧩 Reto de Ensamblaje",
-          "timer": true,
-          "pairs": {
-            "Student": "Estudiante",
-            "Name": "Nombre",
-            "My": "Mi",
-            "Happy": "Feliz"
-          }
-        }
+      "vocab_new": [
+        "Goodbye good night",
+        "Student",
+        "Name",
+        "My"
+      ],
+      "vocab_review": [
+        "Happy"
+      ],
+      "story": {
+        "en": "Let us practice some phrases!",
+        "es": "¡Vamos a practicar frases!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching",
+        "boss_battle"
       ]
     },
     {
@@ -895,72 +611,30 @@
       "title": "1.12: Rompecabezas II",
       "desc": "Armando saludos.",
       "icon": "🧩",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "Yo soy Hiram",
-          "timer": true,
-          "target": "I am Hiram",
-          "options": [
-            "Hiram",
-            "I",
-            "am"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "I am Hiram",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "Tú eres un estudiante cansado",
-          "timer": true,
-          "target": "You are a tired student",
-          "options": [
-            "tired",
-            "are",
-            "student",
-            "a",
-            "You"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "You are a tired student",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "Buenas madrugadas feliz niña",
-          "timer": true,
-          "target": "Good morning happy girl",
-          "options": [
-            "girl",
-            "happy",
-            "morning",
-            "Good"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "Good morning happy girl",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "🧩 Reto de Vocabulario",
-          "timer": true,
-          "pairs": {
-            "Tired": "Cansado",
-            "Girl": "Niña",
-            "Hiram": "Hiram",
-            "Morning": "Mañana"
-          }
-        }
+      "vocab_new": [
+        "I am Moon",
+        "Good morning happy girl",
+        "Tired",
+        "Girl"
+      ],
+      "vocab_review": [
+        "Moon",
+        "Morning"
+      ],
+      "story": {
+        "en": "Let us practice some phrases!",
+        "es": "¡Vamos a practicar frases!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching",
+        "boss_battle"
       ]
     },
     {
@@ -968,72 +642,30 @@
       "title": "1.13: Traducción I",
       "desc": "Piensa en inglés.",
       "icon": "⚡",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "Mi nombre es feliz triste",
-          "timer": true,
-          "target": "My name is happy sad",
-          "options": [
-            "happy",
-            "is",
-            "sad",
-            "name",
-            "My"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "My name is happy sad",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "Tú eres mi estudiante",
-          "timer": true,
-          "target": "You are my student",
-          "options": [
-            "my",
-            "are",
-            "You",
-            "student"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "You are my student",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "Yo estoy listo",
-          "timer": true,
-          "target": "I am ready",
-          "options": [
-            "ready",
-            "am",
-            "I"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "I am ready",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "🧩 Reto de Pensamiento Rápido",
-          "timer": true,
-          "pairs": {
-            "My": "Mi",
-            "Student": "Estudiante",
-            "Happy": "Feliz",
-            "Sad": "Triste"
-          }
-        }
+      "vocab_new": [
+        "You are my student",
+        "I am ready",
+        "My",
+        "Student"
+      ],
+      "vocab_review": [
+        "Happy",
+        "Sad"
+      ],
+      "story": {
+        "en": "Let us practice some phrases!",
+        "es": "¡Vamos a practicar frases!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching",
+        "boss_battle"
       ]
     },
     {
@@ -1041,72 +673,31 @@
       "title": "1.14: Traducción II",
       "desc": "Dominio mental.",
       "icon": "⚡",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "Tú eres un niño",
-          "timer": true,
-          "target": "You are a boy",
-          "options": [
-            "boy",
-            "a",
-            "You",
-            "are"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "You are a boy",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "Mi nombre es estudiante",
-          "timer": true,
-          "target": "My name is student",
-          "options": [
-            "student",
-            "is",
-            "name",
-            "My"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "My name is student",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "Yo feliz, tú triste",
-          "timer": true,
-          "target": "I happy you sad",
-          "options": [
-            "sad",
-            "happy",
-            "you",
-            "I"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "I happy you sad",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "🧩 Reto de Dominio",
-          "timer": true,
-          "pairs": {
-            "Boy": "Niño",
-            "Student": "Estudiante",
-            "I": "Yo",
-            "You": "Tú"
-          }
-        }
+      "vocab_new": [
+        "You are a boy",
+        "My name is student",
+        "I happy you sad",
+        "Boy"
+      ],
+      "vocab_review": [
+        "Student",
+        "I",
+        "You"
+      ],
+      "story": {
+        "en": "Let us practice some phrases!",
+        "es": "¡Vamos a practicar frases!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching",
+        "boss_battle"
       ]
     },
     {
@@ -1114,75 +705,29 @@
       "title": "1.15: El Gran Ensamblaje",
       "desc": "Armado de frases largas.",
       "icon": "🏗️",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "Hola, buenos días mi feliz estudiante",
-          "timer": true,
-          "target": "Hello good morning my happy student",
-          "options": [
-            "student",
-            "my",
-            "happy",
-            "morning",
-            "Hello",
-            "good"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "Hello good morning my happy student",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "Yo soy un niño listo",
-          "timer": true,
-          "target": "I am a ready boy",
-          "options": [
-            "ready",
-            "a",
-            "am",
-            "boy",
-            "I"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "I am a ready boy",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "Adiós mi triste niña",
-          "timer": true,
-          "target": "Goodbye my sad girl",
-          "options": [
-            "my",
-            "sad",
-            "Goodbye",
-            "girl"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "¡Ahora dilo tú mismo!",
-          "word": "Goodbye my sad girl",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "🧩 El Último Ensamblaje",
-          "timer": true,
-          "pairs": {
-            "Morning": "Mañana",
-            "Ready": "Listo",
-            "Sad": "Triste",
-            "Good": "Buen/Buenos"
-          }
-        }
+      "vocab_new": [
+        "Goodbye my sad girl",
+        "Morning",
+        "Ready",
+        "Sad"
+      ],
+      "vocab_review": [
+        "Good"
+      ],
+      "story": {
+        "en": "Let us practice some phrases!",
+        "es": "¡Vamos a practicar frases!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching",
+        "boss_battle"
       ]
     },
     {
@@ -1190,46 +735,27 @@
       "title": "1.16: Eco Continuo 1",
       "desc": "Fluidez en saludos.",
       "icon": "🗣️",
-      "steps": [
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "Hello Moon I am ready",
-          "displayWord": "Hola Moon yo estoy listo",
-          "successMsg": "¡Perfecto!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "You are a sad boy",
-          "displayWord": "Tú eres un niño triste",
-          "successMsg": "¡Perfecto!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "Good morning my name is Hiram",
-          "displayWord": "Buenos días mi nombre es Hiram",
-          "successMsg": "¡Perfecto!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "I am happy and you are tired",
-          "displayWord": "Yo estoy feliz y tú estás cansado",
-          "successMsg": "¡Perfecto!"
-        },
-        {
-          "type": "matching",
-          "prompt": "🧩 Reto de Fluidez",
-          "timer": true,
-          "pairs": {
-            "Happy": "Feliz",
-            "Tired": "Cansado",
-            "Ready": "Listo",
-            "Sad": "Triste"
-          }
-        }
+      "vocab_new": [
+        "Happy",
+        "Tired",
+        "Ready",
+        "Sad"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let us practice some phrases!",
+        "es": "¡Vamos a practicar frases!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching",
+        "boss_battle"
       ]
     },
     {
@@ -1237,46 +763,32 @@
       "title": "1.17: Eco Continuo 2",
       "desc": "Fluidez en emociones.",
       "icon": "🗣️",
-      "steps": [
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "Happy boy",
-          "displayWord": "Niño feliz",
-          "successMsg": "¡Perfecto!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "Sad girl",
-          "displayWord": "Niña triste",
-          "successMsg": "¡Perfecto!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "Tired student",
-          "displayWord": "Estudiante cansado",
-          "successMsg": "¡Perfecto!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "Ready Moon",
-          "displayWord": "Moon listo",
-          "successMsg": "¡Perfecto!"
-        },
-        {
-          "type": "matching",
-          "prompt": "🧩 Reto de Emociones",
-          "timer": true,
-          "pairs": {
-            "Happy": "Feliz",
-            "Sad": "Triste",
-            "Boy": "Niño",
-            "Girl": "Niña"
-          }
-        }
+      "vocab_new": [
+        "Happy boy",
+        "Sad girl",
+        "Tired student",
+        "Ready Moon"
+      ],
+      "vocab_review": [
+        "Happy",
+        "Sad",
+        "Boy",
+        "Girl"
+      ],
+      "story": {
+        "en": "Let us practice some phrases!",
+        "es": "¡Vamos a practicar frases!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching",
+        "boss_battle"
       ]
     },
     {
@@ -1378,57 +890,29 @@
       "title": "1.20: La Fogata",
       "desc": "El Jefe del Campamento.",
       "icon": "🔥",
-      "steps": [
-        {
-          "type": "echo_chamber",
-          "prompt": "p_ready",
-          "word": "I am ready",
-          "displayWord": "Estoy listo",
-          "successMsg": "¡Que empiece la prueba!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "Moon te saluda. Responde:",
-          "word": "Hello Moon",
-          "displayWord": "Hola Moon",
-          "successMsg": "¡Genial!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "Moon pregunta quién eres:",
-          "word": "My name is Hiram",
-          "displayWord": "Mi nombre es Hiram",
-          "successMsg": "¡Perfecto!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "Moon pregunta cómo te sientes:",
-          "word": "I am happy",
-          "displayWord": "Estoy feliz",
-          "successMsg": "¡Esa es la actitud!"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "Despídete y vete a dormir:",
-          "word": "Goodbye good night",
-          "displayWord": "Adiós buenas noches",
-          "successMsg": "¡Módulo superado!"
-        },
-        {
-          "type": "matching",
-          "prompt": "🏆 EXAMEN DE GRADUACIÓN 🏆",
-          "timer": true,
-          "pairs": {
-            "Hello": "Hola",
-            "Goodbye": "Adiós",
-            "I": "Yo",
-            "You": "Tú",
-            "Boy": "Niño",
-            "Girl": "Niña",
-            "Happy": "Feliz",
-            "Sad": "Triste"
-          }
-        }
+      "vocab_new": [
+        "I am ready",
+        "Hello Moon",
+        "My name is Moon",
+        "I am happy",
+        "Goodbye good night",
+        "Hello",
+        "Goodbye",
+        "I",
+        "You",
+        "Boy",
+        "Girl",
+        "Happy",
+        "Sad"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "It's time to test your skills at the campfire! Get ready to face the Boss.",
+        "es": "¡Es hora de probar tus habilidades en la fogata! Prepárate para enfrentar al Jefe."
+      },
+      "flow": [
+        "story_moment",
+        "boss_battle"
       ]
     }
   ]

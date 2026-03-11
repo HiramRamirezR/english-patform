@@ -1,0 +1,671 @@
+{
+    "Hello": {
+        "es": "Hola",
+        "emoji": "👋",
+        "aliases": [
+            "halo",
+            "jello",
+            "yellow",
+            "hell low"
+        ]
+    },
+    "Goodbye": {
+        "es": "Adiós",
+        "emoji": "✨",
+        "aliases": [
+            "good bye"
+        ]
+    },
+    "Good morning": {
+        "es": "Buenos días",
+        "emoji": "☀️",
+        "aliases": [
+            "good mourning"
+        ]
+    },
+    "Good night": {
+        "es": "Buenas noches",
+        "emoji": "🌙",
+        "aliases": [
+            "goodnite"
+        ]
+    },
+    "I am": {
+        "es": "Yo soy",
+        "emoji": "👤",
+        "aliases": [
+            "im",
+            "i'm",
+            "hi am",
+            "eye am",
+            "high am"
+        ]
+    },
+    "I": {
+        "es": "Yo",
+        "emoji": "👆",
+        "aliases": [
+            "eye",
+            "hi",
+            "aye",
+            "ai",
+            "hay",
+            "a",
+            "ay"
+        ]
+    },
+    "Happy": {
+        "es": "Feliz",
+        "emoji": "😊",
+        "aliases": [
+            "hapi"
+        ]
+    },
+    "Sad": {
+        "es": "Triste",
+        "emoji": "😢",
+        "aliases": [
+            "sat"
+        ]
+    },
+    "Tired": {
+        "es": "Cansado",
+        "emoji": "😴",
+        "aliases": [
+            "tire red",
+            "tie red"
+        ]
+    },
+    "Ready": {
+        "es": "Listo",
+        "emoji": "💥",
+        "aliases": [
+            "reddy",
+            "reading",
+            "red"
+        ]
+    },
+    "Boy": {
+        "es": "Niño",
+        "emoji": "👦",
+        "aliases": [
+            "boil",
+            "void",
+            "voy",
+            "buoy"
+        ]
+    },
+    "Girl": {
+        "es": "Niña",
+        "emoji": "👧",
+        "aliases": [
+            "curl",
+            "grill",
+            "earl",
+            "gryl"
+        ]
+    },
+    "Student": {
+        "es": "Estudiante",
+        "emoji": "📚",
+        "aliases": [
+            "stu dent",
+            "stew dent"
+        ]
+    },
+    "You are": {
+        "es": "Tú eres",
+        "emoji": "👉",
+        "aliases": [
+            "ur",
+            "your",
+            "you're",
+            "ure",
+            "you r"
+        ]
+    },
+    "You": {
+        "es": "Tú",
+        "emoji": "👤",
+        "aliases": [
+            "u",
+            "jew",
+            "yoo",
+            "hue",
+            "ew",
+            "youth"
+        ]
+    },
+    "My name is": {
+        "es": "Mi nombre es",
+        "emoji": "🏷️",
+        "aliases": []
+    },
+    "Name": {
+        "es": "Nombre",
+        "emoji": "💭",
+        "aliases": []
+    },
+    "I am ready": {
+        "es": "Estoy listo",
+        "emoji": "🔥",
+        "aliases": [
+            "i'm ready"
+        ]
+    },
+    "Hello Moon": {
+        "es": "Hola Moon",
+        "emoji": "🐻",
+        "aliases": [
+            "yellow moon",
+            "hella moon"
+        ]
+    },
+    "My name is Moon": {
+        "es": "Mi nombre es Moon",
+        "emoji": "🐻",
+        "aliases": [
+            "my name is mon",
+            "my name is mom",
+            "my name is none",
+            "my name is noon",
+            "my name is nun"
+        ]
+    },
+    "Goodbye good night": {
+        "es": "Adiós buenas noches",
+        "emoji": "🌙",
+        "aliases": []
+    },
+    "You are happy": {
+        "es": "Tú eres feliz",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "You are sad": {
+        "es": "Tú estás triste",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "My": {
+        "es": "My",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "I am Moon": {
+        "es": "Yo soy Moon",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Good morning happy girl": {
+        "es": "Buenas madrugadas feliz niña",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Moon": {
+        "es": "Moon",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Morning": {
+        "es": "Morning",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "You are my student": {
+        "es": "Tú eres mi estudiante",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "You are a boy": {
+        "es": "Tú eres un niño",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "My name is student": {
+        "es": "Mi nombre es estudiante",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "I happy you sad": {
+        "es": "Yo feliz, tú triste",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Goodbye my sad girl": {
+        "es": "Adiós mi triste niña",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Good": {
+        "es": "Good",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Happy boy": {
+        "es": "Niño feliz",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Sad girl": {
+        "es": "Niña triste",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Tired student": {
+        "es": "Estudiante cansado",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Ready Moon": {
+        "es": "Moon listo",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "It is": {
+        "es": "Es",
+        "emoji": "✨",
+        "aliases": [
+            "eat is",
+            "id is",
+            "it's"
+        ]
+    },
+    "They are": {
+        "es": "Son",
+        "emoji": "✨",
+        "aliases": [
+            "there",
+            "their",
+            "they're",
+            "day are"
+        ]
+    },
+    "It is They are": {
+        "es": "It is They are",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Bear": {
+        "es": "Oso",
+        "emoji": "✨",
+        "aliases": [
+            "bare",
+            "beer",
+            "pear"
+        ]
+    },
+    "Wolf": {
+        "es": "Lobo",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Bird": {
+        "es": "Pájaro",
+        "emoji": "✨",
+        "aliases": [
+            "beard",
+            "board",
+            "bert"
+        ]
+    },
+    "Tree": {
+        "es": "Árbol",
+        "emoji": "✨",
+        "aliases": [
+            "three",
+            "tea",
+            "free"
+        ]
+    },
+    "Forest": {
+        "es": "Bosque",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Big": {
+        "es": "Grande",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Small": {
+        "es": "Pequeño",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "It is big": {
+        "es": "Es grande",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "They are small": {
+        "es": "Son pequeños",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Big bear": {
+        "es": "Oso grande",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Red": {
+        "es": "Rojo",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Blue": {
+        "es": "Azul",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Green": {
+        "es": "Verde",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "It is red": {
+        "es": "Es rojo",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "They are green": {
+        "es": "Son verdes",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Blue bird": {
+        "es": "Pájaro azul",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Green tree": {
+        "es": "Árbol verde",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Big wolf": {
+        "es": "Lobo grande",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Small bird": {
+        "es": "Pájaro pequeño",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Bears": {
+        "es": "Osos",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Birds": {
+        "es": "Pájaros",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Trees": {
+        "es": "Árboles",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "They are big bears": {
+        "es": "They are big bears",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "It is a blue bird": {
+        "es": "It is a blue bird",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "They are green trees": {
+        "es": "They are green trees",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Big bears": {
+        "es": "Osos grandes",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Green trees": {
+        "es": "Árboles verdes",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Look it is a big bear": {
+        "es": "Look it is a big bear",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "They are wolves": {
+        "es": "They are wolves",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "It is a small tree": {
+        "es": "It is a small tree",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Small tree": {
+        "es": "Árbol pequeño",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Wolves": {
+        "es": "Lobos",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "A small blue bird": {
+        "es": "A small blue bird",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "They are big green trees": {
+        "es": "They are big green trees",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "The forest is big": {
+        "es": "The forest is big",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Big forest": {
+        "es": "Bosque grande",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "I see a red bear": {
+        "es": "I see a red bear",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "It is green and blue": {
+        "es": "It is green and blue",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "They are happy birds": {
+        "es": "They are happy birds",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "I see": {
+        "es": "Yo veo",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Happy birds": {
+        "es": "Pájaros felices",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Red bear": {
+        "es": "Oso rojo",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "The wolf is tired": {
+        "es": "The wolf is tired",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Look at the green trees": {
+        "es": "Look at the green trees",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "It is a big day": {
+        "es": "It is a big day",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Look at": {
+        "es": "Mira a",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Big day": {
+        "es": "Gran día",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Hello wolf you are big": {
+        "es": "Hello wolf you are big",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "They are small and blue birds": {
+        "es": "They are small and blue birds",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Goodbye green bear": {
+        "es": "Goodbye green bear",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Blue birds": {
+        "es": "Pájaros azules",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "It is a big bear": {
+        "es": "Es un oso grande",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "They are small birds": {
+        "es": "Son pájaros pequeños",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "The tree is green": {
+        "es": "El árbol es verde",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Look it is a blue wolf": {
+        "es": "Mira es un lobo azul",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Small birds": {
+        "es": "Pájaros pequeños",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "I am a boy and it is a bear": {
+        "es": "Yo soy un niño y es un oso",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "They are red trees": {
+        "es": "Son árboles rojos",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "The forest is big and green": {
+        "es": "El bosque es grande y verde",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Hello blue bird": {
+        "es": "Hola pájaro azul",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Red trees": {
+        "es": "Árboles rojos",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "It is tired": {
+        "es": "Está cansado",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "They are happy bears": {
+        "es": "Son osos felices",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "You are a big wolf": {
+        "es": "Tú eres un lobo grande",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "I see a small green tree": {
+        "es": "Yo veo un árbol verde pequeño",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Happy bears": {
+        "es": "Osos felices",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Look it is a big green tree": {
+        "es": "Mira es un árbol verde grande",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "They are brown bears": {
+        "es": "Son osos cafés",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Hello small blue bird": {
+        "es": "Hola pajarito azul",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "The forest is ready": {
+        "es": "El bosque está listo",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Brown bears": {
+        "es": "Osos cafés",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "They are blue birds": {
+        "es": "Son pájaros azules",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "Goodbye animals": {
+        "es": "Adiós animales",
+        "emoji": "✨",
+        "aliases": []
+    },
+    "I see the forest": {
+        "es": "Veo el bosque",
+        "emoji": "✨",
+        "aliases": []
+    }
+}

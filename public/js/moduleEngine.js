@@ -15,6 +15,8 @@ export class MoonsforestEngine {
         this.currentStep = 0;
         this.startTime = Date.now();
         this.sessionHistory = []; // Almacenará { type: 'moon'|'child', content: text|blobUrl }
+        this.errors = 0; // Para calcular estrellas
+
 
         // UI Elements
         this.progressBar = document.getElementById('progress-bar');
@@ -40,11 +42,47 @@ export class MoonsforestEngine {
 
         // Voice Setup
         this.voices = [];
+        this.femaleVoice = null;
         window.speechSynthesis.onvoiceschanged = () => {
             this.voices = window.speechSynthesis.getVoices();
+            this.setFemaleVoice();
         };
+        // Intento inicial por si ya estaban cargadas
+        this.voices = window.speechSynthesis.getVoices();
+        this.setFemaleVoice();
 
         this.init();
+    }
+
+    setFemaleVoice() {
+        if (!this.voices || this.voices.length === 0) return;
+        const preferredNames = [
+            'Google US English', 'Zira', 'Samantha', 'Karen', 'Victoria',
+            'Moira', 'Monica', 'Fiona', 'Grace', 'Jenny', 'Microsoft Zira'
+        ];
+
+        for (let name of preferredNames) {
+            const voice = this.voices.find(v => v.lang.startsWith('en') && v.name.includes(name));
+            if (voice) {
+                this.femaleVoice = voice;
+                return voice;
+            }
+        }
+
+        const fallback = this.voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('female'));
+        if (fallback) {
+            this.femaleVoice = fallback;
+            return fallback;
+        }
+
+        this.femaleVoice = this.voices.find(v => v.lang.startsWith('en')) || this.voices[0];
+        return this.femaleVoice;
+    }
+
+    getFemaleVoice() {
+        if (this.femaleVoice) return this.femaleVoice;
+        this.voices = window.speechSynthesis.getVoices();
+        return this.setFemaleVoice();
     }
 
     init() {
@@ -65,7 +103,7 @@ export class MoonsforestEngine {
         this.hideMoon();
 
         if (this.currentStep >= this.data.length) {
-            this.renderCompletion();
+            this.renderLessonCompleteMoon();
             return;
         }
 
@@ -85,6 +123,18 @@ export class MoonsforestEngine {
             this.renderMatching(stepData);
         } else if (stepData.type === 'fill_in_blank') {
             this.renderFillInBlank(stepData);
+        } else if (stepData.type === 'story_moment') {
+            this.renderStoryMoment(stepData);
+        } else if (stepData.type === 'interstitial_moon') {
+            this.renderInterstitialMoon(stepData);
+        } else if (stepData.type === 'speed_speak') {
+            this.renderSpeedSpeak(stepData);
+        } else if (stepData.type === 'picture_it') {
+            this.renderPictureIt(stepData);
+        } else if (stepData.type === 'memory_flip') {
+            this.renderMemoryFlip(stepData);
+        } else if (stepData.type === 'boss_battle') {
+            this.renderBossBattle(stepData);
         } else {
             this.container.innerHTML = `<p>Unsupported activity: ${stepData.type}</p>`;
         }
@@ -156,7 +206,6 @@ export class MoonsforestEngine {
                 }
 
                 cardEl.classList.add('flipped');
-                this.speak(card.word);
                 cardEl.classList.add('solved');
                 solvedCount++;
 
@@ -164,7 +213,12 @@ export class MoonsforestEngine {
                     this.playSound('success');
                     this.triggerSuccessBurst();
                     this.showNextButton(box);
-                    this.showMoon({ en: "You heard them all. Super!", es: "¡Las escuchaste todas!" });
+                    // Reproduce el sonido de la palabra y cuando termine, el de Moon
+                    this.speak(card.word, () => {
+                        this.showMoon({ en: "You heard them all. Super!", es: "¡Las escuchaste todas!" });
+                    });
+                } else {
+                    this.speak(card.word);
                 }
             });
 
@@ -387,6 +441,9 @@ export class MoonsforestEngine {
                             attempts: attempts,
                             lastTranscript: transcript
                         });
+                        this.errors++; // Max attempts reached
+                    } else if (attempts > 1) {
+                        this.errors++; // Needed multiple attempts
                     }
 
                     let msg = (attempts >= 3 && !matches)
@@ -398,6 +455,7 @@ export class MoonsforestEngine {
                     forcePass(msg);
                 } else {
                     this.playSound('error');
+                    this.errors++;
                     let hints = [
                         { en: "Almost! Try saying it again.", es: "¡Casi! Inténtalo de nuevo." },
                         { en: "Open your mouth wide and speak loud!", es: "¡Abre la boca y habla fuerte!" },
@@ -583,6 +641,7 @@ export class MoonsforestEngine {
 
                     this.showNextButton(box);
                 } else {
+                    this.errors++;
                     this.playSound('error');
                     this.showMoon({ en: "Hmm... that's not quite right. Swap them around!", es: "Cámbialas de lugar." });
                 }
@@ -663,6 +722,7 @@ export class MoonsforestEngine {
                     }, 600);
                 } else {
                     // ❌ Wrong
+                    this.errors++;
                     this.playSound('error');
                     btn.classList.add('fib-wrong');
                     btn.disabled = true;
@@ -849,6 +909,7 @@ export class MoonsforestEngine {
                         }
                     } else {
                         // ❌ Wrong
+                        this.errors++;
                         this.playSound('error');
                         const w1 = selectedItem;
                         const w2 = btn;
@@ -879,6 +940,713 @@ export class MoonsforestEngine {
         this.container.appendChild(box);
     }
 
+    // --- NUEVOS MÉTODOS DE MOON Y ACTIVIDADES ---
+
+    renderStoryMoment(data) {
+        const overlay = document.createElement('div');
+        overlay.className = 'story-intro-overlay';
+
+        const card = document.createElement('div');
+        card.className = 'story-intro-card';
+
+        const label = document.createElement('div');
+        label.className = 'story-intro-label';
+        label.innerText = '🌲 Story Moment';
+
+        const avatar = document.createElement('div');
+        avatar.className = 'story-intro-avatar';
+        avatar.innerText = '🐻‍❄️';
+
+        const enMsg = data.en || "Moon is thinking...";
+        const esMsg = data.es || "";
+
+        const msgText = document.createElement('div');
+        msgText.innerHTML = `
+            <div class="story-intro-text-en">${enMsg}</div>
+            ${esMsg ? `<div class="story-intro-text-es">${esMsg}</div>` : ''}
+        `;
+
+        const btn = document.createElement('button');
+        btn.className = 'story-intro-btn';
+        btn.innerText = "Let's Go! →";
+        btn.style.opacity = '0';
+        btn.style.pointerEvents = 'none';
+
+        btn.onclick = () => {
+            overlay.classList.add('closing');
+            setTimeout(() => {
+                overlay.remove();
+                this.nextStep();
+            }, 500);
+        };
+
+        card.appendChild(label);
+        card.appendChild(avatar);
+        card.appendChild(msgText);
+        card.appendChild(btn);
+        overlay.appendChild(card);
+        document.body.appendChild(overlay);
+
+        // Narrar la historia
+        this.speakMoon(enMsg, () => {
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+        });
+
+        // Show button anyway after a while to avoid lock
+        setTimeout(() => {
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+        }, 5000);
+    }
+
+    renderInterstitialMoon(data) {
+        const overlay = document.createElement('div');
+        overlay.className = 'moon-interstitial-overlay';
+
+        const card = document.createElement('div');
+        card.className = 'moon-interstitial-card';
+
+        const avatar = document.createElement('div');
+        avatar.className = 'moon-interstitial-avatar';
+        avatar.innerText = '🐻‍❄️';
+
+        const msgBox = document.createElement('div');
+        msgBox.className = 'moon-interstitial-message';
+
+        const enMsg = data.message?.en || "Great job!";
+        const esMsg = data.message?.es || "";
+
+        msgBox.innerHTML = `
+            <div class="moon-interstitial-en">${enMsg}</div>
+            ${esMsg ? `<span class="moon-interstitial-es">${esMsg}</span>` : ''}
+        `;
+
+        const contHint = document.createElement('div');
+        contHint.className = 'moon-interstitial-continue';
+        contHint.innerText = 'Loading next activity...';
+
+        card.appendChild(avatar);
+        card.appendChild(msgBox);
+        card.appendChild(contHint);
+        overlay.appendChild(card);
+        document.body.appendChild(overlay);
+
+        this.speakMoon(enMsg, () => {
+            contHint.innerText = 'Tap anywhere to continue →';
+            // Al terminar de hablar, permitir avanzar haciendo click en cualquier lado
+            overlay.onclick = () => {
+                overlay.classList.add('closing');
+                setTimeout(() => {
+                    overlay.remove();
+                    this.nextStep();
+                }, 400);
+            };
+        });
+
+        // Auto-advance after 5s max if no action
+        setTimeout(() => {
+            if (document.body.contains(overlay)) {
+                contHint.innerText = 'Tap anywhere to continue →';
+                overlay.onclick = () => {
+                    overlay.classList.add('closing');
+                    setTimeout(() => {
+                        overlay.remove();
+                        this.nextStep();
+                    }, 400);
+                };
+            }
+        }, 5000);
+    }
+
+    renderSpeedSpeak(data) {
+        const box = document.createElement('div');
+        box.className = 'activity-box speed-speak-box';
+
+        const prompt = document.createElement('div');
+        prompt.className = 'activity-prompt';
+        prompt.innerText = data.prompt || 'Say it fast before time runs out!';
+        box.appendChild(prompt);
+
+        const targetWords = [...data.words];
+        // randomize if required
+        targetWords.sort(() => Math.random() - 0.5);
+
+        let currentIndex = 0;
+        let timerId = null;
+        let isListeningWord = false;
+
+        const timerTrack = document.createElement('div');
+        timerTrack.className = 'speed-timer-track';
+        const timerFill = document.createElement('div');
+        timerFill.className = 'speed-timer-fill';
+        timerTrack.appendChild(timerFill);
+
+        const scoreTrack = document.createElement('div');
+        scoreTrack.className = 'speed-score-track';
+        for (let i = 0; i < targetWords.length; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'speed-dot';
+            dot.id = `speed-dot-${i}`;
+            scoreTrack.appendChild(dot);
+        }
+
+        const displayArea = document.createElement('div');
+        displayArea.style.margin = '2rem 0';
+        displayArea.style.minHeight = '150px';
+
+        const targetDisplay = document.createElement('div');
+        targetDisplay.className = 'speed-target-display';
+        targetDisplay.innerText = targetWords[0];
+
+        displayArea.appendChild(targetDisplay);
+
+        const feedback = document.createElement('div');
+        feedback.className = 'speed-feedback';
+        feedback.innerText = 'Press the mic to start!';
+
+        const micBtn = document.createElement('button');
+        micBtn.className = 'speed-speak-mic';
+        micBtn.innerHTML = '🎤';
+
+        box.appendChild(scoreTrack);
+        box.appendChild(displayArea);
+        box.appendChild(timerTrack);
+        box.appendChild(micBtn);
+        box.appendChild(feedback);
+
+        this.container.appendChild(box);
+
+        const secPerWord = data.seconds_per_word || 4;
+
+        const nextWord = () => {
+            if (currentIndex >= targetWords.length) {
+                // Done
+                micBtn.style.display = 'none';
+                timerTrack.style.display = 'none';
+                targetDisplay.innerText = "Challenge Complete!";
+                targetDisplay.className = 'speed-target-display success-word';
+                feedback.innerText = "";
+                this.playSound('success');
+                this.triggerSuccessBurst();
+                this.showMoon({ en: "Wow! You speak so fast! Beautiful.", es: "¡Wow! ¡Hablas muy rápido! Hermoso." });
+                this.showNextButton(box);
+
+                if (this.recognition && isListeningWord) {
+                    try { this.recognition.stop(); } catch (e) { }
+                }
+                return;
+            }
+
+            // Setup current word
+            targetDisplay.className = 'speed-target-display';
+            targetDisplay.innerText = targetWords[currentIndex];
+            timerFill.style.transition = 'none';
+            timerFill.style.width = '100%';
+            timerFill.style.background = 'linear-gradient(90deg, var(--forest-glow), #4ade80)';
+
+            // Wait a tiny bit and animate timer
+            setTimeout(() => {
+                timerFill.style.transition = `width ${secPerWord}s linear, background-color ${secPerWord}s ease`;
+                timerFill.style.width = '0%';
+                timerFill.style.background = '#ef4444'; // goes red at the end
+            }, 50);
+
+            // Timer fail logic
+            timerId = setTimeout(() => {
+                if (isListeningWord) {
+                    this.errors++;
+                    this.playSound('error');
+                    targetDisplay.classList.add('fail-word');
+                    document.getElementById(`speed-dot-${currentIndex}`).classList.add('miss');
+                    currentIndex++;
+                    setTimeout(() => nextWord(), 1000); // 1s wait before next
+                }
+            }, secPerWord * 1000);
+        };
+
+        micBtn.addEventListener('click', () => {
+            if (!this.recognition || isListeningWord) return;
+
+            isListeningWord = true;
+            micBtn.classList.add('active');
+            feedback.innerText = "Listening continuously... Say the words!";
+
+            try {
+                this.recognition.continuous = true;
+                this.recognition.interimResults = true;
+                this.recognition.start();
+            } catch (e) { console.error(e); }
+
+            nextWord();
+        });
+
+        if (this.recognition) {
+            this.recognition.onresult = (event) => {
+                if (!isListeningWord || currentIndex >= targetWords.length) return;
+
+                // Check latest transcript
+                let currentTranscript = "";
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    currentTranscript += event.results[i][0].transcript.toLowerCase();
+                }
+
+                const target = targetWords[currentIndex].toLowerCase();
+
+                if (currentTranscript.includes(target) || currentTranscript.replace(/\s/g, '').includes(target.replace(/\s/g, ''))) {
+                    // Success for this word
+                    clearTimeout(timerId);
+                    this.playSound('success');
+                    targetDisplay.classList.add('success-word');
+                    document.getElementById(`speed-dot-${currentIndex}`).classList.add('hit');
+
+                    currentIndex++;
+                    setTimeout(() => nextWord(), 600); // short delay for visual confirmation
+                }
+            };
+
+            this.recognition.onerror = () => {
+                if (isListeningWord && currentIndex < targetWords.length) {
+                    // Try resetting recognition
+                    try { this.recognition.stop(); setTimeout(() => this.recognition.start(), 300); } catch (e) { }
+                }
+            };
+
+            this.recognition.onend = () => {
+                if (isListeningWord && currentIndex < targetWords.length) {
+                    // Try to keep it active
+                    try { this.recognition.start(); } catch (e) { }
+                }
+            };
+        }
+    }
+
+    renderBossBattle(data) {
+        const box = document.createElement('div');
+        box.className = 'activity-box boss-battle-box';
+
+        const prompt = document.createElement('div');
+        prompt.className = 'activity-prompt';
+        prompt.innerText = data.prompt || 'Defeat the Boss by speaking clearly!';
+        box.appendChild(prompt);
+
+        const targetWords = [...data.words];
+        targetWords.sort(() => Math.random() - 0.5); // Randomize boss challenges
+
+        let currentIndex = 0;
+        let hp = 4; // 4 lives
+        let isListeningWord = false;
+
+        const hpTrack = document.createElement('div');
+        hpTrack.className = 'boss-hp-track';
+        hpTrack.style.display = 'flex';
+        hpTrack.style.justifyContent = 'center';
+        hpTrack.style.gap = '10px';
+        hpTrack.style.marginBottom = '20px';
+        hpTrack.style.fontSize = '2rem';
+
+        const updateHP = () => {
+            hpTrack.innerHTML = '';
+            for (let i = 0; i < hp; i++) {
+                hpTrack.innerHTML += '❤️';
+            }
+            if (hp === 0) {
+                hpTrack.innerHTML = '💔';
+            }
+        };
+        updateHP();
+        box.appendChild(hpTrack);
+
+        const scoreTrack = document.createElement('div');
+        scoreTrack.className = 'speed-score-track';
+        for (let i = 0; i < targetWords.length; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'speed-dot';
+            dot.id = `boss-dot-${i}`;
+            scoreTrack.appendChild(dot);
+        }
+
+        const displayArea = document.createElement('div');
+        displayArea.style.margin = '2rem 0';
+        displayArea.style.minHeight = '150px';
+
+        const targetDisplay = document.createElement('div');
+        targetDisplay.className = 'speed-target-display';
+        targetDisplay.innerText = targetWords[0];
+
+        displayArea.appendChild(targetDisplay);
+
+        const feedback = document.createElement('div');
+        feedback.className = 'speed-feedback';
+        feedback.innerText = 'Presiona el micrófono para iniciar la batalla!';
+
+        const micBtn = document.createElement('button');
+        micBtn.className = 'speed-speak-mic';
+        micBtn.innerHTML = '🎤';
+
+        box.appendChild(scoreTrack);
+        box.appendChild(displayArea);
+        box.appendChild(micBtn);
+        box.appendChild(feedback);
+
+        this.container.appendChild(box);
+
+        const nextWord = () => {
+            if (hp <= 0) {
+                // Game Over logic
+                micBtn.style.display = 'none';
+                targetDisplay.innerText = "Game Over!";
+                targetDisplay.className = 'speed-target-display';
+                targetDisplay.style.color = '#ef4444';
+                feedback.innerText = "Te quedaste sin corazones...";
+                this.playSound('error');
+                this.showMoon({ en: "Oh no... you lost all your hearts. Let's try again tomorrow.", es: "Oh no... perdiste todos tus corazones. Vuelve a intentarlo." });
+                this.showNextButton(box);
+                if (this.recognition && isListeningWord) {
+                    try { this.recognition.stop(); } catch (e) { }
+                }
+                return;
+            }
+
+            if (currentIndex >= targetWords.length) {
+                // Boss Defeated
+                micBtn.style.display = 'none';
+                targetDisplay.innerText = "¡Jefe Derrotado!";
+                targetDisplay.className = 'speed-target-display success-word';
+                feedback.innerText = "¡Ganaste!";
+                this.playSound('success');
+                this.triggerSuccessBurst(true);
+                setTimeout(() => this.triggerSuccessBurst(), 500);
+                this.showMoon({ en: "Incredible! You defeated the boss!", es: "¡Increíble! ¡Acabas de derrotar al jefe final!" });
+                this.showNextButton(box);
+
+                if (this.recognition && isListeningWord) {
+                    try { this.recognition.stop(); } catch (e) { }
+                }
+                return;
+            }
+
+            // Setup current word
+            targetDisplay.className = 'speed-target-display';
+            let currentTargetWord = targetWords[currentIndex];
+            targetDisplay.innerText = currentTargetWord;
+            targetDisplay.style.color = '';
+            timerFill.style.width = '100%';
+            timerFill.style.background = 'linear-gradient(90deg, var(--forest-glow), #4ade80)';
+        };
+
+        const timerTrack = document.createElement('div');
+        timerTrack.className = 'speed-timer-track';
+        const timerFill = document.createElement('div');
+        timerFill.className = 'speed-timer-fill';
+        timerTrack.appendChild(timerFill);
+        displayArea.after(timerTrack);
+
+        let timerId = null;
+        let secPerWord = 5;
+
+        const startTimer = () => {
+            timerFill.style.transition = 'none';
+            timerFill.style.width = '100%';
+            timerFill.style.background = 'linear-gradient(90deg, var(--forest-glow), #4ade80)';
+
+            setTimeout(() => {
+                timerFill.style.transition = `width ${secPerWord}s linear, background-color ${secPerWord}s ease`;
+                timerFill.style.width = '0%';
+                timerFill.style.background = '#ef4444';
+            }, 50);
+
+            timerId = setTimeout(() => {
+                if (isListeningWord) {
+                    // Timeout!
+                    hp--;
+                    updateHP();
+                    this.errors++;
+                    this.playSound('error');
+                    targetDisplay.classList.add('fail-word');
+                    document.getElementById(`boss-dot-${currentIndex}`).classList.add('miss');
+                    currentIndex++;
+                    setTimeout(() => {
+                        targetDisplay.classList.remove('fail-word');
+                        nextWord();
+                        if (hp > 0 && currentIndex < targetWords.length) startTimer();
+                    }, 1000);
+                }
+            }, secPerWord * 1000);
+        };
+
+        micBtn.addEventListener('click', () => {
+            if (!this.recognition || isListeningWord) return;
+
+            isListeningWord = true;
+            micBtn.classList.add('active');
+            feedback.innerText = "¡La batalla ha comenzado! Habla ahora...";
+
+            try {
+                this.recognition.continuous = true;
+                this.recognition.interimResults = true;
+                this.recognition.start();
+            } catch (e) { console.error(e); }
+
+            nextWord();
+            startTimer();
+        });
+
+        if (this.recognition) {
+            this.recognition.onresult = (event) => {
+                if (!isListeningWord || currentIndex >= targetWords.length || hp <= 0) return;
+
+                let currentTranscript = "";
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    currentTranscript += event.results[i][0].transcript.toLowerCase();
+                }
+
+                const targetRegexStr = targetWords[currentIndex].toLowerCase().replace(/\s/g, '');
+                const cleanTranscript = currentTranscript.replace(/\s/g, '');
+
+                // Allow aliases from dictionary if available in data
+                let possibleMatches = [targetWords[currentIndex].toLowerCase()];
+                if (data.aliasesMap && data.aliasesMap[targetWords[currentIndex]]) {
+                    possibleMatches = possibleMatches.concat(data.aliasesMap[targetWords[currentIndex]]);
+                }
+
+                let isMatch = false;
+                for (let match of possibleMatches) {
+                    let cleanMatch = match.toLowerCase().replace(/\s/g, '');
+                    if (cleanTranscript.includes(cleanMatch)) {
+                        isMatch = true;
+                        break;
+                    }
+                }
+
+                if (isMatch) {
+                    clearTimeout(timerId);
+                    this.playSound('success');
+                    targetDisplay.classList.add('success-word');
+                    document.getElementById(`boss-dot-${currentIndex}`).classList.add('hit');
+
+                    currentIndex++;
+                    setTimeout(() => {
+                        targetDisplay.classList.remove('success-word');
+                        nextWord();
+                        if (hp > 0 && currentIndex < targetWords.length) startTimer();
+                    }, 600);
+                }
+            };
+
+            this.recognition.onerror = () => {
+                if (isListeningWord && currentIndex < targetWords.length && hp > 0) {
+                    try { this.recognition.stop(); setTimeout(() => this.recognition.start(), 300); } catch (e) { }
+                }
+            };
+
+            this.recognition.onend = () => {
+                if (isListeningWord && currentIndex < targetWords.length) {
+                    // Try restarting if it stopped mid-game
+                    try { this.recognition.start(); } catch (e) { }
+                } else {
+                    micBtn.classList.remove('active');
+                }
+            };
+        }
+    }
+
+    renderPictureIt(data) {
+        const box = document.createElement('div');
+        box.className = 'activity-box';
+
+        const prompt = document.createElement('div');
+        prompt.className = 'activity-prompt';
+        prompt.innerText = data.prompt || 'Tap the picture of the word Moon says!';
+        box.appendChild(prompt);
+
+        const options = [...data.options];
+        options.sort(() => Math.random() - 0.5);
+
+        const grid = document.createElement('div');
+        grid.className = 'picture-it-grid';
+
+        const listenBtn = document.createElement('button');
+        listenBtn.className = 'pi-listen-btn';
+        listenBtn.innerHTML = '🔊 Susurrar palabra otra vez';
+
+        let answered = false;
+
+        options.forEach(opt => {
+            const card = document.createElement('div');
+            card.className = 'picture-it-card';
+
+            let emoji = '🌲'; // fallback
+            // Determine emoji: you might have to pass emojis map in data
+            if (data.emojisMap && data.emojisMap[opt]) {
+                emoji = data.emojisMap[opt];
+            } else if (opt.includes('Happy')) emoji = '😊';
+            else if (opt.includes('Sad')) emoji = '😢';
+            else if (opt.includes('Tired')) emoji = '😴';
+            else if (opt.includes('Ready')) emoji = '💥';
+
+            card.innerHTML = `
+                <div class="pi-emoji">${emoji}</div>
+                <div class="pi-word">???</div>
+            `;
+
+            card.onclick = () => {
+                if (answered || card.classList.contains('pi-locked')) return;
+                answered = true;
+
+                if (opt === data.word_to_find) {
+                    // Correcto
+                    this.playSound('success');
+                    this.triggerSuccessBurst();
+                    card.classList.add('pi-correct');
+                    card.querySelector('.pi-word').innerText = opt;
+
+                    // lock other cards
+                    Array.from(grid.children).forEach(c => c.classList.add('pi-locked'));
+
+                    this.showMoon({ en: "Spot on! That's the one.", es: "¡Exacto! Ese es." });
+                    this.showNextButton(box);
+                } else {
+                    // Incorrecto
+                    this.errors++;
+                    this.playSound('error');
+                    card.classList.add('pi-wrong', 'pi-locked');
+                    card.querySelector('.pi-word').innerText = opt; // reveal it
+
+                    this.showMoon({ en: `Oops! That's ${opt}. Listen again...`, es: `¡Ups! Eso es ${opt}. Escucha de nuevo...` }, () => {
+                        this.speak(data.word_to_find);
+                    });
+
+                    setTimeout(() => {
+                        card.classList.remove('pi-wrong');
+                        answered = false;
+                    }, 1500);
+                }
+            };
+
+            grid.appendChild(card);
+        });
+
+        listenBtn.onclick = () => {
+            this.speak(data.word_to_find);
+        };
+
+        box.appendChild(grid);
+        box.appendChild(document.createElement('br'));
+        box.appendChild(listenBtn);
+        this.container.appendChild(box);
+
+        // Auto-play the target word after a brief delay
+        setTimeout(() => {
+            this.speak(data.word_to_find);
+        }, 800);
+    }
+
+    renderMemoryFlip(data) {
+        const box = document.createElement('div');
+        box.className = 'activity-box';
+
+        const prompt = document.createElement('div');
+        prompt.className = 'activity-prompt';
+        prompt.innerText = data.prompt || 'Find the matching pairs! Listen closely.';
+        box.appendChild(prompt);
+
+        const items = [];
+        // data.pairs format {"Word": "Emoji"}
+        for (let [word, emoji] of Object.entries(data.pairs)) {
+            items.push({ id: word, type: 'word', content: word });
+            items.push({ id: word, type: 'emoji', content: emoji });
+        }
+
+        items.sort(() => Math.random() - 0.5);
+
+        const grid = document.createElement('div');
+        grid.className = 'memory-grid';
+        // adjust columns based on count
+        const total = items.length;
+        const cols = total <= 4 ? 2 : total <= 8 ? 4 : 4;
+        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+        let firstCard = null;
+        let secondCard = null;
+        let lockBoard = false;
+        let pairsFound = 0;
+        const totalPairs = Object.keys(data.pairs).length;
+
+        items.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'memory-card';
+            card.dataset.id = item.id;
+
+            card.innerHTML = `
+                <div class="memory-card-inner">
+                    <div class="memory-card-front">❓</div>
+                    <div class="memory-card-back">${item.content}</div>
+                </div>
+            `;
+
+            card.onclick = () => {
+                if (lockBoard) return;
+                if (card === firstCard) return;
+                if (card.classList.contains('matched')) return;
+
+                card.classList.add('flipped');
+
+                // TTS on flip if it's a word card
+                if (item.type === 'word') {
+                    this.speak(item.content);
+                }
+
+                if (!firstCard) {
+                    firstCard = card;
+                    return;
+                }
+
+                secondCard = card;
+                lockBoard = true;
+
+                if (firstCard.dataset.id === secondCard.dataset.id) {
+                    // Match
+                    this.playSound('success');
+                    firstCard.classList.add('matched');
+                    secondCard.classList.add('matched');
+                    firstCard = null;
+                    secondCard = null;
+                    lockBoard = false;
+                    pairsFound++;
+
+                    if (pairsFound === totalPairs) {
+                        setTimeout(() => {
+                            this.triggerSuccessBurst();
+                            this.showMoon({ en: "You have a great memory!", es: "¡Tienes una memoria genial!" });
+                            this.showNextButton(box);
+                        }, 500);
+                    }
+                } else {
+                    // No match
+                    this.errors++;
+                    this.playSound('error');
+                    firstCard.querySelector('.memory-card-front').classList.add('memory-wrong-flash');
+                    secondCard.querySelector('.memory-card-front').classList.add('memory-wrong-flash');
+
+                    setTimeout(() => {
+                        firstCard.classList.remove('flipped');
+                        secondCard.classList.remove('flipped');
+                        firstCard.querySelector('.memory-card-front').classList.remove('memory-wrong-flash');
+                        secondCard.querySelector('.memory-card-front').classList.remove('memory-wrong-flash');
+                        firstCard = null;
+                        secondCard = null;
+                        lockBoard = false;
+                    }, 1200);
+                }
+            };
+
+            grid.appendChild(card);
+        });
+
+        box.appendChild(grid);
+        this.container.appendChild(box);
+    }
 
     // --- SOUND EFFECTS ENGINE (Web Audio API) ---
     playSound(type) {
@@ -924,91 +1692,107 @@ export class MoonsforestEngine {
         }
     }
 
-    renderCompletion() {
+    renderLessonCompleteMoon() {
         this.progressBar.style.width = '100%';
         this.container.innerHTML = '';
 
-        // Calcular minutos y lanzar evento
         const endTime = Date.now();
         const minutesSpent = Math.max(1, Math.round((endTime - this.startTime) / 60000));
         const totalSteps = this.data.length;
-        document.dispatchEvent(new CustomEvent('lessonCompleted', { detail: { minutes: minutesSpent } }));
+
+        // Calcular estrellas (Max 3. Perfeccion = 3, 1-3 errores = 2, 4+ = 1)
+        let stars = 3;
+        if (this.errors > 0 && this.errors <= 3) stars = 2;
+        if (this.errors > 3) stars = 1;
+
+        document.dispatchEvent(new CustomEvent('lessonCompleted', { detail: { minutes: minutesSpent, stars: stars } }));
 
         const targetUrl = this.options.returnUrl || 'mapa.html';
 
-        // Epic confetti burst on load
-        setTimeout(() => this.triggerSuccessBurst(true), 300);
-        setTimeout(() => this.triggerSuccessBurst(true), 700);
+        const overlay = document.createElement('div');
+        overlay.className = 'lesson-complete-overlay';
 
         const box = document.createElement('div');
-        box.className = 'completion-box';
+        box.className = 'lesson-complete-card';
 
-        // Story player (desktop only)
-        const hasHistory = this.sessionHistory.length > 0 && !this.isMobile;
-        const storyPlayerHTML = hasHistory ? `
-            <div class="story-player-card">
-                <div class="story-player-title">🎙️ Today's Adventure</div>
-                <div class="story-player-sub">Listen to your complete conversation with Moon.</div>
-                <button id="play-story-btn" class="btn-play-story">▶️ Play My Session</button>
-            </div>
-        ` : '';
+        const avatar = document.createElement('div');
+        avatar.className = 'lesson-complete-avatar';
+        avatar.innerText = '🐻‍❄️';
 
-        box.innerHTML = `
-            <div class="completion-trophy">🏆</div>
-            <h2 class="completion-title">Lesson <span>Complete!</span></h2>
-            <p class="completion-subtitle">You just leveled up your English. Keep exploring the forest!</p>
+        const title = document.createElement('h2');
+        title.className = 'lesson-complete-title';
+        title.innerHTML = `Lesson <span>Complete!</span>`;
 
-            <div class="completion-stats">
-                <div class="stat-pill">
-                    <div class="stat-pill-value">${minutesSpent}</div>
-                    <div class="stat-pill-label">Minutes<br>Speaking</div>
-                </div>
-                <div class="stat-pill">
-                    <div class="stat-pill-value">${totalSteps}</div>
-                    <div class="stat-pill-label">Activities<br>Completed</div>
-                </div>
-                <div class="stat-pill">
-                    <div class="stat-pill-value">🌟</div>
-                    <div class="stat-pill-label">XP<br>Earned</div>
-                </div>
-            </div>
-
-            ${storyPlayerHTML}
-
-            <button class="btn-return-forest" onclick="window.location.href='${targetUrl}'">
-                🌲 Back to the Forest
-            </button>
-        `;
-
-        this.container.appendChild(box);
-
-        // Story player logic
-        if (hasHistory) {
-            const playBtn = document.getElementById('play-story-btn');
-            if (playBtn) {
-                playBtn.addEventListener('click', async () => {
-                    playBtn.disabled = true;
-                    playBtn.innerText = '🎬 Playing...';
-
-                    for (const item of this.sessionHistory) {
-                        if (item.type === 'moon') {
-                            await new Promise(resolve => this.speak(item.content, () => resolve()));
-                        } else if (item.type === 'child') {
-                            await new Promise(resolve => {
-                                const audio = new Audio(item.content);
-                                audio.onended = resolve;
-                                audio.play().catch(() => resolve());
-                            });
-                        }
-                    }
-
-                    playBtn.disabled = false;
-                    playBtn.innerText = '▶️ Play Again';
-                });
-            }
+        const starsContainer = document.createElement('div');
+        starsContainer.className = 'lesson-complete-stars';
+        for (let i = 0; i < 3; i++) {
+            const star = document.createElement('div');
+            star.className = `lc-star ${i < stars ? 'active' : 'dim'}`;
+            star.innerText = '⭐';
+            star.style.transitionDelay = `${i * 0.15 + 0.5}s`;
+            starsContainer.appendChild(star);
         }
 
-        this.showMoon({ en: "You finished your training! You're brave.", es: "¡Terminaste! Eres valiente." });
+        const msg = document.createElement('div');
+        msg.className = 'lesson-complete-moon-msg';
+
+        let msgEn = "Amazing! The forest is happy.";
+        let msgEs = "¡Asombroso! El bosque está feliz.";
+
+        if (stars === 3) {
+            msgEn = "Perfect score! You are a true explorer!";
+            msgEs = "¡Puntaje perfecto! Eres un explorador verdadero.";
+        } else if (stars === 2) {
+            msgEn = "Great job! A few bumps, but you made it.";
+            msgEs = "¡Buen trabajo! Algunos tropiezos, pero lo lograste.";
+        } else {
+            msgEn = "You finished! Practice makes perfect.";
+            msgEs = "¡Terminaste! La práctica hace al maestro.";
+        }
+
+        msg.innerHTML = `"${msgEn}" <span>${msgEs}</span>`;
+
+        const stats = document.createElement('div');
+        stats.className = 'lesson-complete-stats';
+
+        const xpEarned = stars * 10;
+        stats.innerHTML = `
+            <div class="lc-stat">
+                <div class="lc-stat-val">${minutesSpent}</div>
+                <div class="lc-stat-label">MINUTES</div>
+            </div>
+            <div class="lc-stat">
+                <div class="lc-stat-val">+${xpEarned}</div>
+                <div class="lc-stat-label">EXP</div>
+            </div>
+        `;
+
+        const btn = document.createElement('button');
+        btn.className = 'btn-continue-forest';
+        btn.innerText = 'Continue the Adventure →';
+        btn.onclick = () => window.location.href = targetUrl;
+
+        box.appendChild(avatar);
+        box.appendChild(title);
+        box.appendChild(starsContainer);
+        box.appendChild(msg);
+        box.appendChild(stats);
+        box.appendChild(btn);
+
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+
+        // Sound & Confetti
+        setTimeout(() => {
+            this.playSound('success');
+            this.triggerSuccessBurst(true);
+            setTimeout(() => { this.triggerSuccessBurst(); }, 300);
+        }, 300);
+
+        // Moon TTS
+        setTimeout(() => {
+            this.speakMoon(msgEn);
+        }, 800);
     }
 
     /* -------------------------------------------------------------------------- */
@@ -1016,7 +1800,12 @@ export class MoonsforestEngine {
     /* -------------------------------------------------------------------------- */
 
     speak(text, onEndCallback = null) {
-        if ('speechSynthesis' in window) {
+        if (!('speechSynthesis' in window)) {
+            if (onEndCallback) onEndCallback();
+            return;
+        }
+
+        const play = () => {
             window.speechSynthesis.cancel(); // Cancel ongoing speech
 
             // Guardar en el historial para el final (solo si no estamos en reproducción final)
@@ -1027,16 +1816,29 @@ export class MoonsforestEngine {
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'en-US';
             utterance.rate = 0.85;
-            const preferredVoice = this.voices.find(v => v.lang === 'en-US' && v.name.includes('Google'));
-            if (preferredVoice) utterance.voice = preferredVoice;
+
+            const voice = this.getFemaleVoice();
+            if (voice) utterance.voice = voice;
 
             if (onEndCallback) {
                 utterance.onend = () => onEndCallback();
             }
 
             window.speechSynthesis.speak(utterance);
-        } else if (onEndCallback) {
-            onEndCallback(); // Fallback
+        };
+
+        if (window.speechSynthesis.getVoices().length === 0) {
+            // Wait up to 1s for voices to load (especially Safari/Chrome initial load)
+            let attempts = 0;
+            const timer = setInterval(() => {
+                if (window.speechSynthesis.getVoices().length > 0 || attempts > 10) {
+                    clearInterval(timer);
+                    play();
+                }
+                attempts++;
+            }, 100);
+        } else {
+            play();
         }
     }
 
@@ -1106,8 +1908,11 @@ export class MoonsforestEngine {
         this.currentTimerBar = timerBar;
     }
 
-    showMoon(message) {
-        if (!this.moonSupport) return;
+    showMoon(message, onEndCallback = null) {
+        if (!this.moonSupport) {
+            if (onEndCallback) onEndCallback();
+            return;
+        }
 
         // message can be a string or { en: '...', es: '...' }
         let enText, esText;
@@ -1127,19 +1932,41 @@ export class MoonsforestEngine {
         this.moonSupport.classList.remove('hidden');
 
         // Speak Moon's message in English using TTS
-        this.speakMoon(enText);
+        this.speakMoon(enText, onEndCallback);
     }
 
-    speakMoon(text) {
+    speakMoon(text, onEndCallback = null) {
         if (!('speechSynthesis' in window)) return;
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-US';
-        utterance.rate = 0.9;
-        utterance.pitch = 1.1; // slightly warmer voice for Moon
-        const preferredVoice = this.voices.find(v => v.lang === 'en-US' && v.name.includes('Google'));
-        if (preferredVoice) utterance.voice = preferredVoice;
-        window.speechSynthesis.speak(utterance);
+
+        const play = () => {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            utterance.pitch = 1.1; // slightly warmer voice for Moon
+
+            const voice = this.getFemaleVoice();
+            if (voice) utterance.voice = voice;
+
+            if (onEndCallback) {
+                utterance.onend = () => onEndCallback();
+            }
+
+            window.speechSynthesis.speak(utterance);
+        };
+
+        if (window.speechSynthesis.getVoices().length === 0) {
+            let attempts = 0;
+            const timer = setInterval(() => {
+                if (window.speechSynthesis.getVoices().length > 0 || attempts > 10) {
+                    clearInterval(timer);
+                    play();
+                }
+                attempts++;
+            }, 100);
+        } else {
+            play();
+        }
     }
 
     hideMoon() {

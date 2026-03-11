@@ -3,6 +3,7 @@ import { auth, db, getEffectiveUser } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { sendDiscordNotification } from './discord.js';
+import { generateStepsFromFlow } from './stepGenerator.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Extraer ID de la lección de la URL
@@ -15,13 +16,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    const moduleId = lessonId.substring(0, 2); // ie 'm1'
+    let moduleId;
+    if (lessonId === 'daily_practice') {
+        moduleId = urlParams.get('module') || 'm1'; // fallback a m1
+    } else {
+        moduleId = lessonId.substring(0, 2); // ie 'm1'
+    }
     let configModule;
     let globals;
+    let dictionary = {};
     try {
-        const [moduleRes, globalsRes] = await Promise.all([
+        const [moduleRes, globalsRes, dictRes] = await Promise.all([
             fetch(`/data/${moduleId}.json`),
-            fetch(`/data/globals.json`)
+            fetch(`/data/globals.json`),
+            fetch(`/data/dictionary.json`)
         ]);
 
         if (!moduleRes.ok) throw new Error("Módulo no encontrado");
@@ -29,6 +37,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (globalsRes.ok) {
             globals = await globalsRes.json();
+        }
+
+        if (dictRes.ok) {
+            dictionary = await dictRes.json();
         }
     } catch (error) {
         console.error("Error cargando el módulo:", error);
@@ -43,10 +55,61 @@ document.addEventListener('DOMContentLoaded', async () => {
         successMessages: { ...(globals?.successMessages || {}), ...(configModule.resources?.successMessages || {}) }
     };
 
-    const lessonConfig = configModule.lessons.find(l => l.id === lessonId);
+    let lessonConfig;
 
-    if (!lessonConfig || !lessonConfig.steps || lessonConfig.steps.length === 0) {
+    if (lessonId === 'daily_practice') {
+        // Generar Práctica Infinita Aleatoria
+        let allVocab = [];
+        configModule.lessons.forEach(l => {
+            if (l.vocab_new) allVocab.push(...l.vocab_new);
+            if (l.vocab_review) allVocab.push(...l.vocab_review);
+        });
+        // Deduplicar e ignorar frases demasiado largas si queremos
+        allVocab = [...new Set(allVocab)];
+
+        // Pick 6-8 random words
+        allVocab.sort(() => Math.random() - 0.5);
+        const selectedVocab = allVocab.slice(0, 8);
+
+        lessonConfig = {
+            id: "daily_practice",
+            title: "Práctica Infinita",
+            desc: "Repaso Aleatorio",
+            vocab_new: selectedVocab.slice(0, 4),
+            vocab_review: selectedVocab.slice(4, 8),
+            story: {
+                en: "Welcome to your infinite daily practice! Let's mix things up.",
+                es: "¡Bienvenido a tu práctica diaria infinita!"
+            },
+            flow: [
+                "story_moment",
+                "echo_chamber",
+                "picture_it",
+                "echo_chamber_translation",
+                "speed_speak",
+                "memory_flip",
+                "matching",
+                "boss_battle"
+            ]
+        };
+    } else {
+        lessonConfig = configModule.lessons.find(l => l.id === lessonId);
+    }
+
+    if (!lessonConfig || (!lessonConfig.steps && !lessonConfig.flow)) {
         alert("Esta lección aún está en construcción.");
+        window.location.href = `module.html?id=${moduleId}`;
+        return;
+    }
+
+    // Generar dynamic steps usando el Nivel 1 si 'flow' y 'vocab_new' existen
+    let finalSteps = lessonConfig.steps || [];
+    if (lessonConfig.flow) {
+        finalSteps = generateStepsFromFlow(lessonConfig, dictionary);
+    }
+
+    if (finalSteps.length === 0) {
+        alert("Error generando pasos para la lección.");
         window.location.href = `module.html?id=${moduleId}`;
         return;
     }
@@ -92,10 +155,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                             completedLessons.push(lessonId);
                         }
 
+                        let moduleStars = data.moduleStars || {};
+                        const starsEarned = e.detail.stars || 0;
+                        const currentStars = moduleStars[lessonId] || 0;
+
+                        // Solo guardar si ganaron más estrellas que su récord previo
+                        if (starsEarned > currentStars) {
+                            moduleStars[lessonId] = starsEarned;
+                        }
+
                         await updateDoc(userRef, {
                             minutesSpokenToday: currentMinutes + minutes,
                             lastSpokenDate: today,
-                            completedLessons: completedLessons
+                            completedLessons: completedLessons,
+                            moduleStars: moduleStars
                         });
                         console.log(`¡Progreso guardado!: +${minutes} mins, ${lessonId} completada.`);
 
@@ -116,7 +189,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // 5. Iniciar la clase de aprendizaje
-        new MoonsforestEngine('learning-container', lessonConfig.steps, {
+        new MoonsforestEngine('learning-container', finalSteps, {
             returnUrl: `module.html?id=${moduleId}`,
             resources: mergedResources,
             userId: effectiveUid,

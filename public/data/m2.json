@@ -8,91 +8,25 @@
       "title": "2.1: Es y Son",
       "desc": "Introducción a objetos y animales.",
       "icon": "🐾",
-      "steps": [
-        {
-          "type": "listen_click",
-          "prompt": "p_listen",
-          "cards": [
-            {
-              "word": "It is",
-              "translation": "Es / Eso es"
-            },
-            {
-              "word": "They are",
-              "translation": "Son / Esos son"
-            }
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "It is",
-          "successMsg": "s_pron",
-          "aliases": [
-            "eat is",
-            "id is",
-            "it's"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "They are",
-          "successMsg": "s_pron",
-          "aliases": [
-            "there",
-            "their",
-            "they're",
-            "day are"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "They are",
-          "displayWord": "Son / Esos son",
-          "successMsg": "s_trans",
-          "aliases": [
-            "there",
-            "their",
-            "they're",
-            "day are"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "It is",
-          "displayWord": "Es / Eso es",
-          "successMsg": "s_trans",
-          "aliases": [
-            "eat is",
-            "id is",
-            "it's"
-          ]
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "It is They are",
-          "options": [
-            "They",
-            "is",
-            "are",
-            "It"
-          ]
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "It is": "Es",
-            "They are": "Son"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "It is",
+        "They are",
+        "It is They are"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -100,95 +34,25 @@
       "title": "2.2: Animales Salvajes",
       "desc": "Conoce a los habitantes.",
       "icon": "🐻",
-      "steps": [
-        {
-          "type": "listen_click",
-          "prompt": "p_listen",
-          "cards": [
-            {
-              "word": "Bear",
-              "translation": "Oso"
-            },
-            {
-              "word": "Wolf",
-              "translation": "Lobo"
-            },
-            {
-              "word": "Bird",
-              "translation": "Pájaro"
-            }
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Bear",
-          "successMsg": "s_pron",
-          "aliases": [
-            "bare",
-            "beer",
-            "pear"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Wolf",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Bird",
-          "successMsg": "s_pron",
-          "aliases": [
-            "beard",
-            "board",
-            "bert"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Bear",
-          "displayWord": "Oso",
-          "successMsg": "s_trans",
-          "aliases": [
-            "bare",
-            "beer",
-            "pear"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Wolf",
-          "displayWord": "Lobo",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Bird",
-          "displayWord": "Pájaro",
-          "successMsg": "s_trans",
-          "aliases": [
-            "beard",
-            "board",
-            "bert"
-          ]
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Bear": "Oso",
-            "Wolf": "Lobo",
-            "Bird": "Pájaro"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "Bear",
+        "Wolf",
+        "Bird"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -196,67 +60,24 @@
       "title": "2.3: La Naturaleza",
       "desc": "Árboles y más.",
       "icon": "🌳",
-      "steps": [
-        {
-          "type": "listen_click",
-          "prompt": "p_listen",
-          "cards": [
-            {
-              "word": "Tree",
-              "translation": "Árbol"
-            },
-            {
-              "word": "Forest",
-              "translation": "Bosque"
-            }
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Tree",
-          "successMsg": "s_pron",
-          "aliases": [
-            "three",
-            "tea",
-            "free"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Forest",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Forest",
-          "displayWord": "Bosque",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Tree",
-          "displayWord": "Árbol",
-          "successMsg": "s_trans",
-          "aliases": [
-            "three",
-            "tea",
-            "free"
-          ]
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Tree": "Árbol",
-            "Forest": "Bosque"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "Tree",
+        "Forest"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -264,57 +85,24 @@
       "title": "2.4: Tamaños",
       "desc": "Grande y pequeño.",
       "icon": "📏",
-      "steps": [
-        {
-          "type": "listen_click",
-          "prompt": "p_listen",
-          "cards": [
-            {
-              "word": "Big",
-              "translation": "Grande"
-            },
-            {
-              "word": "Small",
-              "translation": "Pequeño"
-            }
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Big",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Small",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Big",
-          "displayWord": "Grande",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Small",
-          "displayWord": "Pequeño",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Big": "Grande",
-            "Small": "Pequeño"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "Big",
+        "Small"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -322,68 +110,25 @@
       "title": "2.5: Reto Intermedio",
       "desc": "Uniendo conceptos.",
       "icon": "⭐",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "It is big",
-          "options": [
-            "big",
-            "It",
-            "is"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "It is big",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "They are small",
-          "options": [
-            "are",
-            "They",
-            "small"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "They are small",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "Big bear",
-          "options": [
-            "bear",
-            "Big"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Big bear",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "It is big": "Es grande",
-            "They are small": "Son pequeños",
-            "Big bear": "Oso grande"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "It is big",
+        "They are small",
+        "Big bear"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -391,75 +136,25 @@
       "title": "2.6: Colores del Bosque",
       "desc": "Rojo, Azul, Verde.",
       "icon": "🎨",
-      "steps": [
-        {
-          "type": "listen_click",
-          "prompt": "p_listen",
-          "cards": [
-            {
-              "word": "Red",
-              "translation": "Rojo"
-            },
-            {
-              "word": "Blue",
-              "translation": "Azul"
-            },
-            {
-              "word": "Green",
-              "translation": "Verde"
-            }
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Red",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Blue",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Green",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Red",
-          "displayWord": "Rojo",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Blue",
-          "displayWord": "Azul",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Green",
-          "displayWord": "Verde",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Red": "Rojo",
-            "Blue": "Azul",
-            "Green": "Verde"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "Red",
+        "Blue",
+        "Green"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -467,68 +162,25 @@
       "title": "2.7: Descubriendo Colores",
       "desc": "Describiendo con colores.",
       "icon": "🖌️",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "It is red",
-          "options": [
-            "is",
-            "red",
-            "It"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "It is red",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "They are green",
-          "options": [
-            "green",
-            "are",
-            "They"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "They are green",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "Blue bird",
-          "options": [
-            "bird",
-            "Blue"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Blue bird",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "It is red": "Es rojo",
-            "They are green": "Son verdes",
-            "Blue bird": "Pájaro azul"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "It is red",
+        "They are green",
+        "Blue bird"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -536,66 +188,25 @@
       "title": "2.8: Uniendo Adjetivos",
       "desc": "Adjetivo + Sustantivo.",
       "icon": "💡",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "Green tree",
-          "options": [
-            "tree",
-            "Green"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Green tree",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "Big wolf",
-          "options": [
-            "wolf",
-            "Big"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Big wolf",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "Small bird",
-          "options": [
-            "Small",
-            "bird"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Small bird",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Green tree": "Árbol verde",
-            "Big wolf": "Lobo grande",
-            "Small bird": "Pájaro pequeño"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "Green tree",
+        "Big wolf",
+        "Small bird"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -603,75 +214,25 @@
       "title": "2.9: Más Animales",
       "desc": "Plurales sencillos.",
       "icon": "🐦",
-      "steps": [
-        {
-          "type": "listen_click",
-          "prompt": "p_listen",
-          "cards": [
-            {
-              "word": "Bears",
-              "translation": "Osos"
-            },
-            {
-              "word": "Birds",
-              "translation": "Pájaros"
-            },
-            {
-              "word": "Trees",
-              "translation": "Árboles"
-            }
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Bears",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Birds",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Trees",
-          "successMsg": "s_pron"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Birds",
-          "displayWord": "Pájaros",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Trees",
-          "displayWord": "Árboles",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_think",
-          "word": "Bears",
-          "displayWord": "Osos",
-          "successMsg": "s_trans"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Bears": "Osos",
-            "Birds": "Pájaros",
-            "Trees": "Árboles"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "Bears",
+        "Birds",
+        "Trees"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -679,73 +240,28 @@
       "title": "2.10: Segundo Reto",
       "desc": "Todo junto.",
       "icon": "🧗",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "They are big bears",
-          "options": [
-            "bears",
-            "big",
-            "They",
-            "are"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "They are big bears",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "It is a blue bird",
-          "options": [
-            "blue",
-            "bird",
-            "It",
-            "is",
-            "a"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "It is a blue bird",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "They are green trees",
-          "options": [
-            "are",
-            "green",
-            "trees",
-            "They"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "They are green trees",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Big bears": "Osos grandes",
-            "Blue bird": "Pájaro azul",
-            "Green trees": "Árboles verdes"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "They are big bears",
+        "They are green trees",
+        "Big bears",
+        "Blue bird"
+      ],
+      "vocab_review": [
+        "Green trees"
+      ],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -753,74 +269,26 @@
       "title": "2.11: Rompecabezas I",
       "desc": "Ordena palabras.",
       "icon": "🧩",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "Look it is a big bear",
-          "options": [
-            "bear",
-            "Look",
-            "big",
-            "it",
-            "is",
-            "a"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Look it is a big bear",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "They are wolves",
-          "options": [
-            "are",
-            "wolves",
-            "They"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "They are wolves",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "It is a small tree",
-          "options": [
-            "tree",
-            "small",
-            "It",
-            "is",
-            "a"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "It is a small tree",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Big bear": "Oso grande",
-            "Small tree": "Árbol pequeño",
-            "Wolves": "Lobos"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "They are wolves",
+        "Big bear",
+        "Small tree",
+        "Wolves"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -828,73 +296,28 @@
       "title": "2.12: Rompecabezas II",
       "desc": "Más orden.",
       "icon": "🧩",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "A small blue bird",
-          "options": [
-            "blue",
-            "A",
-            "bird",
-            "small"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "A small blue bird",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "They are big green trees",
-          "options": [
-            "trees",
-            "They",
-            "green",
-            "big",
-            "are"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "They are big green trees",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "The forest is big",
-          "options": [
-            "big",
-            "The",
-            "is",
-            "forest"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "The forest is big",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Small bird": "Pájaro pequeño",
-            "Green trees": "Árboles verdes",
-            "Big forest": "Bosque grande"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "A small blue bird",
+        "The forest is big",
+        "Small bird",
+        "Green trees"
+      ],
+      "vocab_review": [
+        "Big forest"
+      ],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -902,74 +325,26 @@
       "title": "2.13: Traducción I",
       "desc": "Piensa en inglés.",
       "icon": "⚡",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "I see a red bear",
-          "options": [
-            "bear",
-            "see",
-            "a",
-            "I",
-            "red"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "I see a red bear",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "It is green and blue",
-          "options": [
-            "It",
-            "blue",
-            "and",
-            "green",
-            "is"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "It is green and blue",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "They are happy birds",
-          "options": [
-            "happy",
-            "are",
-            "birds",
-            "They"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "They are happy birds",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "I see": "Yo veo",
-            "Happy birds": "Pájaros felices",
-            "Red bear": "Oso rojo"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "They are happy birds",
+        "I see",
+        "Happy birds",
+        "Red bear"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -977,74 +352,26 @@
       "title": "2.14: Traducción II",
       "desc": "Dominio mental.",
       "icon": "⚡",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "The wolf is tired",
-          "options": [
-            "is",
-            "tired",
-            "wolf",
-            "The"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "The wolf is tired",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "Look at the green trees",
-          "options": [
-            "trees",
-            "the",
-            "at",
-            "Look",
-            "green"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Look at the green trees",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "It is a big day",
-          "options": [
-            "big",
-            "a",
-            "It",
-            "day",
-            "is"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "It is a big day",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Tired": "Cansado",
-            "Look at": "Mira a",
-            "Big day": "Gran día"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "The wolf is tired",
+        "Tired",
+        "Look at",
+        "Big day"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -1052,74 +379,26 @@
       "title": "2.15: El Gran Ensamblaje",
       "desc": "Armado de frases largas.",
       "icon": "🏗️",
-      "steps": [
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "Hello wolf you are big",
-          "options": [
-            "wolf",
-            "you",
-            "big",
-            "Hello",
-            "are"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Hello wolf you are big",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "They are small and blue birds",
-          "options": [
-            "and",
-            "small",
-            "They",
-            "birds",
-            "are",
-            "blue"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "They are small and blue birds",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "drag_and_drop",
-          "prompt": "p_drag",
-          "timer": true,
-          "target": "Goodbye green bear",
-          "options": [
-            "bear",
-            "green",
-            "Goodbye"
-          ]
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_echo",
-          "word": "Goodbye green bear",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Hello": "Hola",
-            "Goodbye": "Adiós",
-            "Blue birds": "Pájaros azules"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "Goodbye green bear",
+        "Hello",
+        "Goodbye",
+        "Blue birds"
+      ],
+      "vocab_review": [],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -1127,46 +406,28 @@
       "title": "2.16: Eco Continuo 1",
       "desc": "Fluidez natural.",
       "icon": "🗣️",
-      "steps": [
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "It is a big bear",
-          "displayWord": "Es un oso grande",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "They are small birds",
-          "displayWord": "Son pájaros pequeños",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "The tree is green",
-          "displayWord": "El árbol es verde",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "Look it is a blue wolf",
-          "displayWord": "Mira es un lobo azul",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Big bear": "Oso grande",
-            "Small birds": "Pájaros pequeños",
-            "Green tree": "Árbol verde"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "They are small birds",
+        "The tree is green",
+        "Big bear",
+        "Small birds"
+      ],
+      "vocab_review": [
+        "Green tree"
+      ],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -1174,46 +435,28 @@
       "title": "2.17: Eco Continuo 2",
       "desc": "Fluidez visual.",
       "icon": "🗣️",
-      "steps": [
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "I am a boy and it is a bear",
-          "displayWord": "Yo soy un niño y es un oso",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "They are red trees",
-          "displayWord": "Son árboles rojos",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "The forest is big and green",
-          "displayWord": "El bosque es grande y verde",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "Hello blue bird",
-          "displayWord": "Hola pájaro azul",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Blue bird": "Pájaro azul",
-            "Red trees": "Árboles rojos",
-            "Forest": "Bosque"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "They are red trees",
+        "Hello blue bird",
+        "Blue bird",
+        "Red trees"
+      ],
+      "vocab_review": [
+        "Forest"
+      ],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -1221,46 +464,28 @@
       "title": "2.18: Eco Continuo 3",
       "desc": "Fluidez de adjetivos.",
       "icon": "🗣️",
-      "steps": [
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "It is tired",
-          "displayWord": "Está cansado",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "They are happy bears",
-          "displayWord": "Son osos felices",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "You are a big wolf",
-          "displayWord": "Tú eres un lobo grande",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "I see a small green tree",
-          "displayWord": "Yo veo un árbol verde pequeño",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Tired": "Cansado",
-            "Happy bears": "Osos felices",
-            "Big wolf": "Lobo grande"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "It is tired",
+        "They are happy bears",
+        "Tired",
+        "Happy bears"
+      ],
+      "vocab_review": [
+        "Big wolf"
+      ],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -1268,46 +493,29 @@
       "title": "2.19: Ensayo General",
       "desc": "Preparación para el Jefe.",
       "icon": "🎭",
-      "steps": [
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "Look it is a big green tree",
-          "displayWord": "Mira es un árbol verde grande",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "They are brown bears",
-          "displayWord": "Son osos cafés",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "Hello small blue bird",
-          "displayWord": "Hola pajarito azul",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "echo_chamber",
-          "prompt": "p_speak_fast",
-          "word": "The forest is ready",
-          "displayWord": "El bosque está listo",
-          "successMsg": "s_fluency"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "Ready": "Listo",
-            "Brown bears": "Osos cafés",
-            "Blue bird": "Pajaro azul"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "They are brown bears",
+        "Hello small blue bird",
+        "The forest is ready",
+        "Ready"
+      ],
+      "vocab_review": [
+        "Brown bears",
+        "Blue bird"
+      ],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "picture_it",
+        "echo_chamber_translation",
+        "speed_speak",
+        "memory_flip",
+        "matching"
       ]
     },
     {
@@ -1315,27 +523,26 @@
       "title": "2.20: La Fogata",
       "desc": "El Jefe del Río.",
       "icon": "🔥",
-      "steps": [
-        {
-          "type": "echo_chamber",
-          "prompt": "p_ready",
-          "word": "I am ready",
-          "displayWord": "Estoy listo",
-          "successMsg": "¡Que empiece la prueba!"
-        },
-        {
-          "type": "matching",
-          "prompt": "p_match",
-          "timer": true,
-          "pairs": {
-            "It is a big bear": "Es un oso grande",
-            "They are blue birds": "Son pájaros azules",
-            "They are green trees": "Son árboles verdes",
-            "Goodbye animals": "Adiós animales",
-            "I see the forest": "Veo el bosque"
-          },
-          "successMsg": "s_match"
-        }
+      "vocab_new": [
+        "I am ready",
+        "They are blue birds",
+        "They are green trees",
+        "Goodbye animals"
+      ],
+      "vocab_review": [
+        "I see the forest"
+      ],
+      "story": {
+        "en": "Let's explore the forest!",
+        "es": "¡Exploremos el bosque!"
+      },
+      "flow": [
+        "story_moment",
+        "listen_click",
+        "echo_chamber",
+        "memory_flip",
+        "matching",
+        "boss_battle"
       ]
     }
   ]

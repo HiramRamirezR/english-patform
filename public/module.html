@@ -16,27 +16,29 @@
     <!-- Header Modular -->
     <div id="main-header"></div>
 
-    <div class="dashboard-container" id="dashboard-content"
-        style="max-width: 800px; padding: 2rem 1rem; margin: 0 auto; overflow: visible;">
+    <div class="dashboard-container" id="dashboard-content" style="padding: 2rem 1rem; overflow: visible;">
+        <div style="max-width: 800px; margin: 0 auto;">
 
-        <header class="stats-header"
-            style="justify-content: space-between; gap: 1rem; margin-bottom: 2rem; position: relative; top: 0;">
-            <button class="btn btn-secondary" onclick="window.location.href='mapa.html'"
-                style="padding: 0.5rem 1rem; font-size: 0.9rem;">← Volver</button>
-            <h2 style="font-size: 1.25rem; color: var(--primary-deep); margin: 0; flex: 1; text-align: center;"
-                id="module-title">Cargando Módulo...</h2>
-            <div style="width: 80px;"></div> <!-- Spacing balance -->
-        </header>
+            <header class="stats-header"
+                style="justify-content: space-between; gap: 1rem; margin-bottom: 2rem; position: relative; top: 0;">
+                <button class="btn btn-secondary" onclick="window.location.href='mapa.html'"
+                    style="padding: 0.5rem 1rem; font-size: 0.9rem; background: rgba(30, 41, 59, 0.95); border: 1px solid #334155; color: #f8fafc;">←
+                    Volver</button>
+                <h2 style="font-size: 1.25rem; color: #38bdf8; margin: 0; flex: 1; text-align: center;"
+                    id="module-title">Cargando Módulo...</h2>
+                <div style="width: 80px;"></div> <!-- Spacing balance -->
+            </header>
 
-        <p style="text-align: center; color: var(--slate-600); margin-bottom: 2rem;" id="module-desc">Por favor espera
-            un momento.</p>
+            <p style="text-align: center; color: #cbd5e1; margin-bottom: 2rem;" id="module-desc">Por favor espera
+                un momento.</p>
 
-        <!-- The Peak Map (generado dinámicamente) -->
-        <main class="peak-map" id="map-path"
-            style="flex-direction: column; overflow-x: hidden; padding-top: 0; max-width: 600px; margin: 0 auto;">
-            <!-- Contenido inyectado por JS -->
-        </main>
+            <!-- The Peak Map (generado dinámicamente) -->
+            <main class="peak-map" id="map-path"
+                style="flex-direction: column; overflow-x: hidden; padding-top: 0; max-width: 600px; margin: 0 auto;">
+                <!-- Contenido inyectado por JS -->
+            </main>
 
+        </div>
     </div>
 
     <!-- Scripts -->

@@ -285,13 +285,35 @@ export class MoonsforestEngine {
         feedback.className = 'speech-feedback';
         feedback.innerText = 'Presiona el micrófono para hablar';
 
+        const skipBtn = document.createElement('button');
+        skipBtn.innerText = "Saltar reto";
+        skipBtn.style.display = 'none';
+        skipBtn.style.margin = '1.5rem auto 0';
+        skipBtn.style.background = 'transparent';
+        skipBtn.style.color = 'rgba(255,255,255,0.3)';
+        skipBtn.style.border = 'none';
+        skipBtn.style.fontSize = '0.75rem';
+        skipBtn.style.textDecoration = 'underline';
+        skipBtn.style.cursor = 'pointer';
+        skipBtn.onclick = () => forcePass({ 
+            en: "Got it! Let's move to the next step.", 
+            es: "¡Entendido! Vamos al siguiente paso." 
+        });
+
         box.appendChild(prompt);
         box.appendChild(echoWord);
-        box.appendChild(listenBtn); // Insert before metrics
+        box.appendChild(listenBtn);
         box.appendChild(metricsContainer);
         box.appendChild(micBtn);
         box.appendChild(feedback);
+        box.appendChild(skipBtn);
         this.container.appendChild(box);
+
+        // Logic to show skipBtn
+        const originalFeedback = feedback.innerText;
+        micBtn.addEventListener('click', () => {
+             if (attempts >= 2) skipBtn.style.display = 'inline-block';
+        });
 
         // Logic for listening to the word
         listenBtn.addEventListener('click', () => {
@@ -312,6 +334,7 @@ export class MoonsforestEngine {
         };
 
         const forcePass = (msg) => {
+            skipBtn.style.display = 'none'; // Hide skip button when passing
             this.playSound('success');
             this.triggerSuccessBurst();
             echoWord.classList.add('success');
@@ -345,6 +368,32 @@ export class MoonsforestEngine {
             thermoFill.style.background = '#38bdf8';
             thermoLabel.innerText = "¡Te estoy escuchando! ⚡";
 
+            let recognitionTimeout = setTimeout(() => {
+                if (micBtn.classList.contains('listening')) {
+                    this.recognition.stop();
+                    handleNoResult();
+                }
+            }, 6000);
+
+            const handleNoResult = () => {
+                stopVisualPulse();
+                micBtn.classList.remove('listening');
+                listenBtn.disabled = false;
+                
+                if (attempts >= 3) {
+                    forcePass({ 
+                        en: "Moon heard you in his heart! Let's keep exploring.", 
+                        es: "¡Moon te escuchó en su corazón! Sigamos adelante." 
+                    });
+                } else {
+                    feedback.innerText = "No logré escucharte bien. ¡Intenta de nuevo!";
+                    this.showMoon({ 
+                        en: "Did you say it? I didn't hear you. Try again!", 
+                        es: "¿Lo dijiste? No te escuché. ¡Intenta otra vez!" 
+                    });
+                }
+            };
+
             try {
                 this.recognition.start();
 
@@ -375,6 +424,7 @@ export class MoonsforestEngine {
             }
 
             this.recognition.onresult = async (event) => {
+                clearTimeout(recognitionTimeout);
                 stopVisualPulse();
 
                 // Detener grabación en desktop
@@ -390,6 +440,9 @@ export class MoonsforestEngine {
                     });
                 }
 
+                micBtn.classList.remove('listening');
+                listenBtn.disabled = false;
+
                 let transcript = event.results[0][0].transcript.toLowerCase().trim();
                 let confidence = event.results[0][0].confidence || 0.8;
 
@@ -397,12 +450,12 @@ export class MoonsforestEngine {
                 let fillPercentage = Math.round(confidence * 100);
                 thermoFill.style.width = `${fillPercentage}%`;
 
-                if (fillPercentage < 50) thermoFill.style.background = '#ef4444';
-                else if (fillPercentage < 80) thermoFill.style.background = '#f59e0b';
+                if (fillPercentage < 40) thermoFill.style.background = '#ef4444';
+                else if (fillPercentage < 75) thermoFill.style.background = '#f59e0b';
                 else thermoFill.style.background = '#10b981';
 
                 const corrections = {
-                    "eye": "i", "aye": "i", "hi ": "i ", "ai": "i", "hay": "i", "ay": "i", " a ": " i ",
+                    "eye": "i", "aye": "i", "hi": "i", "ai": "i", "hay": "i", "ay": "i", " a ": " i ", "ah": "i", "high": "i",
                     "am": "am", "um": "am", "em": "am", "aim": "am", "ham": "am", "an ": "am ",
                     "im": "i am", "i'm": "i am",
                     "halo": "hello", "jello": "hello", "yellow": "hello",
@@ -433,6 +486,7 @@ export class MoonsforestEngine {
                 const matches = targets.some(t => cleanTranscript === t || cleanTranscript.startsWith(t) || (attempts >= 2 && cleanTranscript.includes(t)));
 
                 if (matches || attempts >= 3) {
+                    skipBtn.style.display = 'none'; // Hide skip button when passing
                     // Guardar audio en el historial (desktop)
                     if (audioUrl) this.sessionHistory.push({ type: 'child', content: audioUrl });
 
@@ -968,16 +1022,17 @@ export class MoonsforestEngine {
 
         const btn = document.createElement('button');
         btn.className = 'story-intro-btn';
-        btn.innerText = "Let's Go! →";
-        btn.style.opacity = '0';
-        btn.style.pointerEvents = 'none';
+        btn.innerText = "Preparando... 🌲";
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        btn.style.cursor = 'wait';
 
         btn.onclick = () => {
-            overlay.classList.add('closing');
+            overlay.classList.add('fade-out');
             setTimeout(() => {
                 overlay.remove();
                 this.nextStep();
-            }, 500);
+            }, 600);
         };
 
         card.appendChild(label);
@@ -985,19 +1040,19 @@ export class MoonsforestEngine {
         card.appendChild(msgText);
         card.appendChild(btn);
         overlay.appendChild(card);
-        document.body.appendChild(overlay);
+        this.container.appendChild(overlay);
 
-        // Narrar la historia
-        this.speakMoon(enMsg, () => {
-            btn.style.opacity = '1';
-            btn.style.pointerEvents = 'auto';
-        });
+        // TTS
+        this.speak(enMsg);
 
-        // Show button anyway after a while to avoid lock
+        // Habilitar tras delay de carga
         setTimeout(() => {
+            btn.disabled = false;
             btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
+            btn.innerText = "Let's Go! →";
             btn.style.pointerEvents = 'auto';
-        }, 5000);
+        }, 1500);
     }
 
     renderInterstitialMoon(data) {
@@ -1451,6 +1506,8 @@ export class MoonsforestEngine {
         }
     }
 
+
+
     renderPictureIt(data) {
         const box = document.createElement('div');
         box.className = 'activity-box';
@@ -1485,9 +1542,14 @@ export class MoonsforestEngine {
             else if (opt.includes('Tired')) emoji = '😴';
             else if (opt.includes('Ready')) emoji = '💥';
 
+            // Fallback: si el emoji es genérico, mostrar el texto en español para que sea un reto de traducción
+            const showWordStatus = (emoji === '✨' || emoji === '❓' || emoji === '🌲') 
+                ? (data.translationsMap ? data.translationsMap[opt] : opt) 
+                : '???';
+
             card.innerHTML = `
                 <div class="pi-emoji">${emoji}</div>
-                <div class="pi-word">???</div>
+                <div class="pi-word">${showWordStatus}</div>
             `;
 
             card.onclick = () => {

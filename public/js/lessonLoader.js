@@ -61,33 +61,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Generar Práctica Infinita Aleatoria
         let allVocab = [];
         configModule.lessons.forEach(l => {
-            if (l.vocab_new) allVocab.push(...l.vocab_new);
-            if (l.vocab_review) allVocab.push(...l.vocab_review);
+            if (l.vocab_new) allVocab.push(...l.vocab_new.map(v => v.trim()));
+            if (l.vocab_review) allVocab.push(...l.vocab_review.map(v => v.trim()));
         });
-        // Deduplicar e ignorar frases demasiado largas si queremos
-        allVocab = [...new Set(allVocab)];
+        
+        // Deduplicar e ignorar palabras muy cortas para evitar ruido en voz
+        allVocab = [...new Set(allVocab)].filter(w => w.length > 2);
 
-        // Pick 6-8 random words
+        // Pick 4 random words (1/3 of before)
         allVocab.sort(() => Math.random() - 0.5);
-        const selectedVocab = allVocab.slice(0, 8);
+        const selectedVocab = allVocab.slice(0, 4);
 
         lessonConfig = {
             id: "daily_practice",
-            title: "Práctica Infinita",
-            desc: "Repaso Aleatorio",
-            vocab_new: selectedVocab.slice(0, 4),
-            vocab_review: selectedVocab.slice(4, 8),
+            title: "Práctica Diaria",
+            desc: "Repaso Rápido",
+            vocab_new: selectedVocab,
+            vocab_review: [],
             story: {
-                en: "Welcome to your infinite daily practice! Let's mix things up.",
-                es: "¡Bienvenido a tu práctica diaria infinita!"
+                en: "Time for a quick review! Let's play.",
+                es: "¡Es hora de un repaso rápido! Vamos a jugar."
             },
             flow: [
                 "story_moment",
+                "listen_click",
                 "echo_chamber",
                 "picture_it",
-                "echo_chamber_translation",
-                "speed_speak",
-                "memory_flip",
                 "matching",
                 "boss_battle"
             ]

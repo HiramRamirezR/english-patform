@@ -44,6 +44,7 @@ const initApp = () => {
     setupLogin('google-login');
     setupLogin('hero-cta-free');
     setupLogin('hero-cta-explore');
+    setupLogin('pricing-cta');
     setupLogin('hero-cta-teacher', 'profile.html');
 
     // Lógica de referidos

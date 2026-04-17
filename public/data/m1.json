@@ -487,64 +487,6 @@
       ]
     },
     {
-      "id": "m1l8",
-      "title": "1.8: Tú eres...",
-      "desc": "El pronombre \"You\".",
-      "icon": "👉",
-      "vocab_new": [
-        "You",
-        "You are"
-      ],
-      "vocab_review": [
-        "I",
-        "I am"
-      ],
-      "story": {
-        "en": "Who are you? You are my student!",
-        "es": "¿Quién eres tú? ¡Tú eres mi estudiante!"
-      },
-      "flow": [
-        "story_moment",
-        "listen_click",
-        "echo_chamber",
-        "picture_it",
-        "interstitial_moon",
-        "echo_chamber_translation",
-        "speed_speak",
-        "memory_flip",
-        "matching"
-      ]
-    },
-    {
-      "id": "m1l9",
-      "title": "1.9: Mi nombre es...",
-      "desc": "Presentándote.",
-      "icon": "🏷️",
-      "vocab_new": [
-        "Name",
-        "My name is"
-      ],
-      "vocab_review": [
-        "Hello",
-        "Good morning"
-      ],
-      "story": {
-        "en": "My name is Moon. What is your name?",
-        "es": "Mi nombre es Moon. ¿Cuál es tu nombre?"
-      },
-      "flow": [
-        "story_moment",
-        "listen_click",
-        "echo_chamber",
-        "picture_it",
-        "interstitial_moon",
-        "echo_chamber_translation",
-        "speed_speak",
-        "memory_flip",
-        "matching"
-      ]
-    },
-    {
       "id": "m1l10",
       "title": "1.10: Segundo Reto",
       "desc": "¿Quién eres tú?.",

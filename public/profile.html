@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil | English Peak</title>
+    <title>Mi Perfil | Moonsforest</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -170,6 +170,61 @@
         .check-icon {
             font-size: 1rem;
         }
+        /* Referral Card */
+        .referral-card {
+            background: linear-gradient(135deg, #0f172a, #1e3a5f);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #38bdf8;
+        }
+        .referral-link-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(56,189,248,0.3);
+            border-radius: 12px;
+            padding: 0.65rem 0.85rem;
+            margin: 0.85rem 0;
+        }
+        .referral-link-text {
+            flex: 1;
+            color: #7dd3fc;
+            font-size: 0.82rem;
+            font-family: monospace;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .referral-copy-btn {
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+        .referral-copy-btn:hover { background: #7dd3fc; }
+        .referral-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.75rem;
+        }
+        .referral-stat {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 0.65rem;
+            text-align: center;
+        }
+        .referral-stat-num  { font-size: 1.4rem; font-weight: 800; color: #38bdf8; }
+        .referral-stat-label { font-size: 0.72rem; color: #94a3b8; margin-top: 0.1rem; }
     </style>
 </head>
 
@@ -265,6 +320,35 @@
                         <button class="btn" id="cancel-edit-profile-btn"
                             style="background: white; border: 1px solid var(--slate-300);">Cancelar</button>
                         <button class="btn btn-primary" id="save-edit-profile-btn">Guardar Cambios</button>
+                    </div>
+                </div>
+
+                <!-- === Sección de Referidos === -->
+                <div class="referral-card" id="referral-section" style="display:none;">
+                    <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+                        <span style="font-size:1.6rem;">🌲</span>
+                        <div>
+                            <h3 style="color:white; font-size:1rem; margin:0;">Invita amigos al bosque</h3>
+                            <p style="color:#94a3b8; font-size:0.8rem; margin:0;">Gana $50 de descuento por cada uno que se suscriba</p>
+                        </div>
+                    </div>
+                    <div class="referral-link-box">
+                        <span class="referral-link-text" id="referral-link-display">...</span>
+                        <button class="referral-copy-btn" id="referral-copy-btn">📋 Copiar</button>
+                    </div>
+                    <div class="referral-stats">
+                        <div class="referral-stat">
+                            <div class="referral-stat-num" id="referral-count">0</div>
+                            <div class="referral-stat-label">Amigos invitados</div>
+                        </div>
+                        <div class="referral-stat">
+                            <div class="referral-stat-num" id="referral-active">0</div>
+                            <div class="referral-stat-label">Suscripciones activas</div>
+                        </div>
+                        <div class="referral-stat">
+                            <div class="referral-stat-num" id="referral-discount">$0</div>
+                            <div class="referral-stat-label">Descuento acumulado</div>
+                        </div>
                     </div>
                 </div>
 

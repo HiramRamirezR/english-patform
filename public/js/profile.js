@@ -371,6 +371,52 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingState.style.display = 'none';
             profileContent.style.display = 'block';
 
+            // 4. ─── Sección de Referidos ─────────────────────────────────────
+            const referralSection = document.getElementById('referral-section');
+            if (referralSection && docSnap.exists()) {
+                const userData = docSnap.data();
+
+                // Generar/reutilizar código de referido del alumno
+                const existingRef = userData.referralCode;
+                const refCode = existingRef || ('MF' + user.uid.substring(0, 6).toUpperCase());
+
+                // Guardar si no existía
+                if (!existingRef) {
+                    import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js")
+                        .then(({ updateDoc }) => updateDoc(doc(db, 'users', user.uid), { referralCode: refCode }))
+                        .catch(() => {});
+                }
+
+                const refLink = `${window.location.origin}/index.html?ref=${refCode}`;
+                const referralCount  = userData.referralCount  || 0;
+                const referralActive = userData.referralActive || 0;
+                const discount = referralActive * 50;
+
+                document.getElementById('referral-link-display').textContent = refLink;
+                document.getElementById('referral-count').textContent   = referralCount;
+                document.getElementById('referral-active').textContent  = referralActive;
+                document.getElementById('referral-discount').textContent = `$${discount}`;
+                referralSection.style.display = 'block';
+
+                // Botón copiar
+                document.getElementById('referral-copy-btn').addEventListener('click', async () => {
+                    try {
+                        await navigator.clipboard.writeText(refLink);
+                        const btn = document.getElementById('referral-copy-btn');
+                        btn.textContent = '✅ Copiado';
+                        setTimeout(() => { btn.textContent = '📋 Copiar'; }, 2000);
+                    } catch {
+                        // Fallback para navegadores sin Clipboard API
+                        const ta = document.createElement('textarea');
+                        ta.value = refLink;
+                        document.body.appendChild(ta);
+                        ta.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(ta);
+                    }
+                });
+            }
+
         } catch (error) {
             console.error("Error leyendo datos del perfil:", error);
             loadingState.textContent = "Error al cargar la información. Recarga la página por favor.";

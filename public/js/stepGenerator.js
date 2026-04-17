@@ -6,15 +6,43 @@ export function generateStepsFromFlow(lessonConfig, dictionary) {
 
     if (!lessonConfig.flow) return lessonConfig.steps || [];
 
+    // Distractors come from the module's own vocab (words with emojis preferred)
+    // Falls back to dictionary words with emojis if module vocab is too small
     const getOptions = (correctWord, count = 4) => {
         let opts = new Set([correctWord]);
-        let allDictWords = Object.keys(dictionary);
-        // Shuffle dict words
-        allDictWords.sort(() => Math.random() - 0.5);
-        for (let w of allDictWords) {
+
+        // 1. Prioritize other words from this lesson's vocab that have emojis
+        const moduleWordsWithEmoji = allWords.filter(
+            w => w !== correctWord && dictionary[w]?.emoji
+        );
+        moduleWordsWithEmoji.sort(() => Math.random() - 0.5);
+        for (const w of moduleWordsWithEmoji) {
             if (opts.size >= count) break;
             opts.add(w);
         }
+
+        // 2. If still not enough, pull from whole dictionary (emojis only)
+        if (opts.size < count) {
+            const dictWordsWithEmoji = Object.keys(dictionary).filter(
+                w => w !== correctWord && dictionary[w]?.emoji && !opts.has(w)
+            );
+            dictWordsWithEmoji.sort(() => Math.random() - 0.5);
+            for (const w of dictWordsWithEmoji) {
+                if (opts.size >= count) break;
+                opts.add(w);
+            }
+        }
+
+        // 3. Last resort: any word
+        if (opts.size < count) {
+            const rest = allWords.filter(w => !opts.has(w));
+            rest.sort(() => Math.random() - 0.5);
+            for (const w of rest) {
+                if (opts.size >= count) break;
+                opts.add(w);
+            }
+        }
+
         return Array.from(opts);
     };
 
@@ -39,7 +67,7 @@ export function generateStepsFromFlow(lessonConfig, dictionary) {
             });
         }
         else if (activity === 'echo_chamber') {
-            allWords.forEach(w => {
+            allWords.filter(w => w.length > 2).forEach(w => {
                 steps.push({
                     type: 'echo_chamber',
                     prompt: "Listen and repeat! / ¡Escucha y repite!",
@@ -50,7 +78,7 @@ export function generateStepsFromFlow(lessonConfig, dictionary) {
             });
         }
         else if (activity === 'echo_chamber_translation') {
-            allWords.forEach(w => {
+            allWords.filter(w => w.length > 2).forEach(w => {
                 steps.push({
                     type: 'echo_chamber',
                     prompt: "How do you say... / ¿Cómo se dice...",
@@ -65,13 +93,18 @@ export function generateStepsFromFlow(lessonConfig, dictionary) {
             allWords.forEach(w => {
                 let opts = getOptions(w, 4);
                 let emojisMap = {};
-                opts.forEach(o => emojisMap[o] = dictionary[o]?.emoji || "❓");
+                let translationsMap = {};
+                opts.forEach(o => {
+                    emojisMap[o] = dictionary[o]?.emoji || "❓";
+                    translationsMap[o] = dictionary[o]?.es || o;
+                });
                 steps.push({
                     type: 'picture_it',
                     prompt: "Tap the picture of the word Moon says! / ¡Toca la imagen de la palabra!",
                     word_to_find: w,
                     options: opts,
-                    emojisMap: emojisMap
+                    emojisMap: emojisMap,
+                    translationsMap: translationsMap
                 });
             });
         }
@@ -86,8 +119,9 @@ export function generateStepsFromFlow(lessonConfig, dictionary) {
         }
         else if (activity === 'speed_speak') {
             let words = [];
+            const filteredWords = allWords.filter(w => w.length > 2);
             for (let i = 0; i < 6; i++) {
-                words.push(allWords[Math.floor(Math.random() * allWords.length)]);
+                words.push(filteredWords[Math.floor(Math.random() * filteredWords.length)]);
             }
             steps.push({
                 type: 'speed_speak',
@@ -99,7 +133,8 @@ export function generateStepsFromFlow(lessonConfig, dictionary) {
         else if (activity === 'memory_flip') {
             let pairs = {};
             allWords.forEach(w => {
-                pairs[w] = dictionary[w]?.emoji || "✨";
+                const emoji = dictionary[w]?.emoji;
+                pairs[w] = (emoji && emoji !== "✨") ? emoji : (dictionary[w]?.es || w);
             });
             steps.push({
                 type: 'memory_flip',
@@ -110,7 +145,8 @@ export function generateStepsFromFlow(lessonConfig, dictionary) {
         else if (activity === 'matching') {
             let pairs = {};
             allWords.forEach(w => {
-                pairs[w] = dictionary[w]?.es || "✨";
+                const emoji = dictionary[w]?.emoji;
+                pairs[w] = (emoji && emoji !== "✨") ? emoji : (dictionary[w]?.es || w);
             });
             steps.push({
                 type: 'matching',

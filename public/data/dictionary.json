@@ -153,6 +153,14 @@
             "i'm ready"
         ]
     },
+    "I am happy": {
+        "es": "Estoy feliz",
+        "emoji": "😊",
+        "aliases": [
+            "i'm happy",
+            "eye am happy"
+        ]
+    },
     "Hello Moon": {
         "es": "Hola Moon",
         "emoji": "🐻",
@@ -178,13 +186,38 @@
         "aliases": []
     },
     "You are happy": {
-        "es": "Tú eres feliz",
-        "emoji": "✨",
+        "es": "Tú estás feliz",
+        "emoji": "😊",
         "aliases": []
     },
     "You are sad": {
         "es": "Tú estás triste",
-        "emoji": "✨",
+        "emoji": "😢",
+        "aliases": []
+    },
+    "You are tired": {
+        "es": "Tú estás cansado",
+        "emoji": "😴",
+        "aliases": []
+    },
+    "A big bear": {
+        "es": "Un oso grande",
+        "emoji": "🐻",
+        "aliases": []
+    },
+    "Green forest": {
+        "es": "Bosque verde",
+        "emoji": "🌲",
+        "aliases": []
+    },
+    "The sun": {
+        "es": "El sol",
+        "emoji": "☀️",
+        "aliases": []
+    },
+    "I see": {
+        "es": "Yo veo",
+        "emoji": "👁️",
         "aliases": []
     },
     "My": {

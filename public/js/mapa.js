@@ -59,6 +59,27 @@ saveAvatarBtn.addEventListener('click', async () => {
     }
 });
 
+/**
+ * 🔥 Calcula la racha de días consecutivos de estudio
+ * basada en el weeklyProgress (objeto { 'YYYY-MM-DD': true })
+ */
+const calculateStreak = (weeklyProgress) => {
+    if (!weeklyProgress || Object.keys(weeklyProgress).length === 0) return 0;
+    let streak = 0;
+    const today = new Date();
+    for (let i = 0; i < 30; i++) {
+        const d = new Date(today);
+        d.setDate(today.getDate() - i);
+        const key = d.toISOString().split('T')[0];
+        if (weeklyProgress[key]) {
+            streak++;
+        } else if (i > 0) {
+            break; // Rompió la racha
+        }
+    }
+    return streak;
+};
+
 // Setup Initial Dashboard State
 const setupDashboardUI = () => {
     // Si no tiene avatar, mostrar Onboarding
@@ -97,8 +118,19 @@ const setupDashboardUI = () => {
     // Desbloquear Módulos
     setupModuleUnlocks(currentProfile.unlockedModules || ['m1']);
 
-    // Frase inicial
-    moonText.innerHTML = `¡Hola viajero! Qué bueno verte, <strong>${currentProfile.avatar}</strong>. Entra al Campamento Base (Módulo 1) para prepararnos.`;
+    // Mensaje de Moon con racha
+    const streak = calculateStreak(currentProfile.weeklyProgress || {});
+    let moonMsg = '';
+    if (streak === 0) {
+        moonMsg = `¡Hola <strong>${currentProfile.avatar}</strong>! ${firstName}, hoy es un buen día para practicar. ¿Entramos al Campamento?`;
+    } else if (streak === 1) {
+        moonMsg = `¡${firstName}! Llevas <strong>1 día</strong> de racha. Un pasito más hoy y formamos un hábito 🐻‍❄️`;
+    } else if (streak < 5) {
+        moonMsg = `🔥 <strong>¡${streak} días seguidos, ${firstName}!</strong> Tu ${currentProfile.avatar} está ganando experiencia. ¡Sigue así!`;
+    } else {
+        moonMsg = `🏆 <strong>¡RACHA DE ${streak} DÍAS!</strong> Eres una leyenda del bosque, ${firstName}. El 🌲 te espera.`;
+    }
+    moonText.innerHTML = moonMsg;
 
     // Cargar Citas
     loadAppointments();
@@ -108,7 +140,113 @@ const setupDashboardUI = () => {
     if (!currentProfile.placementTestDone && (!currentProfile.unlockedModules || currentProfile.unlockedModules.length <= 1)) {
         setTimeout(() => triggerPlacementTestPrompt(), 2000);
     }
+
+    // 🎉 Verificar si el alumno acaba de completar el Módulo 1
+    const completedLessons = currentProfile.completedLessons || [];
+    const m1JustDone = completedLessons.includes('m1l20');
+    const celebrationShown = sessionStorage.getItem('m1_celebration_shown');
+    if (m1JustDone && !celebrationShown) {
+        sessionStorage.setItem('m1_celebration_shown', 'true');
+        setTimeout(() => showModuleCompletionCelebration(), 1500);
+    }
+
+    // 📍 Botón flotante "Continuar" — lleva a la siguiente lección pendiente
+    setupContinueButton(completedLessons);
+
+    // 👨‍🏫 Sistema de Evaluación Semanal Integrado
+    setupWeeklyEvaluationButton(currentProfile);
 };
+
+/**
+ * Sistema de Evaluación Semanal
+ * Aparece si el alumno ha practicado al menos 3 días esta semana.
+ */
+function setupWeeklyEvaluationButton(profile) {
+    const moonBox = document.querySelector('.moon-status');
+    if (!moonBox) return;
+
+    // Verificar progreso semanal (días con >0 minutos)
+    const weeklyData = profile.weeklyProgress || {};
+    const daysActive = Object.values(weeklyData).filter(v => v > 0).length;
+
+    // Si ha practicado 3 o más días, mostramos el botón de recompensa
+    if (daysActive >= 3) {
+        const evalContainer = document.createElement('div');
+        evalContainer.style.marginTop = '1rem';
+        evalContainer.style.padding = '1rem';
+        evalContainer.style.background = 'rgba(34, 197, 94, 0.1)';
+        evalContainer.style.borderRadius = '12px';
+        evalContainer.style.border = '1px dashed var(--forest-glow)';
+        evalContainer.style.textAlign = 'center';
+
+        const evalBtn = document.createElement('button');
+        evalBtn.className = 'btn-premium';
+        evalBtn.style.width = '100%';
+        evalBtn.style.padding = '0.8rem';
+        evalBtn.style.fontSize = '0.9rem';
+        evalBtn.style.fontWeight = 'bold';
+
+        // Verificar si ya solicitó la evaluación esta semana
+        const weekKey = `eval_${new Date().getFullYear()}_W${getWeekNumber(new Date())}`;
+        const alreadyRequested = profile.requestedEvaluations && profile.requestedEvaluations.includes(weekKey);
+
+        if (alreadyRequested) {
+            evalBtn.innerText = "⏳ Evaluación Solicitada";
+            evalBtn.style.opacity = '0.7';
+            evalBtn.disabled = true;
+            evalBtn.style.cursor = 'default';
+        } else {
+            evalBtn.innerHTML = "🎯 ¡Reto Semanal Listo! Solicitar Evaluación";
+            evalBtn.onclick = async () => {
+                const result = await Swal.fire({
+                    title: '¿Listo para tu Evaluación?',
+                    text: 'Moon le avisará a tu maestro que ya terminaste tu práctica de la semana. ¡Prepárate!',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: '¡Sí, avisar!',
+                    cancelButtonText: 'Aún no',
+                    confirmButtonColor: '#22c55e'
+                });
+
+                if (result.isConfirmed) {
+                    try {
+                        // 1. Guardar en Firestore para que el maestro lo vea
+                        const userRef = doc(db, 'users', profile.uid);
+                        await updateDoc(userRef, {
+                            requestedEvaluations: firebase.firestore.FieldValue.arrayUnion(weekKey),
+                            lastEvalRequest: serverTimestamp()
+                        });
+
+                        // 2. Notificación Discord (para que Hiram se entere al momento)
+                        if (typeof sendDiscordNotification === 'function') {
+                            sendDiscordNotification(`🎯 **Solicitud de Evaluación**: ${profile.name} (${profile.avatar}) ha completado su racha de ${daysActive} días y está listo para ser evaluado.`);
+                        }
+
+                        Swal.fire('¡Listo!', 'Tu maestro ha sido notificado. Recibirás tus estrellas pronto.', 'success');
+                        evalBtn.innerText = "⏳ Evaluación Solicitada";
+                        evalBtn.disabled = true;
+                        evalBtn.style.opacity = '0.7';
+
+                    } catch (error) {
+                        console.error("Error solicitando evaluación:", error);
+                    }
+                }
+            };
+        }
+
+        evalContainer.appendChild(evalBtn);
+        moonBox.appendChild(evalContainer);
+    }
+}
+
+// Helper para número de semana
+function getWeekNumber(d) {
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    return weekNo;
+}
 
 const setupModuleUnlocks = (unlocked) => {
     const nodes = document.querySelectorAll('.module-node');
@@ -121,9 +259,162 @@ const setupModuleUnlocks = (unlocked) => {
         } else {
             node.classList.remove('unlocked');
             node.classList.add('locked');
-            node.onclick = null;
+            // Módulo bloqueado → mostrar modal de suscripción
+            node.onclick = () => showSubscriptionModal();
         }
     });
+};
+
+/**
+ * 🔒 Modal de Suscripción — Se muestra al intentar acceder a módulos bloqueados
+ */
+const showSubscriptionModal = async () => {
+    const result = await Swal.fire({
+        title: '🌲 El Bosque Profundo te llama...',
+        html: `
+            <div style="text-align: left; font-family: 'Outfit', sans-serif;">
+                <p style="font-size: 0.95rem; color: #475569; margin-bottom: 1.25rem; line-height: 1.6;">
+                    Has cruzado el Campamento Base. 19 módulos y cientos de conversaciones
+                    te esperan en lo profundo del bosque.
+                </p>
+                <div style="background: linear-gradient(135deg, #0f172a, #1e3a5f); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.25rem; text-align: center;">
+                    <div style="font-size: 2rem; font-weight: 800; color: #38bdf8; line-height: 1;">$300</div>
+                    <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.25rem;">MXN al mes — Solo <strong style="color: #7dd3fc;">$10 al día</strong></div>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0 0 1rem; font-size: 0.9rem; color: #475569;">
+                    <li style="padding: 0.4rem 0;">🌿 Todos los módulos del bosque desbloqueados</li>
+                    <li style="padding: 0.4rem 0;">🎙️ Práctica de voz con Moon todos los días</li>
+                    <li style="padding: 0.4rem 0;">🧭 Acceso prioritario a evaluaciones con maestros</li>
+                    <li style="padding: 0.4rem 0;">📊 Tu progreso guardado para siempre</li>
+                </ul>
+                <p style="font-size: 0.8rem; color: #94a3b8; text-align: center;">Cancela cuando quieras. Sin penalizaciones.</p>
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: '🚀 Quiero acceso completo',
+        cancelButtonText: 'Más tarde',
+        confirmButtonColor: '#38bdf8',
+        cancelButtonColor: '#64748b',
+        customClass: { popup: 'swal-forest-popup' }
+    });
+
+    if (result.isConfirmed) {
+        // TODO: Reemplazar con el link real de Mercado Pago cuando esté integrado
+        Swal.fire({
+            title: '¡Gracias por tu interés!',
+            html: `<p style="font-size: 0.95rem; color: #475569;">Los pagos estarán disponibles muy pronto. Moon te avisará en cuanto abran las puertas del bosque. 🐻‍❄️</p>`,
+            icon: 'info',
+            confirmButtonColor: '#38bdf8'
+        });
+    }
+};
+
+/**
+ * 🎉 Celebración al completar el Módulo 1 completo (m1l20)
+ */
+const showModuleCompletionCelebration = async () => {
+    // Usar canvas confetti si está disponible, si no, SweetAlert puro
+    await Swal.fire({
+        title: '🔥 ¡LEYENDA DEL CAMPAMENTO BASE!',
+        html: `
+            <div style="text-align: center; font-family: 'Outfit', sans-serif;">
+                <p style="font-size: 3rem; margin: 0.5rem 0;">🏕️⭐🌲</p>
+                <p style="font-size: 1rem; color: #475569; margin-bottom: 1.5rem; line-height: 1.6;">
+                    Completaste las <strong>20 lecciones</strong> del Módulo 1.
+                    Tu ${currentProfile?.avatar || '🦊'} ya puede hablar inglés básico.
+                </p>
+                <div style="background: #f0fdf4; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid #bbf7d0;">
+                    <p style="font-size: 0.85rem; color: #166534; margin: 0;">
+                        🎙️ Estás listo para seguir explorando el bosque.
+                    </p>
+                </div>
+                <div style="background: linear-gradient(135deg, #0f172a, #1e3a5f); border-radius: 16px; padding: 1.5rem;">
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #38bdf8; margin-bottom: 0.25rem;">$300 MXN/mes</div>
+                    <div style="font-size: 0.8rem; color: #94a3b8;">Todos los módulos — Solo $10 al día</div>
+                </div>
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: '🌲 Quiero seguir explorando',
+        cancelButtonText: 'Evalúate primero ($60)',
+        confirmButtonColor: '#38bdf8',
+        cancelButtonColor: '#f97316',
+        allowOutsideClick: false
+    }).then(result => {
+        if (result.isConfirmed) {
+            showSubscriptionModal();
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            window.location.href = 'evaluacion.html';
+        }
+    });
+};
+
+/**
+ * 📍 Botón flotante "Continuar" — detecta la siguiente lección no completada
+ * y la ofrece como acceso rápido desde el mapa.
+ */
+const setupContinueButton = (completedLessons) => {
+    // Eliminar si ya existía (por recarga de UI)
+    const existing = document.getElementById('fab-continue');
+    if (existing) existing.remove();
+
+    // Definir el orden de lecciones del M1
+    const m1Lessons = [
+        'm1l1','m1l2','m1l3','m1l4','m1l5','m1l6','m1l7','m1l8','m1l9','m1l10',
+        'm1l11','m1l12','m1l13','m1l14','m1l15','m1l16','m1l17','m1l18','m1l19','m1l20'
+    ];
+
+    // Encontrar siguiente lección sin completar
+    const nextLesson = m1Lessons.find(id => !completedLessons.includes(id));
+    if (!nextLesson) return; // Todas completadas, no mostrar
+
+    // Solo mostrar si llevan al menos 1 lección completada
+    if (completedLessons.length === 0) return;
+
+    const lessonNum = nextLesson.replace('m1l', '');
+    const fab = document.createElement('button');
+    fab.id = 'fab-continue';
+    fab.innerHTML = `▶ Continuar <span style="opacity:0.8; font-size:0.8rem;">Lección 1.${lessonNum}</span>`;
+    fab.style.cssText = `
+        position: fixed;
+        bottom: 2rem;
+        right: 1.5rem;
+        z-index: 500;
+        background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+        color: white;
+        border: none;
+        border-radius: 999px;
+        padding: 0.85rem 1.5rem;
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(56, 189, 248, 0.45);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+        animation: fabPulse 2.5s ease-in-out infinite;
+    `;
+
+    fab.onmouseenter = () => { fab.style.transform = 'translateY(-2px)'; fab.style.boxShadow = '0 12px 28px rgba(56,189,248,0.55)'; };
+    fab.onmouseleave = () => { fab.style.transform = ''; fab.style.boxShadow = '0 8px 20px rgba(56,189,248,0.45)'; };
+    fab.onclick = () => window.location.href = `lesson.html?id=${nextLesson}`;
+
+    // Añadir animación al stylesheet si no existe
+    if (!document.getElementById('fab-style')) {
+        const style = document.createElement('style');
+        style.id = 'fab-style';
+        style.textContent = `
+            @keyframes fabPulse {
+                0%, 100% { box-shadow: 0 8px 20px rgba(56,189,248,0.45); }
+                50% { box-shadow: 0 8px 32px rgba(56,189,248,0.7); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    document.body.appendChild(fab);
 };
 
 const triggerPlacementTestPrompt = async () => {
@@ -155,68 +446,131 @@ const triggerPlacementTestPrompt = async () => {
 
 const startPlacementTest = async () => {
     let score = 0;
+
+    // 25 preguntas de opción múltiple (5 por nivel, 5 niveles)
     const questions = [
-        // M1 Level
-        { q: 'How do you say "Hola"?', a: 'hello' },
-        { q: 'How do you say "Adiós"?', a: 'goodbye' },
-        { q: 'I ____ happy. (am/is/are)', a: 'am' },
-        { q: 'What is "Ustedes" in English?', a: 'you' },
-        { q: 'They ____ tired. (am/is/are)', a: 'are' },
-        // M2 Level
-        { q: 'What is the opposite of "Big"?', a: 'small' },
-        { q: 'She ____ English. (speak/speaks)', a: 'speaks' },
-        { q: 'It ____ a bear. (is/are)', a: 'is' },
-        { q: 'They ____ birds. (is/are)', a: 'are' },
-        { q: "What color is a 'Blue bird'?", a: 'blue' },
-        // M3 Level
-        { q: 'The cat is ____ the table. (en/sobre -> in/on)', a: 'on' },
-        { q: 'I ____ have a car. (no tengo -> don\'t/doesn\'t)', a: 'don\'t' },
-        { q: 'Where ____ you from?', a: 'are' },
-        { q: 'My name ____ Moon.', a: 'is' },
-        { q: 'He ____ a brother. (has/have)', a: 'has' },
-        // M4 Level
-        { q: 'Yesterday I ____ to the park. (go/went)', a: 'went' },
-        { q: 'I ____ eating now. (am/is/are)', a: 'am' },
-        { q: 'What is "Mañana" (tomorrow/yesterday)?', a: 'tomorrow' },
-        { q: 'Can you ____ me?', a: 'help' },
-        { q: 'This is ____ book. (mi)', a: 'my' },
-        // M5 Level
-        { q: 'I think ____ it is raining.', a: 'that' },
-        { q: 'I want ____ sleep.', a: 'to' },
-        { q: 'How ____ is this?', a: 'much' },
-        { q: 'There ____ many people.', a: 'are' },
-        { q: 'You ____ be careful.', a: 'should' }
+        // --- Nivel 1 (M1): Saludos, pronombres y emociones básicas ---
+        { q: '¿Cómo se dice "Hola"?',              opts: ['Hello', 'Goodbye', 'Thank you', 'Yes'],         a: 'Hello' },
+        { q: 'I ___ happy.',                        opts: ['am', 'is', 'are', 'be'],                       a: 'am' },
+        { q: '¿Cómo se dice "Niña"?',               opts: ['Girl', 'Boy', 'Student', 'Happy'],             a: 'Girl' },
+        { q: 'You ___ my student.',                 opts: ['are', 'is', 'am', 'be'],                       a: 'are' },
+        { q: '¿Cómo se dice "Adiós"?',              opts: ['Goodbye', 'Hello', 'Good night', 'Ready'],     a: 'Goodbye' },
+        // --- Nivel 2 (M2): Animales, colores y descripciones básicas ---
+        { q: 'It ___ a big bear.',                  opts: ['is', 'are', 'am', 'be'],                       a: 'is' },
+        { q: '¿Cuál es el opuesto de "Big"?',       opts: ['Small', 'Tall', 'Fast', 'Old'],                a: 'Small' },
+        { q: 'They ___ birds.',                     opts: ['are', 'is', 'am', 'was'],                      a: 'are' },
+        { q: '¿De qué color es un "Blue bird"?',    opts: ['Blue', 'Red', 'Green', 'Yellow'],              a: 'Blue' },
+        { q: 'The forest ___ big and green.',       opts: ['is', 'are', 'am', 'be'],                       a: 'is' },
+        // --- Nivel 3 (M3): Posesivos, have/has y preposiciones ---
+        { q: 'He ___ a brother.',                   opts: ['has', 'have', 'is', 'are'],                    a: 'has' },
+        { q: 'Where ___ you from?',                 opts: ['are', 'is', 'am', 'were'],                     a: 'are' },
+        { q: 'I ___ have a car. (No tengo)',        opts: ["don't", "doesn't", "isn't", "aren't"],         a: "don't" },
+        { q: 'The cat is ___ the table.',           opts: ['on', 'in', 'at', 'of'],                        a: 'on' },
+        { q: 'My name ___ Moon.',                   opts: ['is', 'are', 'am', 'be'],                       a: 'is' },
+        // --- Nivel 4 (M4): Pasado simple, progresivo y vocabulario ---
+        { q: 'Yesterday I ___ to the park.',        opts: ['went', 'go', 'goes', 'gone'],                  a: 'went' },
+        { q: 'I ___ eating right now.',             opts: ['am', 'is', 'are', 'be'],                       a: 'am' },
+        { q: '"Mañana" en inglés es:',              opts: ['Tomorrow', 'Yesterday', 'Today', 'Later'],     a: 'Tomorrow' },
+        { q: 'Can you ___ me? (ayudar)',            opts: ['help', 'helps', 'helped', 'helping'],          a: 'help' },
+        { q: 'This is ___ book.',                   opts: ['my', 'me', 'I', 'mine'],                       a: 'my' },
+        // --- Nivel 5 (M5): Verbos modales, cláusulas y estructura avanzada ---
+        { q: 'I want ___ sleep.',                   opts: ['to', 'for', 'at', 'on'],                       a: 'to' },
+        { q: 'How ___ is this?',                    opts: ['much', 'many', 'more', 'most'],                a: 'much' },
+        { q: 'You ___ be careful.',                 opts: ['should', 'shall', 'would', 'going'],           a: 'should' },
+        { q: 'I think ___ it is raining.',          opts: ['that', 'which', 'what', 'who'],                a: 'that' },
+        { q: 'There ___ many people here.',         opts: ['are', 'is', 'am', 'be'],                       a: 'are' },
     ];
 
-    Swal.fire({
-        title: '¡Empezamos!',
-        text: 'Responde con una sola palabra o la opción correcta.',
-        timer: 2000,
-        showConfirmButton: false
+    // Pantalla de inicio
+    await Swal.fire({
+        title: '🐻‍❄️ ¡Test de Nivelación!',
+        html: `<p style="font-size:0.95rem; color:#475569; line-height:1.6;">
+            25 preguntas para encontrar tu lugar en el bosque.<br>
+            <strong>Toca la respuesta correcta.</strong> ¡No hay trampas!
+        </p>`,
+        footer: '⏱ Solo tarda unos minutos',
+        confirmButtonText: '¡Comenzar! ▶',
+        confirmButtonColor: '#38bdf8',
+        allowOutsideClick: false
     });
 
     for (let i = 0; i < questions.length; i++) {
         const item = questions[i];
-        const { value: answer } = await Swal.fire({
-            title: `Pregunta ${i + 1}/25`,
-            text: item.q,
-            input: 'text',
-            allowOutsideClick: false,
-            inputPlaceholder: 'Escribe tu respuesta...',
-            footer: '🐻‍❄️ Moon está escuchando...'
+        // Mezclar opciones
+        const shuffled = [...item.opts].sort(() => Math.random() - 0.5);
+
+        const answered = await new Promise(resolve => {
+            Swal.fire({
+                title: `Pregunta ${i + 1} / ${questions.length}`,
+                html: `
+                    <div style="font-family:'Outfit',sans-serif;">
+                        <div style="background:#f8fafc; border-radius:12px; padding:1rem 1.25rem; margin-bottom:1.25rem; border-left:4px solid #38bdf8;">
+                            <p style="font-size:1.05rem; font-weight:600; color:#1e293b; margin:0;">${item.q}</p>
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;" id="opts-grid">
+                            ${shuffled.map(opt => `
+                                <button
+                                    class="swal-opt-btn"
+                                    onclick="window.__placementAnswer('${opt}')"
+                                    style="
+                                        background: white;
+                                        border: 2px solid #e2e8f0;
+                                        border-radius: 12px;
+                                        padding: 0.85rem 0.5rem;
+                                        font-size: 1rem;
+                                        font-weight: 600;
+                                        color: #334155;
+                                        cursor: pointer;
+                                        transition: all 0.15s;
+                                        font-family: 'Outfit', sans-serif;
+                                    "
+                                    onmouseover="this.style.borderColor='#38bdf8'; this.style.background='#f0f9ff'"
+                                    onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='white'"
+                                >${opt}</button>
+                            `).join('')}
+                        </div>
+                        <p style="font-size:0.75rem; color:#94a3b8; margin-top:1rem; text-align:center;">
+                            🐻‍❄️ Progreso: ${i}/${questions.length} — ${Math.round((i/questions.length)*100)}%
+                        </p>
+                    </div>
+                `,
+                showConfirmButton: false,
+                showCancelButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    window.__placementAnswer = (chosen) => resolve(chosen);
+                }
+            });
         });
 
-        if (answer?.toLowerCase().trim() === item.a.toLowerCase()) {
-            score++;
-        }
+        const correct = answered === item.a;
+        if (correct) score++;
+
+        // Feedback rápido (800ms)
+        await Swal.fire({
+            html: correct
+                ? `<div style="font-size:2.5rem;">✅</div><p style="color:#059669; font-weight:700; font-size:1.1rem; margin:0.5rem 0 0;">¡Correcto!</p>`
+                : `<div style="font-size:2.5rem;">❌</div><p style="color:#ef4444; font-weight:700; font-size:1.1rem; margin:0.5rem 0 0;">Era: <strong>${item.a}</strong></p>`,
+            timer: 900,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            width: 200,
+            padding: '1.5rem'
+        });
     }
 
-    // Calcular nivel
+    // Limpiar función global
+    delete window.__placementAnswer;
+
+
+    // Calcular nivel (puntaje sobre 25)
+    // Umbrales: ~88% = M5, ~68% = M4, ~48% = M3, ~28% = M2
     let unlocked = ['m1'];
     if (score >= 22) unlocked = ['m1', 'm2', 'm3', 'm4', 'm5'];
     else if (score >= 17) unlocked = ['m1', 'm2', 'm3', 'm4'];
     else if (score >= 12) unlocked = ['m1', 'm2', 'm3'];
-    else if (score >= 7) unlocked = ['m1', 'm2'];
+    else if (score >= 7)  unlocked = ['m1', 'm2'];
 
     const userRef = doc(db, 'users', currentUser.uid);
     await updateDoc(userRef, {

@@ -278,90 +278,94 @@ document.addEventListener('DOMContentLoaded', () => {
                     profileName.textContent = userData.name;
                 }
 
-                // Cambiar la UI si ya es maestro
-                if (userData.isTeacher) {
-                    profileRoleTag.textContent = 'Alumno + Maestro Activo';
-                    profileRoleTag.className = 'tag-teacher';
+                // Solo mostrar la sección de maestros si es Admin
+                if (userData.isAdmin) {
+                    document.getElementById('teacher-section').style.display = 'block';
 
-                    // Calcular Completitud del Perfil
-                    const profile = userData.teacherProfile || {};
-                    const fields = [
-                        { key: 'bio', label: 'Biografía', public: true },
-                        { key: 'video', label: 'Video YouTube', public: true },
-                        { key: 'loomInterview', label: 'Entrevista Loom', public: false },
-                        { key: 'zoomLink', label: 'Enlace Video-sala', public: true },
-                        { key: 'whatsapp', label: 'WhatsApp', public: false },
-                        { key: 'cvLink', label: 'CV / LinkedIn', public: false },
-                        { key: 'discordId', label: 'Discord (Bot)', public: false },
-                        { key: 'clabe', label: 'CLABE Bancaria', public: false },
-                        { key: 'bank', label: 'Banco', public: false }
-                    ];
+                    if (userData.isTeacher) {
+                        profileRoleTag.textContent = 'Alumno + Maestro Activo';
+                        profileRoleTag.className = 'tag-teacher';
 
-                    let completedCount = 0;
-                    const checklistHtml = fields.map(f => {
-                        const isDone = profile[f.key] && profile[f.key] !== '';
-                        if (isDone) completedCount++;
-                        return `
-                            <li class="checklist-item ${isDone ? 'done' : 'missing'}">
-                                <span class="check-icon">${isDone ? '✅' : '❌'}</span>
-                                ${f.label} <span style="font-size: 0.65rem; opacity: 0.7; margin-left: auto;">${f.public ? '(Público)' : '(Privado)'}</span>
-                            </li>
-                        `;
-                    }).join('');
-
-                    const percentage = Math.round((completedCount / fields.length) * 100);
-
-                    // Ocultar formulario entero y cambiar el mensaje
-                    teacherIntro.innerHTML = `
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                             <h2 style="font-size: 1.15rem; color: #166534; margin: 0;">🎒 ¡Tu perfil de Maestro está activo!</h2>
-                             <span style="font-size: 0.85rem; font-weight: 700; color: #166534;">${percentage}% completo</span>
-                        </div>
-                        
-                        <div class="progress-container">
-                            <div class="progress-bar" style="width: ${percentage}%"></div>
-                        </div>
-
-                        <ul class="checklist">
-                            ${checklistHtml}
-                        </ul>
-
-                        <p style="color: var(--slate-700); font-size: 0.85rem; margin-bottom: 1.25rem; line-height: 1.4;">
-                            Tu formación y biografía son visibles para los alumnos. 
-                            <strong>Tus datos bancarios, CV y WhatsApp son 100% privados</strong> y solo el equipo administrativo tiene acceso para gestionar tus pagos.
-                        </p>
-                        
-                        <button id="edit-teacher-profile-btn" class="btn" style="background: white; border: 1px solid #166534; color: #166534; font-size: 0.85rem; padding: 0.5rem 1.25rem; width: 100%; font-weight: 600;">
-                            Editar mi Información Profesional
-                        </button>
-                    `;
-                    teacherIntro.style.background = '#f0fdf4';
-                    teacherIntro.style.padding = '1.75rem';
-                    teacherIntro.style.borderRadius = '20px';
-                    teacherIntro.style.border = '1px solid #bbf7d0';
-                    document.getElementById('teacher-section').style.background = 'transparent';
-                    document.getElementById('teacher-section').style.border = 'none';
-                    document.getElementById('teacher-section').style.padding = '0';
-                    teacherForm.style.display = 'none';
-
-                    // Lógica para editar perfil
-                    document.getElementById('edit-teacher-profile-btn').addEventListener('click', () => {
+                        // Calcular Completitud del Perfil
                         const profile = userData.teacherProfile || {};
-                        document.getElementById('teacher-bio').value = profile.bio || '';
-                        document.getElementById('teacher-video').value = profile.video || '';
-                        document.getElementById('teacher-loom').value = profile.loomInterview || '';
-                        document.getElementById('teacher-zoom').value = profile.zoomLink || '';
-                        document.getElementById('teacher-whatsapp').value = profile.whatsapp || '';
-                        document.getElementById('teacher-cv').value = profile.cvLink || '';
-                        document.getElementById('teacher-discord').value = profile.discordId || '';
-                        document.getElementById('teacher-clabe').value = profile.clabe || '';
-                        document.getElementById('teacher-bank').value = profile.bank || '';
+                        const fields = [
+                            { key: 'bio', label: 'Biografía', public: true },
+                            { key: 'video', label: 'Video YouTube', public: true },
+                            { key: 'loomInterview', label: 'Entrevista Loom', public: false },
+                            { key: 'zoomLink', label: 'Enlace Video-sala', public: true },
+                            { key: 'whatsapp', label: 'WhatsApp', public: false },
+                            { key: 'cvLink', label: 'CV / LinkedIn', public: false },
+                            { key: 'discordId', label: 'Discord (Bot)', public: false },
+                            { key: 'clabe', label: 'CLABE Bancaria', public: false },
+                            { key: 'bank', label: 'Banco', public: false }
+                        ];
 
-                        submitProvider.innerText = 'Guardar Cambios';
-                        teacherIntro.style.display = 'none';
-                        teacherForm.classList.add('show-form');
-                        teacherForm.style.display = 'block';
-                    });
+                        let completedCount = 0;
+                        const checklistHtml = fields.map(f => {
+                            const isDone = profile[f.key] && profile[f.key] !== '';
+                            if (isDone) completedCount++;
+                            return `
+                                <li class="checklist-item ${isDone ? 'done' : 'missing'}">
+                                    <span class="check-icon">${isDone ? '✅' : '❌'}</span>
+                                    ${f.label} <span style="font-size: 0.65rem; opacity: 0.7; margin-left: auto;">${f.public ? '(Público)' : '(Privado)'}</span>
+                                </li>
+                            `;
+                        }).join('');
+
+                        const percentage = Math.round((completedCount / fields.length) * 100);
+
+                        // Ocultar formulario entero y cambiar el mensaje
+                        teacherIntro.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                 <h2 style="font-size: 1.15rem; color: #166534; margin: 0;">🎒 ¡Tu perfil de Maestro está activo!</h2>
+                                 <span style="font-size: 0.85rem; font-weight: 700; color: #166534;">${percentage}% completo</span>
+                            </div>
+                            
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: ${percentage}%"></div>
+                            </div>
+
+                            <ul class="checklist">
+                                ${checklistHtml}
+                            </ul>
+
+                            <p style="color: var(--slate-700); font-size: 0.85rem; margin-bottom: 1.25rem; line-height: 1.4;">
+                                Tu formación y biografía son visibles para los alumnos. 
+                                <strong>Tus datos bancarios, CV y WhatsApp son 100% privados</strong> y solo el equipo administrativo tiene acceso para gestionar tus pagos.
+                            </p>
+                            
+                            <button id="edit-teacher-profile-btn" class="btn" style="background: white; border: 1px solid #166534; color: #166534; font-size: 0.85rem; padding: 0.5rem 1.25rem; width: 100%; font-weight: 600;">
+                                Editar mi Información Profesional
+                            </button>
+                        `;
+                        teacherIntro.style.background = '#f0fdf4';
+                        teacherIntro.style.padding = '1.75rem';
+                        teacherIntro.style.borderRadius = '20px';
+                        teacherIntro.style.border = '1px solid #bbf7d0';
+                        document.getElementById('teacher-section').style.background = 'transparent';
+                        document.getElementById('teacher-section').style.border = 'none';
+                        document.getElementById('teacher-section').style.padding = '0';
+                        teacherForm.style.display = 'none';
+
+                        // Lógica para editar perfil
+                        document.getElementById('edit-teacher-profile-btn').addEventListener('click', () => {
+                            const profile = userData.teacherProfile || {};
+                            document.getElementById('teacher-bio').value = profile.bio || '';
+                            document.getElementById('teacher-video').value = profile.video || '';
+                            document.getElementById('teacher-loom').value = profile.loomInterview || '';
+                            document.getElementById('teacher-zoom').value = profile.zoomLink || '';
+                            document.getElementById('teacher-whatsapp').value = profile.whatsapp || '';
+                            document.getElementById('teacher-cv').value = profile.cvLink || '';
+                            document.getElementById('teacher-discord').value = profile.discordId || '';
+                            document.getElementById('teacher-clabe').value = profile.clabe || '';
+                            document.getElementById('teacher-bank').value = profile.bank || '';
+
+                            submitProvider.innerText = 'Guardar Cambios';
+                            teacherIntro.style.display = 'none';
+                            teacherForm.classList.add('show-form');
+                            teacherForm.style.display = 'block';
+                        });
+                    }
                 }
             } else {
                 console.warn("El documento de Firestore aún no se sincroniza.");

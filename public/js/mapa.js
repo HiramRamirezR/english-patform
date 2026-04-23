@@ -137,10 +137,7 @@ const setupDashboardUI = () => {
     loadAppointments();
     cleanExpiredAppointments();
 
-    // Verificación de Prueba de Nivelación (Solo una vez al inicio)
-    if (!currentProfile.placementTestDone && (!currentProfile.unlockedModules || currentProfile.unlockedModules.length <= 1)) {
-        setTimeout(() => triggerPlacementTestPrompt(), 2000);
-    }
+    // Verificación de Prueba de Nivelación (Se hace vía el botón de Salto de Nivel en el header)
 
     // 🎉 Verificar si el alumno acaba de completar el Módulo 1
     const completedLessons = currentProfile.completedLessons || [];
@@ -335,17 +332,13 @@ const showModuleCompletionCelebration = async () => {
                 </div>
             </div>
         `,
-        showCancelButton: true,
-        confirmButtonText: '🌲 Quiero seguir explorando',
-        cancelButtonText: 'Evalúate primero ($60)',
+        cancelButtonText: 'Seguir explorando',
         confirmButtonColor: '#38bdf8',
-        cancelButtonColor: '#f97316',
+        cancelButtonColor: '#64748b',
         allowOutsideClick: false
     }).then(result => {
         if (result.isConfirmed) {
             showSubscriptionModal();
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            window.location.href = 'evaluacion.html';
         }
     });
 };
@@ -441,7 +434,6 @@ const triggerPlacementTestPrompt = async () => {
             <div style="text-align: left; font-size: 0.95rem;">
                 <p>¡Hola! Soy Moon. ¿Quieres ver si ya sabes suficiente inglés para saltar algunos niveles?</p>
                 <p>Responderemos <b>25 preguntas rápidas</b> para determinar tu lugar en la montaña.</p>
-                <p style="font-size: 0.8rem; color: #64748b;">* Esta oportunidad es única y no se puede repetir después.</p>
             </div>
         `,
         icon: 'question',
@@ -657,55 +649,19 @@ const cleanExpiredAppointments = async () => {
 };
 
 window.startAutomatedJumpEval = async () => {
-    const { value: accept } = await Swal.fire({
-        title: 'Evaluación de Salto Automática',
-        text: '¿Quieres intentar saltar al siguiente módulo? Deberás responder correctamente 5 preguntas de Moon.',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: '¡Vamos!',
-        cancelButtonText: 'Después'
-    });
+    if (!currentProfile) return;
 
-    if (accept) {
-        // Lógica simplificada: 5 preguntas aleatorias
-        let score = 0;
-        const questions = [
-            { q: 'How do you say "Hola"?', a: 'hello' },
-            { q: 'I ____ happy. (am/is/are)', a: 'am' },
-            { q: 'She ____ English. (speak/speaks)', a: 'speaks' },
-            { q: 'What is the opposite of "Big"?', a: 'small' },
-            { q: 'Do you ____ English?', a: 'speak' }
-        ];
-
-        for (const item of questions) {
-            const { value: answer } = await Swal.fire({
-                title: 'Pregunta de Moon 🐻‍❄️',
-                text: item.q,
-                input: 'text',
-                allowOutsideClick: false
-            });
-            if (answer?.toLowerCase().trim() === item.a) score++;
-        }
-
-        if (score >= 4) {
-            // Desbloquear siguiente módulo
-            const currentUnlocked = currentProfile.unlockedModules || ['m1'];
-            const nextIdx = currentUnlocked.length + 1;
-            const nextModule = `m${nextIdx}`;
-
-            if (!currentUnlocked.includes(nextModule)) {
-                const userRef = doc(db, 'users', currentUser.uid);
-                await updateDoc(userRef, {
-                    unlockedModules: [...currentUnlocked, nextModule]
-                });
-                currentProfile.unlockedModules.push(nextModule);
-
-                await Swal.fire('¡Felicidades!', `Has desbloqueado el ${nextModule} correctamente.`, 'success');
-                setupModuleUnlocks(currentProfile.unlockedModules);
-            }
-        } else {
-            Swal.fire('No pasaste', 'Sigue practicando en tu módulo actual.', 'error');
-        }
+    // Si nunca ha hecho el test de diagnóstico, lo iniciamos
+    if (!currentProfile.placementTestDone) {
+        await triggerPlacementTestPrompt();
+    } else {
+        // Si ya lo hizo, le informamos que su nivel ya fue asignado
+        Swal.fire({
+            title: '¡Nivel Asignado!',
+            text: 'Ya realizaste tu evaluación de diagnóstico y encontraste tu lugar en el bosque. ¡Sigue explorando para avanzar!',
+            icon: 'info',
+            confirmButtonColor: '#38bdf8'
+        });
     }
 };
 

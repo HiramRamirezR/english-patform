@@ -4,20 +4,20 @@
    ============================================================ */
 
 :root {
-    /* ── Forest Palette (matches module.css) ── */
-    --forest-deep:    #052e16;
-    --forest-mid:     #14532d;
-    --forest-light:   #166534;
+    /* ── Forest Palette (Twilight Adjusted) ── */
+    --forest-deep:    #064e3b;
+    --forest-mid:     #065f46;
+    --forest-light:   #0d9488;
     --forest-glow:    #22c55e;
-    --forest-pale:    #dcfce7;
-    --forest-border:  rgba(34,197,94,0.25);
+    --forest-pale:    #ccfbf1;
+    --forest-border:  rgba(34,197,94,0.3);
 
     /* ── Gold Accents ── */
     --gold:           #f59e0b;
     --gold-light:     #fef3c7;
 
-    /* ── Neutral (dark) ── */
-    --night:          #021208;
+    /* ── Neutral (Twilight Night) ── */
+    --night:          #022c22;
     --slate-900:      #0f172a;
     --slate-800:      #1e293b;
     --slate-700:      #334155;
@@ -129,11 +129,24 @@ nav {
 
 /* ── Hero Section ── */
 .hero {
-    background: linear-gradient(180deg, var(--night) 0%, var(--forest-deep) 60%, #031a0d 100%);
-    padding: 8rem 0 14rem;
+    background: linear-gradient(180deg, var(--night) 0%, #064e3b 50%, #134e4a 100%);
+    padding: 9rem 0 16rem;
     text-align: center;
     position: relative;
     overflow: hidden;
+}
+
+/* Twilight Glow effect */
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: radial-gradient(circle at 50% 120%, rgba(245, 158, 11, 0.15), transparent 70%);
+    pointer-events: none;
+    z-index: 1;
 }
 
 /* Starfield particles (decorative) */
@@ -156,18 +169,19 @@ nav {
     z-index: 0;
 }
 
-/* Moon glow in top-right */
-.hero::after {
-    content: '';
+/* Moon glow - Adjusted for twilight */
+.moon-decorative {
     position: absolute;
-    top: 2rem;
-    right: 8%;
-    width: 80px;
-    height: 80px;
+    top: 3rem;
+    right: 10%;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    background: radial-gradient(circle, #f1f5f9 0%, #cbd5e1 55%, transparent 100%);
-    box-shadow: 0 0 40px 20px rgba(203,213,225,0.15), 0 0 90px 50px rgba(203,213,225,0.06);
-    animation: moonFloat 6s ease-in-out infinite alternate;
+    background: radial-gradient(circle, #fef3c7 0%, #fde68a 40%, transparent 100%);
+    box-shadow: 
+        0 0 50px 20px rgba(245, 158, 11, 0.1), 
+        0 0 100px 60px rgba(245, 158, 11, 0.05);
+    animation: moonFloat 8s ease-in-out infinite alternate;
     pointer-events: none;
     z-index: 1;
 }
@@ -184,7 +198,7 @@ nav {
     line-height: 1.1;
     position: relative;
     z-index: 3;
-    text-shadow: 0 0 60px rgba(34,197,94,0.2);
+    text-shadow: 0 4px 12px rgba(0,0,0,0.4), 0 0 60px rgba(34,197,94,0.3);
 }
 
 .hero p {
@@ -221,19 +235,19 @@ nav {
 }
 
 .mtn-1 {
-    background-color: #021508;
+    background-color: #042f2e;
     clip-path: polygon(0% 45%, 15% 20%, 35% 40%, 50% 15%, 75% 50%, 90% 25%, 100% 45%, 100% 100%, 0% 100%);
 }
 .mtn-2 {
-    background-color: #031a0d;
+    background-color: #064e3b;
     clip-path: polygon(0% 100%, 0% 65%, 20% 45%, 45% 75%, 70% 40%, 100% 70%, 100% 100%);
 }
 .mtn-3 {
-    background-color: #041f0f;
+    background-color: #065f46;
     clip-path: polygon(0% 100%, 0% 85%, 25% 65%, 50% 90%, 80% 60%, 100% 95%, 100% 100%);
 }
 .mtn-4 {
-    background-color: #052e16;
+    background-color: #0d9488;
     clip-path: polygon(0% 100%, 0% 95%, 15% 80%, 35% 100%, 60% 75%, 85% 100%, 100% 90%, 100% 100%);
 }
 
@@ -260,11 +274,11 @@ nav {
     border-radius: 1px;
 }
 
-/* Extra Pequeño — lejanísimos, casi negros */
+/* Extra Pequeño — lejanísimos, verde oscuro silueta */
 .tree-xs {
     border-left:  4px solid transparent;
     border-right: 4px solid transparent;
-    border-bottom: 12px solid #021508;
+    border-bottom: 12px solid #064e3b;
     bottom: 90px;
 }
 .tree-xs::before {
@@ -273,10 +287,10 @@ nav {
     left: -3px; bottom: -4px;
     border-left:  3px solid transparent;
     border-right: 3px solid transparent;
-    border-bottom: 9px solid #021508;
+    border-bottom: 9px solid #064e3b;
 }
 .tree-xs::after {
-    background-color: #021508;
+    background-color: #064e3b;
     width: 2px; height: 8px; top: 10px;
 }
 
@@ -284,7 +298,7 @@ nav {
 .tree-sm {
     border-left:  6px solid transparent;
     border-right: 6px solid transparent;
-    border-bottom: 20px solid #031a0d;
+    border-bottom: 20px solid #065f46;
     bottom: 60px;
 }
 .tree-sm::before {
@@ -293,10 +307,10 @@ nav {
     left: -5px; bottom: -6px;
     border-left:  5px solid transparent;
     border-right: 5px solid transparent;
-    border-bottom: 16px solid #031a0d;
+    border-bottom: 16px solid #065f46;
 }
 .tree-sm::after {
-    background-color: #031a0d;
+    background-color: #065f46;
     width: 3px; height: 10px; top: 18px;
 }
 
@@ -304,7 +318,7 @@ nav {
 .tree-md {
     border-left:  10px solid transparent;
     border-right: 10px solid transparent;
-    border-bottom: 35px solid #041f0f;
+    border-bottom: 35px solid #059669;
     bottom: 25px;
 }
 .tree-md::before {
@@ -313,18 +327,18 @@ nav {
     left: -8px; bottom: -10px;
     border-left:  8px solid transparent;
     border-right: 8px solid transparent;
-    border-bottom: 28px solid #041f0f;
+    border-bottom: 28px solid #059669;
 }
 .tree-md::after {
-    background-color: #041f0f;
+    background-color: #059669;
     width: 4px; height: 12px; top: 33px;
 }
 
-/* Grande — los del frente, verde más visible */
+/* Grande — los del frente, verde vibrante */
 .tree-lg {
     border-left:  15px solid transparent;
     border-right: 15px solid transparent;
-    border-bottom: 50px solid #052e16;
+    border-bottom: 50px solid #10b981;
     bottom: -5px;
 }
 .tree-lg::before {
@@ -333,10 +347,10 @@ nav {
     left: -12px; bottom: -15px;
     border-left:  12px solid transparent;
     border-right: 12px solid transparent;
-    border-bottom: 40px solid #052e16;
+    border-bottom: 40px solid #10b981;
 }
 .tree-lg::after {
-    background-color: #052e16;
+    background-color: #10b981;
     width: 5px; height: 14px; top: 48px;
 }
 

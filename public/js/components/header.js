@@ -226,8 +226,8 @@ const renderHeader = (user, userData = null) => {
         }
 
         const evalLabel = latestDone
-            ? `Certificar M${latestDone.replace('m','')} ($60)`
-            : 'Salto de Nivel ($60)';
+            ? `Certificar M${latestDone.replace('m','')}`
+            : 'Salto de Nivel';
         const evalType = latestDone
             ? `Certificación Módulo ${latestDone.replace('m','')}`
             : 'Salto de Nivel (Fast-Track)';
@@ -238,7 +238,7 @@ const renderHeader = (user, userData = null) => {
             ? `<button id="evaluate-btn" data-type="${evalType}" data-mod="${latestDone||''}" class="header-btn-eval">${evalLabel}</button>`
             : '';
 
-        const teacherLink = userData?.isTeacher
+        const teacherLink = userData?.isAdmin
             ? `<a href="${isTeacherView ? 'mapa.html' : 'teacher.html'}" class="header-link">${isTeacherView ? '🎒 Alumno' : '📘 Maestro'}</a>`
             : '';
 
@@ -265,7 +265,7 @@ const renderHeader = (user, userData = null) => {
         // Drawer
         mobileDrawerContent = `
             <div id="mobile-drawer-inner">
-                ${userData?.isTeacher ? `<a href="${isTeacherView ? 'mapa.html' : 'teacher.html'}" class="drawer-link">${isTeacherView ? '🎒 Cambiar a Alumno' : '📘 Cambiar a Maestro'}</a>` : ''}
+                ${userData?.isAdmin ? `<a href="${isTeacherView ? 'mapa.html' : 'teacher.html'}" class="drawer-link">${isTeacherView ? '🎒 Cambiar a Alumno' : '📘 Cambiar a Maestro'}</a>` : ''}
                 ${userData?.isAdmin   ? `<a href="admin.html" class="drawer-link">⚙️ Panel Admin</a>` : ''}
                 <a href="index.html"      class="drawer-link ${active('index')}">🏠 Inicio</a>
                 <a href="mapa.html"       class="drawer-link ${active('mapa')}">🗺️ Mapa del Bosque</a>
@@ -326,7 +326,13 @@ const renderHeader = (user, userData = null) => {
     document.getElementById('header-login-btn-m')?.addEventListener('click', (e) => { e.preventDefault(); handleLogin(); });
     document.getElementById('header-logout-btn') ?.addEventListener('click', (e) => { e.preventDefault(); logout(); });
     document.getElementById('drawer-logout-btn') ?.addEventListener('click', (e) => { e.preventDefault(); logout(); });
-    document.getElementById('evaluate-btn')      ?.addEventListener('click', () => { window.location.href = 'evaluacion.html'; });
+    document.getElementById('evaluate-btn')?.addEventListener('click', () => { 
+        if (window.startAutomatedJumpEval) {
+            window.startAutomatedJumpEval();
+        } else {
+            Swal.fire('🐻‍❄️ Evaluación', 'La evaluación se está preparando. Por favor, ve al Mapa para comenzar.', 'info');
+        }
+    });
 
     // Hamburger
     const hamburger = document.getElementById('hamburger-btn');

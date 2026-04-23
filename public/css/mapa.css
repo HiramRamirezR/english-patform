@@ -191,20 +191,33 @@
 
 /* Moon - Floating Companion */
 .moon-companion {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
+    position: absolute;
+    top: 18rem;
+    left: calc(50% + 540px);
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     z-index: 100;
     cursor: pointer;
     animation: float 4s ease-in-out infinite;
 }
 
-/* Mobile: Push Moon a bit so it doesn't cover content */
 @media (max-width: 480px) {
     .moon-companion {
-        bottom: 1rem;
-        right: 1rem;
+        position: absolute;
+        top: auto;
+        bottom: 9.5rem;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         transform: scale(0.8);
+        pointer-events: none;
+    }
+    .moon-companion > * {
+        pointer-events: auto;
     }
 }
 

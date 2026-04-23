@@ -163,11 +163,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                             moduleStars[lessonId] = starsEarned;
                         }
 
+                        let weeklyProgress = data.weeklyProgress || {};
+                        weeklyProgress[today] = (weeklyProgress[today] || 0) + minutes;
+
                         await updateDoc(userRef, {
                             minutesSpokenToday: currentMinutes + minutes,
                             lastSpokenDate: today,
                             completedLessons: completedLessons,
-                            moduleStars: moduleStars
+                            moduleStars: moduleStars,
+                            weeklyProgress: weeklyProgress
                         });
                         console.log(`¡Progreso guardado!: +${minutes} mins, ${lessonId} completada.`);
 

@@ -1,6 +1,7 @@
 import { auth, db, getEffectiveUser } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { doc, getDoc, updateDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { doc, getDoc, updateDoc, collection, query, where, getDocs, serverTimestamp, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { sendDiscordNotification } from './discord.js';
 
 // DOM Elements
 const avatarModal = document.getElementById('avatar-modal');
@@ -358,47 +359,63 @@ const setupContinueButton = (completedLessons) => {
     const existing = document.getElementById('fab-continue');
     if (existing) existing.remove();
 
-    // Definir el orden de lecciones del M1
-    const m1Lessons = [
-        'm1l1','m1l2','m1l3','m1l4','m1l5','m1l6','m1l7','m1l8','m1l9','m1l10',
-        'm1l11','m1l12','m1l13','m1l14','m1l15','m1l16','m1l17','m1l18','m1l19','m1l20'
-    ];
+    if (!currentProfile) return;
 
-    // Encontrar siguiente lección sin completar
-    const nextLesson = m1Lessons.find(id => !completedLessons.includes(id));
-    if (!nextLesson) return; // Todas completadas, no mostrar
+    // Encontrar el último módulo desbloqueado
+    const unlocked = currentProfile.unlockedModules || ['m1'];
+    
+    // Buscar la primera lección no completada en el orden de los módulos
+    let nextLesson = null;
+    let moduleNum = 0;
+    let lessonNum = 0;
 
-    // Solo mostrar si llevan al menos 1 lección completada
-    if (completedLessons.length === 0) return;
+    for (const modId of unlocked) {
+        const mNum = parseInt(modId.replace('m', ''));
+        // Asumimos 20 lecciones por módulo (estándar Moonsforest)
+        for (let l = 1; l <= 20; l++) {
+            const lId = `${modId}l${l}`;
+            if (!completedLessons.includes(lId)) {
+                nextLesson = lId;
+                moduleNum = mNum;
+                lessonNum = l;
+                break;
+            }
+        }
+        if (nextLesson) break;
+    }
 
-    const lessonNum = nextLesson.replace('m1l', '');
+    if (!nextLesson) return; // Todo completado
+
+    // Solo mostrar si llevan al menos 1 lección completada o están en M1L1 pero queremos motivar
+    if (completedLessons.length === 0 && nextLesson === 'm1l1') return;
+
     const fab = document.createElement('button');
     fab.id = 'fab-continue';
-    fab.innerHTML = `▶ Continuar <span style="opacity:0.8; font-size:0.8rem;">Lección 1.${lessonNum}</span>`;
+    fab.innerHTML = `▶ Continuar <span style="opacity:0.8; font-size:0.8rem;">Lección ${moduleNum}.${lessonNum}</span>`;
     fab.style.cssText = `
         position: fixed;
         bottom: 2rem;
         right: 1.5rem;
         z-index: 500;
-        background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+        background: linear-gradient(135deg, #22c55e, #16a34a);
         color: white;
         border: none;
-        border-radius: 999px;
-        padding: 0.85rem 1.5rem;
+        border-radius: 99px;
+        padding: 0.85rem 1.75rem;
         font-family: 'Outfit', sans-serif;
         font-size: 0.95rem;
         font-weight: 700;
         cursor: pointer;
-        box-shadow: 0 8px 20px rgba(56, 189, 248, 0.45);
+        box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4);
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        transition: transform 0.2s, box-shadow 0.2s;
+        gap: 0.6rem;
+        transition: all 0.2s;
         animation: fabPulse 2.5s ease-in-out infinite;
     `;
 
-    fab.onmouseenter = () => { fab.style.transform = 'translateY(-2px)'; fab.style.boxShadow = '0 12px 28px rgba(56,189,248,0.55)'; };
-    fab.onmouseleave = () => { fab.style.transform = ''; fab.style.boxShadow = '0 8px 20px rgba(56,189,248,0.45)'; };
+    fab.onmouseenter = () => { fab.style.transform = 'translateY(-2px) scale(1.02)'; fab.style.boxShadow = '0 12px 32px rgba(34,197,94,0.5)'; };
+    fab.onmouseleave = () => { fab.style.transform = ''; fab.style.boxShadow = '0 8px 24px rgba(34,197,94,0.4)'; };
     fab.onclick = () => window.location.href = `lesson.html?id=${nextLesson}`;
 
     // Añadir animación al stylesheet si no existe
@@ -407,8 +424,8 @@ const setupContinueButton = (completedLessons) => {
         style.id = 'fab-style';
         style.textContent = `
             @keyframes fabPulse {
-                0%, 100% { box-shadow: 0 8px 20px rgba(56,189,248,0.45); }
-                50% { box-shadow: 0 8px 32px rgba(56,189,248,0.7); }
+                0%, 100% { box-shadow: 0 8px 24px rgba(34,197,94,0.4); }
+                50% { box-shadow: 0 8px 32px rgba(34,197,94,0.6); }
             }
         `;
         document.head.appendChild(style);
@@ -614,26 +631,24 @@ const cleanExpiredAppointments = async () => {
             if (slotEndTime < now) {
                 // Si la sesión pasó y no fue marcada como completada (ya que aquí status es booked/needs_sub)
                 // Liberamos el slot y devolvemos crédito si era needs_sub (nadie llegó)
-                import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js").then(async ({ deleteField }) => {
-                    const slotRef = doc(db, 'slots', d.id);
-                    await updateDoc(slotRef, {
-                        status: 'available',
-                        studentId: deleteField(),
-                        studentName: deleteField(),
-                        studentEmail: deleteField(),
-                        studentAvatar: deleteField(),
-                        evaluationType: deleteField(),
-                        bookedAt: deleteField()
-                    });
-
-                    if (data.status === 'needs_sub') {
-                        const userRef = doc(db, 'users', currentUser.uid);
-                        await updateDoc(userRef, {
-                            evalCredits: (currentProfile.evalCredits || 0) + 1
-                        });
-                        currentProfile.evalCredits = (currentProfile.evalCredits || 0) + 1;
-                    }
+                const slotRef = doc(db, 'slots', d.id);
+                await updateDoc(slotRef, {
+                    status: 'available',
+                    studentId: deleteField(),
+                    studentName: deleteField(),
+                    studentEmail: deleteField(),
+                    studentAvatar: deleteField(),
+                    evaluationType: deleteField(),
+                    bookedAt: deleteField()
                 });
+
+                if (data.status === 'needs_sub') {
+                    const userRef = doc(db, 'users', currentUser.uid);
+                    await updateDoc(userRef, {
+                        evalCredits: (currentProfile.evalCredits || 0) + 1
+                    });
+                    currentProfile.evalCredits = (currentProfile.evalCredits || 0) + 1;
+                }
             }
         }
     } catch (e) {
@@ -773,24 +788,22 @@ const loadAppointments = async () => {
                     if (!window.notifiedMissingTeacher) {
                         window.notifiedMissingTeacher = true;
 
-                        import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js").then(async ({ deleteField }) => {
-                            Swal.fire({
-                                title: 'Buscando sala...',
-                                allowOutsideClick: false,
-                                didOpen: () => { Swal.showLoading(); }
-                            });
+                        Swal.fire({
+                            title: 'Buscando sala...',
+                            allowOutsideClick: false,
+                            didOpen: () => { Swal.showLoading(); }
+                        });
 
-                            const slotRef = doc(db, 'slots', appointmentId);
-                            await updateDoc(slotRef, {
-                                status: 'available',
-                                studentId: deleteField(),
-                                studentName: deleteField(),
-                                studentEmail: deleteField(),
-                                studentAvatar: deleteField(),
-                                evaluationType: deleteField(),
-                                bookedAt: deleteField()
-                            });
-
+                        const slotRef = doc(db, 'slots', appointmentId);
+                        updateDoc(slotRef, {
+                            status: 'available',
+                            studentId: deleteField(),
+                            studentName: deleteField(),
+                            studentEmail: deleteField(),
+                            studentAvatar: deleteField(),
+                            evaluationType: deleteField(),
+                            bookedAt: deleteField()
+                        }).then(async () => {
                             const userRef = doc(db, 'users', currentUser.uid);
                             const currentCredits = currentProfile.evalCredits || 0;
                             await updateDoc(userRef, {
@@ -884,18 +897,17 @@ const loadAppointments = async () => {
                         didOpen: () => { Swal.showLoading(); }
                     });
 
-                    import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js").then(async ({ deleteField }) => {
-                        // 1. Liberar Slot
-                        const slotRef = doc(db, 'slots', appointmentId);
-                        await updateDoc(slotRef, {
-                            status: 'available',
-                            studentId: deleteField(),
-                            studentName: deleteField(),
-                            studentEmail: deleteField(),
-                            studentAvatar: deleteField(),
-                            evaluationType: deleteField(),
-                            bookedAt: deleteField()
-                        });
+                    // 1. Liberar Slot
+                    const slotRef = doc(db, 'slots', appointmentId);
+                    await updateDoc(slotRef, {
+                        status: 'available',
+                        studentId: deleteField(),
+                        studentName: deleteField(),
+                        studentEmail: deleteField(),
+                        studentAvatar: deleteField(),
+                        evaluationType: deleteField(),
+                        bookedAt: deleteField()
+                    });
 
                         // 2. Dar crédito al estudiante
                         const userRef = doc(db, 'users', currentUser.uid);
@@ -925,7 +937,6 @@ const loadAppointments = async () => {
                         });
 
                         loadAppointments(); // Recargar widget
-                    });
 
                 } catch (error) {
                     console.error("Error al cancelar cita:", error);
@@ -945,10 +956,22 @@ const setupWeeklyPath = (progress) => {
     const currentDayIndex = today.getDay(); // 0 (Domingo) a 6 (Sábado)
     const dayCircles = document.querySelectorAll('.day-circle');
 
+    // Obtener las fechas de la semana actual (Domingo a Sábado)
+    const weekDates = [];
+    const firstDayOfWeek = new Date(today);
+    firstDayOfWeek.setDate(today.getDate() - currentDayIndex);
+
+    for (let i = 0; i < 7; i++) {
+        const d = new Date(firstDayOfWeek);
+        d.setDate(firstDayOfWeek.getDate() + i);
+        weekDates.push(d.toISOString().split('T')[0]);
+    }
+
     dayCircles.forEach(circle => {
         const dayIdx = parseInt(circle.dataset.day);
+        const dateKey = weekDates[dayIdx];
 
-        // Limpiar estados previos (por si acaso)
+        // Limpiar estados previos
         circle.classList.remove('active', 'today');
 
         // Marcar hoy
@@ -956,9 +979,8 @@ const setupWeeklyPath = (progress) => {
             circle.classList.add('today');
         }
 
-        // Marcar si hubo progreso ese día (basado en Firestore)
-        // El campo indexado en progress es el número del día 0-6
-        if (progress[dayIdx]) {
+        // Marcar si hubo progreso ese día (basado en YYYY-MM-DD)
+        if (progress && progress[dateKey] && progress[dateKey] > 0) {
             circle.classList.add('active');
         }
     });

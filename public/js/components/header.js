@@ -12,10 +12,10 @@ const renderHeader = (user, userData = null) => {
         style.id = 'header-styles';
         style.textContent = `
             #site-header {
-                background: rgba(255,255,255,0.97);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+                background: rgba(2, 18, 8, 0.95);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border-bottom: 1px solid rgba(34, 197, 94, 0.15);
                 position: sticky;
                 top: 0;
                 z-index: 1000;
@@ -32,10 +32,10 @@ const renderHeader = (user, userData = null) => {
             }
             .header-logo {
                 text-decoration: none;
-                color: var(--primary-deep, #1e3a5f);
+                color: #22c55e;
                 font-weight: 800;
-                font-size: 1.2rem;
-                letter-spacing: -0.3px;
+                font-size: 1.25rem;
+                letter-spacing: -0.5px;
                 flex-shrink: 0;
             }
             #desktop-nav {
@@ -44,19 +44,26 @@ const renderHeader = (user, userData = null) => {
                 align-items: center;
             }
             .header-link {
-                color: var(--slate-700, #334155);
+                color: rgba(255, 255, 255, 0.7);
                 text-decoration: none;
                 font-weight: 500;
                 font-size: 0.9rem;
-                padding: 0.35rem 0.5rem;
-                border-radius: 8px;
-                transition: background 0.15s, color 0.15s;
+                padding: 0.45rem 0.75rem;
+                border-radius: 99px;
+                transition: all 0.2s;
             }
-            .header-link:hover { background: #f1f5f9; color: var(--primary-deep, #1e3a5f); }
-            .header-link.active { color: var(--primary-deep, #1e3a5f); font-weight: 700; }
+            .header-link:hover { 
+                background: rgba(34, 197, 94, 0.12); 
+                color: #86efac; 
+            }
+            .header-link.active { 
+                color: #22c55e; 
+                background: rgba(34, 197, 94, 0.08);
+                font-weight: 700; 
+            }
             .header-btn-outline {
-                border: 1px solid #cbd5e1;
-                color: #64748b;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: rgba(255, 255, 255, 0.8);
                 padding: 0.45rem 1rem;
                 font-size: 0.85rem;
                 background: transparent;
@@ -64,32 +71,45 @@ const renderHeader = (user, userData = null) => {
                 cursor: pointer;
                 font-family: 'Outfit', sans-serif;
                 font-weight: 500;
-                transition: all 0.15s;
+                transition: all 0.2s;
             }
-            .header-btn-outline:hover { border-color: #94a3b8; color: #334155; background: #f8fafc; }
+            .header-btn-outline:hover { 
+                border-color: #22c55e; 
+                color: #22c55e; 
+                background: rgba(34, 197, 94, 0.05); 
+            }
             .header-btn-eval {
-                background: linear-gradient(135deg, #fb923c, #f97316);
-                color: white;
+                background: linear-gradient(135deg, #22c55e, #16a34a);
+                color: #052e16;
                 border: none;
-                padding: 0.5rem 1rem;
+                padding: 0.5rem 1.25rem;
                 font-size: 0.82rem;
-                font-weight: 700;
+                font-weight: 800;
                 border-radius: 999px;
                 cursor: pointer;
                 font-family: 'Outfit', sans-serif;
-                box-shadow: 0 4px 10px rgba(249,115,22,0.3);
-                transition: transform 0.15s, box-shadow 0.15s;
+                box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+                transition: all 0.2s;
                 white-space: nowrap;
             }
-            .header-btn-eval:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(249,115,22,0.4); }
+            .header-btn-eval:hover { 
+                transform: translateY(-1px); 
+                box-shadow: 0 6px 18px rgba(34, 197, 94, 0.45); 
+                filter: brightness(1.1);
+            }
             .header-btn-admin {
-                color: #f97316;
+                color: #f59e0b;
                 text-decoration: none;
                 font-weight: 700;
                 font-size: 0.82rem;
-                border: 1px solid #f97316;
+                border: 1px solid rgba(245, 158, 11, 0.5);
                 padding: 0.35rem 0.65rem;
                 border-radius: 6px;
+                transition: all 0.2s;
+            }
+            .header-btn-admin:hover {
+                background: rgba(245, 158, 11, 0.1);
+                border-color: #f59e0b;
             }
             /* ── Zona móvil ── */
             #mobile-nav-row {
@@ -98,21 +118,21 @@ const renderHeader = (user, userData = null) => {
                 gap: 0.75rem;
             }
             #hamburger-btn {
-                background: none;
-                border: none;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
                 cursor: pointer;
-                padding: 0.4rem;
+                padding: 0.5rem;
                 display: flex;
                 flex-direction: column;
                 gap: 5px;
-                border-radius: 8px;
-                transition: background 0.15s;
+                border-radius: 10px;
+                transition: all 0.2s;
             }
-            #hamburger-btn:hover { background: #f1f5f9; }
+            #hamburger-btn:hover { background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3); }
             #hamburger-btn .bar {
-                width: 22px;
+                width: 20px;
                 height: 2px;
-                background: #334155;
+                background: #86efac;
                 border-radius: 2px;
                 transition: all 0.3s ease;
                 display: block;
@@ -124,50 +144,57 @@ const renderHeader = (user, userData = null) => {
             #mobile-drawer {
                 max-height: 0;
                 overflow: hidden;
-                transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease;
+                transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
                 opacity: 0;
-                background: white;
-                border-top: 1px solid #f1f5f9;
+                background: #052e16;
+                border-top: 1px solid rgba(34, 197, 94, 0.1);
             }
-            #mobile-drawer.open { max-height: 400px; opacity: 1; }
+            #mobile-drawer.open { max-height: 500px; opacity: 1; }
             #mobile-drawer-inner {
-                padding: 1rem 1.25rem 1.25rem;
+                padding: 1.5rem 1.25rem 2rem;
                 display: flex;
                 flex-direction: column;
-                gap: 0.25rem;
+                gap: 0.5rem;
             }
             .drawer-link {
                 display: flex;
                 align-items: center;
-                gap: 0.6rem;
-                padding: 0.75rem 0.75rem;
-                border-radius: 12px;
+                gap: 0.75rem;
+                padding: 0.85rem 1rem;
+                border-radius: 14px;
                 text-decoration: none;
-                font-weight: 500;
-                font-size: 0.95rem;
-                color: #334155;
-                transition: background 0.15s;
+                font-weight: 600;
+                font-size: 1rem;
+                color: rgba(255, 255, 255, 0.8);
+                transition: all 0.2s;
             }
-            .drawer-link:hover, .drawer-link.active { background: #f1f5f9; color: #1e3a5f; }
-            .drawer-divider { height: 1px; background: #f1f5f9; margin: 0.5rem 0; }
+            .drawer-link:hover, .drawer-link.active { 
+                background: rgba(34, 197, 94, 0.15); 
+                color: #22c55e; 
+            }
+            .drawer-divider { height: 1px; background: rgba(34, 197, 94, 0.1); margin: 1rem 0; }
             .drawer-btn-logout {
                 width: 100%;
-                background: none;
-                border: 1px solid #e2e8f0;
-                padding: 0.75rem;
-                border-radius: 12px;
-                color: #64748b;
-                font-size: 0.9rem;
+                background: rgba(239, 68, 68, 0.05);
+                border: 1px solid rgba(239, 68, 68, 0.2);
+                padding: 0.85rem;
+                border-radius: 14px;
+                color: #fca5a5;
+                font-size: 0.95rem;
                 font-family: 'Outfit', sans-serif;
-                font-weight: 500;
+                font-weight: 600;
                 cursor: pointer;
                 text-align: left;
                 display: flex;
                 align-items: center;
-                gap: 0.6rem;
-                transition: background 0.15s;
+                gap: 0.75rem;
+                transition: all 0.2s;
             }
-            .drawer-btn-logout:hover { background: #fef2f2; color: #ef4444; border-color: #fecaca; }
+            .drawer-btn-logout:hover { 
+                background: rgba(239, 68, 68, 0.15); 
+                color: #ef4444; 
+                border-color: #ef4444; 
+            }
             /* ── Breakpoints ── */
             @media (max-width: 640px) {
                 #desktop-nav    { display: none !important; }

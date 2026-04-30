@@ -140,6 +140,7 @@ const setupDashboardUI = () => {
     // Verificación de Prueba de Nivelación (Se hace vía el botón de Salto de Nivel en el header)
 
     // 🎉 Verificar si el alumno acaba de completar su módulo gratuito
+    const completedLessons = currentProfile.completedLessons || [];
     const freeMod = currentProfile.freeModuleId || 'm1';
     const modJustDone = completedLessons.includes(`${freeMod}l20`);
     const celebrationKey = `${freeMod}_celebration_shown`;
@@ -155,6 +156,9 @@ const setupDashboardUI = () => {
 
     // 👨‍🏫 Sistema de Evaluación Semanal Integrado
     setupWeeklyEvaluationButton(currentProfile);
+
+    // 💎 Estado de Suscripción Premium (SIEMPRE VISIBLE)
+    setupPremiumStatus(currentProfile);
 };
 
 /**
@@ -238,6 +242,75 @@ function setupWeeklyEvaluationButton(profile) {
         moonBox.appendChild(evalContainer);
     }
 }
+
+/**
+ * 💎 Sistema de Visualización Premium
+ * Muestra una tarjeta con la cuenta regresiva si el usuario tiene acceso pagado.
+ */
+const setupPremiumStatus = (profile) => {
+    const card = document.getElementById('premium-status-card');
+    const countdown = document.getElementById('premium-countdown');
+    const icon = document.getElementById('premium-icon');
+    const label = document.getElementById('premium-label');
+    const sublabel = document.getElementById('premium-sublabel');
+    
+    if (!card || !countdown) return;
+
+    card.style.display = 'flex'; 
+
+    if (profile.isPremium) {
+        // --- ESTADO PREMIUM ---
+        card.style.borderLeft = '5px solid var(--forest-glow)';
+        card.style.cursor = 'default';
+        card.onclick = null;
+        if (icon) icon.innerHTML = '🛡️';
+        if (label) {
+            label.innerText = 'PRO';
+            label.style.color = 'var(--forest-glow)';
+        }
+        if (sublabel) sublabel.style.color = '#4ade80';
+
+        if (profile.premiumUntil) {
+            let expiry;
+            try {
+                expiry = (profile.premiumUntil && typeof profile.premiumUntil.toDate === 'function') 
+                    ? profile.premiumUntil.toDate() 
+                    : new Date(profile.premiumUntil);
+            } catch (e) { expiry = new Date(); }
+
+            const now = new Date();
+            const diffDays = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays > 1) {
+                countdown.innerHTML = `Te quedan <strong>${diffDays} días</strong> de acceso ilimitado.`;
+            } else if (diffDays === 1) {
+                countdown.innerHTML = `Tu acceso termina <strong>mañana</strong>.`;
+            } else if (diffDays === 0) {
+                countdown.innerHTML = `¡Tu acceso termina <strong>hoy</strong>!`;
+            } else {
+                countdown.innerHTML = `<span style="color:#f87171;">Acceso expirado.</span>`;
+                label.innerText = 'EXP';
+                label.style.color = '#ef4444';
+            }
+        } else {
+            countdown.innerText = "Acceso ilimitado activo 🌲";
+        }
+    } else {
+        // --- ESTADO GRATUITO (EXPLORADOR) ---
+        card.style.borderLeft = '5px solid #818cf8';
+        card.style.cursor = 'pointer';
+        card.onclick = () => showSubscriptionModal();
+
+        if (icon) icon.innerHTML = '🥾';
+        if (label) {
+            label.innerText = 'FREE';
+            label.style.color = '#818cf8';
+        }
+        if (sublabel) sublabel.style.color = '#a5b4fc';
+
+        countdown.innerHTML = 'Módulo 1 Gratis • <span style="color:#818cf8; font-weight:bold;">Mejorar cuenta ↗</span>';
+    }
+};
 
 // Helper para número de semana
 function getWeekNumber(d) {

@@ -33,13 +33,26 @@
                 un momento.</p>
 
             <!-- Progress Track -->
+            <style>
+                @keyframes avatarIdle {
+                    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+                    50% { transform: translate(-50%, -52%) scale(1.05); }
+                }
+                @keyframes bossPulse {
+                    0%, 100% { transform: translateY(-50%) scale(1); filter: drop-shadow(0 0 5px rgba(239, 68, 68, 0.2)); }
+                    50% { transform: translateY(-50%) scale(1.1); filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.6)); }
+                }
+                .avatar-anim { animation: avatarIdle 2.5s ease-in-out infinite; }
+                .boss-anim { animation: bossPulse 3s ease-in-out infinite; }
+            </style>
+
             <div id="module-progress-container" style="margin-bottom: 2rem; display: none;">
                 <div class="progress-track" style="
-                    height: 8px; 
-                    background: rgba(30, 41, 59, 0.5); 
+                    height: 10px; 
+                    background: rgba(30, 41, 59, 0.6); 
                     border-radius: 99px; 
                     position: relative; 
-                    margin: 2.5rem 1rem 1rem;
+                    margin: 3rem 1.5rem 1.5rem;
                     border: 1px solid rgba(255,255,255,0.05);
                 ">
                     <!-- Progress Fill -->
@@ -49,29 +62,29 @@
                         background: linear-gradient(90deg, var(--forest-glow), #4ade80); 
                         border-radius: 99px;
                         transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-                        box-shadow: 0 0 12px var(--forest-glow);
+                        box-shadow: 0 0 15px var(--forest-glow);
                     "></div>
                     
                     <!-- Avatar Marker -->
-                    <div id="avatar-marker" style="
+                    <div id="avatar-marker" class="avatar-anim" style="
                         position: absolute; 
                         top: 50%; 
                         left: 0%; 
                         transform: translate(-50%, -50%); 
-                        font-size: 1.8rem; 
+                        font-size: 2.2rem; 
                         transition: left 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-                        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+                        filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
                         z-index: 10;
                     ">🦊</div>
 
                     <!-- Boss Marker -->
-                    <div style="
+                    <div class="boss-anim" style="
                         position: absolute; 
                         top: 50%; 
-                        right: -10px; 
+                        right: -15px; 
                         transform: translateY(-50%); 
-                        font-size: 1.5rem;
-                        filter: grayscale(0.5) opacity(0.8);
+                        font-size: 3rem;
+                        z-index: 5;
                     " title="Guardián del Bosque">👹</div>
                 </div>
             </div>

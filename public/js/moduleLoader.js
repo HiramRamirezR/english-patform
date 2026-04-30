@@ -50,6 +50,40 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const data = userSnap.data();
                 completedLessons = data.completedLessons || [];
                 moduleStars = data.moduleStars || {};
+                
+                // --- VERIFICACIÓN DE ACCESO ---
+                const unlocked = data.unlockedModules || ['m1'];
+                const freeModId = data.freeModuleId || 'm1';
+                const isPremium = data.isPremium || false;
+                const isCompleted = completedLessons.includes(`${moduleId}l20`);
+
+                const hasAccess = isPremium || (moduleId === freeModId) || unlocked.includes(moduleId) || isCompleted;
+
+                if (!hasAccess) {
+                    console.warn("Acceso denegado al módulo:", moduleId);
+                    window.location.href = "mapa.html?error=locked";
+                    return;
+                }
+                // -----------------------------
+
+                // Actualizar Progreso Visual
+                const progressContainer = document.getElementById('module-progress-container');
+                const progressFill = document.getElementById('progress-fill');
+                const avatarMarker = document.getElementById('avatar-marker');
+                
+                if (progressContainer && config.lessons) {
+                    progressContainer.style.display = 'block';
+                    const total = config.lessons.length;
+                    const completedInModule = config.lessons.filter(l => completedLessons.includes(l.id)).length;
+                    const percentage = total > 0 ? (completedInModule / total) * 100 : 0;
+                    
+                    // Pequeño delay para que la transición se vea al entrar
+                    setTimeout(() => {
+                        progressFill.style.width = `${percentage}%`;
+                        avatarMarker.style.left = `${percentage}%`;
+                        if (data.avatar) avatarMarker.textContent = data.avatar;
+                    }, 300);
+                }
             }
 
             // Práctica Diaria Infinita

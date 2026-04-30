@@ -29,8 +29,52 @@
                 <div style="width: 80px;"></div> <!-- Spacing balance -->
             </header>
 
-            <p style="text-align: center; color: #cbd5e1; margin-bottom: 2rem;" id="module-desc">Por favor espera
+            <p style="text-align: center; color: #cbd5e1; margin-bottom: 0.5rem;" id="module-desc">Por favor espera
                 un momento.</p>
+
+            <!-- Progress Track -->
+            <div id="module-progress-container" style="margin-bottom: 2rem; display: none;">
+                <div class="progress-track" style="
+                    height: 8px; 
+                    background: rgba(30, 41, 59, 0.5); 
+                    border-radius: 99px; 
+                    position: relative; 
+                    margin: 2.5rem 1rem 1rem;
+                    border: 1px solid rgba(255,255,255,0.05);
+                ">
+                    <!-- Progress Fill -->
+                    <div id="progress-fill" style="
+                        height: 100%; 
+                        width: 0%; 
+                        background: linear-gradient(90deg, var(--forest-glow), #4ade80); 
+                        border-radius: 99px;
+                        transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+                        box-shadow: 0 0 12px var(--forest-glow);
+                    "></div>
+                    
+                    <!-- Avatar Marker -->
+                    <div id="avatar-marker" style="
+                        position: absolute; 
+                        top: 50%; 
+                        left: 0%; 
+                        transform: translate(-50%, -50%); 
+                        font-size: 1.8rem; 
+                        transition: left 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+                        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+                        z-index: 10;
+                    ">🦊</div>
+
+                    <!-- Boss Marker -->
+                    <div style="
+                        position: absolute; 
+                        top: 50%; 
+                        right: -10px; 
+                        transform: translateY(-50%); 
+                        font-size: 1.5rem;
+                        filter: grayscale(0.5) opacity(0.8);
+                    " title="Guardián del Bosque">👹</div>
+                </div>
+            </div>
 
             <!-- The Peak Map (generado dinámicamente) -->
             <main class="peak-map" id="map-path"

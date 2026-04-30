@@ -148,6 +148,7 @@ export const handleLogin = async () => {
                 isAdmin: false,   // Siempre explícito para que las reglas de Firestore lo evalúen correctamente
                 createdAt: serverTimestamp(),
                 points: 0,
+                freeModuleId: 'm1', // El primer módulo gratuito por defecto
                 referredBy: storedRefCode // Si null, no fue referido
             });
 

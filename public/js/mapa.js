@@ -116,8 +116,8 @@ const setupDashboardUI = () => {
     // Ruta Semanal
     setupWeeklyPath(currentProfile.weeklyProgress || {});
 
-    // Desbloquear Módulos
-    setupModuleUnlocks(currentProfile.unlockedModules || ['m1']);
+    // Desbloquear Módulos con lógica de Pago/Gratis
+    setupModuleUnlocks(currentProfile);
 
     // Mensaje de Moon con racha
     const streak = calculateStreak(currentProfile.weeklyProgress || {});
@@ -139,13 +139,15 @@ const setupDashboardUI = () => {
 
     // Verificación de Prueba de Nivelación (Se hace vía el botón de Salto de Nivel en el header)
 
-    // 🎉 Verificar si el alumno acaba de completar el Módulo 1
-    const completedLessons = currentProfile.completedLessons || [];
-    const m1JustDone = completedLessons.includes('m1l20');
-    const celebrationShown = sessionStorage.getItem('m1_celebration_shown');
-    if (m1JustDone && !celebrationShown) {
-        sessionStorage.setItem('m1_celebration_shown', 'true');
-        setTimeout(() => showModuleCompletionCelebration(), 1500);
+    // 🎉 Verificar si el alumno acaba de completar su módulo gratuito
+    const freeMod = currentProfile.freeModuleId || 'm1';
+    const modJustDone = completedLessons.includes(`${freeMod}l20`);
+    const celebrationKey = `${freeMod}_celebration_shown`;
+    const celebrationShown = sessionStorage.getItem(celebrationKey);
+    
+    if (modJustDone && !celebrationShown) {
+        sessionStorage.setItem(celebrationKey, 'true');
+        setTimeout(() => showModuleCompletionCelebration(freeMod), 1500);
     }
 
     // 📍 Botón flotante "Continuar" — lleva a la siguiente lección pendiente
@@ -246,11 +248,29 @@ function getWeekNumber(d) {
     return weekNo;
 }
 
-const setupModuleUnlocks = (unlocked) => {
+const setupModuleUnlocks = (profile) => {
+    const unlocked = profile.unlockedModules || ['m1'];
+    const freeModuleId = profile.freeModuleId || 'm1';
+    const isPremium = profile.isPremium || false;
+    const completedLessons = profile.completedLessons || [];
+
     const nodes = document.querySelectorAll('.module-node');
     nodes.forEach(node => {
         const id = node.getAttribute('data-id');
-        if (unlocked.includes(id)) {
+        
+        // Un módulo es accesible si:
+        // 1. Eres premium
+        // 2. Es tu módulo gratuito asignado (freeModuleId)
+        // 3. Estaba desbloqueado por el test (esto incluye módulos previos al salto)
+        // 4. Ya lo completaste (para repasar)
+        
+        const isFree = (id === freeModuleId);
+        const wasUnlocked = unlocked.includes(id);
+        const isCompleted = completedLessons.includes(`${id}l20`); // Consideramos l20 como fin
+
+        const canAccess = isPremium || isFree || wasUnlocked || isCompleted;
+
+        if (canAccess) {
             node.classList.remove('locked');
             node.classList.add('unlocked');
             node.onclick = () => window.location.href = `module.html?id=${id}`;
@@ -310,29 +330,32 @@ const showSubscriptionModal = async () => {
 /**
  * 🎉 Celebración al completar el Módulo 1 completo (m1l20)
  */
-const showModuleCompletionCelebration = async () => {
+const showModuleCompletionCelebration = async (modId = 'm1') => {
+    const modNum = modId.replace('m', '');
     // Usar canvas confetti si está disponible, si no, SweetAlert puro
     await Swal.fire({
-        title: '🔥 ¡LEYENDA DEL CAMPAMENTO BASE!',
+        title: `🔥 ¡LEYENDA DEL MÓDULO ${modNum}!`,
         html: `
             <div style="text-align: center; font-family: 'Outfit', sans-serif;">
                 <p style="font-size: 3rem; margin: 0.5rem 0;">🏕️⭐🌲</p>
                 <p style="font-size: 1rem; color: #475569; margin-bottom: 1.5rem; line-height: 1.6;">
-                    Completaste las <strong>20 lecciones</strong> del Módulo 1.
-                    Tu ${currentProfile?.avatar || '🦊'} ya puede hablar inglés básico.
+                    Completaste las <strong>20 lecciones</strong> del Módulo ${modNum}.
+                    Tu ${currentProfile?.avatar || '🦊'} ya puede hablar inglés con más fluidez.
                 </p>
                 <div style="background: #f0fdf4; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid #bbf7d0;">
                     <p style="font-size: 0.85rem; color: #166534; margin: 0;">
-                        🎙️ Estás listo para seguir explorando el bosque.
+                        🎙️ El bosque se vuelve más profundo y misterioso...
                     </p>
                 </div>
                 <div style="background: linear-gradient(135deg, #0f172a, #1e3a5f); border-radius: 16px; padding: 1.5rem;">
                     <div style="font-size: 1.5rem; font-weight: 800; color: #38bdf8; margin-bottom: 0.25rem;">$300 MXN/mes</div>
-                    <div style="font-size: 0.8rem; color: #94a3b8;">Todos los módulos — Solo $10 al día</div>
+                    <div style="font-size: 0.8rem; color: #94a3b8;">Sigue explorando — Solo $10 al día</div>
                 </div>
             </div>
         `,
         cancelButtonText: 'Seguir explorando',
+        confirmButtonText: '🚀 Quiero acceso completo',
+        showCancelButton: true,
         confirmButtonColor: '#38bdf8',
         cancelButtonColor: '#64748b',
         allowOutsideClick: false
@@ -576,19 +599,35 @@ const startPlacementTest = async () => {
     // Calcular nivel (puntaje sobre 25)
     // Umbrales: ~88% = M5, ~68% = M4, ~48% = M3, ~28% = M2
     let unlocked = ['m1'];
-    if (score >= 22) unlocked = ['m1', 'm2', 'm3', 'm4', 'm5'];
-    else if (score >= 17) unlocked = ['m1', 'm2', 'm3', 'm4'];
-    else if (score >= 12) unlocked = ['m1', 'm2', 'm3'];
-    else if (score >= 7)  unlocked = ['m1', 'm2'];
+    let freeModuleId = 'm1';
+
+    if (score >= 22) { 
+        unlocked = ['m1', 'm2', 'm3', 'm4', 'm5']; 
+        freeModuleId = 'm5'; 
+    }
+    else if (score >= 17) { 
+        unlocked = ['m1', 'm2', 'm3', 'm4']; 
+        freeModuleId = 'm4'; 
+    }
+    else if (score >= 12) { 
+        unlocked = ['m1', 'm2', 'm3']; 
+        freeModuleId = 'm3'; 
+    }
+    else if (score >= 7)  { 
+        unlocked = ['m1', 'm2']; 
+        freeModuleId = 'm2'; 
+    }
 
     const userRef = doc(db, 'users', currentUser.uid);
     await updateDoc(userRef, {
         unlockedModules: unlocked,
+        freeModuleId: freeModuleId,
         placementTestDone: true,
         placementScore: score
     });
 
     currentProfile.unlockedModules = unlocked;
+    currentProfile.freeModuleId = freeModuleId;
     currentProfile.placementTestDone = true;
 
     await Swal.fire({

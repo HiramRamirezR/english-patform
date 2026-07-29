@@ -26,9 +26,13 @@ export async function sendDiscordNotification(title, description, color = 344700
             ]
         };
 
+        const headers = { 'Content-Type': 'application/json' };
+        const secret = localStorage.getItem('moonsforest_discord_secret');
+        if (secret) headers['x-auth-secret'] = secret;
+
         const response = await fetch('/.netlify/functions/discord', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers,
             body: JSON.stringify(payload)
         });
 

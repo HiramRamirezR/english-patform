@@ -1,0 +1,235 @@
+{
+  "id": "m3",
+  "title": "Módulo 3: La Cabaña del Campamento",
+  "description": "Presenta a tu familia y amigos usando posesivos.",
+  "lessons": [
+    {
+      "id": "m3l1",
+      "title": "3.1: My Mother and Father",
+      "desc": "Conoce las palabras para mamá y papá.",
+      "icon": "👨‍👩‍👧‍👦",
+      "vocab_new": ["Mother", "Father", "My"],
+      "vocab_review": [],
+      "story": { "en": "Let's meet the family!", "es": "¡Vamos a conocer a la familia!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m3l2",
+      "title": "3.2: Brothers and Sisters",
+      "desc": "Aprende a decir hermano y hermana.",
+      "icon": "👫",
+      "vocab_new": ["Brother", "Sister"],
+      "vocab_review": ["Mother", "Father", "My"],
+      "story": { "en": "Do you have a brother or a sister?", "es": "¿Tienes hermano o hermana?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m3l3",
+      "title": "3.3: My Friend",
+      "desc": "Cómo presentar a un amigo.",
+      "icon": "🤝",
+      "vocab_new": ["Friend"],
+      "vocab_review": ["Mother", "Father", "Brother", "Sister"],
+      "story": { "en": "Friends are family too!", "es": "¡Los amigos también son familia!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m3l4",
+      "title": "3.4: He and She",
+      "desc": "Diferencia entre 'él' y 'ella'.",
+      "icon": "👤",
+      "vocab_new": ["He is", "She is"],
+      "vocab_review": ["Mother", "Father", "Brother", "Sister", "Friend"],
+      "story": { "en": "He is my brother. She is my sister.", "es": "Él es mi hermano. Ella es mi hermana." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m3l5",
+      "title": "3.5: Mini-Reto Familiar",
+      "desc": "Demuestra lo que has aprendido.",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["Mother", "Father", "Brother", "Sister", "Friend", "My", "He is", "She is"],
+      "story": { "en": "Time for a challenge!", "es": "¡Hora de un reto!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m3l6",
+      "title": "3.6: Your Family",
+      "desc": "Habla de la familia de otra persona.",
+      "icon": "👪",
+      "vocab_new": ["Your"],
+      "vocab_review": ["Mother", "Father", "Brother", "Sister", "Friend"],
+      "story": { "en": "Your family is special too!", "es": "¡Tu familia también es especial!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m3l7",
+      "title": "3.7: His and Her",
+      "desc": "Posesivos: su (de él) y su (de ella).",
+      "icon": "👕",
+      "vocab_new": ["His", "Her"],
+      "vocab_review": ["My", "Your", "Father", "Mother", "Brother", "Sister"],
+      "story": { "en": "His mother. Her father. Practice the difference!", "es": "Su mamá de él. Su papá de ella. ¡Practica la diferencia!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m3l8",
+      "title": "3.8: Describing Family",
+      "desc": "Agrega adjetivos para describir.",
+      "icon": "📏",
+      "vocab_new": ["Tall", "Short", "Young", "Old"],
+      "vocab_review": ["Mother", "Father", "Brother", "Sister", "Friend", "My", "Your", "His", "Her"],
+      "story": { "en": "My father is tall. My mother is young.", "es": "Mi papá es alto. Mi mamá es joven." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m3l9",
+      "title": "3.9: Family and Friends",
+      "desc": "Describe a todos: familia y amigos.",
+      "icon": "👥",
+      "vocab_new": ["Baby", "Kind", "Funny"],
+      "vocab_review": ["Tall", "Short", "Young", "Old", "Mother", "Father", "Friend"],
+      "story": { "en": "My friend is funny and kind!", "es": "¡Mi amigo es gracioso y amable!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m3l10",
+      "title": "3.10: Segundo Reto",
+      "desc": "¿Ya dominas los posesivos?",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["My", "Your", "His", "Her", "Tall", "Short", "Young", "Old", "Kind", "Funny"],
+      "story": { "en": "Another challenge awaits!", "es": "¡Otro reto te espera!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m3l11",
+      "title": "3.11: Sentence Puzzle I",
+      "desc": "Arma oraciones con posesivos.",
+      "icon": "🧩",
+      "vocab_new": ["Strong"],
+      "vocab_review": ["My", "Your", "His", "Her", "Father", "Brother", "Tall"],
+      "story": { "en": "Put the words in order!", "es": "¡Pon las palabras en orden!" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m3l12",
+      "title": "3.12: Sentence Puzzle II",
+      "desc": "Más oraciones con 'he' y 'she'.",
+      "icon": "🧩",
+      "vocab_new": ["Is"],
+      "vocab_review": ["He is", "She is", "My", "Your", "His", "Her", "Sister", "Friend", "Young", "Kind"],
+      "story": { "en": "He is my friend. She is your sister.", "es": "Él es mi amigo. Ella es tu hermana." },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m3l13",
+      "title": "3.13: Think in English I",
+      "desc": "Traduce oraciones sobre la familia.",
+      "icon": "💡",
+      "vocab_new": [],
+      "vocab_review": ["Mother", "Father", "Brother", "Sister", "Friend", "Tall", "Short", "Kind", "Funny"],
+      "story": { "en": "Think in English! How do you say it?", "es": "¡Piensa en inglés! ¿Cómo lo dices?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m3l14",
+      "title": "3.14: Think in English II",
+      "desc": "Más traducciones con posesivos.",
+      "icon": "💡",
+      "vocab_new": [],
+      "vocab_review": ["My", "Your", "His", "Her", "Tall", "Short", "Young", "Old", "Strong"],
+      "story": { "en": "His mother is tall. Her father is strong.", "es": "Su mamá de él es alta. Su papá de ella es fuerte." },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m3l15",
+      "title": "3.15: The Great Assembly",
+      "desc": "Une todo: familia, posesivos y adjetivos.",
+      "icon": "🏛️",
+      "vocab_new": ["Family"],
+      "vocab_review": ["My", "Your", "His", "Her", "Mother", "Father", "Brother", "Sister", "Friend", "Tall", "Short", "Young", "Old", "Kind", "Funny", "Strong"],
+      "story": { "en": "Bring it all together! Your family, my family, everyone!", "es": "¡Únelo todo! Tu familia, mi familia, ¡todos!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "drag_and_drop", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m3l16",
+      "title": "3.16: Echo Continuo: Family",
+      "desc": "Repite frases sobre la familia sin pausa.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Mother", "Father", "Brother", "Sister", "My", "Your"],
+      "story": { "en": "Repeat after Moon — fast and clear!", "es": "¡Repite después de Moon — rápido y claro!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m3l17",
+      "title": "3.17: Echo Continuo: Descriptions",
+      "desc": "Describe a tu familia sin parar.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Tall", "Short", "Young", "Old", "Kind", "Funny", "Strong", "He is", "She is"],
+      "story": { "en": "Keep going! Describe everyone!", "es": "¡Sigue! ¡Describe a todos!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m3l18",
+      "title": "3.18: Echo Continuo: Posesivos",
+      "desc": "My, your, his, her — practica sin pausa.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["My", "Your", "His", "Her", "Father", "Mother", "Brother", "Sister", "Friend"],
+      "story": { "en": "My father, your mother, his brother, her sister!", "es": "Mi papá, tu mamá, su hermano de él, su hermana de ella!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m3l19",
+      "title": "3.19: Rehearsal",
+      "desc": "Ensayo general antes del gran reto.",
+      "icon": "🎭",
+      "vocab_new": [],
+      "vocab_review": ["Family", "My", "Your", "His", "Her", "He is", "She is", "Tall", "Short", "Young", "Old", "Kind", "Funny", "Strong", "Mother", "Father", "Brother", "Sister", "Friend", "Baby"],
+      "story": { "en": "Get ready for the campfire!", "es": "¡Prepárate para la fogata!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m3l20",
+      "title": "3.20: 🔥 La Fogata — My Family",
+      "desc": "Presenta a tu familia frente a la fogata.",
+      "icon": "🔥",
+      "vocab_new": [],
+      "vocab_review": ["My", "Your", "His", "Her", "He is", "She is", "Mother", "Father", "Brother", "Sister", "Friend", "Tall", "Short", "Young", "Old", "Kind", "Funny", "Strong", "Family", "Baby"],
+      "story": { "en": "Welcome to the campfire! Tonight, tell everyone about your family.", "es": "Bienvenido a la fogata. Esta noche, habla de tu familia." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "m3_eval_1",
+      "title": "Evaluación M3: My Family",
+      "preview": {
+        "en": "You're at the campfire with Moon. She wants to meet your family! Tell her about each person — who they are and what they're like.",
+        "es": "Estás en la fogata con Moon. ¡Ella quiere conocer a tu familia! Cuéntale quién es cada persona y cómo es."
+      },
+      "lines": [
+        { "role": "moon", "en": "Hello! Welcome to the campfire. Tell me about your family!", "es": "¡Hola! Bienvenido a la fogata. ¡Háblame de tu familia!" },
+        { "role": "student", "en": "(Tell Moon about your family.)", "es": "(Dile a Moon acerca de tu familia.)" },
+        { "role": "moon", "en": "Who is she?", "es": "¿Quién es ella?" },
+        { "role": "student", "en": "(Say: She is my mother / sister / friend.)", "es": "(Di: Ella es mi mamá / hermana / amiga.)" },
+        { "role": "moon", "en": "What is she like?", "es": "¿Cómo es ella?" },
+        { "role": "student", "en": "(Describe her: tall, kind, young, funny...)", "es": "(Descríbela: alta, amable, joven, graciosa...)" },
+        { "role": "moon", "en": "And who is he?", "es": "¿Y quién es él?" },
+        { "role": "student", "en": "(Say: He is my father / brother / friend.)", "es": "(Di: Él es mi papá / hermano / amigo.)" },
+        { "role": "moon", "en": "Is he tall?", "es": "¿Él es alto?" },
+        { "role": "student", "en": "(Say: Yes, he is tall. / No, he is short.)", "es": "(Di: Sí, él es alto. / No, él es bajo.)" },
+        { "role": "moon", "en": "Tell me more! What is your mother like?", "es": "¡Cuéntame más! ¿Cómo es tu mamá?" },
+        { "role": "student", "en": "(Describe your mother: She is kind / young / funny.)", "es": "(Describe a tu mamá: Ella es amable / joven / graciosa.)" },
+        { "role": "moon", "en": "Do you have a friend? Tell me about your friend.", "es": "¿Tienes un amigo? Háblame de tu amigo." },
+        { "role": "student", "en": "(Say: He is my friend. He is tall and funny.)", "es": "(Di: Él es mi amigo. Él es alto y gracioso.)" },
+        { "role": "moon", "en": "Wonderful! Your family sounds amazing. Thank you for sharing!", "es": "¡Maravilloso! Tu familia suena increíble. ¡Gracias por compartir!" },
+        { "role": "student", "en": "(Say: Thank you, Moon!)", "es": "(Di: ¡Gracias, Moon!)" }
+      ]
+    }
+  ]
+}

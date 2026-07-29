@@ -1,0 +1,235 @@
+{
+  "id": "m5",
+  "title": "Módulo 5: En Movimiento",
+  "description": "Describe lo que está pasando ahora con el presente continuo.",
+  "lessons": [
+    {
+      "id": "m5l1",
+      "title": "5.1: I Am Running",
+      "desc": "Cómo decir lo que estás haciendo ahora.",
+      "icon": "🏃",
+      "vocab_new": ["I am running", "Running"],
+      "vocab_review": [],
+      "story": { "en": "What are you doing right now? Let's learn!", "es": "¿Qué estás haciendo ahora mismo? ¡Vamos a aprender!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m5l2",
+      "title": "5.2: Eating and Drinking",
+      "desc": "Acciones con comida y bebida.",
+      "icon": "🍽️",
+      "vocab_new": ["Eating", "Drinking"],
+      "vocab_review": ["Running", "I am running"],
+      "story": { "en": "Are you eating? Are you drinking? Tell me!", "es": "¿Estás comiendo? ¿Estás bebiendo? ¡Dime!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m5l3",
+      "title": "5.3: Reading and Writing",
+      "desc": "Acciones tranquilas.",
+      "icon": "📖",
+      "vocab_new": ["Reading", "Writing"],
+      "vocab_review": ["Eating", "Drinking"],
+      "story": { "en": "I am reading a book. Are you writing?", "es": "Estoy leyendo un libro. ¿Estás escribiendo?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m5l4",
+      "title": "5.4: Singing and Dancing",
+      "desc": "Acciones divertidas.",
+      "icon": "🎤",
+      "vocab_new": ["Singing", "Dancing"],
+      "vocab_review": ["Reading", "Writing"],
+      "story": { "en": "Listen! Moon is singing. Are you dancing?", "es": "¡Escucha! Moon está cantando. ¿Estás bailando?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m5l5",
+      "title": "5.5: Mini-Reto en Movimiento",
+      "desc": "Todo lo que estás haciendo.",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["Running", "Eating", "Drinking", "Reading", "Writing", "Singing", "Dancing", "I am running"],
+      "story": { "en": "Time for a movement challenge!", "es": "¡Hora de un reto en movimiento!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m5l6",
+      "title": "5.6: Swimming and Flying",
+      "desc": "En el agua y en el aire.",
+      "icon": "🏊",
+      "vocab_new": ["Swimming", "Flying"],
+      "vocab_review": ["Running", "Singing"],
+      "story": { "en": "Fish are swimming. Birds are flying. What about you?", "es": "Los peces nadan. Los pájaros vuelan. ¿Y tú?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m5l7",
+      "title": "5.7: Cooking and Playing",
+      "desc": "En la cocina y en el juego.",
+      "icon": "🍳",
+      "vocab_new": ["Cooking", "Playing"],
+      "vocab_review": ["Swimming", "Flying", "Eating"],
+      "story": { "en": "Moon is cooking! The children are playing.", "es": "¡Moon está cocinando! Los niños están jugando." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m5l8",
+      "title": "5.8: Sleeping and Smiling",
+      "desc": "Descanso y alegría.",
+      "icon": "😴",
+      "vocab_new": ["Sleeping", "Smiling"],
+      "vocab_review": ["Cooking", "Playing", "Dancing"],
+      "story": { "en": "The baby is sleeping. Everyone is smiling!", "es": "El bebé está durmiendo. ¡Todos están sonriendo!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m5l9",
+      "title": "5.9: Walking and Talking",
+      "desc": "Acciones cotidianas.",
+      "icon": "🚶",
+      "vocab_new": ["Walking", "Talking"],
+      "vocab_review": ["Sleeping", "Smiling"],
+      "story": { "en": "We are walking in the forest. We are talking!", "es": "Estamos caminando en el bosque. ¡Estamos hablando!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m5l10",
+      "title": "5.10: Segundo Reto",
+      "desc": "Todo sobre acciones en movimiento.",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["Running", "Eating", "Drinking", "Reading", "Writing", "Singing", "Dancing", "Swimming", "Flying", "Cooking", "Playing", "Sleeping", "Smiling", "Walking", "Talking"],
+      "story": { "en": "Another movement challenge!", "es": "¡Otro reto en movimiento!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m5l11",
+      "title": "5.11: Rompecabezas I",
+      "desc": "Ordena acciones.",
+      "icon": "🧩",
+      "vocab_new": ["Listening", "Watching"],
+      "vocab_review": ["I am running", "Running", "Walking", "Eating"],
+      "story": { "en": "Put the action words in order!", "es": "¡Pon las palabras de acción en orden!" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m5l12",
+      "title": "5.12: Rompecabezas II",
+      "desc": "Más oraciones en presente continuo.",
+      "icon": "🧩",
+      "vocab_new": ["Now"],
+      "vocab_review": ["Listening", "Watching", "Singing", "Dancing", "Reading"],
+      "story": { "en": "What are you doing now? Put it together!", "es": "¿Qué estás haciendo ahora? ¡Ármalo!" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m5l13",
+      "title": "5.13: Traducción I",
+      "desc": "Piensa en inglés: ¿qué está pasando?",
+      "icon": "💡",
+      "vocab_new": ["Sitting", "Standing"],
+      "vocab_review": ["I am", "Running", "Eating", "Drinking", "Now"],
+      "story": { "en": "Think in English! What is happening?", "es": "¡Piensa en inglés! ¿Qué está pasando?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m5l14",
+      "title": "5.14: Traducción II",
+      "desc": "Más traducciones de acciones.",
+      "icon": "💡",
+      "vocab_new": ["Today"],
+      "vocab_review": ["Sitting", "Standing", "Swimming", "Flying", "Cooking", "Playing"],
+      "story": { "en": "Today we are learning! Translate the actions.", "es": "¡Hoy estamos aprendiendo! Traduce las acciones." },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m5l15",
+      "title": "5.15: The Great Movement",
+      "desc": "Une todo: acciones y presente continuo.",
+      "icon": "🏛️",
+      "vocab_new": ["Fast", "Slow"],
+      "vocab_review": ["Running", "Walking", "Eating", "Drinking", "Singing", "Dancing", "Swimming", "Flying", "Cooking", "Playing", "Sleeping", "Smiling", "Talking", "Reading", "Writing", "Now", "Today"],
+      "story": { "en": "The forest is full of movement! What is everyone doing?", "es": "¡El bosque está lleno de movimiento! ¿Qué está haciendo cada quién?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "drag_and_drop", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m5l16",
+      "title": "5.16: Echo Continuo: Actions",
+      "desc": "Repite acciones sin pausa.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Running", "Walking", "Eating", "Drinking", "Reading", "Writing", "Singing", "Dancing"],
+      "story": { "en": "Repeat the actions! Fast and clear!", "es": "¡Repite las acciones! ¡Rápido y claro!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m5l17",
+      "title": "5.17: Echo Continuo: Movement",
+      "desc": "Más verbos en movimiento.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Swimming", "Flying", "Cooking", "Playing", "Sleeping", "Smiling", "Walking", "Talking"],
+      "story": { "en": "Keep going! Say what everyone is doing!", "es": "¡Sigue! ¡Di lo que todos están haciendo!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m5l18",
+      "title": "5.18: Echo Continuo: Now",
+      "desc": "Describe lo que pasa ahora sin parar.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Listening", "Watching", "Sitting", "Standing", "Now", "Today", "Fast", "Slow"],
+      "story": { "en": "Right now! What is happening?", "es": "¡Ahora mismo! ¿Qué está pasando?" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m5l19",
+      "title": "5.19: Rehearsal",
+      "desc": "Ensayo general antes del festival.",
+      "icon": "🎭",
+      "vocab_new": [],
+      "vocab_review": ["I am running", "Running", "Walking", "Eating", "Drinking", "Reading", "Writing", "Singing", "Dancing", "Swimming", "Flying", "Cooking", "Playing", "Sleeping", "Smiling", "Talking", "Listening", "Watching", "Sitting", "Standing", "Now", "Today", "Fast", "Slow"],
+      "story": { "en": "Get ready for the movement festival!", "es": "¡Prepárate para el festival de movimiento!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m5l20",
+      "title": "5.20: 🎪 El Festival — What Are You Doing?",
+      "desc": "Roleplay: ¿qué está pasando en el festival?",
+      "icon": "🎪",
+      "vocab_new": [],
+      "vocab_review": ["I am running", "Running", "Walking", "Eating", "Drinking", "Reading", "Writing", "Singing", "Dancing", "Swimming", "Flying", "Cooking", "Playing", "Sleeping", "Smiling", "Talking", "Listening", "Watching", "Sitting", "Standing", "Now", "Today", "Fast", "Slow"],
+      "story": { "en": "Welcome to the Movement Festival! Everyone is doing something. What are you doing?", "es": "¡Bienvenido al Festival de Movimiento! Todos están haciendo algo. ¿Qué estás haciendo tú?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "m5_eval_1",
+      "title": "Evaluación M5: What Are You Doing?",
+      "preview": {
+        "en": "You and Moon are at the Movement Festival! Talk about what everyone is doing right now.",
+        "es": "¡Tú y Moon están en el Festival de Movimiento! Hablen sobre lo que todos están haciendo ahora."
+      },
+      "lines": [
+        { "role": "moon", "en": "Welcome to the Movement Festival! So many things happening!", "es": "¡Bienvenido al Festival de Movimiento! ¡Tantas cosas pasando!" },
+        { "role": "student", "en": "(Greet Moon and say you are happy and excited!)", "es": "(Saluda a Moon y di que estás feliz y emocionado.)" },
+        { "role": "moon", "en": "Look! A bird is flying. What is it doing?", "es": "¡Mira! Un pájaro está volando. ¿Qué está haciendo?" },
+        { "role": "student", "en": "(Say: The bird is flying! It is fast!)", "es": "(Di: ¡El pájaro está volando! Es rápido.)" },
+        { "role": "moon", "en": "And over there, a boy is dancing. What is he doing?", "es": "Y allá, un niño está bailando. ¿Qué está haciendo?" },
+        { "role": "student", "en": "(Say: He is dancing! He is happy.)", "es": "(Di: ¡Él está bailando! Él está feliz.)" },
+        { "role": "moon", "en": "I am singing! Can you hear me? What am I doing?", "es": "¡Estoy cantando! ¿Puedes oírme? ¿Qué estoy haciendo?" },
+        { "role": "student", "en": "(Say: You are singing, Moon! You are amazing.)", "es": "(Di: ¡Estás cantando, Moon! Eres increíble.)" },
+        { "role": "moon", "en": "A girl is eating an apple. What is she doing?", "es": "Una niña está comiendo una manzana. ¿Qué está haciendo?" },
+        { "role": "student", "en": "(Say: She is eating an apple. The apple is yummy!)", "es": "(Di: Ella está comiendo una manzana. ¡La manzana es deliciosa!)" },
+        { "role": "moon", "en": "Two friends are playing and laughing. What are they doing?", "es": "Dos amigos están jugando y riendo. ¿Qué están haciendo?" },
+        { "role": "student", "en": "(Say: They are playing. They are happy!)", "es": "(Di: Están jugando. ¡Están felices!)" },
+        { "role": "moon", "en": "What about you? What are you doing right now?", "es": "¿Y tú? ¿Qué estás haciendo ahora mismo?" },
+        { "role": "student", "en": "(Say: I am talking to Moon! I am learning English.)", "es": "(Di: ¡Estoy hablando con Moon! Estoy aprendiendo inglés.)" },
+        { "role": "moon", "en": "Wonderful! The festival is amazing. Thank you for coming!", "es": "¡Maravilloso! El festival es increíble. ¡Gracias por venir!" },
+        { "role": "student", "en": "(Say goodbye and thank Moon for the festival!)", "es": "(Despídete y agradece a Moon por el festival.)" }
+      ]
+    }
+  ]
+}

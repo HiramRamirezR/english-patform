@@ -22,7 +22,7 @@ export const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 const initApp = () => {
-    console.log("English Peak: Sistema de Auth inicializado.");
+    window.devLog("English Peak: Sistema de Auth inicializado.");
 
     // Botones de login
     const setupLogin = (id, targetRoute = 'mapa.html') => {
@@ -57,7 +57,7 @@ const initApp = () => {
     // Escuchar cambios en el estado de autenticación
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            console.log("Usuario autenticado:", user.displayName);
+            window.devLog("Usuario autenticado:", user.displayName);
 
             // Actualizar nombre en el dashboard si existe el elemento
             const userNameEl = document.getElementById('user-name');
@@ -75,7 +75,7 @@ const initApp = () => {
                     const data = userSnap.data();
                     const needsHealing = (!data.name || !data.email) && user.displayName;
                     if (needsHealing) {
-                        console.log("🩹 Sanando perfil incompleto:", user.displayName);
+                        window.devLog("🩹 Sanando perfil incompleto:", user.displayName);
                         const { updateDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
                         await updateDoc(userRef, {
                             name: data.name || user.displayName,
@@ -88,7 +88,7 @@ const initApp = () => {
                 // Silencioso: no bloqueamos la UI si esto falla
             }
         } else {
-            console.log("No hay sesión activa.");
+            window.devLog("No hay sesión activa.");
             // Si estamos en el mapa y no hay sesión, volver a la landing
             if (window.location.pathname.endsWith('mapa.html')) {
                 window.location.href = 'index.html';
@@ -128,14 +128,14 @@ export const handleLogin = async () => {
     try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
-        console.log("Login exitoso con Google:", user.displayName);
+        window.devLog("Login exitoso con Google:", user.displayName);
 
         // Lógica de Firestore: Perfiles Duales Automáticos
         const userRef = doc(db, 'users', user.uid);
         const userSnap = await getDoc(userRef);
 
         if (!userSnap.exists()) {
-            console.log("Creando nuevo perfil de usuario (student base)...");
+            window.devLog("Creando nuevo perfil de usuario (student base)...");
             const storedRefCode = localStorage.getItem('moonsforest_ref') || null;
 
             await setDoc(userRef, {
@@ -180,7 +180,7 @@ export const handleLogin = async () => {
                             const qCount = query(collection(db, "users"), where("referredBy", "==", storedRefCode));
                             const referralsSnap = await getDocs(qCount);
                             totalReferrals = referralsSnap.size;
-                        } catch (e) { console.warn("No se pudo contar el hito de referidos (permisos)."); }
+                        } catch (e) { window.devWarn("No se pudo contar el hito de referidos (permisos)."); }
 
                         if (discordId) {
                             // 1. Mensaje de nuevo referido
@@ -204,7 +204,7 @@ export const handleLogin = async () => {
                         }
                     }
                 } catch (err) {
-                    console.error("Error notificando referido al maestro:", err);
+                    window.devWarn("Error notificando referido al maestro:", err);
                 }
             }
         }
@@ -214,7 +214,7 @@ export const handleLogin = async () => {
     } catch (error) {
         // Ignorar errores de cancelación para no asustar al usuario
         if (error.code !== 'auth/cancelled-popup-request' && error.code !== 'auth/popup-closed-by-user') {
-            console.error("Error en login:", error.code, error.message);
+            window.devWarn("Error en login:", error.code, error.message);
             Swal.fire({
                 title: 'Error de Autenticación',
                 text: 'No pudimos iniciar tu sesión: ' + error.message,
@@ -245,25 +245,33 @@ export const getEffectiveUser = async () => {
     const impId = localStorage.getItem('impersonate_id');
     if (impId) {
         // Verificar si el usuario REAL es admin antes de permitir el impersonate
-        const realDoc = await getDoc(doc(db, 'users', user.uid));
-        if (realDoc.exists() && realDoc.data().isAdmin) {
-            console.log("🕵️ Modo Impersonate Activo:", impId);
-
-            // Añadir banner visual de que estás suplantando
-            if (!document.getElementById('impersonate-banner')) {
-                const banner = document.createElement('div');
-                banner.id = 'impersonate-banner';
-                banner.innerHTML = `
-                    Estás viendo la plataforma como <strong>${impId}</strong> 
-                    <button onclick="localStorage.removeItem('impersonate_id'); window.location.reload();" 
-                            style="margin-left: 1rem; background: white; color: red; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer;">
-                        Salir
-                    </button>`;
-                banner.style.cssText = "position: fixed; top: 0; left: 0; right: 0; background: #ef4444; color: white; text-align: center; padding: 8px; font-size: 0.8rem; z-index: 10000; font-family: sans-serif;";
-                document.body.appendChild(banner);
+        try {
+            const realDoc = await getDoc(doc(db, 'users', user.uid));
+            if (!realDoc.exists() || !realDoc.data().isAdmin) {
+                localStorage.removeItem('impersonate_id');
+                return { uid: user.uid, isImpersonated: false };
             }
-            return { uid: impId, isImpersonated: true };
+        } catch (e) {
+            window.devWarn("Error verificando admin para impersonate:", e);
+            localStorage.removeItem('impersonate_id');
+            return { uid: user.uid, isImpersonated: false };
         }
+
+            window.devLog("🕵️ Modo Impersonate Activo:", impId);
+
+        if (!document.getElementById('impersonate-banner')) {
+            const banner = document.createElement('div');
+            banner.id = 'impersonate-banner';
+            banner.innerHTML = `
+                Estás viendo la plataforma como <strong>${impId}</strong> 
+                <button onclick="localStorage.removeItem('impersonate_id'); window.location.reload();" 
+                        style="margin-left: 1rem; background: white; color: red; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer;">
+                    Salir
+                </button>`;
+            banner.style.cssText = "position: fixed; top: 0; left: 0; right: 0; background: #ef4444; color: white; text-align: center; padding: 8px; font-size: 0.8rem; z-index: 10000; font-family: sans-serif;";
+            document.body.appendChild(banner);
+        }
+        return { uid: impId, isImpersonated: true };
     }
     return { uid: user.uid, isImpersonated: false };
 }

@@ -256,6 +256,7 @@
         <aside class="admin-sidebar" id="admin-sidebar">
             <a href="#overview" class="sidebar-item active">📊 Dashboard</a>
             <a href="#students" class="sidebar-item">🎒 Alumnos</a>
+            <a href="#evaluations" class="sidebar-item">🎙️ Evaluaciones</a>
             <a href="#teachers" class="sidebar-item">👩‍🏫 Maestros</a>
             <a href="#finances" class="sidebar-item">💰 Finanzas</a>
             <a href="#content" class="sidebar-item">📝 Contenido (CMS)</a>
@@ -352,7 +353,7 @@
                         <thead>
                             <tr style="border-bottom: 2px solid var(--slate-100); text-align: left;">
                                 <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">ALUMNO</th>
-                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">PROGRESO</th>
+                                <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">MÓDULO</th>
                                 <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">HABLA (HOY)</th>
                                 <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">MIN TOTALES</th>
                                 <th style="padding: 1rem; color: var(--slate-500); font-size: 0.85rem;">ESTADO</th>
@@ -361,6 +362,22 @@
                         </thead>
                         <tbody id="students-table-body"></tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- Sección: Evaluaciones -->
+            <div id="evaluations-view" class="section-view" style="display: none;">
+                <header class="dashboard-header">
+                    <div>
+                        <h1>Revisión de Evaluaciones</h1>
+                        <p style="color: var(--slate-500);">Escucha, aprueba o rechaza las evaluaciones de los alumnos.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="loadEvaluations()" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                        Actualizar
+                    </button>
+                </header>
+                <div id="evaluations-list" class="report-section" style="padding: 1.5rem;">
+                    <p style="color: var(--slate-400); text-align: center;">Cargando evaluaciones...</p>
                 </div>
             </div>
 

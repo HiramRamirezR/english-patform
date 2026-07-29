@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 1. Extraer ID de la lección de la URL
     const urlParams = new URLSearchParams(window.location.search);
     const lessonId = urlParams.get('id');
+    const isReview = urlParams.get('review') === 'true';
 
     if (!lessonId) {
         alert("No se especificó ninguna lección. Regresando...");
@@ -113,14 +114,60 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // 3. Pintar en el HTML
+    // 3. Verificar compatibilidad de SpeechRecognition antes de arrancar
+    const hasSpeechSupport = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
+    if (!hasSpeechSupport && !isReview) {
+        document.getElementById('skeleton-loader').style.display = 'none';
+        const container = document.getElementById('learning-container');
+        container.innerHTML = `
+            <div style="text-align:center; padding:3rem 1.5rem; font-family:'Outfit',sans-serif; max-width:480px; margin:4rem auto;">
+                <div style="font-size:4rem; margin-bottom:1rem;">🌲</div>
+                <h2 style="color:white; font-size:1.3rem; margin-bottom:1rem;">Tu navegador no es compatible</h2>
+                <p style="color:#94a3b8; font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">
+                    Moonsforest necesita <strong style="color:#7dd3fc;">Chrome</strong> o <strong style="color:#7dd3fc;">Edge</strong>
+                    en tu computadora, o <strong style="color:#7dd3fc;">Chrome para Android</strong> en tu celular.
+                </p>
+                <div style="background:#1e293b; border-radius:16px; padding:1rem; margin-bottom:1.5rem; text-align:left;">
+                    <p style="color:#cbd5e1; font-size:0.85rem; margin:0;">
+                        📱 <strong>¿Cómo habilitarlo?</strong><br><br>
+                        1. Abre este enlace en <strong>Chrome</strong><br>
+                        2. Acepta el permiso de micrófono<br>
+                        3. ¡El bosque te espera! 🌲
+                    </p>
+                </div>
+                <button onclick="window.location.href='index.html'"
+                    style="padding:0.8rem 2rem; background:linear-gradient(135deg,#22c55e,#16a34a); color:white; border:none; border-radius:99px; font-size:1rem; font-weight:700; cursor:pointer; font-family:'Outfit',sans-serif;">
+                    ← Volver al inicio
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    // 4. Pintar en el HTML
     document.title = `${lessonConfig.title} | Moonsforest`;
     document.getElementById('lesson-title').innerText = lessonConfig.title;
 
+    // Confirmación de salida (evita perder progreso)
+    if (!isReview) {
+        const confirmExit = (e) => {
+            e.preventDefault();
+            e.returnValue = '¿Seguro que quieres salir? Perderás tu progreso en esta lección.';
+            return e.returnValue;
+        };
+        window.addEventListener('beforeunload', confirmExit);
+
+        document.addEventListener('lessonCompleted', () => {
+            window.removeEventListener('beforeunload', confirmExit);
+        }, { once: true });
+    }
+
     // Configurar Botón de Volver
     const btnBack = document.getElementById('btn-back');
-    btnBack.addEventListener('click', () => {
-        window.location.href = `module.html?id=${moduleId}`;
+    btnBack.addEventListener('click', (e) => {
+        if (isReview || confirm('¿Seguro que quieres salir? Perderás tu progreso en esta lección.')) {
+            window.location.href = `module.html?id=${moduleId}`;
+        }
     });
 
     // 4. Arrancar Autenticación y Motor
@@ -133,8 +180,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const effectiveUser = await getEffectiveUser();
         const effectiveUid = effectiveUser.uid;
 
-        // Listener de progresión
+        // Listener de progresión (no guarda en modo repaso)
         document.addEventListener('lessonCompleted', async (e) => {
+            if (isReview) return;
             const minutes = e.detail.minutes;
             if (minutes > 0) {
                 try {
@@ -158,7 +206,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                         const starsEarned = e.detail.stars || 0;
                         const currentStars = moduleStars[lessonId] || 0;
 
-                        // Solo guardar si ganaron más estrellas que su récord previo
                         if (starsEarned > currentStars) {
                             moduleStars[lessonId] = starsEarned;
                         }
@@ -173,15 +220,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                             moduleStars: moduleStars,
                             weeklyProgress: weeklyProgress
                         });
-                        console.log(`¡Progreso guardado!: +${minutes} mins, ${lessonId} completada.`);
+                        window.devLog(`Progreso guardado: +${minutes} mins, ${lessonId} completada.`);
 
-                        // Notificar a Discord (Opcional: No notificar si es impersonated)
                         if (!effectiveUser.isImpersonated) {
                             const userName = data.name || "Un viajero anónimo";
                             await sendDiscordNotification(
                                 "🎓 Lección Completada",
                                 `**${userName}** acaba de completar la lección **${lessonConfig.title}** y acumuló +**${minutes}** minutos hablados.`,
-                                5763719 // Verde
+                                5763719
                             );
                         }
                     }
@@ -191,13 +237,31 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
 
+        // Determinar si es premium y datos de evaluación
+        let isPremium = false;
+        let userName = 'Estudiante';
+        try {
+            const userSnap = await getDoc(doc(db, 'users', effectiveUid));
+            if (userSnap.exists()) {
+                const data = userSnap.data();
+                isPremium = data.isPremium === true;
+                userName = data.name || 'Estudiante';
+            }
+        } catch (e) {
+            console.warn("No se pudo verificar premium:", e);
+        }
+
         // 5. Iniciar la clase de aprendizaje
         new MoonsforestEngine('learning-container', finalSteps, {
             returnUrl: `module.html?id=${moduleId}`,
             resources: mergedResources,
             userId: effectiveUid,
+            userName: userName,
             lessonId: lessonId,
-            moduleId: moduleId
+            moduleId: moduleId,
+            evaluations: configModule.evaluations || [],
+            isPremium: isPremium,
+            isReview: isReview
         });
     });
 });

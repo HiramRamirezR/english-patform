@@ -221,7 +221,7 @@
         "aliases": []
     },
     "My": {
-        "es": "My",
+        "es": "Mi",
         "emoji": "✨",
         "aliases": []
     },
@@ -255,19 +255,33 @@
         "emoji": "✨",
         "aliases": []
     },
-    "My name is student": {
-        "es": "Mi nombre es estudiante",
+    "I am a student": {
+        "es": "Yo soy estudiante",
         "emoji": "✨",
         "aliases": []
     },
-    "I happy you sad": {
-        "es": "Yo feliz, tú triste",
-        "emoji": "✨",
+    "I am happy": {
+        "es": "Yo estoy feliz",
+        "emoji": "😊",
         "aliases": []
     },
-    "Goodbye my sad girl": {
-        "es": "Adiós mi triste niña",
-        "emoji": "✨",
+    "You are sad": {
+        "es": "Tú estás triste",
+        "emoji": "😢",
+        "aliases": []
+    },
+    "Goodbye sad girl": {
+        "es": "Adiós niña triste",
+        "emoji": "👋"
+    },
+    "I am ready and tired": {
+        "es": "Yo estoy listo y cansado",
+        "emoji": "😴",
+        "aliases": []
+    },
+    "Hello I am a good boy": {
+        "es": "Hola yo soy un buen niño",
+        "emoji": "👋",
         "aliases": []
     },
     "Good": {
@@ -700,5 +714,485 @@
         "es": "Veo el bosque",
         "emoji": "✨",
         "aliases": []
+    },
+    "Mother": {
+        "es": "Mamá",
+        "emoji": "👩",
+        "aliases": ["mudder", "motha", "mama"]
+    },
+    "Father": {
+        "es": "Papá",
+        "emoji": "👨",
+        "aliases": ["fada", "fathah", "papa"]
+    },
+    "Brother": {
+        "es": "Hermano",
+        "emoji": "👦",
+        "aliases": ["brotha", "bruvah", "broda"]
+    },
+    "Sister": {
+        "es": "Hermana",
+        "emoji": "👧",
+        "aliases": ["sista", "sistah"]
+    },
+    "Friend": {
+        "es": "Amigo",
+        "emoji": "🤝",
+        "aliases": ["fren", "frand", "frend"]
+    },
+    "He is": {
+        "es": "Él es",
+        "emoji": "👤",
+        "aliases": ["he's", "heez", "he iz"]
+    },
+    "She is": {
+        "es": "Ella es",
+        "emoji": "👤",
+        "aliases": ["she's", "sheez", "she iz"]
+    },
+    "Your": {
+        "es": "Tu",
+        "emoji": "👉",
+        "aliases": ["yoor", "yore", "yer"]
+    },
+    "His": {
+        "es": "Su (de él)",
+        "emoji": "👤",
+        "aliases": ["hiz", "he's"]
+    },
+    "Her": {
+        "es": "Su (de ella)",
+        "emoji": "👤",
+        "aliases": ["hur", "huh"]
+    },
+    "Tall": {
+        "es": "Alto",
+        "emoji": "📏",
+        "aliases": ["tol", "talll"]
+    },
+    "Short": {
+        "es": "Bajo",
+        "emoji": "📏",
+        "aliases": ["shor", "shart", "chort"]
+    },
+    "Young": {
+        "es": "Joven",
+        "emoji": "🌱",
+        "aliases": ["yung", "yong"]
+    },
+    "Old": {
+        "es": "Viejo",
+        "emoji": "👴",
+        "aliases": ["olld", "owld"]
+    },
+    "Baby": {
+        "es": "Bebé",
+        "emoji": "👶",
+        "aliases": ["baybee", "babi"]
+    },
+    "Kind": {
+        "es": "Amable",
+        "emoji": "💛",
+        "aliases": ["kined", "kynd"]
+    },
+    "Funny": {
+        "es": "Gracioso",
+        "emoji": "😄",
+        "aliases": ["funee", "funi", "phunny"]
+    },
+    "Strong": {
+        "es": "Fuerte",
+        "emoji": "💪",
+        "aliases": ["strang", "strung", "stron"]
+    },
+    "Family": {
+        "es": "Familia",
+        "emoji": "👨‍👩‍👧‍👦",
+        "aliases": ["familee", "famly", "famali"]
+    },
+    "He is my father": {
+        "es": "Él es mi papá",
+        "emoji": "👨",
+        "aliases": []
+    },
+    "She is my mother": {
+        "es": "Ella es mi mamá",
+        "emoji": "👩",
+        "aliases": []
+    },
+    "He is my brother": {
+        "es": "Él es mi hermano",
+        "emoji": "👦",
+        "aliases": []
+    },
+    "She is my sister": {
+        "es": "Ella es mi hermana",
+        "emoji": "👧",
+        "aliases": []
+    },
+    "My friend": {
+        "es": "Mi amigo",
+        "emoji": "🤝",
+        "aliases": []
+    },
+    "My family": {
+        "es": "Mi familia",
+        "emoji": "👨‍👩‍👧‍👦",
+        "aliases": []
+    },
+    "Your family": {
+        "es": "Tu familia",
+        "emoji": "👨‍👩‍👧‍👦",
+        "aliases": []
+    },
+    "His mother": {
+        "es": "Su mamá de él",
+        "emoji": "👩",
+        "aliases": []
+    },
+    "Her father": {
+        "es": "Su papá de ella",
+        "emoji": "👨",
+        "aliases": []
+    },
+    "My mother is tall": {
+        "es": "Mi mamá es alta",
+        "emoji": "📏",
+        "aliases": []
+    },
+    "My father is strong": {
+        "es": "Mi papá es fuerte",
+        "emoji": "💪",
+        "aliases": []
+    },
+    "My sister is young": {
+        "es": "Mi hermana es joven",
+        "emoji": "🌱",
+        "aliases": []
+    },
+    "My brother is funny": {
+        "es": "Mi hermano es gracioso",
+        "emoji": "😄",
+        "aliases": []
+    },
+    "She is kind": {
+        "es": "Ella es amable",
+        "emoji": "💛",
+        "aliases": []
+    },
+    "He is tall": {
+        "es": "Él es alto",
+        "emoji": "📏",
+        "aliases": []
+    },
+    "My friend is funny": {
+        "es": "Mi amigo es gracioso",
+        "emoji": "😄",
+        "aliases": []
+    },
+    "Your friend is kind": {
+        "es": "Tu amigo es amable",
+        "emoji": "💛",
+        "aliases": []
+    },
+    "His sister is young": {
+        "es": "Su hermana de él es joven",
+        "emoji": "🌱",
+        "aliases": []
+    },
+    "Her brother is short": {
+        "es": "Su hermano de ella es bajo",
+        "emoji": "📏",
+        "aliases": []
+    },
+    "Like": {
+        "es": "Gustar",
+        "emoji": "👍",
+        "aliases": ["lyke", "lic", "lak"]
+    },
+    "I like": {
+        "es": "Me gusta",
+        "emoji": "❤️",
+        "aliases": ["i lyke", "i lic", "eye like"]
+    },
+    "Don't like": {
+        "es": "No me gusta",
+        "emoji": "👎",
+        "aliases": ["dont like", "do not like", "dun like"]
+    },
+    "Apple": {
+        "es": "Manzana",
+        "emoji": "🍎",
+        "aliases": ["apel", "appul", "apl"]
+    },
+    "Banana": {
+        "es": "Plátano",
+        "emoji": "🍌",
+        "aliases": ["banana", "bunana", "bannana"]
+    },
+    "Bread": {
+        "es": "Pan",
+        "emoji": "🍞",
+        "aliases": ["bred", "brehd"]
+    },
+    "Water": {
+        "es": "Agua",
+        "emoji": "💧",
+        "aliases": ["wata", "wuter", "wahtah"]
+    },
+    "Market": {
+        "es": "Mercado",
+        "emoji": "🏪",
+        "aliases": ["markit", "markett", "markat"]
+    },
+    "Food": {
+        "es": "Comida",
+        "emoji": "🍽️",
+        "aliases": ["fud", "foood"]
+    },
+    "Meat": {
+        "es": "Carne",
+        "emoji": "🍖",
+        "aliases": ["meet", "meht", "met"]
+    },
+    "Rice": {
+        "es": "Arroz",
+        "emoji": "🍚",
+        "aliases": ["rys", "rihce", "raice"]
+    },
+    "Fish": {
+        "es": "Pescado",
+        "emoji": "🐟",
+        "aliases": ["fesh", "feesh", "fsh"]
+    },
+    "Milk": {
+        "es": "Leche",
+        "emoji": "🥛",
+        "aliases": ["melk", "mylk", "meelk"]
+    },
+    "Egg": {
+        "es": "Huevo",
+        "emoji": "🥚",
+        "aliases": ["eg", "ehg", "aig"]
+    },
+    "Cheese": {
+        "es": "Queso",
+        "emoji": "🧀",
+        "aliases": ["cheez", "chese", "cheas"]
+    },
+    "Delicious": {
+        "es": "Delicioso",
+        "emoji": "😋",
+        "aliases": ["delishus", "dilicious", "yummy"]
+    },
+    "Hungry": {
+        "es": "Hambriento",
+        "emoji": "🍽️",
+        "aliases": ["hungree", "hungry", "hungrey"]
+    },
+    "Thirsty": {
+        "es": "Sediento",
+        "emoji": "🥤",
+        "aliases": ["thursty", "thersty", "firsty"]
+    },
+    "Hot": {
+        "es": "Caliente",
+        "emoji": "🌶️",
+        "aliases": ["hott", "haht", "hut"]
+    },
+    "Cold": {
+        "es": "Frío",
+        "emoji": "❄️",
+        "aliases": ["coled", "kold", "coald"]
+    },
+    "Yummy": {
+        "es": "Delicioso",
+        "emoji": "😋",
+        "aliases": ["yumy", "yumi", "nummy"]
+    },
+    "Sweet": {
+        "es": "Dulce",
+        "emoji": "🍬",
+        "aliases": ["swete", "sweet", "swit"]
+    },
+    "Orange": {
+        "es": "Naranja",
+        "emoji": "🍊",
+        "aliases": ["orinj", "orng", "arange"]
+    },
+    "Cake": {
+        "es": "Pastel",
+        "emoji": "🎂",
+        "aliases": ["kaik", "kake", "kek"]
+    },
+    "I like apples": {
+        "es": "Me gustan las manzanas",
+        "emoji": "🍎",
+        "aliases": []
+    },
+    "I don't like bread": {
+        "es": "No me gusta el pan",
+        "emoji": "🍞",
+        "aliases": []
+    },
+    "I like bananas": {
+        "es": "Me gustan los plátanos",
+        "emoji": "🍌",
+        "aliases": []
+    },
+    "The market is big": {
+        "es": "El mercado es grande",
+        "emoji": "🏪",
+        "aliases": []
+    },
+    "The food is yummy": {
+        "es": "La comida es deliciosa",
+        "emoji": "😋",
+        "aliases": []
+    },
+    "I am hungry": {
+        "es": "Tengo hambre",
+        "emoji": "🍽️",
+        "aliases": []
+    },
+    "I am thirsty": {
+        "es": "Tengo sed",
+        "emoji": "🥤",
+        "aliases": []
+    },
+    "Hot food": {
+        "es": "Comida caliente",
+        "emoji": "🌶️",
+        "aliases": []
+    },
+    "Cold water": {
+        "es": "Agua fría",
+        "emoji": "💧",
+        "aliases": []
+    },
+    "Sweet cake": {
+        "es": "Pastel dulce",
+        "emoji": "🎂",
+        "aliases": []
+    },
+    "Running": {
+        "es": "Corriendo",
+        "emoji": "🏃",
+        "aliases": ["runing", "runnin", "rning"]
+    },
+    "I am running": {
+        "es": "Estoy corriendo",
+        "emoji": "🏃",
+        "aliases": ["im running", "eye am running"]
+    },
+    "Eating": {
+        "es": "Comiendo",
+        "emoji": "🍽️",
+        "aliases": ["eeting", "eatin", "eeating"]
+    },
+    "Drinking": {
+        "es": "Bebiendo",
+        "emoji": "🥤",
+        "aliases": ["drinkin", "drnking", "dranking"]
+    },
+    "Reading": {
+        "es": "Leyendo",
+        "emoji": "📖",
+        "aliases": ["reeding", "reding", "reting"]
+    },
+    "Writing": {
+        "es": "Escribiendo",
+        "emoji": "✍️",
+        "aliases": ["writting", "righting", "writin"]
+    },
+    "Singing": {
+        "es": "Cantando",
+        "emoji": "🎤",
+        "aliases": ["singin", "snging", "synging"]
+    },
+    "Dancing": {
+        "es": "Bailando",
+        "emoji": "💃",
+        "aliases": ["dansing", "dancin", "daancing"]
+    },
+    "Swimming": {
+        "es": "Nadando",
+        "emoji": "🏊",
+        "aliases": ["swiming", "swimin", "swmming"]
+    },
+    "Flying": {
+        "es": "Volando",
+        "emoji": "🪁",
+        "aliases": ["fling", "fliing", "flaiying"]
+    },
+    "Cooking": {
+        "es": "Cocinando",
+        "emoji": "🍳",
+        "aliases": ["cookin", "kooking", "kuking"]
+    },
+    "Playing": {
+        "es": "Jugando",
+        "emoji": "🎮",
+        "aliases": ["plaiing", "playin", "pleying"]
+    },
+    "Sleeping": {
+        "es": "Durmiendo",
+        "emoji": "😴",
+        "aliases": ["sleping", "slepin", "sliping"]
+    },
+    "Smiling": {
+        "es": "Sonriendo",
+        "emoji": "😊",
+        "aliases": ["smieling", "smilin", "smyling"]
+    },
+    "Walking": {
+        "es": "Caminando",
+        "emoji": "🚶",
+        "aliases": ["waking", "wolking", "waking"]
+    },
+    "Talking": {
+        "es": "Hablando",
+        "emoji": "💬",
+        "aliases": ["torking", "talkin", "talking"]
+    },
+    "Listening": {
+        "es": "Escuchando",
+        "emoji": "👂",
+        "aliases": ["listning", "lissening", "listnin"]
+    },
+    "Watching": {
+        "es": "Mirando",
+        "emoji": "👀",
+        "aliases": ["waching", "watchin", "wotching"]
+    },
+    "Sitting": {
+        "es": "Sentado",
+        "emoji": "🪑",
+        "aliases": ["siting", "sitten", "sitin"]
+    },
+    "Standing": {
+        "es": "Parado",
+        "emoji": "🧍",
+        "aliases": ["standin", "stending", "staning"]
+    },
+    "Now": {
+        "es": "Ahora",
+        "emoji": "⏰",
+        "aliases": ["nao", "nau", "noow"]
+    },
+    "Today": {
+        "es": "Hoy",
+        "emoji": "📅",
+        "aliases": ["tudei", "tooday", "todai"]
+    },
+    "Fast": {
+        "es": "Rápido",
+        "emoji": "⚡",
+        "aliases": ["faste", "fahst", "faast"]
+    },
+    "Slow": {
+        "es": "Lento",
+        "emoji": "🐢",
+        "aliases": ["sloh", "slo", "slowe"]
     }
 }

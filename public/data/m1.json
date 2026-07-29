@@ -524,7 +524,7 @@
       "desc": "Ordena palabras.",
       "icon": "🧩",
       "vocab_new": [
-        "Goodbye good night",
+        "Goodbye and good night",
         "Student",
         "Name",
         "My"
@@ -558,6 +558,11 @@
         "Good morning happy girl",
         "Tired",
         "Girl"
+      ],
+      "vocab_review": [
+        "Happy",
+        "Sad",
+        "Boy"
       ],
       "vocab_review": [
         "Moon",
@@ -617,9 +622,9 @@
       "icon": "⚡",
       "vocab_new": [
         "You are a boy",
-        "My name is student",
-        "I happy you sad",
-        "Boy"
+        "I am a student",
+        "I am happy",
+        "You are sad"
       ],
       "vocab_review": [
         "Student",
@@ -648,7 +653,7 @@
       "desc": "Armado de frases largas.",
       "icon": "🏗️",
       "vocab_new": [
-        "Goodbye my sad girl",
+        "Goodbye sad girl",
         "Morning",
         "Ready",
         "Sad"
@@ -683,7 +688,11 @@
         "Ready",
         "Sad"
       ],
-      "vocab_review": [],
+      "vocab_review": [
+        "I am",
+        "You are",
+        "My name is"
+      ],
       "story": {
         "en": "Let us practice some phrases!",
         "es": "¡Vamos a practicar frases!"
@@ -742,30 +751,30 @@
         {
           "type": "echo_chamber",
           "prompt": "p_speak_fast",
-          "word": "My name is happy",
-          "displayWord": "Mi nombre es feliz",
-          "successMsg": "¡Perfecto!"
+          "word": "I am happy",
+          "displayWord": "Yo estoy feliz",
+          "successMsg": "s_great"
         },
         {
           "type": "echo_chamber",
           "prompt": "p_speak_fast",
           "word": "You are sad",
-          "displayWord": "Tú eres triste",
-          "successMsg": "¡Perfecto!"
+          "displayWord": "Tú estás triste",
+          "successMsg": "s_great"
         },
         {
           "type": "echo_chamber",
           "prompt": "p_speak_fast",
-          "word": "I am ready tired",
-          "displayWord": "Yo estoy listo cansado",
-          "successMsg": "¡Perfecto!"
+          "word": "I am ready and tired",
+          "displayWord": "Yo estoy listo y cansado",
+          "successMsg": "s_great"
         },
         {
           "type": "echo_chamber",
           "prompt": "p_speak_fast",
-          "word": "Hello a good boy",
-          "displayWord": "Hola un buen niño",
-          "successMsg": "¡Perfecto!"
+          "word": "Hello I am a good boy",
+          "displayWord": "Hola yo soy un buen niño",
+          "successMsg": "s_great"
         },
         {
           "type": "matching",
@@ -855,6 +864,28 @@
       "flow": [
         "story_moment",
         "boss_battle"
+      ]
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "m1_eval_1",
+      "title": "Conversación en el Campamento",
+      "preview": {
+        "en": "You are at the camp. Moon welcomes you. Greet each other and talk about how you feel.",
+        "es": "Estás en el campamento. Moon te da la bienvenida. Salúdense y hablen sobre cómo se sienten."
+      },
+      "lines": [
+        { "role": "moon", "en": "Hello! Welcome to Moonsforest!", "es": "¡Hola! ¡Bienvenido a Moonsforest!" },
+        { "role": "student", "en": "Hello Moon! I am happy to be here.", "es": "¡Hola Moon! Estoy feliz de estar aquí." },
+        { "role": "moon", "en": "What is your name?", "es": "¿Cuál es tu nombre?" },
+        { "role": "student", "en": "My name is [your name]. I am a student.", "es": "Mi nombre es [tu nombre]. Soy un estudiante." },
+        { "role": "moon", "en": "How are you today?", "es": "¿Cómo estás hoy?" },
+        { "role": "student", "en": "I am happy and ready!", "es": "¡Estoy feliz y listo!" },
+        { "role": "moon", "en": "Are you a boy or a girl?", "es": "¿Eres niño o niña?" },
+        { "role": "student", "en": "I am a [boy/girl]. I am ready to learn.", "es": "Soy [niño/niña]. Estoy listo para aprender." },
+        { "role": "moon", "en": "Goodbye, see you next time!", "es": "¡Adiós, nos vemos la próxima vez!" },
+        { "role": "student", "en": "Goodbye Moon! Thank you! I am happy.", "es": "¡Adiós Moon! ¡Gracias! Estoy feliz." }
       ]
     }
   ]

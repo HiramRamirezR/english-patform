@@ -1,3 +1,20 @@
 [build]
   publish = "public"
   functions = "functions"
+
+[[redirects]]
+  from = "/_2025-05-01/*"
+  to = "/"
+  status = 200
+
+# Redirigir páginas eliminadas
+[[redirects]]
+  from = "/interview.html"
+  to = "/"
+  status = 301
+
+# Catch-all 404
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404

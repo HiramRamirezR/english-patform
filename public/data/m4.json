@@ -1,0 +1,237 @@
+{
+  "id": "m4",
+  "title": "Módulo 4: El Mercado",
+  "description": "Expresa lo que te gusta y no te gusta en el mercado.",
+  "lessons": [
+    {
+      "id": "m4l1",
+      "title": "4.1: I Like",
+      "desc": "Aprende a decir que algo te gusta.",
+      "icon": "👍",
+      "vocab_new": ["Like", "I like"],
+      "vocab_review": [],
+      "story": { "en": "Welcome to the market! Let's talk about what you like.", "es": "¡Bienvenido al mercado! Hablemos de lo que te gusta." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m4l2",
+      "title": "4.2: I Don't Like",
+      "desc": "Aprende a decir que algo no te gusta.",
+      "icon": "👎",
+      "vocab_new": ["Don't like"],
+      "vocab_review": ["Like", "I like"],
+      "story": { "en": "Sometimes we don't like things. That's okay!", "es": "A veces no nos gustan cosas. ¡Está bien!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m4l3",
+      "title": "4.3: Apple and Banana",
+      "desc": "Fruta del mercado.",
+      "icon": "🍎",
+      "vocab_new": ["Apple", "Banana"],
+      "vocab_review": ["Like", "Don't like"],
+      "story": { "en": "Apples and bananas — sweet and yummy!", "es": "Manzanas y plátanos — ¡dulces y deliciosos!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m4l4",
+      "title": "4.4: Bread and Water",
+      "desc": "Comida y bebida básica.",
+      "icon": "🍞",
+      "vocab_new": ["Bread", "Water"],
+      "vocab_review": ["Apple", "Banana", "Like"],
+      "story": { "en": "Bread and water — simple but good!", "es": "Pan y agua — ¡simple pero bueno!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m4l5",
+      "title": "4.5: Mini-Reto del Mercado",
+      "desc": "¿Qué te gusta? ¿Qué no te gusta?",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["Like", "Don't like", "Apple", "Banana", "Bread", "Water", "I like"],
+      "story": { "en": "Time for a market challenge!", "es": "¡Hora de un reto en el mercado!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m4l6",
+      "title": "4.6: At the Market",
+      "desc": "Vocabulario del mercado.",
+      "icon": "🏪",
+      "vocab_new": ["Market", "Food"],
+      "vocab_review": ["Apple", "Banana", "Bread", "Water", "Like"],
+      "story": { "en": "Let's go to the market! So much food!", "es": "¡Vamos al mercado! ¡Tanta comida!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m4l7",
+      "title": "4.7: Meat and Rice",
+      "desc": "Más comida del mercado.",
+      "icon": "🍖",
+      "vocab_new": ["Meat", "Rice"],
+      "vocab_review": ["Market", "Food", "Like", "Don't like"],
+      "story": { "en": "Meat and rice — a delicious meal!", "es": "Carne y arroz — ¡una comida deliciosa!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m4l8",
+      "title": "4.8: Fish and Milk",
+      "desc": "Pescado y leche.",
+      "icon": "🐟",
+      "vocab_new": ["Fish", "Milk"],
+      "vocab_review": ["Meat", "Rice", "Like", "Don't like"],
+      "story": { "en": "Fish from the sea and milk from the farm!", "es": "¡Pescado del mar y leche de la granja!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m4l9",
+      "title": "4.9: Egg and Cheese",
+      "desc": "Huevo y queso.",
+      "icon": "🥚",
+      "vocab_new": ["Egg", "Cheese"],
+      "vocab_review": ["Milk", "Fish", "Bread", "Like"],
+      "story": { "en": "Eggs and cheese — perfect for breakfast!", "es": "¡Huevos y queso — perfectos para el desayuno!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m4l10",
+      "title": "4.10: Segundo Reto",
+      "desc": "Todo sobre la comida del mercado.",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["Like", "Don't like", "Apple", "Banana", "Bread", "Water", "Meat", "Rice", "Fish", "Milk", "Egg", "Cheese", "Market", "Food"],
+      "story": { "en": "Another market challenge!", "es": "¡Otro reto del mercado!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m4l11",
+      "title": "4.11: Rompecabezas I",
+      "desc": "Ordena oraciones del mercado.",
+      "icon": "🧩",
+      "vocab_new": ["Delicious"],
+      "vocab_review": ["I like", "Apple", "Banana", "Bread", "Market"],
+      "story": { "en": "Put the market words in order!", "es": "¡Pon las palabras del mercado en orden!" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m4l12",
+      "title": "4.12: Rompecabezas II",
+      "desc": "Más oraciones con like/don't like.",
+      "icon": "🧩",
+      "vocab_new": [],
+      "vocab_review": ["I like", "Don't like", "Meat", "Rice", "Fish", "Milk", "Egg", "Cheese", "Delicious"],
+      "story": { "en": "I like meat. I don't like fish. Your turn!", "es": "Me gusta la carne. No me gusta el pescado. ¡Tu turno!" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m4l13",
+      "title": "4.13: Traducción I",
+      "desc": "Piensa en inglés en el mercado.",
+      "icon": "💡",
+      "vocab_new": ["Hungry", "Thirsty"],
+      "vocab_review": ["I like", "Don't like", "Apple", "Water", "Bread", "Food"],
+      "story": { "en": "Are you hungry? Are you thirsty? Think in English!", "es": "¿Tienes hambre? ¿Tienes sed? ¡Piensa en inglés!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m4l14",
+      "title": "4.14: Traducción II",
+      "desc": "Más traducciones de comida.",
+      "icon": "💡",
+      "vocab_new": ["Hot", "Cold"],
+      "vocab_review": ["Hungry", "Thirsty", "Like", "Don't like", "Milk", "Water", "Rice"],
+      "story": { "en": "Hot soup! Cold water! How do you say it in English?", "es": "¡Sopa caliente! ¡Agua fría! ¿Cómo lo dices en inglés?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m4l15",
+      "title": "4.15: The Great Market",
+      "desc": "Une todo: like, don't like y la comida.",
+      "icon": "🏛️",
+      "vocab_new": ["Yummy", "Sweet"],
+      "vocab_review": ["Like", "Don't like", "Apple", "Banana", "Bread", "Water", "Meat", "Rice", "Fish", "Milk", "Egg", "Cheese", "Market", "Food", "Delicious"],
+      "story": { "en": "The market has everything! What do you like?", "es": "¡El mercado lo tiene todo! ¿Qué te gusta?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "drag_and_drop", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m4l16",
+      "title": "4.16: Echo Continuo: Food",
+      "desc": "Repite nombres de comida sin pausa.",
+      "icon": "🔁",
+      "vocab_new": ["Orange"],
+      "vocab_review": ["Apple", "Banana", "Bread", "Meat", "Fish", "Egg", "Cheese", "Rice", "Milk"],
+      "story": { "en": "Repeat the food words — fast and clear!", "es": "¡Repite las palabras de comida — rápido y claro!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m4l17",
+      "title": "4.17: Echo Continuo: Likes",
+      "desc": "Di lo que te gusta y no te gusta sin parar.",
+      "icon": "🔁",
+      "vocab_new": ["Cake"],
+      "vocab_review": ["I like", "Don't like", "Delicious", "Yummy", "Apple", "Banana", "Bread", "Orange", "Cake"],
+      "story": { "en": "I like cake! I don't like... tell me!", "es": "¡Me gusta el pastel! No me gusta... ¡dime!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m4l18",
+      "title": "4.18: Echo Continuo: Market",
+      "desc": "Describe el mercado sin pausa.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Market", "Food", "Hungry", "Thirsty", "Hot", "Cold", "Sweet", "Delicious", "Yummy"],
+      "story": { "en": "The market is big! The food is yummy!", "es": "¡El mercado es grande! ¡La comida es deliciosa!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m4l19",
+      "title": "4.19: Rehearsal",
+      "desc": "Ensayo general para el mercado.",
+      "icon": "🎭",
+      "vocab_new": [],
+      "vocab_review": ["Like", "Don't like", "I like", "Apple", "Banana", "Bread", "Water", "Meat", "Rice", "Fish", "Milk", "Egg", "Cheese", "Orange", "Cake", "Market", "Food", "Delicious", "Yummy", "Sweet", "Hungry", "Thirsty", "Hot", "Cold"],
+      "story": { "en": "Get ready for the market festival!", "es": "¡Prepárate para el festival del mercado!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m4l20",
+      "title": "4.20: 🧺 El Mercado — What Do You Like?",
+      "desc": "Roleplay en el mercado.",
+      "icon": "🧺",
+      "vocab_new": [],
+      "vocab_review": ["Like", "Don't like", "I like", "Apple", "Banana", "Bread", "Water", "Meat", "Rice", "Fish", "Milk", "Egg", "Cheese", "Orange", "Cake", "Market", "Food", "Delicious", "Yummy", "Sweet", "Hungry", "Thirsty", "Hot", "Cold"],
+      "story": { "en": "Welcome to the market! Today, you and Moon will visit the stalls and talk about food.", "es": "¡Bienvenido al mercado! Hoy, tú y Moon visitarán los puestos y hablarán de comida." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "m4_eval_1",
+      "title": "Evaluación M4: At the Market",
+      "preview": {
+        "en": "You and Moon are at the market! Moon is a vendor. Tell her what you like and don't like from the market stalls.",
+        "es": "¡Tú y Moon están en el mercado! Moon es una vendedora. Dile lo que te gusta y no te gusta de los puestos."
+      },
+      "lines": [
+        { "role": "moon", "en": "Welcome to the market! So much food today!", "es": "¡Bienvenido al mercado! ¡Tanta comida hoy!" },
+        { "role": "student", "en": "(Greet Moon and say you are happy to be at the market.)", "es": "(Saluda a Moon y di que estás feliz de estar en el mercado.)" },
+        { "role": "moon", "en": "Do you like apples?", "es": "¿Te gustan las manzanas?" },
+        { "role": "student", "en": "(Say: Yes, I like apples! / No, I don't like apples.)", "es": "(Di: Sí, me gustan las manzanas. / No, no me gustan las manzanas.)" },
+        { "role": "moon", "en": "What about bananas? Are they yummy?", "es": "¿Qué tal los plátanos? ¿Son deliciosos?" },
+        { "role": "student", "en": "(Say: Yes, bananas are yummy! / No, I don't like bananas.)", "es": "(Di: Sí, los plátanos son deliciosos. / No, no me gustan los plátanos.)" },
+        { "role": "moon", "en": "I have fresh bread and milk too!", "es": "¡También tengo pan fresco y leche!" },
+        { "role": "student", "en": "(Say if you like bread and milk or not.)", "es": "(Di si te gusta el pan y la leche o no.)" },
+        { "role": "moon", "en": "Are you hungry? I have meat and rice!", "es": "¿Tienes hambre? ¡Tengo carne y arroz!" },
+        { "role": "student", "en": "(Say: I am hungry! I like meat and rice. / I am not hungry.)", "es": "(Di: Tengo hambre. Me gusta la carne y el arroz. / No tengo hambre.)" },
+        { "role": "moon", "en": "And here is some fish. Do you like fish?", "es": "Y aquí hay pescado. ¿Te gusta el pescado?" },
+        { "role": "student", "en": "(Say: Yes, fish is delicious! / No, I don't like fish.)", "es": "(Di: Sí, el pescado es delicioso. / No, no me gusta el pescado.)" },
+        { "role": "moon", "en": "What is your favorite food from the market?", "es": "¿Cuál es tu comida favorita del mercado?" },
+        { "role": "student", "en": "(Say your favorite food: I like [food]. It is yummy / sweet / delicious!)", "es": "(Di tu comida favorita: Me gusta [comida]. ¡Es deliciosa / dulce!)" },
+        { "role": "moon", "en": "Would you like some cake? It is sweet and yummy!", "es": "¿Quieres pastel? ¡Es dulce y delicioso!" },
+        { "role": "student", "en": "(Say: Yes, I like cake! / No, I don't like cake, but thank you!)", "es": "(Di: Sí, me gusta el pastel. / No, no me gusta el pastel, pero gracias.)" },
+        { "role": "moon", "en": "Great choices! See you at the market again!", "es": "¡Buenas elecciones! ¡Nos vemos en el mercado otra vez!" },
+        { "role": "student", "en": "(Say goodbye and thank Moon!)", "es": "(Despídete y agradécele a Moon.)" }
+      ]
+    }
+  ]
+}

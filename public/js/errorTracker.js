@@ -6,6 +6,19 @@
 
 import { auth } from './auth.js';
 
+// 🪵 Log condicional — solo imprime en desarrollo (localhost)
+// Usamos var + window para crear binding global accesible desde módulos strict-mode
+var devLog = globalThis.devLog = function(...args) {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        console.log(...args);
+    }
+};
+var devWarn = globalThis.devWarn = function(...args) {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        console.warn(...args);
+    }
+};
+
 // ─── Configuración ────────────────────────────────────────────────────────────
 const THROTTLE_MS = 10_000;    // Mínimo 10s entre envíos del mismo error
 const MAX_ERRORS_PER_SESSION = 15; // Tope por sesión para no spamear
@@ -82,9 +95,13 @@ const reportError = async ({ message, source, lineno, colno, stack }) => {
     ].join('\n');
 
     try {
+        const headers = { 'Content-Type': 'application/json' };
+        const secret = localStorage.getItem('moonsforest_discord_secret');
+        if (secret) headers['x-auth-secret'] = secret;
+
         await fetch('/.netlify/functions/discord', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers,
             body: JSON.stringify({
                 channel: 'errores',
                 embeds: [{
@@ -122,4 +139,4 @@ window.addEventListener('unhandledrejection', (event) => {
     reportError({ message, stack, source: getPage() });
 });
 
-console.log('🌲 Moonsforest Error Tracker activo.');
+devLog('🌲 Moonsforest Error Tracker activo.');

@@ -6,12 +6,9 @@ export function generateStepsFromFlow(lessonConfig, dictionary) {
 
     if (!lessonConfig.flow) return lessonConfig.steps || [];
 
-    // Distractors come from the module's own vocab (words with emojis preferred)
-    // Falls back to dictionary words with emojis if module vocab is too small
     const getOptions = (correctWord, count = 4) => {
         let opts = new Set([correctWord]);
 
-        // 1. Prioritize other words from this lesson's vocab that have emojis
         const moduleWordsWithEmoji = allWords.filter(
             w => w !== correctWord && dictionary[w]?.emoji
         );
@@ -21,7 +18,6 @@ export function generateStepsFromFlow(lessonConfig, dictionary) {
             opts.add(w);
         }
 
-        // 2. If still not enough, pull from whole dictionary (emojis only)
         if (opts.size < count) {
             const dictWordsWithEmoji = Object.keys(dictionary).filter(
                 w => w !== correctWord && dictionary[w]?.emoji && !opts.has(w)
@@ -33,7 +29,6 @@ export function generateStepsFromFlow(lessonConfig, dictionary) {
             }
         }
 
-        // 3. Last resort: any word
         if (opts.size < count) {
             const rest = allWords.filter(w => !opts.has(w));
             rest.sort(() => Math.random() - 0.5);
@@ -46,7 +41,16 @@ export function generateStepsFromFlow(lessonConfig, dictionary) {
         return Array.from(opts);
     };
 
+    const fillInBlankMessages = [
+        { en: "Complete the sentence!", es: "¡Completa la oración!" },
+        { en: "Choose the right word!", es: "¡Elige la palabra correcta!" },
+        { en: "Fill in the blank!", es: "¡Llena el espacio!" },
+    ];
+
+    let activityIndex = 0;
     lessonConfig.flow.forEach(activity => {
+        activityIndex++;
+
         if (activity === 'story_moment') {
             steps.push({
                 type: 'story_moment',
@@ -157,12 +161,11 @@ export function generateStepsFromFlow(lessonConfig, dictionary) {
             });
         }
         else if (activity === 'drag_and_drop') {
-            // Un simple drag_and_drop con la combinacion de las primeras 2 palabras
             if (vocabNew.length >= 2) {
                 const targetStr = `${vocabNew[0]} ${vocabNew[1]}`;
                 steps.push({
                     type: 'drag_and_drop',
-                    prompt: `Une la frase: / Build the phrase: "${dictionary[vocabNew[0]]?.es} ${dictionary[vocabNew[1]]?.es}"`,
+                    prompt: `Build the phrase: / Arma la frase: "${dictionary[vocabNew[0]]?.es} ${dictionary[vocabNew[1]]?.es}"`,
                     timer: 15,
                     target: targetStr,
                     options: [vocabNew[1], vocabNew[0]]
@@ -184,5 +187,64 @@ export function generateStepsFromFlow(lessonConfig, dictionary) {
         }
     });
 
-    return steps;
+    const paddedSteps = [];
+    let stepCount = 0;
+    const MIN_STEPS = 10;
+
+    for (let i = 0; i < steps.length; i++) {
+        paddedSteps.push(steps[i]);
+        stepCount++;
+
+        const addedMoonBreak = steps[i].type === 'matching' || steps[i].type === 'speed_speak' || steps[i].type === 'memory_flip';
+        const notLast = i < steps.length - 1;
+        const nextIsNotBreak = notLast && !['interstitial_moon', 'story_moment', 'boss_battle'].includes(steps[i + 1]?.type);
+
+        if (addedMoonBreak && nextIsNotBreak) {
+            paddedSteps.push({
+                type: 'interstitial_moon',
+                message: {
+                    en: "You're doing great! Ready for more?",
+                    es: "¡Lo estás haciendo genial! ¿Listo para más?"
+                }
+            });
+            stepCount++;
+        }
+    }
+
+    // If lesson is still too short, add fill-in-the-blank padding
+    if (stepCount < MIN_STEPS && vocabNew.length > 0) {
+        const wordsForFIB = allWords.filter(w => w.length > 2);
+        const fibTargets = [
+            { word: wordsForFIB[0] || allWords[0], options: getOptions(wordsForFIB[0] || allWords[0], 3) },
+        ];
+        if (fibTargets[0]) {
+            paddedSteps.push({
+                type: 'fill_in_blank',
+                prompt: fillInBlankMessages[Math.floor(Math.random() * fillInBlankMessages.length)],
+                sentence: `I ___ ${fibTargets[0].word.toLowerCase()}`,
+                answer: fibTargets[0].word,
+                options: fibTargets[0].options,
+                successMsg: { en: "Perfect! Keep going!", es: "¡Perfecto! ¡Sigue así!" }
+            });
+            stepCount++;
+        }
+    }
+
+    if (stepCount < MIN_STEPS && vocabNew.length > 1) {
+        const wordsForFIB = allWords.filter(w => w.length > 2);
+        const fibTarget = wordsForFIB[1] || allWords[1 % allWords.length];
+        if (fibTarget) {
+            paddedSteps.push({
+                type: 'fill_in_blank',
+                prompt: fillInBlankMessages[Math.floor(Math.random() * fillInBlankMessages.length)],
+                sentence: `I like ___`,
+                answer: fibTarget,
+                options: getOptions(fibTarget, 4),
+                successMsg: { en: "Excellent! You know your words!", es: "¡Excelente! ¡Sabes tus palabras!" }
+            });
+            stepCount++;
+        }
+    }
+
+    return paddedSteps;
 }

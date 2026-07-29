@@ -1,7 +1,7 @@
 import { auth, db } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import {
-    doc, getDoc, collection, getDocs, query, where, limit, orderBy, getCountFromServer, updateDoc
+    doc, getDoc, collection, getDocs, query, where, limit, orderBy, getCountFromServer, updateDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { sendDiscordNotification } from './discord.js';
 
@@ -165,6 +165,51 @@ function renderMinutesBreakdown(students) {
 }
 
 /**
+ * 🎁 Free Pass — Otorga acceso premium por 1 mes a un beta tester
+ */
+window.grantFreePass = async (userId, userName) => {
+    const result = await Swal.fire({
+        title: '🎁 ¿Free Pass para ' + (userName?.split(' ')[0] || 'este alumno') + '?',
+        html: `
+            <div style="text-align: left; font-size:0.9rem;">
+                <p>Se le otorgará acceso <strong>premium completo por 1 mes</strong>.</p>
+                <p style="color:#475569;">Podrá estudiar su módulo asignado y solicitar evaluaciones sin pagar.</p>
+            </div>
+        `,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '🎁 Sí, dar acceso',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#059669'
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+        const premiumUntil = new Date();
+        premiumUntil.setMonth(premiumUntil.getMonth() + 1);
+
+        const userRef = doc(db, 'users', userId);
+        await updateDoc(userRef, {
+            isPremium: true,
+            premiumUntil: premiumUntil.toISOString()
+        });
+
+        Swal.fire({
+            title: '✅ Acceso Otorgado',
+            html: `<p>${userName || 'El alumno'} tiene acceso premium hasta <strong>${premiumUntil.toLocaleDateString()}</strong>.</p>`,
+            icon: 'success',
+            confirmButtonColor: '#059669'
+        });
+
+        loadStudents();
+    } catch (err) {
+        console.error("Error al otorgar free pass:", err);
+        Swal.fire('Error', 'No se pudo otorgar el acceso.', 'error');
+    }
+};
+
+/**
  * 🕵️ Impersonate Logic
  */
 window.impersonateUser = (userId) => {
@@ -274,6 +319,8 @@ function switchSection(targetId) {
         loadFinances();
     } else if (targetId === 'overview') {
         initDashboard();
+    } else if (targetId === 'evaluations') {
+        loadEvaluations();
     } else if (targetId === 'technical') {
         loadTechnicalReports();
     }
@@ -597,6 +644,162 @@ async function loadTeachers() {
 }
 
 /**
+ * 🎙️ Evaluaciones Management Logic
+ */
+async function loadEvaluations() {
+    const container = document.getElementById('evaluations-list');
+    if (!container) return;
+
+    try {
+        const q = query(collection(db, 'evaluations'), orderBy('createdAt', 'desc'));
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+            container.innerHTML = '<p style="color: var(--slate-400); text-align: center; padding: 2rem;">No hay evaluaciones pendientes. 🌲</p>';
+            return;
+        }
+
+        const allUsers = [];
+        const usersSnap = await getDocs(collection(db, 'users'));
+        usersSnap.forEach(doc => allUsers.push({ id: doc.id, ...doc.data() }));
+
+        let html = '<div style="display:flex; flex-direction:column; gap:1rem;">';
+
+        snap.forEach(doc => {
+            const evalData = doc.data();
+            const evalId = doc.id;
+            const student = allUsers.find(u => u.id === evalData.userId);
+            const studentName = student?.name || student?.email || evalData.userId;
+            const dateStr = evalData.createdAt?.toDate?.()?.toLocaleString() || 'Fecha desconocida';
+
+            const statusColors = {
+                pending: { bg: '#fef9c3', color: '#854d0e', label: '⏳ Pendiente' },
+                approved: { bg: '#dcfce7', color: '#166534', label: '✅ Aprobada' },
+                rejected: { bg: '#fee2e2', color: '#991b1b', label: '❌ Rechazada' }
+            };
+            const status = statusColors[evalData.status] || statusColors.pending;
+
+            const transcriptHtml = evalData.transcript?.map(t =>
+                `<div style="padding:0.25rem 0; border-bottom:1px solid #f1f5f9;">
+                    <span style="color:#334155;">"${t.en}"</span>
+                    <span style="color:#94a3b8; font-size:0.8rem; margin-left:0.5rem;">(${t.es})</span>
+                </div>`
+            ).join('') || 'Sin transcripción';
+
+            html += `
+                <div style="background:white; border-radius:16px; padding:1.25rem; border:1px solid #e2e8f0; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+                        <div>
+                            <strong style="color:#1e293b; font-size:1rem;">${studentName}</strong>
+                            <span style="font-size:0.8rem; color:#64748b; margin-left:0.5rem;">${evalData.moduleId?.toUpperCase() || '—'}</span>
+                        </div>
+                        <div style="display:flex; gap:0.75rem; align-items:center;">
+                            <span style="background:${status.bg}; color:${status.color}; padding:0.25rem 0.75rem; border-radius:99px; font-size:0.75rem; font-weight:600;">${status.label}</span>
+                            <span style="font-size:0.75rem; color:#94a3b8;">${dateStr}</span>
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                        <div>
+                            <p style="font-size:0.75rem; color:#64748b; font-weight:600; margin:0 0 0.5rem;">🎧 AUDIO</p>
+                            ${evalData.audioUrl
+                                ? `<audio controls style="width:100%; height:40px;">
+                                    <source src="${evalData.audioUrl}" type="audio/webm">
+                                   </audio>`
+                                : '<p style="font-size:0.85rem; color:#94a3b8;">Audio no disponible</p>'
+                            }
+                        </div>
+                        <div>
+                            <p style="font-size:0.75rem; color:#64748b; font-weight:600; margin:0 0 0.5rem;">📝 TRANSCRIPCIÓN</p>
+                            <div style="max-height:120px; overflow-y:auto; font-size:0.85rem; background:#f8fafc; border-radius:8px; padding:0.5rem;">
+                                ${transcriptHtml}
+                            </div>
+                        </div>
+                    </div>
+                    ${evalData.feedback ? `
+                        <div style="background:#f8fafc; border-radius:8px; padding:0.75rem; margin-bottom:0.75rem;">
+                            <span style="font-size:0.75rem; color:#64748b; font-weight:600;">💬 FEEDBACK:</span>
+                            <p style="margin:0.25rem 0 0; font-size:0.85rem; color:#334155;">${evalData.feedback}</p>
+                        </div>
+                    ` : ''}
+                    ${evalData.status === 'pending' ? `
+                        <div style="display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap; padding-top:0.75rem; border-top:1px solid #e2e8f0;">
+                            <textarea id="feedback-${evalId}" placeholder="Escribe tu feedback aquí..." 
+                                style="flex:1; min-width:200px; padding:0.5rem; border:1px solid #e2e8f0; border-radius:8px; font-family:Outfit,sans-serif; font-size:0.85rem; resize:vertical; min-height:40px;"></textarea>
+                            <button class="btn" style="background:#059669; color:white; border:none; padding:0.5rem 1rem; border-radius:8px; font-weight:600; font-size:0.85rem; cursor:pointer;"
+                                    onclick="window.reviewEval('${evalId}', '${evalData.userId}', '${evalData.moduleId}', 'approved')">✅ Aprobar</button>
+                            <button class="btn" style="background:#dc2626; color:white; border:none; padding:0.5rem 1rem; border-radius:8px; font-weight:600; font-size:0.85rem; cursor:pointer;"
+                                    onclick="window.reviewEval('${evalId}', '${evalData.userId}', '${evalData.moduleId}', 'rejected')">❌ Rechazar</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        });
+
+        html += '</div>';
+        container.innerHTML = html;
+
+    } catch (error) {
+        console.error("Error cargando evaluaciones:", error);
+        container.innerHTML = `<p style="color:red; text-align:center;">Error: ${error.message}</p>`;
+    }
+}
+
+window.reviewEval = async (evalId, userId, moduleId, status) => {
+    try {
+        const feedbackEl = document.getElementById(`feedback-${evalId}`);
+        const feedback = feedbackEl?.value?.trim() || '';
+
+        const evalRef = doc(db, 'evaluations', evalId);
+        await updateDoc(evalRef, {
+            status: status,
+            feedback: feedback || (status === 'approved' ? '¡Felicidades! Puedes avanzar al siguiente módulo.' : 'Sigue practicando y vuelve a intentarlo.'),
+            reviewedAt: serverTimestamp()
+        });
+
+        if (status === 'approved' && moduleId) {
+            const moduleNum = parseInt(moduleId.replace('m', ''));
+            const nextModule = `m${moduleNum + 1}`;
+
+            const userRef = doc(db, 'users', userId);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                const data = userSnap.data();
+                const currentUnlocked = data.unlockedModules || [];
+                if (!currentUnlocked.includes(nextModule)) {
+                    currentUnlocked.push(nextModule);
+                    await updateDoc(userRef, {
+                        unlockedModules: currentUnlocked,
+                        currentModule: nextModule
+                    });
+                }
+            }
+        }
+
+        await sendDiscordNotification(
+            status === 'approved' ? '✅ Evaluación Aprobada' : '❌ Evaluación Rechazada',
+            `Un alumno ha recibido feedback para su evaluación del **${moduleId?.toUpperCase()}**.\n\n${feedback ? `💬 "${feedback}"` : 'Sin comentarios adicionales.'}`,
+            status === 'approved' ? 5763719 : 15548997
+        );
+
+        Swal.fire({
+            title: status === 'approved' ? '✅ Aprobada' : '❌ Rechazada',
+            text: status === 'approved'
+                ? `El alumno ahora puede acceder al siguiente módulo.`
+                : 'El alumno ha sido notificado para que repase.',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+        });
+
+        loadEvaluations();
+
+    } catch (error) {
+        console.error("Error revisando evaluación:", error);
+        Swal.fire('Error', 'No se pudo guardar la revisión.', 'error');
+    }
+};
+
+/**
  * 🎒 Students Management Logic
  */
 async function loadStudents() {
@@ -621,7 +824,9 @@ async function loadStudents() {
                 return;
             }
 
-            tableBody.innerHTML = list.map(student => `
+            tableBody.innerHTML = list.map(student => {
+                const isPremium = student.isPremium === true;
+                return `
                 <tr style="border-bottom: 1px solid var(--slate-50); hover: background: var(--slate-50);">
                     <td style="padding: 1rem;">
                         <div style="display: flex; align-items: center; gap: 10px;">
@@ -634,23 +839,26 @@ async function loadStudents() {
                     </td>
                     <td style="padding: 1rem;">
                         <span style="font-size: 0.85rem; background: var(--sky-blue); color: var(--primary-deep); padding: 2px 8px; border-radius: 4px;">
-                            M${student.module || 1} L${student.lesson || 1}
+                            ${student.freeModuleId || 'm1'}
                         </span>
                     </td>
                     <td style="padding: 1rem; font-weight: 600;">${student.minutesSpokenToday || 0}m</td>
                     <td style="padding: 1rem;">${student.totalMinutesSpoken || 0}m</td>
                     <td style="padding: 1rem;">
-                        <span class="status-badge ${student.isSubscribed ? 'badge-active' : 'badge-pending'}">
-                            ${student.isSubscribed ? 'Activo' : 'Prueba'}
+                        <span class="status-badge ${isPremium ? 'badge-active' : 'badge-pending'}">
+                            ${isPremium ? '⭐ Premium' : 'Gratis'}
                         </span>
                     </td>
-                    <td style="padding: 1rem; display: flex; gap: 4px;">
-                        <button class="btn" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; border: 1px solid var(--slate-300);" 
-                                onclick="alert('Detalle de ${student.id}')">Ficha</button>
+                    <td style="padding: 1rem; display: flex; gap: 4px; flex-wrap: wrap;">
+                        ${isPremium
+                            ? `<span style="font-size:0.72rem; color:#166534; background:#dcfce7; padding:4px 8px; border-radius:99px;">✅ Acceso activo</span>`
+                            : `<button class="btn" style="padding: 0.25rem 0.75rem; font-size: 0.72rem; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; font-weight: 700;"
+                                    onclick="grantFreePass('${student.id}', '${student.name}')">🎁 Free Pass</button>`
+                        }
                         <button class="btn" onclick="impersonateUser('${student.id}')" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; background: var(--slate-100);">🕵️</button>
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
         };
 
         renderTable(allStudents);

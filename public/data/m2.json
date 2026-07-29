@@ -10,8 +10,7 @@
       "icon": "🐾",
       "vocab_new": [
         "It is",
-        "They are",
-        "It is They are"
+        "They are"
       ],
       "vocab_review": [],
       "story": {
@@ -543,6 +542,32 @@
         "memory_flip",
         "matching",
         "boss_battle"
+      ]
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "m2_eval_1",
+      "title": "Paseo por el Bosque",
+      "preview": {
+        "en": "You and Moon are taking a walk in the forest. Look around! Describe the animals, trees, and colors you see.",
+        "es": "Tú y Moon están dando un paseo por el bosque. ¡Mira a tu alrededor! Describe los animales, árboles y colores que ves."
+      },
+      "lines": [
+        { "role": "moon", "en": "Welcome to the forest! Let's take a walk. What do you see?", "es": "¡Bienvenido al bosque! Vamos a caminar. ¿Qué ves?" },
+        { "role": "student", "en": "(Say hello and look around. Point to something!)", "es": "(Saluda y mira a tu alrededor. ¡Señala algo!)" },
+        { "role": "moon", "en": "Look! A bear! What is it?", "es": "¡Mira! ¡Un oso! ¿Qué es?" },
+        { "role": "student", "en": "It is a bear. It is big and brown.", "es": "Es un oso. Es grande y café." },
+        { "role": "moon", "en": "And up in the tree — what are those?", "es": "Y arriba en el árbol — ¿qué son esos?" },
+        { "role": "student", "en": "They are birds. They are small and blue.", "es": "Son pájaros. Son pequeños y azules." },
+        { "role": "moon", "en": "I see a wolf too. What color is it?", "es": "También veo un lobo. ¿De qué color es?" },
+        { "role": "student", "en": "The wolf is gray. It is big and tired.", "es": "El lobo es gris. Es grande y está cansado." },
+        { "role": "moon", "en": "Look at the trees! What are they like?", "es": "¡Mira los árboles! ¿Cómo son?" },
+        { "role": "student", "en": "They are green and tall. The forest is big!", "es": "Son verdes y altos. ¡El bosque es grande!" },
+        { "role": "moon", "en": "What is your favorite animal in the forest?", "es": "¿Cuál es tu animal favorito en el bosque?" },
+        { "role": "student", "en": "(Say your favorite animal and describe it!)", "es": "(Di tu animal favorito y descríbelo.)" },
+        { "role": "moon", "en": "Wonderful! You are a true forest explorer!", "es": "¡Maravilloso! Eres un verdadero explorador del bosque!" },
+        { "role": "student", "en": "(Say goodbye and thank Moon for the walk!)", "es": "(Despídete y agradece a Moon por el paseo.)" }
       ]
     }
   ]

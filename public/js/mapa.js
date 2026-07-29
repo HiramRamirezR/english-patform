@@ -1,7 +1,8 @@
 import { auth, db, getEffectiveUser } from './auth.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { doc, getDoc, updateDoc, collection, query, where, getDocs, serverTimestamp, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { doc, getDoc, updateDoc, collection, query, where, getDocs, serverTimestamp, deleteField, arrayUnion, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { sendDiscordNotification } from './discord.js';
+import { startSubscription, handlePaymentReturn } from './payment.js';
 
 // DOM Elements
 const avatarModal = document.getElementById('avatar-modal');
@@ -92,6 +93,7 @@ const setupDashboardUI = () => {
 
     // Ya tiene avatar, preparar el "Peak"
     avatarModal.style.display = 'none';
+    document.getElementById('skeleton-loader').style.display = 'none';
     dashboardContent.style.display = 'block';
 
     // Rellenar Datos
@@ -159,6 +161,15 @@ const setupDashboardUI = () => {
 
     // 💎 Estado de Suscripción Premium (SIEMPRE VISIBLE)
     setupPremiumStatus(currentProfile);
+
+    // 📊 Resultados de Evaluaciones
+    setupEvaluationResults(currentProfile);
+
+    // 🔄 Listener en tiempo real para cambios en el perfil (ej. evaluación aprobada)
+    setupRealtimeProfileListener();
+
+    // 🌲 Tour de onboarding para nuevos exploradores
+    showOnboardingTutorial(currentProfile);
 };
 
 /**
@@ -169,11 +180,9 @@ function setupWeeklyEvaluationButton(profile) {
     const moonBox = document.querySelector('.moon-status');
     if (!moonBox) return;
 
-    // Verificar progreso semanal (días con >0 minutos)
     const weeklyData = profile.weeklyProgress || {};
     const daysActive = Object.values(weeklyData).filter(v => v > 0).length;
 
-    // Si ha practicado 3 o más días, mostramos el botón de recompensa
     if (daysActive >= 3) {
         const evalContainer = document.createElement('div');
         evalContainer.style.marginTop = '1rem';
@@ -183,62 +192,72 @@ function setupWeeklyEvaluationButton(profile) {
         evalContainer.style.border = '1px dashed var(--forest-glow)';
         evalContainer.style.textAlign = 'center';
 
-        const evalBtn = document.createElement('button');
-        evalBtn.className = 'btn-premium';
-        evalBtn.style.width = '100%';
-        evalBtn.style.padding = '0.8rem';
-        evalBtn.style.fontSize = '0.9rem';
-        evalBtn.style.fontWeight = 'bold';
+        const isPremium = profile.isPremium || false;
 
-        // Verificar si ya solicitó la evaluación esta semana
-        const weekKey = `eval_${new Date().getFullYear()}_W${getWeekNumber(new Date())}`;
-        const alreadyRequested = profile.requestedEvaluations && profile.requestedEvaluations.includes(weekKey);
-
-        if (alreadyRequested) {
-            evalBtn.innerText = "⏳ Evaluación Solicitada";
-            evalBtn.style.opacity = '0.7';
-            evalBtn.disabled = true;
-            evalBtn.style.cursor = 'default';
+        if (!isPremium) {
+            evalContainer.innerHTML = `
+                <p style="margin:0 0 0.5rem; font-size:0.85rem; color:#475569;">
+                    🥾 Has practicado suficiente esta semana.
+                </p>
+                <button class="btn-premium" style="width:100%; padding:0.8rem; font-size:0.9rem; font-weight:bold;" onclick="showSubscriptionModal()">
+                    🔒 Desbloquear Evaluación — $300/mes
+                </button>
+            `;
         } else {
-            evalBtn.innerHTML = "🎯 ¡Reto Semanal Listo! Solicitar Evaluación";
-            evalBtn.onclick = async () => {
-                const result = await Swal.fire({
-                    title: '¿Listo para tu Evaluación?',
-                    text: 'Moon le avisará a tu maestro que ya terminaste tu práctica de la semana. ¡Prepárate!',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: '¡Sí, avisar!',
-                    cancelButtonText: 'Aún no',
-                    confirmButtonColor: '#22c55e'
-                });
+            const weekKey = `eval_${new Date().getFullYear()}_W${getWeekNumber(new Date())}`;
+            const alreadyRequested = profile.requestedEvaluations && profile.requestedEvaluations.includes(weekKey);
+            const evalBtn = document.createElement('button');
+            evalBtn.className = 'btn-premium';
+            evalBtn.style.width = '100%';
+            evalBtn.style.padding = '0.8rem';
+            evalBtn.style.fontSize = '0.9rem';
+            evalBtn.style.fontWeight = 'bold';
 
-                if (result.isConfirmed) {
-                    try {
-                        // 1. Guardar en Firestore para que el maestro lo vea
-                        const userRef = doc(db, 'users', profile.uid);
-                        await updateDoc(userRef, {
-                            requestedEvaluations: firebase.firestore.FieldValue.arrayUnion(weekKey),
-                            lastEvalRequest: serverTimestamp()
-                        });
+            if (alreadyRequested) {
+                evalBtn.innerText = "⏳ Evaluación Solicitada";
+                evalBtn.style.opacity = '0.7';
+                evalBtn.disabled = true;
+                evalBtn.style.cursor = 'default';
+            } else {
+                evalBtn.innerHTML = "🎯 ¡Reto Semanal Listo! Solicitar Evaluación";
+                evalBtn.onclick = async () => {
+                    const result = await Swal.fire({
+                        title: '¿Listo para tu Evaluación?',
+                        text: 'Se grabará tu conversación con Moon y se enviará a revisión. Recibirás feedback pronto.',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: '¡Sí, comenzar!',
+                        cancelButtonText: 'Aún no',
+                        confirmButtonColor: '#22c55e'
+                    });
 
-                        // 2. Notificación Discord (para que Hiram se entere al momento)
-                        if (typeof sendDiscordNotification === 'function') {
-                            sendDiscordNotification(`🎯 **Solicitud de Evaluación**: ${profile.name} (${profile.avatar}) ha completado su racha de ${daysActive} días y está listo para ser evaluado.`);
+                    if (result.isConfirmed) {
+                        try {
+                            const userRef = doc(db, 'users', profile.uid || currentUser.uid);
+                            await updateDoc(userRef, {
+                                requestedEvaluations: arrayUnion(weekKey),
+                                lastEvalRequest: serverTimestamp()
+                            });
+
+                            if (typeof sendDiscordNotification === 'function') {
+                                sendDiscordNotification(`🎯 **Solicitud de Evaluación**: ${profile.name} (${profile.avatar}) ha completado su racha de ${daysActive} días y está listo para ser evaluado.`);
+                            }
+
+                            Swal.fire('¡Listo!', 'Tu evaluación será revisada. Te notificaremos el resultado.', 'success');
+                            evalBtn.innerText = "⏳ Evaluación Solicitada";
+                            evalBtn.disabled = true;
+                            evalBtn.style.opacity = '0.7';
+
+                        } catch (error) {
+                            console.error("Error solicitando evaluación:", error);
                         }
-
-                        Swal.fire('¡Listo!', 'Tu maestro ha sido notificado. Recibirás tus estrellas pronto.', 'success');
-                        evalBtn.innerText = "⏳ Evaluación Solicitada";
-                        evalBtn.disabled = true;
-                        evalBtn.style.opacity = '0.7';
-
-                    } catch (error) {
-                        console.error("Error solicitando evaluación:", error);
                     }
-                }
-            };
+                };
+            }
+
+            evalContainer.appendChild(evalBtn);
         }
 
-        evalContainer.appendChild(evalBtn);
         moonBox.appendChild(evalContainer);
     }
 }
@@ -312,6 +331,159 @@ const setupPremiumStatus = (profile) => {
     }
 };
 
+/**
+ * 📊 Resultados de Evaluaciones para el Alumno
+ * Muestra el historial de evaluaciones, notificación de feedback listo
+ * y desbloqueo automático del siguiente módulo al aprobar.
+ */
+const setupEvaluationResults = async (profile) => {
+    if (!currentUser) return;
+
+    try {
+        const q = query(
+            collection(db, 'evaluations'),
+            where('userId', '==', currentUser.uid)
+        );
+        const snapshot = await getDocs(q);
+        const evals = [];
+        snapshot.forEach(doc => {
+            evals.push({ id: doc.id, ...doc.data() });
+        });
+
+        if (evals.length === 0) return;
+
+        // Ordenar por fecha descendente (más reciente primero)
+        evals.sort((a, b) => {
+            const aTime = a.createdAt?.toDate?.() || new Date(a.createdAt);
+            const bTime = b.createdAt?.toDate?.() || new Date(b.createdAt);
+            return bTime - aTime;
+        });
+
+        // Buscar contenedor para mostrar resultados
+        const moonBox = document.querySelector('.moon-status');
+        if (!moonBox) return;
+
+        // === NOTIFICACIÓN VISUAL: feedback listo ===
+        const hasNewFeedback = evals.some(e =>
+            (e.status === 'approved' || e.status === 'rejected') &&
+            !localStorage.getItem(`eval_notified_${e.id}`)
+        );
+
+        if (hasNewFeedback) {
+            const latestWithFeedback = evals.find(e =>
+                (e.status === 'approved' || e.status === 'rejected') &&
+                !localStorage.getItem(`eval_notified_${e.id}`)
+            );
+
+            if (latestWithFeedback) {
+                // Marcar como notificado
+                localStorage.setItem(`eval_notified_${latestWithFeedback.id}`, 'true');
+
+                const isApproved = latestWithFeedback.status === 'approved';
+                const modNum = (latestWithFeedback.moduleId || 'm1').replace('m', '');
+                const nextMod = `m${parseInt(modNum) + 1}`;
+
+                Swal.fire({
+                    title: isApproved ? '✅ ¡Evaluación Aprobada!' : '❌ Evaluación No Aprobada',
+                    html: `
+                        <div style="text-align: center; font-family: 'Outfit', sans-serif;">
+                            <p style="font-size: 1rem; color: #475569; margin-bottom: 1rem;">
+                                ${isApproved
+                                    ? `¡Felicidades! Tu evaluación del <strong>Módulo ${modNum}</strong> fue aprobada.<br>
+                                       El módulo <strong>${nextMod}</strong> está ahora desbloqueado para ti.`
+                                    : `Tu evaluación del <strong>Módulo ${modNum}</strong> necesita más práctica.`
+                                }
+                            </p>
+                            ${latestWithFeedback.feedback ? `
+                                <div style="background: #f8fafc; border-radius: 12px; padding: 1rem; text-align: left; border: 1px solid #e2e8f0;">
+                                    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 0.5rem; font-weight:600;">📝 Feedback del maestro:</p>
+                                    <p style="font-size: 0.9rem; color: #1e293b; line-height: 1.5;">${latestWithFeedback.feedback}</p>
+                                </div>
+                            ` : ''}
+                            ${!isApproved ? `
+                                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 1rem;">Puedes repasar el módulo y solicitar una nueva evaluación cuando estés listo.</p>
+                            ` : ''}
+                        </div>
+                    `,
+                    icon: isApproved ? 'success' : 'warning',
+                    confirmButtonColor: isApproved ? '#22c55e' : '#f97316',
+                    confirmButtonText: 'Entendido'
+                });
+
+                // Si fue aprobada, refrescar perfil para actualizar módulos desbloqueados
+                if (isApproved) {
+                    const userRef = doc(db, 'users', currentUser.uid);
+                    const freshSnap = await getDoc(userRef);
+                    if (freshSnap.exists()) {
+                        currentProfile = freshSnap.data();
+                        setupModuleUnlocks(currentProfile);
+                    }
+                }
+            }
+        }
+
+        // === VISTA DE RESULTADOS en el dashboard ===
+        // Mostrar las últimas 3 evaluaciones como tarjeta compacta
+        const latestEvals = evals.slice(0, 3);
+
+        const evalCard = document.createElement('div');
+        evalCard.style.cssText = `
+            background: rgba(30, 41, 59, 0.95);
+            border-radius: 20px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 400px;
+            border-left: 5px solid #a78bfa;
+        `;
+
+        let evalHtml = `
+            <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
+                <span style="font-size:1.2rem;">📋</span>
+                <h4 style="color:#f8fafc; margin:0; font-size:1rem;">Mis Evaluaciones</h4>
+            </div>
+        `;
+
+        latestEvals.forEach((ev, idx) => {
+            const modDisplay = (ev.moduleId || 'm?').replace('m', 'Módulo ');
+            const statusIcon = ev.status === 'approved' ? '✅' : ev.status === 'rejected' ? '❌' : '⏳';
+            const statusColor = ev.status === 'approved' ? '#22c55e' : ev.status === 'rejected' ? '#ef4444' : '#fbbf24';
+            const dateStr = ev.createdAt?.toDate?.()?.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' }) || '';
+
+            const audioHtml = ev.audioUrl ? `
+                <audio controls preload="none" style="height:28px; width:80px; border-radius:6px;" 
+                    onmouseover="this.style.width='140px'" onmouseout="this.style.width='80px'">
+                    <source src="${ev.audioUrl}" type="audio/webm">
+                </audio>
+            ` : '';
+
+            evalHtml += `
+                <div style="
+                    display:flex; align-items:center; gap:0.75rem; 
+                    padding:0.6rem 0.75rem; 
+                    background: ${idx % 2 === 0 ? 'rgba(15,23,42,0.4)' : 'transparent'};
+                    border-radius:12px; margin-bottom:0.25rem;
+                ">
+                    <span style="font-size:1.1rem;">${statusIcon}</span>
+                    <div style="flex:1; min-width:0;">
+                        <div style="font-size:0.85rem; color:#e2e8f0; font-weight:500;">${modDisplay}</div>
+                        <div style="font-size:0.7rem; color:#94a3b8;">${dateStr}</div>
+                    </div>
+                    ${audioHtml}
+                    <span style="font-size:0.75rem; font-weight:600; color:${statusColor};">
+                        ${ev.status === 'approved' ? 'Aprobado' : ev.status === 'rejected' ? 'Rechazado' : 'Pendiente'}
+                    </span>
+                </div>
+            `;
+        });
+
+        evalCard.innerHTML = evalHtml;
+        moonBox.appendChild(evalCard);
+
+    } catch (error) {
+        console.error("Error cargando resultados de evaluaciones:", error);
+    }
+};
+
 // Helper para número de semana
 function getWeekNumber(d) {
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
@@ -359,7 +531,7 @@ const setupModuleUnlocks = (profile) => {
 /**
  * 🔒 Modal de Suscripción — Se muestra al intentar acceder a módulos bloqueados
  */
-const showSubscriptionModal = async () => {
+window.showSubscriptionModal = async () => {
     const result = await Swal.fire({
         title: '🌲 El Bosque Profundo te llama...',
         html: `
@@ -390,13 +562,13 @@ const showSubscriptionModal = async () => {
     });
 
     if (result.isConfirmed) {
-        // TODO: Reemplazar con el link real de Mercado Pago cuando esté integrado
-        Swal.fire({
-            title: '¡Gracias por tu interés!',
-            html: `<p style="font-size: 0.95rem; color: #475569;">Los pagos estarán disponibles muy pronto. Moon te avisará en cuanto abran las puertas del bosque. 🐻‍❄️</p>`,
-            icon: 'info',
-            confirmButtonColor: '#38bdf8'
-        });
+        if (currentUser?.uid) {
+            await startSubscription(
+                currentUser.uid,
+                currentProfile?.name || 'Estudiante',
+                currentProfile?.email || ''
+            );
+        }
     }
 };
 
@@ -405,7 +577,7 @@ const showSubscriptionModal = async () => {
  */
 const showModuleCompletionCelebration = async (modId = 'm1') => {
     const modNum = modId.replace('m', '');
-    // Usar canvas confetti si está disponible, si no, SweetAlert puro
+    spawnConfetti(60);
     await Swal.fire({
         title: `🔥 ¡LEYENDA DEL MÓDULO ${modNum}!`,
         html: `
@@ -438,6 +610,42 @@ const showModuleCompletionCelebration = async (modId = 'm1') => {
         }
     });
 };
+
+function spawnConfetti(count = 40) {
+    const burst = document.createElement('div');
+    burst.style.cssText = 'position:fixed; top:0; left:0; right:0; bottom:0; pointer-events:none; z-index:99999; overflow:hidden;';
+    document.body.appendChild(burst);
+    const colors = ['#22c55e', '#f59e0b', '#3b82f6', '#a855f7', '#ec4899', '#fbbf24', '#38bdf8', '#4ade80'];
+    const cx = window.innerWidth / 2;
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        const size = 6 + Math.random() * 10;
+        const angle = (i / count) * 360 * (Math.PI / 180);
+        const dist = 150 + Math.random() * 250;
+        const dx = Math.cos(angle) * dist;
+        const dy = Math.sin(angle) * dist - 150;
+        p.style.cssText = `
+            position:absolute; left:${cx}px; top:40%; width:${size}px; height:${size}px;
+            background:${colors[i % colors.length]}; border-radius:${Math.random() > 0.5 ? '50%' : '2px'};
+            --dx:${dx}px; --dy:${dy}px;
+            animation: confettiFall ${0.8 + Math.random() * 0.6}s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+            animation-delay: ${Math.random() * 0.2}s;
+            opacity: 0;
+        `;
+        burst.appendChild(p);
+    }
+    setTimeout(() => burst.remove(), 2000);
+}
+
+// Inject confetti keyframes
+const confettiStyle = document.createElement('style');
+confettiStyle.textContent = `
+    @keyframes confettiFall {
+        0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+        100% { transform: translate(var(--dx), var(--dy)) rotate(${360 + Math.random() * 720}deg) scale(0.3); opacity: 0; }
+    }
+`;
+document.head.appendChild(confettiStyle);
 
 /**
  * 📍 Botón flotante "Continuar" — detecta la siguiente lección no completada
@@ -528,8 +736,8 @@ const triggerPlacementTestPrompt = async () => {
         title: '🐻‍❄️ ¡Evaluación de Diagnóstico!',
         html: `
             <div style="text-align: left; font-size: 0.95rem;">
-                <p>¡Hola! Soy Moon. ¿Quieres ver si ya sabes suficiente inglés para saltar algunos niveles?</p>
-                <p>Responderemos <b>25 preguntas rápidas</b> para determinar tu lugar en la montaña.</p>
+                <p>¡Hola! Soy Moon. Vamos a encontrar tu lugar en el bosque.</p>
+                <p>Las preguntas comienzan fáciles y se vuelven más difíciles. <b>En cuanto falles una, sabremos tu nivel.</b></p>
             </div>
         `,
         icon: 'question',
@@ -543,181 +751,216 @@ const triggerPlacementTestPrompt = async () => {
     if (accept) {
         startPlacementTest();
     } else {
-        const userRef = doc(db, 'users', currentUser.uid);
-        await updateDoc(userRef, { placementTestDone: true });
-        currentProfile.placementTestDone = true;
+        try {
+            const userRef = doc(db, 'users', currentUser.uid);
+            await updateDoc(userRef, { placementTestDone: true });
+            currentProfile.placementTestDone = true;
+        } catch (e) {
+            console.error("Error guardando placementTestDone:", e);
+        }
     }
 };
 
 const startPlacementTest = async () => {
-    let score = 0;
-
-    // 25 preguntas de opción múltiple (5 por nivel, 5 niveles)
-    const questions = [
-        // --- Nivel 1 (M1): Saludos, pronombres y emociones básicas ---
-        { q: '¿Cómo se dice "Hola"?',              opts: ['Hello', 'Goodbye', 'Thank you', 'Yes'],         a: 'Hello' },
-        { q: 'I ___ happy.',                        opts: ['am', 'is', 'are', 'be'],                       a: 'am' },
-        { q: '¿Cómo se dice "Niña"?',               opts: ['Girl', 'Boy', 'Student', 'Happy'],             a: 'Girl' },
-        { q: 'You ___ my student.',                 opts: ['are', 'is', 'am', 'be'],                       a: 'are' },
-        { q: '¿Cómo se dice "Adiós"?',              opts: ['Goodbye', 'Hello', 'Good night', 'Ready'],     a: 'Goodbye' },
-        // --- Nivel 2 (M2): Animales, colores y descripciones básicas ---
-        { q: 'It ___ a big bear.',                  opts: ['is', 'are', 'am', 'be'],                       a: 'is' },
-        { q: '¿Cuál es el opuesto de "Big"?',       opts: ['Small', 'Tall', 'Fast', 'Old'],                a: 'Small' },
-        { q: 'They ___ birds.',                     opts: ['are', 'is', 'am', 'was'],                      a: 'are' },
-        { q: '¿De qué color es un "Blue bird"?',    opts: ['Blue', 'Red', 'Green', 'Yellow'],              a: 'Blue' },
-        { q: 'The forest ___ big and green.',       opts: ['is', 'are', 'am', 'be'],                       a: 'is' },
-        // --- Nivel 3 (M3): Posesivos, have/has y preposiciones ---
-        { q: 'He ___ a brother.',                   opts: ['has', 'have', 'is', 'are'],                    a: 'has' },
-        { q: 'Where ___ you from?',                 opts: ['are', 'is', 'am', 'were'],                     a: 'are' },
-        { q: 'I ___ have a car. (No tengo)',        opts: ["don't", "doesn't", "isn't", "aren't"],         a: "don't" },
-        { q: 'The cat is ___ the table.',           opts: ['on', 'in', 'at', 'of'],                        a: 'on' },
-        { q: 'My name ___ Moon.',                   opts: ['is', 'are', 'am', 'be'],                       a: 'is' },
-        // --- Nivel 4 (M4): Pasado simple, progresivo y vocabulario ---
-        { q: 'Yesterday I ___ to the park.',        opts: ['went', 'go', 'goes', 'gone'],                  a: 'went' },
-        { q: 'I ___ eating right now.',             opts: ['am', 'is', 'are', 'be'],                       a: 'am' },
-        { q: '"Mañana" en inglés es:',              opts: ['Tomorrow', 'Yesterday', 'Today', 'Later'],     a: 'Tomorrow' },
-        { q: 'Can you ___ me? (ayudar)',            opts: ['help', 'helps', 'helped', 'helping'],          a: 'help' },
-        { q: 'This is ___ book.',                   opts: ['my', 'me', 'I', 'mine'],                       a: 'my' },
-        // --- Nivel 5 (M5): Verbos modales, cláusulas y estructura avanzada ---
-        { q: 'I want ___ sleep.',                   opts: ['to', 'for', 'at', 'on'],                       a: 'to' },
-        { q: 'How ___ is this?',                    opts: ['much', 'many', 'more', 'most'],                a: 'much' },
-        { q: 'You ___ be careful.',                 opts: ['should', 'shall', 'would', 'going'],           a: 'should' },
-        { q: 'I think ___ it is raining.',          opts: ['that', 'which', 'what', 'who'],                a: 'that' },
-        { q: 'There ___ many people here.',         opts: ['are', 'is', 'am', 'be'],                       a: 'are' },
+    const levels = [
+        {
+            id: 'm1', name: 'Módulo 1 — Campamento Base',
+            questions: [
+                { q: '¿Cómo se dice "Hola"?',              opts: ['Hello', 'Goodbye', 'Thank you', 'Yes'],         a: 'Hello' },
+                { q: 'I ___ happy.',                        opts: ['am', 'is', 'are', 'be'],                       a: 'am' },
+                { q: '¿Cómo se dice "Niña"?',               opts: ['Girl', 'Boy', 'Student', 'Happy'],             a: 'Girl' },
+                { q: 'You ___ my student.',                 opts: ['are', 'is', 'am', 'be'],                       a: 'are' },
+                { q: '¿Cómo se dice "Adiós"?',              opts: ['Goodbye', 'Hello', 'Good night', 'Ready'],     a: 'Goodbye' },
+            ]
+        },
+        {
+            id: 'm2', name: 'Módulo 2 — El Bosque de los Animales',
+            questions: [
+                { q: 'It ___ a big bear.',                  opts: ['is', 'are', 'am', 'be'],                       a: 'is' },
+                { q: '¿Cuál es el opuesto de "Big"?',       opts: ['Small', 'Tall', 'Fast', 'Old'],                a: 'Small' },
+                { q: 'They ___ birds.',                     opts: ['are', 'is', 'am', 'was'],                      a: 'are' },
+                { q: '¿De qué color es un "Blue bird"?',    opts: ['Blue', 'Red', 'Green', 'Yellow'],              a: 'Blue' },
+                { q: 'The forest ___ big and green.',       opts: ['is', 'are', 'am', 'be'],                       a: 'is' },
+            ]
+        },
+        {
+            id: 'm3', name: 'Módulo 3 — La Cabaña del Campamento',
+            questions: [
+                { q: 'He ___ a brother.',                   opts: ['has', 'have', 'is', 'are'],                    a: 'has' },
+                { q: 'Where ___ you from?',                 opts: ['are', 'is', 'am', 'were'],                     a: 'are' },
+                { q: 'I ___ have a car. (No tengo)',        opts: ["don't", "doesn't", "isn't", "aren't"],         a: "don't" },
+                { q: 'The cat is ___ the table.',           opts: ['on', 'in', 'at', 'of'],                        a: 'on' },
+                { q: 'My name ___ Moon.',                   opts: ['is', 'are', 'am', 'be'],                       a: 'is' },
+            ]
+        },
+        {
+            id: 'm4', name: 'Módulo 4 — El Mercado del Río',
+            questions: [
+                { q: 'Yesterday I ___ to the park.',        opts: ['went', 'go', 'goes', 'gone'],                  a: 'went' },
+                { q: 'I ___ eating right now.',             opts: ['am', 'is', 'are', 'be'],                       a: 'am' },
+                { q: '"Mañana" en inglés es:',              opts: ['Tomorrow', 'Yesterday', 'Today', 'Later'],     a: 'Tomorrow' },
+                { q: 'Can you ___ me? (ayudar)',            opts: ['help', 'helps', 'helped', 'helping'],          a: 'help' },
+                { q: 'This is ___ book.',                   opts: ['my', 'me', 'I', 'mine'],                       a: 'my' },
+            ]
+        },
+        {
+            id: 'm5', name: 'Módulo 5 — En Movimiento',
+            questions: [
+                { q: 'I want ___ sleep.',                   opts: ['to', 'for', 'at', 'on'],                       a: 'to' },
+                { q: 'How ___ is this?',                    opts: ['much', 'many', 'more', 'most'],                a: 'much' },
+                { q: 'You ___ be careful.',                 opts: ['should', 'shall', 'would', 'going'],           a: 'should' },
+                { q: 'I think ___ it is raining.',          opts: ['that', 'which', 'what', 'who'],                a: 'that' },
+                { q: 'There ___ many people here.',         opts: ['are', 'is', 'am', 'be'],                       a: 'are' },
+            ]
+        }
     ];
 
-    // Pantalla de inicio
     await Swal.fire({
-        title: '🐻‍❄️ ¡Test de Nivelación!',
+        title: '🐻‍❄️ Test de Nivelación',
         html: `<p style="font-size:0.95rem; color:#475569; line-height:1.6;">
-            25 preguntas para encontrar tu lugar en el bosque.<br>
-            <strong>Toca la respuesta correcta.</strong> ¡No hay trampas!
+            Preguntas progresivas — empiezan fáciles y se complican.<br>
+            <strong>Fallas una y se detiene.</strong> Así sabemos dónde empezar.
         </p>`,
-        footer: '⏱ Solo tarda unos minutos',
+        footer: '⏱ Unos 3-5 minutos',
         confirmButtonText: '¡Comenzar! ▶',
         confirmButtonColor: '#38bdf8',
         allowOutsideClick: false
     });
 
-    for (let i = 0; i < questions.length; i++) {
-        const item = questions[i];
-        // Mezclar opciones
-        const shuffled = [...item.opts].sort(() => Math.random() - 0.5);
+    let assignedModule = 'm1';
+    let allCorrect = true;
 
-        const answered = await new Promise(resolve => {
-            Swal.fire({
-                title: `Pregunta ${i + 1} / ${questions.length}`,
-                html: `
-                    <div style="font-family:'Outfit',sans-serif;">
-                        <div style="background:#f8fafc; border-radius:12px; padding:1rem 1.25rem; margin-bottom:1.25rem; border-left:4px solid #38bdf8;">
-                            <p style="font-size:1.05rem; font-weight:600; color:#1e293b; margin:0;">${item.q}</p>
+    for (let levelIdx = 0; levelIdx < levels.length; levelIdx++) {
+        const level = levels[levelIdx];
+        assignedModule = level.id;
+
+        for (let qIdx = 0; qIdx < level.questions.length; qIdx++) {
+            const item = level.questions[qIdx];
+            const shuffled = [...item.opts].sort(() => Math.random() - 0.5);
+
+            const answered = await new Promise(resolve => {
+                Swal.fire({
+                    title: `Nivel ${levelIdx + 1} — Pregunta ${qIdx + 1}`,
+                    html: `
+                        <div style="font-family:'Outfit',sans-serif;">
+                            <div style="background:#f8fafc; border-radius:12px; padding:1rem 1.25rem; margin-bottom:1.25rem; border-left:4px solid #38bdf8;">
+                                <p style="font-size:1.05rem; font-weight:600; color:#1e293b; margin:0;">${item.q}</p>
+                            </div>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;" id="opts-grid">
+                                ${shuffled.map(opt => `
+                                    <button
+                                        class="swal-opt-btn"
+                                        onclick="window.__placementAnswer('${opt}')"
+                                        style="
+                                            background: white;
+                                            border: 2px solid #e2e8f0;
+                                            border-radius: 12px;
+                                            padding: 0.85rem 0.5rem;
+                                            font-size: 1rem;
+                                            font-weight: 600;
+                                            color: #334155;
+                                            cursor: pointer;
+                                            transition: all 0.15s;
+                                            font-family: 'Outfit', sans-serif;
+                                        "
+                                        onmouseover="this.style.borderColor='#38bdf8'; this.style.background='#f0f9ff'"
+                                        onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='white'"
+                                    >${opt}</button>
+                                `).join('')}
+                            </div>
                         </div>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;" id="opts-grid">
-                            ${shuffled.map(opt => `
-                                <button
-                                    class="swal-opt-btn"
-                                    onclick="window.__placementAnswer('${opt}')"
-                                    style="
-                                        background: white;
-                                        border: 2px solid #e2e8f0;
-                                        border-radius: 12px;
-                                        padding: 0.85rem 0.5rem;
-                                        font-size: 1rem;
-                                        font-weight: 600;
-                                        color: #334155;
-                                        cursor: pointer;
-                                        transition: all 0.15s;
-                                        font-family: 'Outfit', sans-serif;
-                                    "
-                                    onmouseover="this.style.borderColor='#38bdf8'; this.style.background='#f0f9ff'"
-                                    onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='white'"
-                                >${opt}</button>
-                            `).join('')}
-                        </div>
-                        <p style="font-size:0.75rem; color:#94a3b8; margin-top:1rem; text-align:center;">
-                            🐻‍❄️ Progreso: ${i}/${questions.length} — ${Math.round((i/questions.length)*100)}%
-                        </p>
-                    </div>
-                `,
-                showConfirmButton: false,
-                showCancelButton: false,
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen: () => {
-                    window.__placementAnswer = (chosen) => resolve(chosen);
-                }
+                    `,
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    didOpen: () => {
+                        window.__placementAnswer = (chosen) => resolve(chosen);
+                    }
+                });
             });
-        });
 
-        const correct = answered === item.a;
-        if (correct) score++;
+            const correct = answered === item.a;
 
-        // Feedback rápido (800ms)
-        await Swal.fire({
-            html: correct
-                ? `<div style="font-size:2.5rem;">✅</div><p style="color:#059669; font-weight:700; font-size:1.1rem; margin:0.5rem 0 0;">¡Correcto!</p>`
-                : `<div style="font-size:2.5rem;">❌</div><p style="color:#ef4444; font-weight:700; font-size:1.1rem; margin:0.5rem 0 0;">Era: <strong>${item.a}</strong></p>`,
-            timer: 900,
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            width: 200,
-            padding: '1.5rem'
-        });
+            if (!correct) {
+                allCorrect = false;
+                await Swal.fire({
+                    html: `<div style="text-align:center;">
+                        <div style="font-size:2.5rem;">❌</div>
+                        <p style="color:#ef4444; font-weight:700; font-size:1.1rem; margin:0.5rem 0;">Respuesta: <strong>${item.a}</strong></p>
+                        <p style="color:#475569; font-size:0.9rem; margin-top:0.5rem;">Te asignamos al <strong>${level.name}</strong></p>
+                    </div>`,
+                    timer: 2000,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    width: 250,
+                    padding: '1.5rem'
+                });
+                break;
+            }
+
+            await Swal.fire({
+                html: `<div style="font-size:2.5rem;">✅</div><p style="color:#059669; font-weight:700; font-size:1.1rem; margin:0.5rem 0 0;">¡Correcto!</p>`,
+                timer: 600,
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                width: 180,
+                padding: '1.5rem'
+            });
+        }
+
+        if (!allCorrect) break;
     }
 
-    // Limpiar función global
     delete window.__placementAnswer;
 
-
-    // Calcular nivel (puntaje sobre 25)
-    // Umbrales: ~88% = M5, ~68% = M4, ~48% = M3, ~28% = M2
-    let unlocked = ['m1'];
-    let freeModuleId = 'm1';
-
-    if (score >= 22) { 
-        unlocked = ['m1', 'm2', 'm3', 'm4', 'm5']; 
-        freeModuleId = 'm5'; 
-    }
-    else if (score >= 17) { 
-        unlocked = ['m1', 'm2', 'm3', 'm4']; 
-        freeModuleId = 'm4'; 
-    }
-    else if (score >= 12) { 
-        unlocked = ['m1', 'm2', 'm3']; 
-        freeModuleId = 'm3'; 
-    }
-    else if (score >= 7)  { 
-        unlocked = ['m1', 'm2']; 
-        freeModuleId = 'm2'; 
+    const moduleNum = parseInt(assignedModule.replace('m', ''));
+    const unlocked = [];
+    for (let i = 1; i <= moduleNum; i++) {
+        unlocked.push(`m${i}`);
     }
 
-    const userRef = doc(db, 'users', currentUser.uid);
-    await updateDoc(userRef, {
-        unlockedModules: unlocked,
-        freeModuleId: freeModuleId,
-        placementTestDone: true,
-        placementScore: score
-    });
+    try {
+        const userRef = doc(db, 'users', currentUser.uid);
+        await updateDoc(userRef, {
+            unlockedModules: unlocked,
+            freeModuleId: assignedModule,
+            placementTestDone: true
+        });
 
-    currentProfile.unlockedModules = unlocked;
-    currentProfile.freeModuleId = freeModuleId;
-    currentProfile.placementTestDone = true;
+        currentProfile.unlockedModules = unlocked;
+        currentProfile.freeModuleId = assignedModule;
+        currentProfile.placementTestDone = true;
+    } catch (e) {
+        console.error("Error guardando resultado del placement test:", e);
+        Swal.fire('Error', 'No se pudo guardar tu progreso. Intenta de nuevo.', 'error');
+        return;
+    }
 
     await Swal.fire({
-        title: '¡Prueba Terminada!',
+        title: allCorrect ? '¡Nivel Máximo!' : '¡Nivel Asignado!',
         html: `
             <div style="text-align: center;">
                 <p style="font-size: 3rem;">🏔️</p>
-                <p>Puntaje: <b>${score}/25</b></p>
-                <p>Has desbloqueado hasta el: <b>Módulo ${unlocked.length}</b></p>
-                <p>¡Disfruta tu aventura!</p>
+                <p style="font-size:1rem; color:#475569; margin:0.5rem 0;">
+                    ${allCorrect
+                        ? '¡Respondiste todo correcto! Tienes nivel avanzado.'
+                        : `Tu aventura comienza en el <strong>${assignedModule.toUpperCase()}</strong>.`
+                    }
+                </p>
+                <p style="font-size:0.85rem; color:#94a3b8;">
+                    ${allCorrect
+                        ? 'Tienes acceso al Módulo 5 para empezar.'
+                        : 'Completa este módulo y cuando quieras avanzar, solo pide tu evaluación.'
+                    }
+                </p>
             </div>
         `,
         icon: 'success',
         confirmButtonColor: '#38bdf8'
     });
 
-    setupModuleUnlocks(unlocked);
+    setupModuleUnlocks(currentProfile);
 };
 
 const cleanExpiredAppointments = async () => {
@@ -1080,6 +1323,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (docSnap.exists()) {
                 currentProfile = docSnap.data();
                 setupDashboardUI();
+
+                // Procesar retorno de Mercado Pago
+                handlePaymentReturn(currentUser.uid);
             } else {
                 console.warn("Perfil de usuario no encontrado en Firestore.");
             }
@@ -1110,3 +1356,143 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 4000);
     });
 });
+
+/* -------------------------------------------------------------------------- */
+/*  ONBOARDING TUTORIAL — Tour interactivo para nuevos exploradores           */
+/* -------------------------------------------------------------------------- */
+function showOnboardingTutorial(profile) {
+    const completedLessons = profile.completedLessons || [];
+    const weeklyProgress = profile.weeklyProgress || {};
+
+    // Solo mostrar si es completamente nuevo (sin lecciones, sin progreso semanal)
+    const isNew = completedLessons.length === 0 && Object.keys(weeklyProgress).length === 0;
+    if (!isNew) return;
+
+    // Esperar a que el DOM esté listo
+    setTimeout(() => showTutorialStep(1), 800);
+}
+
+function showTutorialStep(step) {
+    const overlay = document.createElement('div');
+    overlay.id = 'tutorial-overlay';
+    overlay.style.cssText = `
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.7); z-index: 99999;
+        display: flex; align-items: center; justify-content: center;
+        font-family: 'Outfit', sans-serif;
+        animation: fadeIn 0.3s ease;
+    `;
+
+    const card = document.createElement('div');
+    card.style.cssText = `
+        background: linear-gradient(145deg, #1e293b, #0f172a);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 24px; padding: 2rem; max-width: 400px; width: 90%;
+        text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    `;
+
+    let content = '';
+    let moonFace = '🐻‍❄️';
+    let btnText = 'Siguiente →';
+
+    if (step === 1) {
+        content = `
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">🌲</div>
+            <h2 style="color: white; font-size: 1.3rem; margin: 0 0 0.5rem;">¡Bienvenido a Moonsforest!</h2>
+            <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.5;">
+                Este es tu <strong style="color: #7dd3fc;">Mapa del Bosque</strong>. Cada punto es un módulo con 20 lecciones.
+            </p>
+            <p style="color: #64748b; font-size: 0.8rem; margin-top: 0.5rem;">
+                El Módulo 1 (Campamento Base) está abierto para ti. Empieza ahí.
+            </p>
+        `;
+        btnText = '¡Entendido! →';
+    } else if (step === 2) {
+        content = `
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎤</div>
+            <h2 style="color: white; font-size: 1.3rem; margin: 0 0 0.5rem;">Aquí se Habla, no solo se Clickea</h2>
+            <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.5;">
+                Moon te enseñará palabras nuevas. Luego <strong style="color: #7dd3fc;">tú las repites en voz alta</strong>.
+            </p>
+            <p style="color: #64748b; font-size: 0.8rem; margin-top: 0.5rem;">
+                El micrófono detecta tu voz. ¡No tengas miedo de hablar fuerte!
+            </p>
+        `;
+        btnText = '¡Suena bien! →';
+    } else if (step === 3) {
+        content = `
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">🧑‍🏫</div>
+            <h2 style="color: white; font-size: 1.3rem; margin: 0 0 0.5rem;">Evaluaciones con Maestros Reales</h2>
+            <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.5;">
+                Cuando termines un módulo, puedes <strong style="color: #7dd3fc;">grabar una conversación</strong> con Moon.
+            </p>
+            <p style="color: #64748b; font-size: 0.8rem; margin-top: 0.5rem;">
+                Un maestro real la escuchará y te dará feedback para desbloquear el siguiente nivel. 🚀
+            </p>
+        `;
+        btnText = '🌲 ¡Comenzar Aventura!';
+    }
+
+    const btn = document.createElement('button');
+    btn.innerText = btnText;
+    btn.style.cssText = `
+        margin-top: 1.5rem; padding: 0.8rem 2rem;
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white; border: none; border-radius: 99px;
+        font-size: 1rem; font-weight: 700; cursor: pointer;
+        font-family: 'Outfit', sans-serif;
+        transition: transform 0.2s;
+    `;
+    btn.onmouseover = () => btn.style.transform = 'scale(1.05)';
+    btn.onmouseout = () => btn.style.transform = 'scale(1)';
+
+    btn.onclick = () => {
+        overlay.remove();
+        if (step < 3) {
+            setTimeout(() => showTutorialStep(step + 1), 300);
+        }
+    };
+
+    card.innerHTML = content;
+    card.appendChild(btn);
+    overlay.appendChild(card);
+    document.body.appendChild(overlay);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  REAL-TIME PROFILE LISTENER — refresca UI cuando admin aprueba evaluación  */
+/* -------------------------------------------------------------------------- */
+let profileUnsubscriber = null;
+
+function setupRealtimeProfileListener() {
+    if (!currentUser) return;
+    if (profileUnsubscriber) profileUnsubscriber();
+
+    const userRef = doc(db, 'users', currentUser.uid);
+    profileUnsubscriber = onSnapshot(userRef, (snap) => {
+        if (!snap.exists()) return;
+        const newData = snap.data();
+        const oldUnlocked = currentProfile?.unlockedModules || [];
+        const newUnlocked = newData.unlockedModules || [];
+
+        // Solo refrescar si cambió algo relevante (módulos desbloqueados, premium, etc)
+        const unlockedChanged = JSON.stringify(oldUnlocked) !== JSON.stringify(newUnlocked);
+        const premiumChanged = currentProfile?.isPremium !== newData.isPremium;
+
+        if (unlockedChanged || premiumChanged) {
+            currentProfile = newData;
+            setupModuleUnlocks(currentProfile);
+            setupContinueButton(currentProfile.completedLessons || []);
+            setupPremiumStatus(currentProfile);
+        }
+    }, (err) => {
+        window.devWarn("Error en listener de perfil:", err);
+    });
+}
+
+// Inject animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+`;
+document.head.appendChild(style);

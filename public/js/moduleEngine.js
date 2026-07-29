@@ -1,5 +1,7 @@
 import { db } from './auth.js';
-import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { collection, addDoc, serverTimestamp, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+import { sendDiscordNotification } from './discord.js';
 
 /**
  * Module Learning Engine 🌲
@@ -12,10 +14,14 @@ export class MoonsforestEngine {
         this.data = data;
         this.options = options;
         this.resources = options.resources || {};
+        this.isReview = options.isReview === true;
         this.currentStep = 0;
         this.startTime = Date.now();
         this.sessionHistory = []; // Almacenará { type: 'moon'|'child', content: text|blobUrl }
         this.errors = 0; // Para calcular estrellas
+        this.evalAudioChunks = []; // Para grabación de evaluación
+        this.mediaRecorder = null;
+        this.mediaStream = null;
 
 
         // UI Elements
@@ -34,10 +40,8 @@ export class MoonsforestEngine {
         if (SpeechRecognition) {
             this.recognition = new SpeechRecognition();
             this.recognition.lang = 'en-US';
-            this.recognition.interimResults = false;
+            this.recognition.interimResults = true;
             this.recognition.maxAlternatives = 1;
-        } else {
-            console.warn("Speech Recognition API no soportada en este navegador.");
         }
 
         // Voice Setup
@@ -113,7 +117,9 @@ export class MoonsforestEngine {
         if (stepData.prompt) stepData.prompt = this.resolveText(stepData.prompt);
         if (stepData.successMsg) stepData.successMsg = this.resolveText(stepData.successMsg);
 
-        if (stepData.type === 'listen_click') {
+        if (this.isReview && ['echo_chamber', 'speed_speak', 'boss_battle', 'interstitial_moon', 'story_moment'].includes(stepData.type)) {
+            this.renderReviewStep(stepData);
+        } else if (stepData.type === 'listen_click') {
             this.renderListenClick(stepData);
         } else if (stepData.type === 'echo_chamber') {
             this.renderEchoChamber(stepData);
@@ -150,6 +156,68 @@ export class MoonsforestEngine {
             return this.resources.successMessages[text] || text;
         }
         return text;
+    }
+
+    renderReviewStep(stepData) {
+        const box = document.createElement('div');
+        box.className = 'activity-box';
+        box.style.textAlign = 'center';
+        box.style.padding = '2rem';
+
+        const icon = document.createElement('div');
+        icon.style.fontSize = '3rem';
+        icon.style.marginBottom = '1rem';
+
+        if (stepData.type === 'echo_chamber') {
+            icon.innerText = '🗣️';
+            const word = document.createElement('div');
+            word.style.cssText = 'font-size: 2rem; font-weight: 700; color: white; margin-bottom: 1rem;';
+            word.innerText = stepData.word || '';
+            box.appendChild(icon);
+            box.appendChild(word);
+            if (stepData.displayWord) {
+                const translation = document.createElement('div');
+                translation.style.cssText = 'color: #94a3b8; font-size: 1rem; margin-bottom: 1rem;';
+                translation.innerText = `"${stepData.displayWord}"`;
+                box.appendChild(translation);
+            }
+            const hint = document.createElement('div');
+            hint.style.cssText = 'color: #64748b; font-size: 0.85rem; margin-bottom: 1rem;';
+            hint.innerText = 'Modo repaso — practica diciendo la palabra en voz alta';
+            box.appendChild(hint);
+            this.speak(stepData.word);
+            setTimeout(() => {
+                this.showNextButton(box);
+            }, 500 + (stepData.word ? stepData.word.length * 100 : 500));
+        } else if (stepData.type === 'speed_speak' || stepData.type === 'boss_battle') {
+            icon.innerText = stepData.type === 'boss_battle' ? '⚔️' : '⚡';
+            const label = document.createElement('div');
+            label.style.cssText = 'color: white; font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem;';
+            label.innerText = stepData.type === 'boss_battle' ? 'Jefe Final (vista previa)' : 'Reto de Velocidad (vista previa)';
+            const words = document.createElement('div');
+            words.style.cssText = 'color: #94a3b8; font-size: 1rem; margin-bottom: 1rem;';
+            words.innerText = (stepData.words || []).join('  ·  ');
+            box.appendChild(icon);
+            box.appendChild(label);
+            box.appendChild(words);
+            const hint = document.createElement('div');
+            hint.style.cssText = 'color: #64748b; font-size: 0.85rem;';
+            hint.innerText = 'Modo repaso — practica diciendo las palabras';
+            box.appendChild(hint);
+            setTimeout(() => this.showNextButton(box), 1000);
+        } else if (stepData.type === 'story_moment' || stepData.type === 'interstitial_moon') {
+            icon.innerText = '📖';
+            const text = stepData.en || stepData.message?.en || '';
+            const textEl = document.createElement('div');
+            textEl.style.cssText = 'color: #cbd5e1; font-size: 1.1rem; line-height: 1.5;';
+            textEl.innerText = text;
+            box.appendChild(icon);
+            box.appendChild(textEl);
+            this.speak(text);
+            setTimeout(() => this.showNextButton(box), 1500);
+        }
+
+        this.container.appendChild(box);
     }
 
     nextStep() {
@@ -276,6 +344,15 @@ export class MoonsforestEngine {
         micBtn.className = 'mic-btn';
         micBtn.innerHTML = '🎤';
 
+        // Recording indicator (LED animado)
+        const recordingIndicator = document.createElement('div');
+        recordingIndicator.className = 'recording-indicator';
+        recordingIndicator.style.display = 'none';
+        recordingIndicator.innerHTML = `
+            <div class="rec-led"></div>
+            <span>Grabando...</span>
+        `;
+
         const listenBtn = document.createElement('button');
         listenBtn.className = 'listen-btn-echo';
         listenBtn.innerHTML = '🔊';
@@ -304,6 +381,7 @@ export class MoonsforestEngine {
         box.appendChild(echoWord);
         box.appendChild(listenBtn);
         box.appendChild(metricsContainer);
+        box.appendChild(recordingIndicator);
         box.appendChild(micBtn);
         box.appendChild(feedback);
         box.appendChild(skipBtn);
@@ -352,7 +430,20 @@ export class MoonsforestEngine {
 
         micBtn.addEventListener('click', async () => {
             if (!this.recognition) {
-                alert("Tu navegador no soporta el reconocimiento de voz. Usa Chrome en Android o Safari en iOS.");
+                Swal.fire({
+                    title: '🌲 Navegador no compatible',
+                    html: `
+                        <div style="text-align:center; font-family:'Outfit',sans-serif;">
+                            <p style="font-size:0.95rem; color:#475569; line-height:1.5;">
+                                Para hablar con Moon necesitas <strong>Chrome</strong> o <strong>Edge</strong>.<br>
+                                Abre esta página en Chrome y acepta el permiso de micrófono. 🎤
+                            </p>
+                        </div>
+                    `,
+                    icon: 'warning',
+                    confirmButtonColor: '#22c55e',
+                    confirmButtonText: 'Entendido'
+                });
                 return;
             }
 
@@ -362,6 +453,7 @@ export class MoonsforestEngine {
             micBtn.classList.add('listening');
             listenBtn.disabled = true;
             feedback.innerText = 'Listening... Habla ahora.';
+            recordingIndicator.style.display = 'flex'; // Show recording LED
 
             // Start CSS pulse animation instead of AudioContext analysis
             thermoFill.classList.add('pulse-animation-active');
@@ -377,6 +469,7 @@ export class MoonsforestEngine {
 
             const handleNoResult = () => {
                 stopVisualPulse();
+                recordingIndicator.style.display = 'none';
                 micBtn.classList.remove('listening');
                 listenBtn.disabled = false;
                 
@@ -386,10 +479,10 @@ export class MoonsforestEngine {
                         es: "¡Moon te escuchó en su corazón! Sigamos adelante." 
                     });
                 } else {
-                    feedback.innerText = "No logré escucharte bien. ¡Intenta de nuevo!";
+                    feedback.innerText = "😕 No te escuché. ¿Hablaste? ¡Intenta más fuerte!";
                     this.showMoon({ 
-                        en: "Did you say it? I didn't hear you. Try again!", 
-                        es: "¿Lo dijiste? No te escuché. ¡Intenta otra vez!" 
+                        en: "I didn't hear anything. Speak a bit louder and closer to the mic! 🎤", 
+                        es: "No escuché nada. ¡Habla un poco más fuerte y cerca del micrófono!" 
                     });
                 }
             };
@@ -424,8 +517,23 @@ export class MoonsforestEngine {
             }
 
             this.recognition.onresult = async (event) => {
+                // Show live interim results while speaking
+                let liveTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    liveTranscript += event.results[i][0].transcript;
+                }
+                const liveClean = liveTranscript.toLowerCase().trim();
+                if (liveClean) {
+                    feedback.innerHTML = `🎤 Dijiste: "<strong>${liveClean}</strong>"`;
+                }
+
+                // Only process final results for validation
+                const lastResult = event.results[event.results.length - 1];
+                if (!lastResult.isFinal) return;
+
                 clearTimeout(recognitionTimeout);
                 stopVisualPulse();
+                recordingIndicator.style.display = 'none';
 
                 // Detener grabación en desktop
                 let audioUrl = null;
@@ -443,8 +551,8 @@ export class MoonsforestEngine {
                 micBtn.classList.remove('listening');
                 listenBtn.disabled = false;
 
-                let transcript = event.results[0][0].transcript.toLowerCase().trim();
-                let confidence = event.results[0][0].confidence || 0.8;
+                let transcript = lastResult[0].transcript.toLowerCase().trim();
+                let confidence = lastResult[0].confidence || 0.8;
 
                 thermoLabel.innerText = "Claridad de tu pronunciación 🎯";
                 let fillPercentage = Math.round(confidence * 100);
@@ -521,6 +629,7 @@ export class MoonsforestEngine {
 
             const handleError = (errorType) => {
                 stopVisualPulse();
+                recordingIndicator.style.display = 'none';
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                     mediaRecorder.stop();
                     mediaRecorder.stream.getTracks().forEach(track => track.stop());
@@ -534,8 +643,11 @@ export class MoonsforestEngine {
                 this.playSound('error');
                 thermoFill.style.width = '0%';
                 if (errorType === 'no-speech') {
-                    feedback.innerText = "I didn't hear you. Could you say it again?";
-                    this.showMoon({ en: "I didn't hear anything. Try speaking louder!", es: "No escuché nada. ¡Habla más fuerte!" });
+                    feedback.innerText = "😕 No te escuché. ¿Hablaste más fuerte?";
+                    this.showMoon({ en: "I didn't hear anything. Try speaking louder and closer to the mic! 🎤", es: "No escuché nada. ¡Habla más fuerte y cerca del micrófono!" });
+                } else if (errorType === 'not-allowed' || errorType === 'permission-denied') {
+                    feedback.innerText = "🚫 Micrófono bloqueado. Permítenos usarlo en la configuración del navegador.";
+                    this.showMoon({ en: "I can't access your microphone. Please allow microphone access in your browser settings.", es: "No puedo acceder a tu micrófono. Permite el acceso en la configuración de tu navegador." });
                 } else {
                     feedback.innerText = 'Microphone issue. Please try again.';
                     this.showMoon({ en: "Check your microphone permissions.", es: "Revisa el permiso de tu micrófono." });
@@ -1762,12 +1874,13 @@ export class MoonsforestEngine {
         const minutesSpent = Math.max(1, Math.round((endTime - this.startTime) / 60000));
         const totalSteps = this.data.length;
 
-        // Calcular estrellas (Max 3. Perfeccion = 3, 1-3 errores = 2, 4+ = 1)
         let stars = 3;
         if (this.errors > 0 && this.errors <= 3) stars = 2;
         if (this.errors > 3) stars = 1;
 
-        document.dispatchEvent(new CustomEvent('lessonCompleted', { detail: { minutes: minutesSpent, stars: stars } }));
+        if (!this.isReview) {
+            document.dispatchEvent(new CustomEvent('lessonCompleted', { detail: { minutes: minutesSpent, stars: stars } }));
+        }
 
         const targetUrl = this.options.returnUrl || 'mapa.html';
 
@@ -1783,7 +1896,7 @@ export class MoonsforestEngine {
 
         const title = document.createElement('h2');
         title.className = 'lesson-complete-title';
-        title.innerHTML = `Lesson <span>Complete!</span>`;
+        title.innerHTML = this.isReview ? `Review <span>Complete!</span>` : `Lesson <span>Complete!</span>`;
 
         const starsContainer = document.createElement('div');
         starsContainer.className = 'lesson-complete-stars';
@@ -1798,10 +1911,12 @@ export class MoonsforestEngine {
         const msg = document.createElement('div');
         msg.className = 'lesson-complete-moon-msg';
 
-        let msgEn = "Amazing! The forest is happy.";
-        let msgEs = "¡Asombroso! El bosque está feliz.";
+        let msgEn, msgEs;
 
-        if (stars === 3) {
+        if (this.isReview) {
+            msgEn = "Great review! Keep practicing and you'll master it!";
+            msgEs = "¡Buen repaso! Sigue practicando y lo dominarás.";
+        } else if (stars === 3) {
             msgEn = "Perfect score! You are a true explorer!";
             msgEs = "¡Puntaje perfecto! Eres un explorador verdadero.";
         } else if (stars === 2) {
@@ -1814,27 +1929,54 @@ export class MoonsforestEngine {
 
         msg.innerHTML = `"${msgEn}" <span>${msgEs}</span>`;
 
-        const stats = document.createElement('div');
-        stats.className = 'lesson-complete-stats';
-
-        const xpEarned = stars * 10;
-        stats.innerHTML = `
-            <div class="lc-stat">
-                <div class="lc-stat-val">${minutesSpent}</div>
-                <div class="lc-stat-label">MINUTES</div>
-            </div>
-            <div class="lc-stat">
-                <div class="lc-stat-val">+${xpEarned}</div>
-                <div class="lc-stat-label">EXP</div>
-            </div>
-        `;
-
         const buttonsContainer = document.createElement('div');
         buttonsContainer.style.display = 'flex';
         buttonsContainer.style.flexDirection = 'column';
         buttonsContainer.style.gap = '0.75rem';
         buttonsContainer.style.marginTop = '1rem';
         buttonsContainer.style.width = '100%';
+
+        if (!this.isReview) {
+            const stats = document.createElement('div');
+            stats.className = 'lesson-complete-stats';
+            const xpEarned = stars * 10;
+            stats.innerHTML = `
+                <div class="lc-stat">
+                    <div class="lc-stat-val">${minutesSpent}</div>
+                    <div class="lc-stat-label">MINUTES</div>
+                </div>
+                <div class="lc-stat">
+                    <div class="lc-stat-val">+${xpEarned}</div>
+                    <div class="lc-stat-label">EXP</div>
+                </div>
+            `;
+            box.appendChild(stats);
+
+            const isLastLesson = this.options.lessonId && this.options.lessonId.endsWith('l20');
+            const evals = this.options.evaluations;
+            if (isLastLesson && evals && evals.length > 0) {
+                const evalBtn = document.createElement('button');
+                evalBtn.className = 'btn-continue-forest';
+                evalBtn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                evalBtn.style.color = '#052e16';
+                evalBtn.style.border = 'none';
+                evalBtn.style.fontWeight = '800';
+                evalBtn.style.boxShadow = '0 4px 16px rgba(245, 158, 11, 0.4)';
+                evalBtn.innerText = '🎙️ Solicitar Evaluación para Avanzar';
+                evalBtn.onclick = async () => {
+                    if (this.options.isPremium) {
+                        evalBtn.disabled = true;
+                        evalBtn.innerText = 'Iniciando evaluación...';
+                        await this.startEvaluationFlow(evals);
+                    } else {
+                        if (typeof window.showSubscriptionModal === 'function') {
+                            window.showSubscriptionModal();
+                        }
+                    }
+                };
+                buttonsContainer.appendChild(evalBtn);
+            }
+        }
 
         const btnRepeat = document.createElement('button');
         btnRepeat.className = 'btn-continue-forest';
@@ -1846,7 +1988,7 @@ export class MoonsforestEngine {
 
         const btn = document.createElement('button');
         btn.className = 'btn-continue-forest';
-        btn.innerText = 'Salir al Mapa →';
+        btn.innerText = this.isReview ? 'Salir al Mapa →' : 'Salir al Mapa →';
         btn.onclick = () => window.location.href = targetUrl;
 
         buttonsContainer.appendChild(btnRepeat);
@@ -1856,7 +1998,6 @@ export class MoonsforestEngine {
         box.appendChild(title);
         box.appendChild(starsContainer);
         box.appendChild(msg);
-        box.appendChild(stats);
         box.appendChild(buttonsContainer);
 
         overlay.appendChild(box);
@@ -1873,6 +2014,346 @@ export class MoonsforestEngine {
         setTimeout(() => {
             this.speakMoon(msgEn);
         }, 800);
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /* EVALUACIÓN CONVERSACIONAL                                                  */
+    /* -------------------------------------------------------------------------- */
+
+    async startEvaluationFlow(evals) {
+        const evalData = evals[0];
+        if (!evalData || !evalData.lines || evalData.lines.length === 0) {
+            Swal.fire('Error', 'No hay conversaciones de evaluación disponibles.', 'error');
+            return;
+        }
+
+        // Rate limiting: max 1 evaluación cada 5 minutos
+        const lastEvalKey = `last_eval_${this.options.userId}`;
+        const lastEvalTime = parseInt(localStorage.getItem(lastEvalKey) || '0');
+        if (Date.now() - lastEvalTime < 300000) {
+            const remaining = Math.ceil((300000 - (Date.now() - lastEvalTime)) / 60000);
+            Swal.fire('⏳ Espera un momento', `Puedes solicitar una nueva evaluación en ${remaining} minuto(s).`, 'info');
+            return;
+        }
+
+        try {
+            // 1. Mostrar preview del script
+            await this.showEvalPreview(evalData);
+
+            // 2. Solicitar acceso al micrófono con verificación
+            try {
+                this.mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            } catch (micErr) {
+                if (micErr.name === 'NotAllowedError' || micErr.name === 'PermissionDeniedError') {
+                    Swal.fire({
+                        title: '🎤 Micrófono necesario',
+                        html: `
+                            <div style="text-align:center; font-family:'Outfit',sans-serif;">
+                                <p style="font-size:1rem; color:#475569;">
+                                    Para la evaluación necesitamos acceso a tu micrófono.
+                                </p>
+                                <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:12px; padding:1rem; margin-top:1rem; text-align:left;">
+                                    <p style="font-size:0.85rem; color:#991b1b; font-weight:600;">📱 ¿Cómo habilitarlo?</p>
+                                    <p style="font-size:0.8rem; color:#7f1d1d; margin-top:0.25rem;">
+                                        Chrome: 🔒 icono en la barra de direcciones → Micrófono → Permitir<br>
+                                        Luego recarga la página y vuelve a intentar.
+                                    </p>
+                                </div>
+                            </div>
+                        `,
+                        icon: 'warning',
+                        confirmButtonColor: '#3b82f6',
+                        confirmButtonText: 'Entendido'
+                    });
+                } else {
+                    Swal.fire('Error de micrófono', 'No pudimos acceder a tu micrófono: ' + micErr.message, 'error');
+                }
+                return;
+            }
+
+            // 3. Round 1: Moon habla rol A, alumno responde rol B
+            const round1Blobs = await this.runEvalLines(evalData, 'moon', 'student', 1);
+
+            // 4. Round 2: Alumno lee rol A, Moon responde rol B
+            const round2Blobs = await this.runEvalLines(evalData, 'student', 'moon', 2);
+
+            // 5. Liberar recursos de micrófono
+            if (this.mediaStream) {
+                this.mediaStream.getTracks().forEach(t => t.stop());
+                this.mediaStream = null;
+            }
+
+            // 6. Subir todo
+            const allBlobs = [...round1Blobs, ...round2Blobs];
+            await this.uploadEvaluation(allBlobs, evalData);
+
+        } catch (err) {
+            console.error("Error en evaluación:", err);
+            if (this.mediaStream) {
+                this.mediaStream.getTracks().forEach(t => t.stop());
+                this.mediaStream = null;
+            }
+            Swal.fire({
+                title: 'Error en la evaluación',
+                text: err.message || 'Ocurrió un error. Intenta de nuevo.',
+                icon: 'error',
+                confirmButtonColor: '#ef4444'
+            });
+        }
+    }
+
+    async showEvalPreview(evalData) {
+        const previewLines = evalData.lines.map(line => {
+            const speaker = line.role === 'moon' ? '🐻‍❄️ Moon' : '🧑 Tú';
+            return `<div style="display:flex; gap:0.5rem; padding:0.4rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="font-weight:700; color:${line.role === 'moon' ? '#22c55e' : '#38bdf8'}; min-width:80px;">${speaker}:</span>
+                <div>
+                    <div style="color:white;">${line.en}</div>
+                    <div style="color:#94a3b8; font-size:0.8rem;">${line.es}</div>
+                </div>
+            </div>`;
+        }).join('');
+
+        await Swal.fire({
+            title: '🎙️ Evaluación del Módulo',
+            html: `
+                <div style="text-align:left; font-family:'Outfit',sans-serif; max-height:400px; overflow-y:auto;">
+                    <p style="font-size:0.9rem; color:#475569; margin-bottom:1rem;">
+                        ${evalData.preview?.en || 'Conversación en inglés'}<br>
+                        <span style="color:#94a3b8;">${evalData.preview?.es || ''}</span>
+                    </p>
+                    <div style="background:#1e293b; border-radius:12px; padding:1rem; margin-bottom:1rem;">
+                        <p style="color:#94a3b8; font-size:0.75rem; margin:0 0 0.5rem;">📖 CONVERSACIÓN — ESTÚDIALA ANTES DE COMENZAR</p>
+                        ${previewLines}
+                    </div>
+                    <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:0.75rem; font-size:0.85rem; color:#166534;">
+                        🎙️ Al presionar "Comenzar", se grabará tu voz. Moon guiará la conversación.
+                    </div>
+                </div>
+            `,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: '🎬 Comenzar Evaluación',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#22c55e',
+            cancelButtonColor: '#64748b',
+            allowOutsideClick: false
+        });
+    }
+
+    async runEvalLines(evalData, roleA, roleB, roundNum) {
+        const blobs = [];
+
+        await Swal.fire({
+            title: `🎯 Ronda ${roundNum} de 2`,
+            html: `
+                <div style="text-align:center; font-family:'Outfit',sans-serif;">
+                    <p style="font-size:1rem; color:#1e293b; font-weight:600;">
+                        ${roundNum === 1
+                            ? '🐻‍❄️ Moon comienza la conversación'
+                            : '🧑 Ahora tú empiezas la conversación'
+                        }
+                    </p>
+                    <p style="font-size:0.85rem; color:#475569;">
+                        ${roundNum === 1
+                            ? 'Escucha a Moon y responde cuando sea tu turno.'
+                            : 'Lee tu línea en voz alta y Moon te responderá.'
+                        }
+                    </p>
+                </div>
+            `,
+            confirmButtonText: '¡Entendido!',
+            confirmButtonColor: '#38bdf8',
+            allowOutsideClick: false
+        });
+
+        const container = document.createElement('div');
+        container.style.cssText = 'position:fixed; top:0; left:0; right:0; bottom:0; background:linear-gradient(135deg, #0f172a, #1e3a5f); z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; font-family:Outfit, sans-serif;';
+        document.body.appendChild(container);
+
+        for (let i = 0; i < evalData.lines.length; i++) {
+            const line = evalData.lines[i];
+            const isMoonTurn = line.role === 'moon';
+            const isStudentTurn = line.role === 'student';
+
+            container.innerHTML = `
+                <div style="max-width:500px; width:100%; text-align:center;">
+                    <div style="font-size:3rem; margin-bottom:1rem;">${isMoonTurn ? '🐻‍❄️' : '🎤'}</div>
+                    <div style="color:#94a3b8; font-size:0.8rem; margin-bottom:0.25rem;">
+                        ${isMoonTurn ? 'Moon dice:' : 'Tu turno — Lee en voz alta:'}
+                    </div>
+                    <div style="background:rgba(255,255,255,0.1); border-radius:16px; padding:1.5rem; margin-bottom:1rem;">
+                        <p style="color:white; font-size:1.2rem; font-weight:600; margin:0;">${line.en}</p>
+                        ${isStudentTurn ? `<p style="color:#94a3b8; font-size:0.85rem; margin-top:0.5rem;">${line.es}</p>` : ''}
+                    </div>
+                    <div style="color:#64748b; font-size:0.75rem;">Ronda ${roundNum}/2 — Línea ${i + 1}/${evalData.lines.length}</div>
+                </div>
+            `;
+
+            if (isMoonTurn) {
+                await new Promise(resolve => {
+                    this.speakMoon(line.en, resolve);
+                });
+                await new Promise(r => setTimeout(r, 800));
+            }
+
+            if (isStudentTurn) {
+                const blob = await this.recordStudentAudio(container);
+                if (blob) blobs.push(blob);
+            }
+        }
+
+        container.remove();
+        return blobs;
+    }
+
+    recordStudentAudio(container) {
+        return new Promise((resolve) => {
+            const recordBtn = document.createElement('button');
+            recordBtn.style.cssText = 'margin-top:1rem; padding:0.8rem 2rem; border-radius:99px; border:none; font-size:1rem; font-weight:700; cursor:pointer; font-family:Outfit,sans-serif; transition:all 0.2s;';
+            recordBtn.innerText = '🎤 Grabar respuesta';
+            recordBtn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+            recordBtn.style.color = 'white';
+            container.appendChild(recordBtn);
+
+            let recorder = null;
+            let chunks = [];
+            let isRecording = false;
+
+            recordBtn.onclick = async () => {
+                if (!isRecording) {
+                    chunks = [];
+                    try {
+                        recorder = new MediaRecorder(this.mediaStream);
+                        recorder.ondataavailable = (e) => {
+                            if (e.data.size > 0) chunks.push(e.data);
+                        };
+                        recorder.onstop = () => {
+                            const blob = new Blob(chunks, { type: 'audio/webm' });
+                            recordBtn.innerText = '✅ Grabado';
+                            recordBtn.style.background = '#64748b';
+                            recordBtn.style.cursor = 'default';
+                            recordBtn.disabled = true;
+                            setTimeout(() => resolve(blob), 500);
+                        };
+                        recorder.start();
+                        isRecording = true;
+                        recordBtn.innerText = '🔴 Grabando... (toca para detener)';
+                        recordBtn.style.background = '#ef4444';
+                    } catch (e) {
+                        console.error("Error al iniciar grabación:", e);
+                        resolve(null);
+                    }
+                } else {
+                    if (recorder && recorder.state === 'recording') {
+                        recorder.stop();
+                        isRecording = false;
+                    }
+                }
+            };
+        });
+    }
+
+    async uploadEvaluation(blobs, evalData) {
+        const moduleId = this.options.moduleId || 'unknown';
+        const lessonId = this.options.lessonId || 'unknown';
+        const userId = this.options.userId || 'unknown';
+        const timestamp = Date.now();
+        const storage = getStorage();
+
+        // Combinar todos los blobs en uno solo
+        const combinedBlob = new Blob(blobs, { type: 'audio/webm' });
+        const fileName = `evaluations/${userId}/${moduleId}/${timestamp}.webm`;
+        const storageRef = ref(storage, fileName);
+
+        // Subir a Firebase Storage con retry (3 intentos)
+        let audioUrl = null;
+        let lastError = null;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+            try {
+                await uploadBytes(storageRef, combinedBlob);
+                audioUrl = await getDownloadURL(storageRef);
+                break; // éxito
+            } catch (err) {
+                lastError = err;
+                console.warn(`⚠️ Intento ${attempt}/3 de subida falló:`, err.message);
+                if (attempt < 3) {
+                    await new Promise(r => setTimeout(r, attempt * 2000)); // backoff: 2s, 4s
+                }
+            }
+        }
+
+        if (!audioUrl) {
+            console.error("No se pudo subir el audio tras 3 intentos:", lastError);
+            Swal.fire({
+                title: 'Error de conexión',
+                text: 'No pudimos subir tu grabación. Revisa tu conexión e intenta de nuevo.',
+                icon: 'error',
+                confirmButtonColor: '#ef4444',
+                confirmButtonText: 'Entendido'
+            });
+            // Limpiar weekKey para permitir reintento
+            if (this.options.userId) {
+                const lastEvalKey = `last_eval_${this.options.userId}`;
+                localStorage.removeItem(lastEvalKey);
+            }
+            return;
+        }
+
+        // Guardar timestamp para rate limiting
+        const lastEvalKey = `last_eval_${this.options.userId}`;
+        localStorage.setItem(lastEvalKey, String(Date.now()));
+
+        // Crear documento en Firestore
+        const evalDoc = {
+            userId,
+            moduleId,
+            lessonId,
+            status: 'pending',
+            audioUrl,
+            fileName,
+            transcript: evalData.lines
+                .filter(l => l.role === 'student')
+                .map(l => ({ en: l.en, es: l.es })),
+            createdAt: serverTimestamp(),
+            premium: true
+        };
+
+        await addDoc(collection(db, 'evaluations'), evalDoc);
+
+        // Notificar Discord
+        try {
+            const userName = this.options.userName || 'Un alumno';
+            await sendDiscordNotification(
+                "🎙️ Nueva Evaluación Recibida",
+                `**${userName}** ha completado su evaluación del **${moduleId.toUpperCase()}**.\n\n🔗 Escuchar audio: ${audioUrl}\n📝 Módulo: ${moduleId}`,
+                15844367
+            );
+        } catch (e) {
+            console.warn("Error notificando Discord:", e);
+        }
+
+        // Mostrar confirmación
+        await Swal.fire({
+            title: '🎉 ¡Evaluación Enviada!',
+            html: `
+                <div style="text-align:center; font-family:'Outfit',sans-serif;">
+                    <p style="font-size:3rem; margin:0.5rem 0;">📤</p>
+                    <p style="font-size:1rem; color:#475569;">
+                        Tu conversación fue grabada y enviada para revisión.
+                    </p>
+                    <p style="font-size:0.85rem; color:#94a3b8;">
+                        Recibirás feedback pronto. Moon te avisará cuando esté listo.
+                    </p>
+                </div>
+            `,
+            icon: 'success',
+            confirmButtonColor: '#22c55e',
+            confirmButtonText: '🌲 Entendido'
+        });
+
+        // Recargar al mapa
+        window.location.href = this.options.returnUrl || 'mapa.html';
     }
 
     /* -------------------------------------------------------------------------- */

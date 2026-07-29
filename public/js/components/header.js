@@ -239,7 +239,7 @@ const renderHeader = (user, userData = null) => {
             : '';
 
         const teacherLink = userData?.isAdmin
-            ? `<a href="${isTeacherView ? 'mapa.html' : 'teacher.html'}" class="header-link">${isTeacherView ? '🎒 Alumno' : '📘 Maestro'}</a>`
+            ? `<a href="teacher.html" class="header-link" style="border:1px solid rgba(245,158,11,0.3); color:#fbbf24;">📘 Portal Maestro</a>`
             : '';
 
         const adminLink = userData?.isAdmin

@@ -44,6 +44,16 @@ service cloud.firestore {
       allow update, delete: if isSignedIn() && (isAdmin() || request.auth.uid == resource.data.teacherId);
     }
     
+    // Reglas para evaluaciones
+    match /evaluations/{evalId} {
+      // Alumno puede crear su propia evaluación
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      // Admin puede leer y modificar todas
+      allow read, update, delete: if isAdmin();
+      // El alumno puede leer sus propias evaluaciones (para ver feedback)
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
     // Por seguridad, bloqueamos cualquier otra colección no definida (solo admin)
     match /{document=**} {
       allow read, write: if isAdmin();

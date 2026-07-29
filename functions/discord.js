@@ -6,6 +6,14 @@ exports.handler = async function (event, context) {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
+    // Auth: verify shared secret
+    const functionSecret = process.env.DISCORD_FUNCTION_SECRET;
+    const authHeader = event.headers['x-auth-secret'];
+    if (functionSecret && authHeader !== functionSecret) {
+        console.warn("⚠️ Intento de acceso no autorizado a Discord function");
+        return { statusCode: 401, body: JSON.stringify({ error: 'No autorizado' }) };
+    }
+
     const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
     const ADMIN_WEBHOOK = process.env.DISCORD_WEBHOOK_URL;
     const TEACHERS_WEBHOOK = process.env.DISCORD_TEACHERS_WEBHOOK_URL;

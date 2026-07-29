@@ -27,6 +27,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('module-title').innerText = config.title;
     document.getElementById('module-desc').innerText = config.description;
 
+    // Ocultar skeleton, mostrar contenido
+    const skeleton = document.getElementById('skeleton-loader');
+    if (skeleton) skeleton.style.display = 'none';
+    const content = document.getElementById('dashboard-content');
+    if (content) content.style.display = 'block';
+
     const mapPath = document.getElementById('map-path');
     mapPath.innerHTML = ''; // Limpiar loader
 
@@ -143,6 +149,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 const checkmark = isCompleted ? `<div style="display:flex; align-items:center;">${starsHtml}</div>` : '';
 
+                const reviewBtn = isCompleted
+                    ? `<button class="review-btn" onclick="event.stopPropagation(); window.location.href='lesson.html?id=${lesson.id}&review=true'" style="
+                        background: rgba(255,255,255,0.08);
+                        border: 1px solid rgba(255,255,255,0.15);
+                        color: #94a3b8;
+                        padding: 0.3rem 0.8rem;
+                        border-radius: 99px;
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        cursor: pointer;
+                        font-family: 'Outfit', sans-serif;
+                        transition: all 0.2s;
+                        margin-left: 0.5rem;
+                        white-space: nowrap;
+                    " onmouseover="this.style.background='rgba(255,255,255,0.15)'; this.style.color='white'" onmouseout="this.style.background='rgba(255,255,255,0.08)'; this.style.color='#94a3b8'">🔄 Repasar</button>`
+                    : '';
+
                 node.innerHTML = `
                     <span class="module-icon" style="background: ${iconBg}; margin-right: 1.25rem;">${lesson.icon}</span>
                     <div style="flex: 1; display:flex; align-items:center; justify-content: space-between; overflow: hidden;">
@@ -150,7 +173,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <span class="module-label" style="font-size: 1.05rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${lesson.title}</span>
                             <p style="font-size: 0.85rem; color: var(--slate-500); margin-top: 0.2rem; margin-bottom: 0;">${lesson.desc}</p>
                         </div>
-                        ${checkmark}
+                        <div style="display:flex; align-items:center;">
+                            ${checkmark}
+                            ${reviewBtn}
+                        </div>
                     </div>
                 `;
 

@@ -3,6 +3,10 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signO
 import { getFirestore, doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { sendDiscordNotification } from './discord.js';
 
+// No-ops por si errorTracker.js aún no ha ejecutado (auth.js siempre corre primero como dependencia)
+if (typeof globalThis.devLog !== 'function') globalThis.devLog = function(){};
+if (typeof globalThis.devWarn !== 'function') globalThis.devWarn = function(){};
+
 /**
  * Configuración de Firebase
  */
@@ -41,11 +45,9 @@ const initApp = () => {
         }
     };
 
-    setupLogin('google-login');
     setupLogin('hero-cta-free');
     setupLogin('hero-cta-explore');
     setupLogin('pricing-cta');
-    setupLogin('hero-cta-teacher', 'profile.html');
 
     // Lógica de referidos
     const urlParams = new URL(window.location.href).searchParams;

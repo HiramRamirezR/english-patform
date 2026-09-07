@@ -1,0 +1,237 @@
+{
+  "id": "m6",
+  "title": "Módulo 6: La Mochila del Explorador",
+  "description": "Aprende a decir qué tienes y qué no tienes en tu mochila.",
+  "lessons": [
+    {
+      "id": "m6l1",
+      "title": "6.1: I Have a Backpack",
+      "desc": "Cómo decir qué tienes en tu mochila.",
+      "icon": "🎒",
+      "vocab_new": ["Backpack", "Map"],
+      "vocab_review": [],
+      "story": { "en": "We are going on an adventure! What do you have in your backpack?", "es": "¡Vamos de aventura! ¿Qué tienes en tu mochila?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m6l2",
+      "title": "6.2: Compass and Tent",
+      "desc": "Más objetos de explorador.",
+      "icon": "🧭",
+      "vocab_new": ["Compass", "Tent"],
+      "vocab_review": ["Backpack", "Map"],
+      "story": { "en": "A compass helps you find direction. A tent is your home outside!", "es": "¡Una brújula te ayuda a encontrar el camino. ¡Una carpa es tu hogar afuera!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m6l3",
+      "title": "6.3: Flashlight and Rope",
+      "desc": "Herramientas para la aventura.",
+      "icon": "🔦",
+      "vocab_new": ["Flashlight", "Rope"],
+      "vocab_review": ["Compass", "Tent"],
+      "story": { "en": "It is dark! You need a flashlight. And a rope is very useful!", "es": "¡Está oscuro! Necesitas una linterna. ¡Y una cuerda es muy útil!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m6l4",
+      "title": "6.4: Knife and Hat",
+      "desc": "Más objetos para explorar.",
+      "icon": "🔪",
+      "vocab_new": ["Knife", "Hat"],
+      "vocab_review": ["Flashlight", "Rope"],
+      "story": { "en": "A knife is sharp! And a hat protects you from the sun.", "es": "¡Un cuchillo es filoso! Y un sombrero te protege del sol." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m6l5",
+      "title": "6.5: Mini-Reto del Explorador",
+      "desc": "¿Qué tienes en tu mochila?",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["Backpack", "Map", "Compass", "Tent", "Flashlight", "Rope", "Knife", "Hat", "I have"],
+      "story": { "en": "Time for your first explorer challenge!", "es": "¡Hora de tu primer reto de explorador!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m6l6",
+      "title": "6.6: Water and Food",
+      "desc": "Lo que necesitas para vivir.",
+      "icon": "💧",
+      "vocab_new": ["Water", "Food"],
+      "vocab_review": ["Backpack", "Map"],
+      "story": { "en": "An explorer always needs water and food!", "es": "¡Un explorador siempre necesita agua y comida!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m6l7",
+      "title": "6.7: I Don't Have",
+      "desc": "Cómo decir qué NO tienes.",
+      "icon": "🚫",
+      "vocab_new": ["I don't have"],
+      "vocab_review": ["I have", "Backpack", "Map", "Compass", "Tent"],
+      "story": { "en": "Oh no! You don't have everything. That's okay!", "es": "¡Oh no! No tienes todo. ¡Está bien!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m6l8",
+      "title": "6.8: Do You Have?",
+      "desc": "Pregunta a otros exploradores.",
+      "icon": "❓",
+      "vocab_new": ["Do you have"],
+      "vocab_review": ["I have", "I don't have", "Flashlight", "Rope", "Knife", "Hat"],
+      "story": { "en": "Ask your friends! Do you have a flashlight? Do you have a hat?", "es": "¡Pregunta a tus amigos! ¿Tienes una linterna? ¿Tienes un sombrero?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m6l9",
+      "title": "6.9: Reviewing Items",
+      "desc": "Repasa todo lo que tienes.",
+      "icon": "🎒",
+      "vocab_new": [],
+      "vocab_review": ["Backpack", "Map", "Compass", "Tent", "Flashlight", "Rope", "Knife", "Hat", "Water", "Food", "I have", "I don't have", "Do you have"],
+      "story": { "en": "Let's review everything in your backpack!", "es": "¡Repasemos todo lo que hay en tu mochila!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m6l10",
+      "title": "6.10: Segundo Reto",
+      "desc": "Reto completo del explorador.",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["Backpack", "Map", "Compass", "Tent", "Flashlight", "Rope", "Knife", "Hat", "Water", "Food", "I have", "I don't have", "Do you have"],
+      "story": { "en": "The big explorer challenge! Show what you know!", "es": "¡El gran reto del explorador! ¡Demuestra lo que sabes!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m6l11",
+      "title": "6.11: Rompecabezas I",
+      "desc": "Ordena frases con objetos.",
+      "icon": "🧩",
+      "vocab_new": [],
+      "vocab_review": ["I have", "Backpack", "Map", "Compass", "Tent"],
+      "story": { "en": "Put the words in order! I have a backpack!", "es": "¡Pon las palabras en orden! ¡Tengo una mochila!" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m6l12",
+      "title": "6.12: Rompecabezas II",
+      "desc": "Más frases para ordenar.",
+      "icon": "🧩",
+      "vocab_new": [],
+      "vocab_review": ["I don't have", "Flashlight", "Rope", "Knife", "Hat"],
+      "story": { "en": "I don't have a knife. Put it together!", "es": "No tengo un cuchillo. ¡Ármalo!" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m6l13",
+      "title": "6.13: Traducción I",
+      "desc": "Piensa en inglés: ¿qué tienes?",
+      "icon": "💡",
+      "vocab_new": [],
+      "vocab_review": ["I have", "I don't have", "Backpack", "Map", "Compass", "Tent"],
+      "story": { "en": "Think in English! What do you have?", "es": "¡Piensa en inglés! ¿Qué tienes?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m6l14",
+      "title": "6.14: Traducción II",
+      "desc": "Más traducciones de objetos.",
+      "icon": "💡",
+      "vocab_new": [],
+      "vocab_review": ["Do you have", "Flashlight", "Rope", "Knife", "Hat", "Water", "Food"],
+      "story": { "en": "Translate! Do you have water? Do you have food?", "es": "¡Traduce! ¿Tienes agua? ¿Tienes comida?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m6l15",
+      "title": "6.15: El Gran Ensamblaje",
+      "desc": "Une todo: objetos y frases.",
+      "icon": "🏛️",
+      "vocab_new": [],
+      "vocab_review": ["Backpack", "Map", "Compass", "Tent", "Flashlight", "Rope", "Knife", "Hat", "Water", "Food", "I have", "I don't have", "Do you have"],
+      "story": { "en": "The forest is calling! What do you have in your backpack?", "es": "¡El bosque te llama! ¿Qué tienes en tu mochila?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "drag_and_drop", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m6l16",
+      "title": "6.16: Echo Continuo: I Have",
+      "desc": "Repite: I have a...",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["I have", "Backpack", "Map", "Compass", "Tent"],
+      "story": { "en": "Repeat after me! I have a backpack! I have a map!", "es": "¡Repite después de mí! ¡Tengo una mochila! ¡Tengo un mapa!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m6l17",
+      "title": "6.17: Echo Continuo: I Don't Have",
+      "desc": "Repite: I don't have a...",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["I don't have", "Flashlight", "Rope", "Knife", "Hat"],
+      "story": { "en": "Say what you don't have! I don't have a knife!", "es": "¡Di lo que no tienes! ¡No tengo un cuchillo!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m6l18",
+      "title": "6.18: Echo Continuo: Questions",
+      "desc": "Repite: Do you have a...?",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Do you have", "Water", "Food", "Backpack", "Map", "Compass", "Tent"],
+      "story": { "en": "Ask questions! Do you have water? Do you have food?", "es": "¡Haz preguntas! ¿Tienes agua? ¿Tienes comida?" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m6l19",
+      "title": "6.19: Rehearsal",
+      "desc": "Ensayo general antes de la fogata.",
+      "icon": "🎭",
+      "vocab_new": [],
+      "vocab_review": ["I have", "I don't have", "Do you have", "Backpack", "Map", "Compass", "Tent", "Flashlight", "Rope", "Knife", "Hat", "Water", "Food"],
+      "story": { "en": "Get ready for the campfire! Review everything!", "es": "¡Prepárate para la fogata! ¡Repasa todo!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m6l20",
+      "title": "6.20: 🏕️ La Fogata — What Do You Have?",
+      "desc": "Roleplay: ¿qué tienes en tu mochila?",
+      "icon": "🏕️",
+      "vocab_new": [],
+      "vocab_review": ["I have", "I don't have", "Do you have", "Backpack", "Map", "Compass", "Tent", "Flashlight", "Rope", "Knife", "Hat", "Water", "Food"],
+      "story": { "en": "Welcome to the campfire! Everyone has a backpack. What do you have?", "es": "¡Bienvenido a la fogata! Todos tienen una mochila. ¿Qué tienes tú?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "m6_eval_1",
+      "title": "Evaluación M6: What Do You Have?",
+      "preview": {
+        "en": "You and Moon are at the campfire! Talk about what you have in your backpack.",
+        "es": "¡Tú y Moon están en la fogata! Hablen sobre lo que tienen en su mochila."
+      },
+      "lines": [
+        { "role": "moon", "en": "Welcome to the campfire, explorer! Let's see your backpack!", "es": "¡Bienvenido a la fogata, explorador! ¡Veamos tu mochila!" },
+        { "role": "student", "en": "(Say hello to Moon and say you are ready!)", "es": "(Saluda a Moon y di que estás listo.)" },
+        { "role": "moon", "en": "Do you have a backpack?", "es": "¿Tienes una mochila?" },
+        { "role": "student", "en": "(Say: Yes, I have a backpack!)", "es": "(Di: ¡Sí, tengo una mochila!)" },
+        { "role": "moon", "en": "Great! Do you have a map?", "es": "¡Genial! ¿Tienes un mapa?" },
+        { "role": "student", "en": "(Say: Yes, I have a map!)", "es": "(Di: ¡Sí, tengo un mapa!)" },
+        { "role": "moon", "en": "Do you have a compass?", "es": "¿Tienes una brújula?" },
+        { "role": "student", "en": "(Say: Yes, I have a compass!)", "es": "(Di: ¡Sí, tengo una brújula!)" },
+        { "role": "moon", "en": "Do you have a tent?", "es": "¿Tienes una carpa?" },
+        { "role": "student", "en": "(Say: No, I don't have a tent.)", "es": "(Di: No, no tengo una carpa.)" },
+        { "role": "moon", "en": "Do you have a flashlight?", "es": "¿Tienes una linterna?" },
+        { "role": "student", "en": "(Say: Yes, I have a flashlight!)", "es": "(Di: ¡Sí, tengo una linterna!)" },
+        { "role": "moon", "en": "Do you have water and food?", "es": "¿Tienes agua y comida?" },
+        { "role": "student", "en": "(Say: Yes, I have water and food!)", "es": "(Di: ¡Sí, tengo agua y comida!)" },
+        { "role": "moon", "en": "Do you have a knife?", "es": "¿Tienes un cuchillo?" },
+        { "role": "student", "en": "(Say: No, I don't have a knife.)", "es": "(Di: No, no tengo un cuchillo.)" },
+        { "role": "moon", "en": "You have so many things! You are a great explorer!", "es": "¡Tienes tantas cosas! ¡Eres un gran explorador!" },
+        { "role": "student", "en": "(Say thank you and goodbye to Moon!)", "es": "(Da las gracias y despídete de Moon.)" }
+      ]
+    }
+  ]
+}

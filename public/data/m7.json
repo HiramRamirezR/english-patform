@@ -1,0 +1,235 @@
+{
+  "id": "m7",
+  "title": "Módulo 7: Las Estaciones y el Clima",
+  "description": "Habla del clima y la ropa que llevas puesta.",
+  "lessons": [
+    {
+      "id": "m7l1",
+      "title": "7.1: Sunny and Rainy",
+      "desc": "¿Qué tiempo hace hoy?",
+      "icon": "☀️",
+      "vocab_new": ["Sunny", "Rainy"],
+      "vocab_review": [],
+      "story": { "en": "Look outside! Is it sunny or rainy? Let's learn about the weather!", "es": "¡Mira afuera! ¿Está soleado o lluvioso? ¡Vamos a aprender sobre el clima!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m7l2",
+      "title": "7.2: Cloudy and Windy",
+      "desc": "Nubes y viento.",
+      "icon": "🌬️",
+      "vocab_new": ["Cloudy", "Windy"],
+      "vocab_review": ["Sunny", "Rainy"],
+      "story": { "en": "The clouds are big today! And it is so windy!", "es": "¡Las nubes son enormes hoy! ¡Y hace mucho viento!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m7l3",
+      "title": "7.3: Hot and Cold",
+      "desc": "Temperaturas extremas.",
+      "icon": "🌡️",
+      "vocab_new": ["Hot", "Cold"],
+      "vocab_review": ["Cloudy", "Windy"],
+      "story": { "en": "It is hot in summer! It is cold in winter!", "es": "¡Hace calor en verano! ¡Hace frío en invierno!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m7l4",
+      "title": "7.4: Snowy and Warm",
+      "desc": "Nieve y calorcito.",
+      "icon": "❄️",
+      "vocab_new": ["Snowy", "Warm"],
+      "vocab_review": ["Hot", "Cold"],
+      "story": { "en": "It is snowy outside! But inside it is nice and warm.", "es": "¡Está nevando afuera! Pero adentro está agradable y calientito." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m7l5",
+      "title": "7.5: Mini-Reto del Clima",
+      "desc": "Todo sobre el clima.",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["Sunny", "Rainy", "Cloudy", "Windy", "Hot", "Cold", "Snowy", "Warm"],
+      "story": { "en": "Time for a weather challenge!", "es": "¡Hora de un reto del clima!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m7l6",
+      "title": "7.6: Cool and Freezing",
+      "desc": "Más temperaturas.",
+      "icon": "🧊",
+      "vocab_new": ["Cool", "Freezing"],
+      "vocab_review": ["Snowy", "Warm", "Hot", "Cold"],
+      "story": { "en": "It is cool in spring! It is freezing in the mountains!", "es": "¡Hace fresco en primavera! ¡Está helado en las montañas!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m7l7",
+      "title": "7.7: Jacket and Boots",
+      "desc": "Ropa para el frío.",
+      "icon": "🧥",
+      "vocab_new": ["Jacket", "Boots"],
+      "vocab_review": ["Cool", "Freezing", "Cold"],
+      "story": { "en": "It is cold! I am wearing my jacket and boots.", "es": "¡Hace frío! Estoy usando mi chaqueta y botas." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m7l8",
+      "title": "7.8: Hat and Scarf",
+      "desc": "Más ropa para el invierno.",
+      "icon": "🧣",
+      "vocab_new": ["Hat", "Scarf"],
+      "vocab_review": ["Jacket", "Boots", "Snowy"],
+      "story": { "en": "I am wearing my hat and scarf. I am warm!", "es": "¡Estoy usando mi gorro y bufanda! ¡Estoy calientito!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m7l9",
+      "title": "7.9: Umbrella and Coat",
+      "desc": "Protección contra la lluvia.",
+      "icon": "☂️",
+      "vocab_new": ["Umbrella", "Coat"],
+      "vocab_review": ["Hat", "Scarf", "Rainy"],
+      "story": { "en": "It is rainy! I am wearing my coat and carrying my umbrella.", "es": "¡Está lloviendo! Estoy usando mi abrigo y llevando mi paraguas." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m7l10",
+      "title": "7.10: Segundo Reto",
+      "desc": "Clima y ropa.",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["Sunny", "Rainy", "Cloudy", "Windy", "Hot", "Cold", "Snowy", "Warm", "Cool", "Freezing", "Jacket", "Boots", "Hat", "Scarf", "Umbrella", "Coat"],
+      "story": { "en": "Another weather challenge! Clima and ropa!", "es": "¡Otro reto del clima! ¡Clima y ropa!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m7l11",
+      "title": "7.11: Rompecabezas I",
+      "desc": "Ordena las oraciones del clima.",
+      "icon": "🧩",
+      "vocab_new": ["Seasons"],
+      "vocab_review": ["Sunny", "Rainy", "Cloudy", "Windy", "Hot", "Cold"],
+      "story": { "en": "Put the weather words in order!", "es": "¡Pon las palabras del clima en orden!" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m7l12",
+      "title": "7.12: Rompecabezas II",
+      "desc": "Oraciones con ropa y clima.",
+      "icon": "🧩",
+      "vocab_new": ["Dress"],
+      "vocab_review": ["Jacket", "Boots", "Hat", "Scarf", "Umbrella", "Coat"],
+      "story": { "en": "What are you wearing? Put it together!", "es": "¿Qué estás usando? ¡Ármalo!" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m7l13",
+      "title": "7.13: Traducción I",
+      "desc": "Piensa en inglés: ¿qué tiempo hace?",
+      "icon": "💡",
+      "vocab_new": ["Outside"],
+      "vocab_review": ["It is", "Sunny", "Rainy", "Hot", "Cold", "Snowy", "Warm"],
+      "story": { "en": "Think in English! What is the weather like?", "es": "¡Piensa en inglés! ¿Qué tiempo hace?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m7l14",
+      "title": "7.14: Traducción II",
+      "desc": "Traduce oraciones de ropa.",
+      "icon": "💡",
+      "vocab_new": ["Inside"],
+      "vocab_review": ["Jacket", "Boots", "Hat", "Scarf", "Umbrella", "Coat", "I am wearing"],
+      "story": { "en": "Translate the clothing sentences. Inside or outside?", "es": "Traduce las oraciones de ropa. ¿Adentro o afuera?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m7l15",
+      "title": "7.15: El Gran Ensamblaje",
+      "desc": "Une todo: clima, ropa y estaciones.",
+      "icon": "🏛️",
+      "vocab_new": ["Every"],
+      "vocab_review": ["Sunny", "Rainy", "Cloudy", "Windy", "Hot", "Cold", "Snowy", "Warm", "Cool", "Freezing", "Jacket", "Boots", "Hat", "Scarf", "Umbrella", "Coat", "It is", "I am wearing"],
+      "story": { "en": "The seasons are changing! What is the weather? What are you wearing?", "es": "¡Las estaciones están cambiando! ¿Qué tiempo hace? ¿Qué estás usando?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "drag_and_drop", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m7l16",
+      "title": "7.16: Echo Continuo: Weather",
+      "desc": "Repite el clima sin pausa.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Sunny", "Rainy", "Cloudy", "Windy", "Hot", "Cold", "Snowy", "Warm"],
+      "story": { "en": "Repeat the weather! Fast and clear!", "es": "¡Repite el clima! ¡Rápido y claro!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m7l17",
+      "title": "7.17: Echo Continuo: Clothing",
+      "desc": "Repite la ropa sin parar.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Jacket", "Boots", "Hat", "Scarf", "Umbrella", "Coat", "I am wearing"],
+      "story": { "en": "Keep going! Say what you are wearing!", "es": "¡Sigue! ¡Di lo que estás usando!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m7l18",
+      "title": "7.18: Echo Continuo: Seasons",
+      "desc": "Estaciones y clima juntos.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Cool", "Freezing", "Every", "Outside", "Inside", "Seasons", "Dress"],
+      "story": { "en": "Spring, summer, fall, winter! What is the weather like?", "es": "¡Primavera, verano, otoño, invierno! ¿Qué tiempo hace?" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m7l19",
+      "title": "7.19: Rehearsal",
+      "desc": "Ensayo general antes de la fogata.",
+      "icon": "🎭",
+      "vocab_new": [],
+      "vocab_review": ["Sunny", "Rainy", "Cloudy", "Windy", "Hot", "Cold", "Snowy", "Warm", "Cool", "Freezing", "Jacket", "Boots", "Hat", "Scarf", "Umbrella", "Coat", "It is", "I am wearing"],
+      "story": { "en": "Get ready for the campfire! Talk about the weather and your clothes!", "es": "¡Prepárate para la fogata! ¡Habla del clima y tu ropa!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m7l20",
+      "title": "7.20: 🔥 La Fogata — What's the Weather?",
+      "desc": "Roleplay: clima y ropa en la fogata.",
+      "icon": "🔥",
+      "vocab_new": [],
+      "vocab_review": ["Sunny", "Rainy", "Cloudy", "Windy", "Hot", "Cold", "Snowy", "Warm", "Cool", "Freezing", "Jacket", "Boots", "Hat", "Scarf", "Umbrella", "Coat", "It is", "I am wearing"],
+      "story": { "en": "Welcome to the campfire! It is cold outside. What are you wearing? Tell me about the weather!", "es": "¡Bienvenido a la fogata! Hace frío afuera. ¿Qué estás usando? ¡Cuéntame sobre el clima!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "m7_eval_1",
+      "title": "Evaluación M7: What's the Weather Like?",
+      "preview": {
+        "en": "You and Moon are at the campfire. Talk about the weather and what you are wearing!",
+        "es": "¡Tú y Moon están en la fogata. Hablen del clima y lo que están usando!"
+      },
+      "lines": [
+        { "role": "moon", "en": "Welcome to the campfire! It is cold outside! Brrr!", "es": "¡Bienvenido a la fogata! ¡Hace frío afuera! ¡Brrr!" },
+        { "role": "student", "en": "(Greet Moon and say you are happy!)", "es": "(Saluda a Moon y di que estás feliz.)" },
+        { "role": "moon", "en": "Look at the sky! Is it sunny or cloudy today?", "es": "¡Mira el cielo! ¿Está soleado o nublado hoy?" },
+        { "role": "student", "en": "(Say: It is cloudy today! The clouds are big.)", "es": "(Di: ¡Está nublado hoy! Las nubes son grandes.)" },
+        { "role": "moon", "en": "Oh no! Now it is raining! What do you need?", "es": "¡Oh no! ¡Ahora está lloviendo! ¿Qué necesitas?" },
+        { "role": "student", "en": "(Say: It is rainy! I need my umbrella.)", "es": "(Di: ¡Está lloviendo! Necesito mi paraguas.)" },
+        { "role": "moon", "en": "Good idea! What are you wearing right now?", "es": "¡Buena idea! ¿Qué estás usando ahora mismo?" },
+        { "role": "student", "en": "(Say: I am wearing my jacket, boots, and hat.)", "es": "(Di: Estoy usando mi chaqueta, botas y gorro.)" },
+        { "role": "moon", "en": "Nice! I am wearing my scarf. It is very cold!", "es": "¡Bonito! Estoy usando mi bufanda. ¡Hace mucho frío!" },
+        { "role": "student", "en": "(Say: It is freezing! I am warm with my coat.)", "es": "(Di: ¡Está helado! Estoy calientito con mi abrigo.)" },
+        { "role": "moon", "en": "What about summer? Is it hot in summer?", "es": "¿Y el verano? ¿Hace calor en verano?" },
+        { "role": "student", "en": "(Say: Yes! In summer it is hot. I am wearing shorts!)", "es": "(Di: ¡Sí! En verano hace calor. ¡Uso pantalones cortos!)" },
+        { "role": "moon", "en": "And winter? What is the weather like in winter?", "es": "¿Y el invierno? ¿Qué tiempo hace en invierno?" },
+        { "role": "student", "en": "(Say: In winter it is snowy and cold. I am wearing everything!)", "es": "(Di: En invierno está nevado y hace frío. ¡Uso todo!)" },
+        { "role": "moon", "en": "You know so much about the weather! Thank you!", "es": "¡Sabes mucho del clima! ¡Gracias!" },
+        { "role": "student", "en": "(Say goodbye and thank Moon for the campfire!)", "es": "(Despídete y agradece a Moon por la fogata.)" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+{
+  "id": "m8",
+  "title": "Módulo 8: Los Desafíos del Bosque",
+  "description": "Expresa qué puedes y qué no puedes hacer en el bosque.",
+  "lessons": [
+    {
+      "id": "m8l1",
+      "title": "8.1: Can Swim",
+      "desc": "Habilidades en el agua.",
+      "icon": "🏊",
+      "vocab_new": ["Can swim", "Swim"],
+      "vocab_review": [],
+      "story": { "en": "The river is cold! But I can swim!", "es": "¡El río está frío! ¡Pero puedo nadar!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m8l2",
+      "title": "8.2: Can't Fly",
+      "desc": "Lo que no podemos hacer.",
+      "icon": "🚫",
+      "vocab_new": ["Can't fly", "Fly"],
+      "vocab_review": ["Can swim", "Swim"],
+      "story": { "en": "Birds can fly. I can't fly!", "es": "Los pájaros pueden volar. ¡Yo no puedo volar!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m8l3",
+      "title": "8.3: Can Climb",
+      "desc": "Subir montañas y árboles.",
+      "icon": "🧗",
+      "vocab_new": ["Can climb", "Climb"],
+      "vocab_review": ["Can't fly", "Fly"],
+      "story": { "en": "I can climb the mountain! It's high!", "es": "¡Puedo subir la montaña! ¡Es alta!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m8l4",
+      "title": "8.4: Can Run",
+      "desc": "Correr por el bosque.",
+      "icon": "🏃",
+      "vocab_new": ["Can run", "Run"],
+      "vocab_review": ["Can climb", "Climb"],
+      "story": { "en": "I can run fast in the forest!", "es": "¡Puedo correr rápido en el bosque!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m8l5",
+      "title": "8.5: Mini-Reto del Bosque",
+      "desc": "Primer reto de habilidades.",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["Can swim", "Can't fly", "Can climb", "Can run", "Swim", "Fly", "Climb", "Run"],
+      "story": { "en": "Time for your first forest challenge!", "es": "¡Hora de tu primer reto del bosque!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m8l6",
+      "title": "8.6: Can Walk",
+      "desc": "Caminar por senderos.",
+      "icon": "🚶",
+      "vocab_new": ["Can walk", "Walk"],
+      "vocab_review": ["Can run", "Run"],
+      "story": { "en": "I can walk on the path. Careful!", "es": "Puedo caminar en el sendero. ¡Cuidado!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m8l7",
+      "title": "8.7: Can Talk",
+      "desc": "Hablar con amigos del bosque.",
+      "icon": "🗣️",
+      "vocab_new": ["Can talk", "Talk"],
+      "vocab_review": ["Can walk", "Walk", "Can swim"],
+      "story": { "en": "I can talk to the animals! Hello, rabbit!", "es": "¡Puedo hablar con los animales! ¡Hola, conejo!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m8l8",
+      "title": "8.8: Can Eat",
+      "desc": "Comer frutas del bosque.",
+      "icon": "🍎",
+      "vocab_new": ["Can eat", "Eat"],
+      "vocab_review": ["Can talk", "Talk", "Can't fly"],
+      "story": { "en": "I can eat apples from the tree. Yummy!", "es": "¡Puedo comer manzanas del árbol! ¡Rico!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m8l9",
+      "title": "8.9: Can Drink",
+      "desc": "Beber agua del río.",
+      "icon": "💧",
+      "vocab_new": ["Can drink", "Drink"],
+      "vocab_review": ["Can eat", "Eat", "Can climb"],
+      "story": { "en": "I can drink water from the river. Fresh!", "es": "¡Puedo beber agua del río! ¡Fresca!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m8l10",
+      "title": "8.10: Segundo Reto",
+      "desc": "Reto de habilidades avanzado.",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["Can swim", "Can't fly", "Can climb", "Can run", "Can walk", "Can talk", "Can eat", "Can drink", "Swim", "Fly", "Climb", "Run", "Walk", "Talk", "Eat", "Drink"],
+      "story": { "en": "Another forest challenge! Show what you can do!", "es": "¡Otro reto del bosque! ¡Muestra lo que puedes hacer!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m8l11",
+      "title": "8.11: Rompecabezas I",
+      "desc": "Arma oraciones con Can.",
+      "icon": "🧩",
+      "vocab_new": ["Can jump", "Jump"],
+      "vocab_review": ["Can swim", "Can climb", "Can run", "Can eat"],
+      "story": { "en": "Put the words in order! I can jump!", "es": "¡Pon las palabras en orden! ¡Puedo saltar!" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m8l12",
+      "title": "8.12: Rompecabezas II",
+      "desc": "Más oraciones con Can't.",
+      "icon": "🧩",
+      "vocab_new": ["Can't play", "Play"],
+      "vocab_review": ["Can jump", "Jump", "Can't fly", "Can walk", "Can drink"],
+      "story": { "en": "I can't play here. It's dangerous!", "es": "¡No puedo jugar aquí! ¡Es peligroso!" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m8l13",
+      "title": "8.13: Traducción I",
+      "desc": "Piensa en inglés: ¿qué puedes hacer?",
+      "icon": "💡",
+      "vocab_new": ["River", "Mountain"],
+      "vocab_review": ["Can swim", "Can climb", "Can run", "Can eat", "Can drink"],
+      "story": { "en": "Think in English! What can you do?", "es": "¡Piensa en inglés! ¿Qué puedes hacer?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m8l14",
+      "title": "8.14: Traducción II",
+      "desc": "Más traducciones de habilidades.",
+      "icon": "💡",
+      "vocab_new": ["Cave", "Bridge"],
+      "vocab_review": ["River", "Mountain", "Can walk", "Can talk", "Can't fly", "Can jump"],
+      "story": { "en": "I can cross the bridge! Be careful in the cave!", "es": "¡Puedo cruzar el puente! ¡Ten cuidado en la cueva!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m8l15",
+      "title": "8.15: El Gran Ensamblaje",
+      "desc": "Une todo: habilidades y lugares.",
+      "icon": "🏛️",
+      "vocab_new": ["Dangerous", "Safe"],
+      "vocab_review": ["Can swim", "Can't fly", "Can climb", "Can run", "Can walk", "Can talk", "Can eat", "Can drink", "Can jump", "Can't play", "River", "Mountain", "Cave", "Bridge"],
+      "story": { "en": "The forest is big! Some places are safe, some are dangerous. What can you do?", "es": "¡El bosque es grande! Algunos lugares son seguros, otros peligrosos. ¿Qué puedes hacer?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "drag_and_drop", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m8l16",
+      "title": "8.16: Echo Continuo: Abilities",
+      "desc": "Repite habilidades sin pausa.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Can swim", "Can climb", "Can run", "Can walk", "Can talk", "Can eat", "Can drink", "Can jump"],
+      "story": { "en": "Repeat the abilities! Fast and clear!", "es": "¡Repite las habilidades! ¡Rápido y claro!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m8l17",
+      "title": "8.17: Echo Continuo: Can't",
+      "desc": "Di lo que no puedes hacer.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Can't fly", "Can't play", "Dangerous", "Safe", "River", "Mountain", "Cave", "Bridge"],
+      "story": { "en": "Say what you can't do! Be careful!", "es": "¡Di lo que no puedes hacer! ¡Ten cuidado!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m8l18",
+      "title": "8.18: Echo Continuo: Full Challenge",
+      "desc": "Todo junto: habilidades y lugares.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Can swim", "Can't fly", "Can climb", "Can run", "Can walk", "Can talk", "Can eat", "Can drink", "Can jump", "Can't play", "River", "Mountain", "Cave", "Bridge", "Dangerous", "Safe"],
+      "story": { "en": "The forest is calling! What can you do everywhere?", "es": "¡El bosque te llama! ¿Qué puedes hacer en todas partes?" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m8l19",
+      "title": "8.19: Rehearsal",
+      "desc": "Ensayo general del bosque.",
+      "icon": "🎭",
+      "vocab_new": [],
+      "vocab_review": ["Can swim", "Can't fly", "Can climb", "Can run", "Can walk", "Can talk", "Can eat", "Can drink", "Can jump", "Can't play", "River", "Mountain", "Cave", "Bridge", "Dangerous", "Safe"],
+      "story": { "en": "Get ready for the forest adventure!", "es": "¡Prepárate para la aventura del bosque!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m8l20",
+      "title": "8.20: 🌲 La Fogata — What Can You Do?",
+      "desc": "Roleplay: ¿qué puedes hacer en el bosque?",
+      "icon": "🌲",
+      "vocab_new": [],
+      "vocab_review": ["Can swim", "Can't fly", "Can climb", "Can run", "Can walk", "Can talk", "Can eat", "Can drink", "Can jump", "Can't play", "River", "Mountain", "Cave", "Bridge", "Dangerous", "Safe"],
+      "story": { "en": "Welcome to the forest campfire! Tell Moon what you can and can't do in the forest!", "es": "¡Bienvenido a la fogata del bosque! ¡Dile a Moon lo que puedes y no puedes hacer en el bosque!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "m8_eval_1",
+      "title": "Evaluación M8: Forest Challenges",
+      "preview": {
+        "en": "You and Moon are at the forest campfire! Talk about what you can and can't do in the forest.",
+        "es": "¡Tú y Moon están en la fogata del bosque! Hablen sobre lo que pueden y no pueden hacer en el bosque."
+      },
+      "lines": [
+        { "role": "moon", "en": "Welcome to the forest campfire! Let's talk about what you can do!", "es": "¡Bienvenido a la fogata del bosque! ¡Hablemos de lo que puedes hacer!" },
+        { "role": "student", "en": "(Greet Moon and say you are happy!)", "es": "(Saluda a Moon y di que estás feliz.)" },
+        { "role": "moon", "en": "Can you swim in the river?", "es": "¿Puedes nadar en el río?" },
+        { "role": "student", "en": "(Say: Yes, I can swim! The water is cold!)", "es": "(Di: Sí, ¡puedo nadar! ¡El agua está fría!)" },
+        { "role": "moon", "en": "Can you fly like a bird?", "es": "¿Puedes volar como un pájaro?" },
+        { "role": "student", "en": "(Say: No, I can't fly! I am not a bird!)", "es": "(Di: No, ¡no puedo volar! ¡No soy un pájaro!)" },
+        { "role": "moon", "en": "Can you climb the big mountain?", "es": "¿Puedes subir la montaña grande?" },
+        { "role": "student", "en": "(Say: Yes, I can climb! It is high!)", "es": "(Di: Sí, ¡puedo subir! ¡Es alta!)" },
+        { "role": "moon", "en": "Can you eat apples from the tree?", "es": "¿Puedes comer manzanas del árbol?" },
+        { "role": "student", "en": "(Say: Yes, I can eat! Apples are yummy!)", "es": "(Di: Sí, ¡puedo comer! ¡Las manzanas son ricas!)" },
+        { "role": "moon", "en": "Can you jump over the bridge?", "es": "¿Puedes saltar sobre el puente?" },
+        { "role": "student", "en": "(Say: Yes, I can jump! I am careful!)", "es": "(Di: Sí, ¡puedo saltar! ¡Tengo cuidado!)" },
+        { "role": "moon", "en": "Can you play in the dangerous cave?", "es": "¿Puedes jugar en la cueva peligrosa?" },
+        { "role": "student", "en": "(Say: No, I can't play there! It is dangerous!)", "es": "(Di: No, ¡no puedo jugar ahí! ¡Es peligrosa!)" },
+        { "role": "moon", "en": "What can you do in the forest?", "es": "¿Qué puedes hacer en el bosque?" },
+        { "role": "student", "en": "(Say: I can swim, climb, run, and eat! I can't fly!)", "es": "(Di: Puedo nadar, subir, correr y comer. ¡No puedo volar!)" },
+        { "role": "moon", "en": "Wonderful! You know all the forest challenges. Thank you!", "es": "¡Maravilloso! Conoces todos los desafíos del bosque. ¡Gracias!" },
+        { "role": "student", "en": "(Say goodbye and thank Moon for the adventure!)", "es": "(Despídete y agradece a Moon por la aventura.)" }
+      ]
+    }
+  ]
+}

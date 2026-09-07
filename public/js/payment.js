@@ -2,7 +2,7 @@
 // Mercado Pago Checkout Integration
 
 /**
- * Inicia el flujo de suscripción premium ($300/mes)
+ * Inicia el flujo de suscripción premium ($100/mes)
  * Llama a la Netlify Function y redirige a Mercado Pago
  */
 export async function startSubscription(userId, userName, email) {
@@ -15,7 +15,7 @@ export async function startSubscription(userId, userName, email) {
                         Estás a punto de suscribirte a <strong>Moonsforest Premium</strong>.
                     </p>
                     <div style="background: linear-gradient(135deg, #0f172a, #1e3a5f); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; text-align: center;">
-                        <div style="font-size: 2rem; font-weight: 800; color: #38bdf8; line-height: 1;">$300</div>
+                        <div style="font-size: 2rem; font-weight: 800; color: #38bdf8; line-height: 1;">$100</div>
                         <div style="font-size: 0.85rem; color: #94a3b8;">MXN al mes</div>
                     </div>
                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: #475569;">
@@ -77,7 +77,7 @@ export async function startSubscription(userId, userName, email) {
                         El pago en línea no está disponible temporalmente. Para activar tu acceso:
                     </p>
                     <div style="background:#f0fdf4; border-radius:12px; padding:1rem; margin-bottom:1rem;">
-                        <p style="font-size:0.85rem; color:#166534; margin-bottom:0.5rem; font-weight:600;">1. Transfiere $300 MXN</p>
+                        <p style="font-size:0.85rem; color:#166534; margin-bottom:0.5rem; font-weight:600;">1. Transfiere $100 MXN</p>
                         <p style="font-size:0.85rem; color:#166534;">Cuenta: <strong>Hiram Morales</strong></p>
                         <p style="font-size:0.85rem; color:#166534;">CLABE: <strong>0121 8001 5820 7709 91</strong> (BBVA)</p>
                     </div>

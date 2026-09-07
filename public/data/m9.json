@@ -1,0 +1,235 @@
+{
+  "id": "m9",
+  "title": "Módulo 9: La Búsqueda del Tesoro",
+  "description": "Encuentra objetos usando preposiciones de lugar.",
+  "lessons": [
+    {
+      "id": "m9l1",
+      "title": "9.1: In and On",
+      "desc": "Preposiciones básicas de lugar.",
+      "icon": "📍",
+      "vocab_new": ["In", "On"],
+      "vocab_review": [],
+      "story": { "en": "Where is the box? It is IN the cave. Where is the key? It is ON the rock.", "es": "¿Dónde está la caja? Está DENTRO de la cueva. ¿Dónde está la llave? Está SOBRE la roca." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m9l2",
+      "title": "9.2: Under and Behind",
+      "desc": "Más preposiciones de lugar.",
+      "icon": "🔍",
+      "vocab_new": ["Under", "Behind"],
+      "vocab_review": ["In", "On"],
+      "story": { "en": "The gem is UNDER the tree. The treasure is BEHIND the chest.", "es": "La gema está DEBAJO del árbol. El tesoro está DETRÁS del cofre." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m9l3",
+      "title": "9.3: Next to and Between",
+      "desc": "Preposiciones de cercanía.",
+      "icon": "🗺️",
+      "vocab_new": ["Next to", "Between"],
+      "vocab_review": ["Under", "Behind"],
+      "story": { "en": "The box is NEXT TO the tree. The key is BETWEEN the rocks.", "es": "La caja está AL LADO del árbol. La llave está ENTRE las rocas." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m9l4",
+      "title": "9.4: Where Is It?",
+      "desc": "Preguntar y responder ubicaciones.",
+      "icon": "❓",
+      "vocab_new": ["Where", "It is"],
+      "vocab_review": ["In", "On", "Under", "Behind", "Next to", "Between"],
+      "story": { "en": "Where is the key? It is under the rock! Where is the gem? It is in the chest!", "es": "¿Dónde está la llave? ¡Está debajo de la roca! ¿Dónde está la gema? ¡Está dentro del cofre!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m9l5",
+      "title": "9.5: Mini-Reto de Ubicación",
+      "desc": "Encuentra los objetos.",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["In", "On", "Under", "Behind", "Next to", "Between", "Where", "It is"],
+      "story": { "en": "Time to find the objects! Where are they?", "es": "¡Hora de encontrar los objetos! ¿Dónde están?" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m9l6",
+      "title": "9.6: Box and Rock",
+      "desc": "Objetos para esconder el tesoro.",
+      "icon": "📦",
+      "vocab_new": ["Box", "Rock"],
+      "vocab_review": ["In", "On", "Under"],
+      "story": { "en": "This is a box. It is big. This is a rock. It is small.", "es": "Esta es una caja. Es grande. Esta es una roca. Es pequeña." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m9l7",
+      "title": "9.7: Tree and Key",
+      "desc": "El árbol y la llave del tesoro.",
+      "icon": "🔑",
+      "vocab_new": ["Tree", "Key"],
+      "vocab_review": ["Box", "Rock", "Behind", "Between"],
+      "story": { "en": "The tree is big. The key is small. The key is behind the tree!", "es": "El árbol es grande. La llave es pequeña. ¡La llave está detrás del árbol!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m9l8",
+      "title": "9.8: Treasure and Chest",
+      "desc": "El tesoro y el cofre.",
+      "icon": "💎",
+      "vocab_new": ["Treasure", "Chest"],
+      "vocab_review": ["Tree", "Key", "Next to", "Under"],
+      "story": { "en": "The treasure is in the chest! The chest is next to the tree.", "es": "¡El tesoro está en el cofre! El cofre está al lado del árbol." },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m9l9",
+      "title": "9.9: Gem",
+      "desc": "La gema brillante.",
+      "icon": "💠",
+      "vocab_new": ["Gem"],
+      "vocab_review": ["Treasure", "Chest", "Box", "Rock", "In", "On", "Under"],
+      "story": { "en": "Look! A red gem! It is in the box. It is beautiful!", "es": "¡Mira! ¡Una gema roja! Está en la caja. ¡Es hermosa!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m9l10",
+      "title": "9.10: Segundo Reto",
+      "desc": "Todo sobre objetos y ubicaciones.",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["Box", "Rock", "Tree", "Key", "Treasure", "Chest", "Gem", "In", "On", "Under", "Behind", "Next to", "Between"],
+      "story": { "en": "Another treasure challenge! Find all the objects!", "es": "¡Otro reto del tesoro! ¡Encuentra todos los objetos!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m9l11",
+      "title": "9.11: Rompecabezas I",
+      "desc": "Ordena las oraciones de ubicación.",
+      "icon": "🧩",
+      "vocab_new": ["Here", "There"],
+      "vocab_review": ["In", "On", "Under", "Behind", "Next to", "Between", "Where", "It is"],
+      "story": { "en": "Put the words in order! Where is the key?", "es": "¡Pon las palabras en orden! ¿Dónde está la llave?" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m9l12",
+      "title": "9.12: Rompecabezas II",
+      "desc": "Más oraciones con preposiciones.",
+      "icon": "🧩",
+      "vocab_new": ["Look", "Found"],
+      "vocab_review": ["Here", "There", "Box", "Rock", "Tree", "Key", "Treasure", "Chest", "Gem"],
+      "story": { "en": "Look! I found the gem! It is between the rocks!", "es": "¡Mira! ¡Encontré la gema! Está entre las rocas." },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m9l13",
+      "title": "9.13: Traducción I",
+      "desc": "Piensa en inglés: ¿dónde está?",
+      "icon": "💡",
+      "vocab_new": ["Here it is", "Let us go"],
+      "vocab_review": ["In", "On", "Under", "Behind", "Next to", "Between", "Where", "It is", "Here", "There"],
+      "story": { "en": "Think in English! Where are the objects?", "es": "¡Piensa en inglés! ¿Dónde están los objetos?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m9l14",
+      "title": "9.14: Traducción II",
+      "desc": "Más traducciones de ubicación.",
+      "icon": "💡",
+      "vocab_new": ["Ready", "Start"],
+      "vocab_review": ["Here it is", "Let us go", "Box", "Rock", "Tree", "Key", "Treasure", "Chest", "Gem"],
+      "story": { "en": "Ready? Start the treasure hunt! Translate the clues!", "es": "¿Listo? ¡Empieza la búsqueda del tesoro! ¡Traduce las pistas!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m9l15",
+      "title": "9.15: The Treasure Map",
+      "desc": "Une todo: objetos, preposiciones y ubicaciones.",
+      "icon": "🗺️",
+      "vocab_new": ["Map", "Hunt", "Clue"],
+      "vocab_review": ["Box", "Rock", "Tree", "Key", "Treasure", "Chest", "Gem", "In", "On", "Under", "Behind", "Next to", "Between", "Where", "It is", "Here", "There"],
+      "story": { "en": "The treasure map is ready! Follow the clues and find the treasure!", "es": "¡El mapa del tesoro está listo! ¡Sigue las pistas y encuentra el tesoro!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "drag_and_drop", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m9l16",
+      "title": "9.16: Echo Continuo: Prepositions",
+      "desc": "Repite preposiciones sin pausa.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["In", "On", "Under", "Behind", "Next to", "Between"],
+      "story": { "en": "Repeat the prepositions! Fast and clear!", "es": "¡Repite las preposiciones! ¡Rápido y claro!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m9l17",
+      "title": "9.17: Echo Continuo: Objects",
+      "desc": "Los objetos del tesoro.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Box", "Rock", "Tree", "Key", "Treasure", "Chest", "Gem"],
+      "story": { "en": "Say the object names! Box, rock, tree, key!", "es": "¡Di los nombres de los objetos! ¡Caja, roca, árbol, llave!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m9l18",
+      "title": "9.18: Echo Continuo: Clues",
+      "desc": "Da pistas de ubicación sin parar.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["Where", "It is", "Here", "There", "Here it is", "Let us go", "Look", "Found"],
+      "story": { "en": "Give the clues! Where is the treasure?", "es": "¡Da las pistas! ¿Dónde está el tesoro?" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m9l19",
+      "title": "9.19: Rehearsal",
+      "desc": "Ensayo general antes de la búsqueda.",
+      "icon": "🎭",
+      "vocab_new": [],
+      "vocab_review": ["Box", "Rock", "Tree", "Key", "Treasure", "Chest", "Gem", "In", "On", "Under", "Behind", "Next to", "Between", "Where", "It is", "Here", "There", "Here it is", "Let us go", "Look", "Found", "Map", "Hunt", "Clue", "Ready", "Start"],
+      "story": { "en": "Get ready for the treasure hunt! Review everything!", "es": "¡Prepárate para la búsqueda del tesoro! ¡Repasa todo!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m9l20",
+      "title": "9.20: 🗺️ La Búsqueda del Tesoro",
+      "desc": "Roleplay: Encuentra el tesoro con pistas de Moon.",
+      "icon": "🗺️",
+      "vocab_new": [],
+      "vocab_review": ["Box", "Rock", "Tree", "Key", "Treasure", "Chest", "Gem", "In", "On", "Under", "Behind", "Next to", "Between", "Where", "It is", "Here", "There", "Here it is", "Let us go", "Look", "Found", "Map", "Hunt", "Clue"],
+      "story": { "en": "Welcome to the Treasure Hunt! Moon has hidden the treasure. Follow the clues and find it!", "es": "¡Bienvenido a la Búsqueda del Tesoro! Moon ha escondido el tesoro. ¡Sigue las pistas y encuentra el tesoro!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "m9_eval_1",
+      "title": "Evaluación M9: La Búsqueda del Tesoro",
+      "preview": {
+        "en": "You and Moon are on a treasure hunt! Moon gives clues using prepositions. You find the objects!",
+        "es": "¡Tú y Moon están en una búsqueda del tesoro! Moon da pistas usando preposiciones. ¡Tú encuentras los objetos!"
+      },
+      "lines": [
+        { "role": "moon", "en": "Welcome to the treasure hunt! I have hidden the treasure. Can you find it?", "es": "¡Bienvenido a la búsqueda del tesoro! He escondido el tesoro. ¿Puedes encontrarlo?" },
+        { "role": "student", "en": "(Say: Yes! I am ready! Let us go!)", "es": "(Di: ¡Sí! ¡Estoy listo! ¡Vamos!)" },
+        { "role": "moon", "en": "Here is your first clue. The key is IN the box.", "es": "Aquí está tu primera pista. La llave está DENTRO de la caja." },
+        { "role": "student", "en": "(Say: The key is in the box! I found it!)", "es": "(Di: ¡La llave está en la caja! ¡La encontré!)" },
+        { "role": "moon", "en": "Great job! Now, the gem is ON the rock.", "es": "¡Buen trabajo! Ahora, la gema está SOBRE la roca." },
+        { "role": "student", "en": "(Say: The gem is on the rock! It is beautiful!)", "es": "(Di: ¡La gema está sobre la roca! ¡Es hermosa!)" },
+        { "role": "moon", "en": "Wonderful! The chest is UNDER the tree.", "es": "¡Maravilloso! El cofre está DEBAJO del árbol." },
+        { "role": "student", "en": "(Say: The chest is under the tree! It is big!)", "es": "(Di: ¡El cofre está debajo del árbol! ¡Es grande!)" },
+        { "role": "moon", "en": "Almost there! The treasure is BEHIND the chest.", "es": "¡Casi llegas! El tesoro está DETRÁS del cofre." },
+        { "role": "student", "en": "(Say: The treasure is behind the chest! I found it!)", "es": "(Di: ¡El tesoro está detrás del cofre! ¡Lo encontré!)" },
+        { "role": "moon", "en": "One more! A blue gem is NEXT TO the tree.", "es": "¡Una más! Una gema azul está AL LADO del árbol." },
+        { "role": "student", "en": "(Say: The blue gem is next to the tree! I have it!)", "es": "(Di: ¡La gema azul está al lado del árbol! ¡La tengo!)" },
+        { "role": "moon", "en": "Last clue! Two red gems are BETWEEN the rocks.", "es": "¡Última pista! Dos gemas rojas están ENTRE las rocas." },
+        { "role": "student", "en": "(Say: The red gems are between the rocks! I found all the treasure!)", "es": "(Di: ¡Las gemas rojas están entre las rocas! ¡Encontré todo el tesoro!)" },
+        { "role": "moon", "en": "You did it! You found all the treasure! You are a treasure hunter!", "es": "¡Lo lograste! ¡Encontraste todo el tesoro! ¡Eres un cazatesoros!" },
+        { "role": "student", "en": "(Say: Thank you, Moon! That was fun! The treasure is mine!)", "es": "(Di: ¡Gracias, Moon! ¡Eso fue divertido! ¡El tesoro es mío!)" }
+      ]
+    }
+  ]
+}

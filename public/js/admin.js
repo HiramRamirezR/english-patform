@@ -66,8 +66,8 @@ async function initDashboard() {
             if (data.status === 'booked') bookedSlots.push(data);
         });
 
-        // Ingresos = (Suscripciones * 300) + (Evaluaciones * 60)
-        const totalRevenue = (subscribedCount * 300) + (bookedSlots.length * 60);
+        // Ingresos = (Suscripciones * 100) + (Evaluaciones * 60)
+        const totalRevenue = (subscribedCount * 100) + (bookedSlots.length * 60);
         document.getElementById('kpi-revenue-monthly').textContent = `$ ${totalRevenue.toLocaleString()}`;
 
         // 3. KPI PRO: LTV (Lifetime Value) y Churn
@@ -382,7 +382,7 @@ async function loadFinances() {
             // MF Commission: (User pays $60 - Teacher gets $30) = $30 per evaluation
             const earned = (teacherReferrals * 50) + (tBookedSlots * 30);
             const mfCommission = tBookedSlots * 30; // 50% de las evaluaciones
-            const subscribedMFFunds = students.filter(s => s.isSubscribed).length * 300; // Esto es ingreso bruto MF
+            const subscribedMFFunds = students.filter(s => s.isSubscribed).length * 100; // Esto es ingreso bruto MF
 
             totalPending += earned;
             totalMFFunds += mfCommission;
@@ -411,7 +411,7 @@ async function loadFinances() {
         }).join('');
 
         tableBody.innerHTML = rowsHtml;
-        mfFundsEl.textContent = `$${(totalMFFunds + (students.filter(s => s.isSubscribed).length * 300)).toLocaleString()}`;
+        mfFundsEl.textContent = `$${(totalMFFunds + (students.filter(s => s.isSubscribed).length * 100)).toLocaleString()}`;
         pendingPayoutEl.textContent = `$${totalPending.toLocaleString()}`;
         teachersReadyEl.textContent = readyCount;
 

@@ -1194,5 +1194,340 @@
         "es": "Lento",
         "emoji": "🐢",
         "aliases": ["sloh", "slo", "slowe"]
+    },
+    "Backpack": {
+        "es": "Mochila",
+        "emoji": "🎒",
+        "aliases": ["bakpak", "bak pack", "back pak"]
+    },
+    "Map": {
+        "es": "Mapa",
+        "emoji": "🗺️",
+        "aliases": ["mapp", "maap", "mep"]
+    },
+    "Compass": {
+        "es": "Brújula",
+        "emoji": "🧭",
+        "aliases": ["compas", "kompas", "kumpas"]
+    },
+    "Tent": {
+        "es": "Carpa",
+        "emoji": "⛺",
+        "aliases": ["tents", "tenths", "tend"]
+    },
+    "Flashlight": {
+        "es": "Linterna",
+        "emoji": "🔦",
+        "aliases": ["flash light", "flaslight", "flashlite"]
+    },
+    "Rope": {
+        "es": "Cuerda",
+        "emoji": "🪢",
+        "aliases": ["rop", "rouop", "rope"]
+    },
+    "Knife": {
+        "es": "Cuchillo",
+        "emoji": "🔪",
+        "aliases": ["knifes", "nife", "knif"]
+    },
+    "Hat": {
+        "es": "Sombrero",
+        "emoji": "🎩",
+        "aliases": ["hats", "hat", "hatt"]
+    },
+    "I have": {
+        "es": "Yo tengo",
+        "emoji": "✋",
+        "aliases": ["i hav", "eye have", "aye have"]
+    },
+    "I don't have": {
+        "es": "Yo no tengo",
+        "emoji": "🚫",
+        "aliases": ["i dont have", "i do not have", "eye dont have"]
+    },
+    "Do you have": {
+        "es": "¿Tienes tú?",
+        "emoji": "❓",
+        "aliases": ["do you hav", "doo you have"]
+    },
+    "Need": {
+        "es": "Necesitar",
+        "emoji": "🙏",
+        "aliases": ["nede", "neeed", "nid"]
+    },
+    "Want": {
+        "es": "Querer",
+        "emoji": "💭",
+        "aliases": ["wont", "wantt", "waant"]
+    },
+    "Sunny": {
+        "es": "Soleado",
+        "emoji": "☀️",
+        "aliases": ["suny", "sone", "sunee"]
+    },
+    "Rainy": {
+        "es": "Lluvioso",
+        "emoji": "🌧️",
+        "aliases": ["rany", "rainny", "rayny"]
+    },
+    "Cloudy": {
+        "es": "Nublado",
+        "emoji": "☁️",
+        "aliases": ["cloudly", "kloudy", "kloud"]
+    },
+    "Windy": {
+        "es": "Ventoso",
+        "emoji": "💨",
+        "aliases": ["windee", "wende", "windey"]
+    },
+    "Snowy": {
+        "es": "Nevado",
+        "emoji": "❄️",
+        "aliases": ["snoee", "snawy", "snowie"]
+    },
+    "Warm": {
+        "es": "Cálido",
+        "emoji": "🌤️",
+        "aliases": ["worm", "wawm", "wam"]
+    },
+    "Cool": {
+        "es": "Fresco",
+        "emoji": "🌬️",
+        "aliases": ["kul", "kool", "kuel"]
+    },
+    "Freezing": {
+        "es": "Congelante",
+        "emoji": "🥶",
+        "aliases": ["freezing", "frezing", "freezin"]
+    },
+    "Jacket": {
+        "es": "Chaqueta",
+        "emoji": "🧥",
+        "aliases": ["jaket", "jackit", "jacktet"]
+    },
+    "Boots": {
+        "es": "Botas",
+        "emoji": "👢",
+        "aliases": ["boots", "buts", "bootz"]
+    },
+    "Scarf": {
+        "es": "Bufanda",
+        "emoji": "🧣",
+        "aliases": ["scarff", "skarf", "skarff"]
+    },
+    "Umbrella": {
+        "es": "Paraguas",
+        "emoji": "☂️",
+        "aliases": ["umberella", "umbrela", "ambrlla"]
+    },
+    "Coat": {
+        "es": "Abrigo",
+        "emoji": "🧥",
+        "aliases": ["koat", "kote", "cott"]
+    },
+    "Swim": {
+        "es": "Nadar",
+        "emoji": "🏊",
+        "aliases": ["swimm", "swym", "swum"]
+    },
+    "Climb": {
+        "es": "Escalar",
+        "emoji": "🧗",
+        "aliases": ["klime", "clime", "klimb"]
+    },
+    "Run": {
+        "es": "Correr",
+        "emoji": "🏃",
+        "aliases": ["rune", "ran", "runn"]
+    },
+    "Jump": {
+        "es": "Saltar",
+        "emoji": "🦘",
+        "aliases": ["jump", "jamp", "jomp"]
+    },
+    "Fly": {
+        "es": "Volar",
+        "emoji": "🪁",
+        "aliases": ["fley", "flie", "flye"]
+    },
+    "Can": {
+        "es": "Poder",
+        "emoji": "💪",
+        "aliases": ["kann", "can", "cann"]
+    },
+    "Can't": {
+        "es": "No poder",
+        "emoji": "🚫",
+        "aliases": ["cant", "kant", "cant"]
+    },
+    "Careful": {
+        "es": "Cuidado",
+        "emoji": "⚠️",
+        "aliases": ["kearful", "carful", "keeful"]
+    },
+    "River": {
+        "es": "Río",
+        "emoji": "🏞️",
+        "aliases": ["rivor", "rivr", "riber"]
+    },
+    "Mountain": {
+        "es": "Montaña",
+        "emoji": "🏔️",
+        "aliases": ["mountin", "mowntain", "mounten"]
+    },
+    "Cave": {
+        "es": "Cueva",
+        "emoji": "🕳️",
+        "aliases": ["kaive", "cav", "kaiv"]
+    },
+    "Bridge": {
+        "es": "Puente",
+        "emoji": "🌉",
+        "aliases": ["brij", "brige", "briddge"]
+    },
+    "Dangerous": {
+        "es": "Peligroso",
+        "emoji": "⚠️",
+        "aliases": ["danjerus", "dangeres", "dangeorus"]
+    },
+    "Safe": {
+        "es": "Seguro",
+        "emoji": "✅",
+        "aliases": ["saif", "saffe", "saef"]
+    },
+    "In": {
+        "es": "Dentro de",
+        "emoji": "📦",
+        "aliases": ["inn", "ene", "een"]
+    },
+    "On": {
+        "es": "Sobre",
+        "emoji": "👆",
+        "aliases": ["onn", "on", "awn"]
+    },
+    "Under": {
+        "es": "Debajo de",
+        "emoji": "⬇️",
+        "aliases": ["under", "under", "undr"]
+    },
+    "Behind": {
+        "es": "Detrás de",
+        "emoji": "🔙",
+        "aliases": ["behynd", "behind", "behinde"]
+    },
+    "Next to": {
+        "es": "Junto a",
+        "emoji": "➡️",
+        "aliases": ["nekst to", "next tu", "nex to"]
+    },
+    "Between": {
+        "es": "Entre",
+        "emoji": "↔️",
+        "aliases": ["betwin", "between", "betwene"]
+    },
+    "Box": {
+        "es": "Caja",
+        "emoji": "📦",
+        "aliases": ["box", "boks", "bax"]
+    },
+    "Rock": {
+        "es": "Roca",
+        "emoji": "🪨",
+        "aliases": ["rok", "rockk", "rock"]
+    },
+    "Key": {
+        "es": "Llave",
+        "emoji": "🔑",
+        "aliases": ["kee", "keyy", "kie"]
+    },
+    "Treasure": {
+        "es": "Tesoro",
+        "emoji": "💰",
+        "aliases": ["treasure", "treshure", "trezher"]
+    },
+    "Chest": {
+        "es": "Cofre",
+        "emoji": "🗃️",
+        "aliases": ["chest", "chesst", "tchest"]
+    },
+    "Gem": {
+        "es": "Gema",
+        "emoji": "💎",
+        "aliases": ["jem", "gymm", "gemm"]
+    },
+    "Like": {
+        "es": "Gustar",
+        "emoji": "👍",
+        "aliases": ["lyke", "lic", "lak"]
+    },
+    "Want": {
+        "es": "Querer",
+        "emoji": "💭",
+        "aliases": ["wont", "wantt", "waant"]
+    },
+    "Know": {
+        "es": "Saber",
+        "emoji": "🧠",
+        "aliases": ["noh", "know", "no"]
+    },
+    "See": {
+        "es": "Ver",
+        "emoji": "👁️",
+        "aliases": ["see", "sei", "seee"]
+    },
+    "Hear": {
+        "es": "Oír",
+        "emoji": "👂",
+        "aliases": ["heer", "hear", "heear"]
+    },
+    "Eat": {
+        "es": "Comer",
+        "emoji": "🍽️",
+        "aliases": ["eet", "eat", "eatt"]
+    },
+    "Drink": {
+        "es": "Beber",
+        "emoji": "🥤",
+        "aliases": ["dringk", "drink", "dring"]
+    },
+    "Live": {
+        "es": "Vivir",
+        "emoji": "🏠",
+        "aliases": ["liv", "live", "lyve"]
+    },
+    "Play": {
+        "es": "Jugar",
+        "emoji": "🎮",
+        "aliases": ["pley", "play", "plai"]
+    },
+    "Talk": {
+        "es": "Hablar",
+        "emoji": "💬",
+        "aliases": ["tawk", "talk", "tallk"]
+    },
+    "Walk": {
+        "es": "Caminar",
+        "emoji": "🚶",
+        "aliases": ["wok", "walk", "wawk"]
+    },
+    "Every day": {
+        "es": "Todos los días",
+        "emoji": "📅",
+        "aliases": ["everyday", "evree day", "evry day"]
+    },
+    "Always": {
+        "es": "Siempre",
+        "emoji": "🔄",
+        "aliases": ["alwais", "always", "alwayz"]
+    },
+    "Sometimes": {
+        "es": "A veces",
+        "emoji": "🔀",
+        "aliases": ["somtimes", "sumtimes", "sometimes"]
+    },
+    "Never": {
+        "es": "Nunca",
+        "emoji": "🚫",
+        "aliases": ["neever", "never", "nevr"]
     }
 }

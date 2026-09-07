@@ -1,0 +1,235 @@
+{
+  "id": "m10",
+  "title": "Módulo 10: Relatos de la Fogata",
+  "description": "Cuenta qué haces todos los días en el bosque.",
+  "lessons": [
+    {
+      "id": "m10l1",
+      "title": "10.1: I Like, You Like",
+      "desc": "Cómo expresar lo que te gusta.",
+      "icon": "🔥",
+      "vocab_new": ["I like", "You like"],
+      "vocab_review": [],
+      "story": { "en": "We are sitting by the campfire! What do you like? Let's learn!", "es": "¡Estamos sentados junto a la fogata! ¿Qué te gusta? ¡Vamos a aprender!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m10l2",
+      "title": "10.2: He Likes, She Likes",
+      "desc": "Lo que a otros les gusta.",
+      "icon": "🌙",
+      "vocab_new": ["He likes", "She likes"],
+      "vocab_review": ["I like", "You like"],
+      "story": { "en": "Moon likes the stars. He likes the fire. She likes the stories!", "es": "¡A Moon le gustan las estrellas. A él le gusta el fuego. A ella le gustan las historias!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m10l3",
+      "title": "10.3: We Like, They Like",
+      "desc": "Lo que nos gusta a todos.",
+      "icon": "👫",
+      "vocab_new": ["We like", "They like"],
+      "vocab_review": ["He likes", "She likes"],
+      "story": { "en": "We like the forest. They like the campfire. Everyone is happy!", "es": "¡Nos gusta el bosque. A ellos les gusta la fogata. Todos están felices!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m10l4",
+      "title": "10.4: Mini-Reto de Gustos",
+      "desc": "Todos los gustos juntos.",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["I like", "You like", "He likes", "She likes", "We like", "They like"],
+      "story": { "en": "Time for a gustos challenge! What does everyone like?", "es": "¡Hora de un reto de gustos! ¿Qué le gusta a cada quien?" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m10l5",
+      "title": "10.5: I Want, She Wants",
+      "desc": "Lo que deseas y desean.",
+      "icon": "⭐",
+      "vocab_new": ["I want", "She wants"],
+      "vocab_review": ["I like", "He likes", "We like"],
+      "story": { "en": "I want marshmallows! She wants hot chocolate! What do you want?", "es": "¡Quiero malvaviscos! ¡Ella quiere chocolate caliente! ¿Qué quieres tú?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m10l6",
+      "title": "10.6: I Know, I See",
+      "desc": "Saber y ver en el bosque.",
+      "icon": "🦉",
+      "vocab_new": ["I know", "I see"],
+      "vocab_review": ["I want", "She wants", "I like"],
+      "story": { "en": "I know this place! I see the owl in the tree! Do you see it?", "es": "¡Conozco este lugar! ¡Veo el búho en el árbol! ¿Lo ves?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m10l7",
+      "title": "10.7: I Hear, I Eat",
+      "desc": "Escuchar y comer en la fogata.",
+      "icon": "🎵",
+      "vocab_new": ["I hear", "I eat"],
+      "vocab_review": ["I know", "I see", "I want"],
+      "story": { "en": "I hear the crickets! I eat an apple! The campfire is warm!", "es": "¡Escucho los grillos! ¡Como una manzana! ¡La fogata está caliente!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m10l8",
+      "title": "10.8: I Drink, I Live",
+      "desc": "Beber y vivir en la naturaleza.",
+      "icon": "💧",
+      "vocab_new": ["I drink", "I live"],
+      "vocab_review": ["I hear", "I eat", "I know"],
+      "story": { "en": "I drink water from the river. I live in a little house!", "es": "¡Bebo agua del río! ¡Vivo en una casita!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m10l9",
+      "title": "10.9: Verbs Everywhere",
+      "desc": "Todos los verbos juntos.",
+      "icon": "🎪",
+      "vocab_new": [],
+      "vocab_review": ["I like", "I want", "I know", "I see", "I hear", "I eat", "I drink", "I live"],
+      "story": { "en": "The forest is alive! Everyone likes, wants, eats, drinks!", "es": "¡El bosque está vivo! A todos les gusta, quieren, comen, beben!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "picture_it", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m10l10",
+      "title": "10.10: Segundo Reto",
+      "desc": "Todo sobre verbos y gustos.",
+      "icon": "⭐",
+      "vocab_new": [],
+      "vocab_review": ["I like", "You like", "He likes", "She likes", "We like", "They like", "I want", "She wants", "I know", "I see", "I hear", "I eat", "I drink", "I live"],
+      "story": { "en": "Another challenge! Show what you know!", "es": "¡Otro reto! ¡Muestra lo que sabes!" },
+      "flow": ["story_moment", "speed_speak", "matching", "boss_battle"]
+    },
+    {
+      "id": "m10l11",
+      "title": "10.11: Rompecabezas I",
+      "desc": "Ordena oraciones con presente simple.",
+      "icon": "🧩",
+      "vocab_new": ["I play"],
+      "vocab_review": ["I like", "I want", "I eat", "I drink"],
+      "story": { "en": "Put the sentences in order! I play, I like, I want!", "es": "¡Ordena las oraciones! Yo juego, me gusta, quiero!" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m10l12",
+      "title": "10.12: Rompecabezas II",
+      "desc": "Más oraciones con presente simple.",
+      "icon": "🧩",
+      "vocab_new": ["We play", "They play"],
+      "vocab_review": ["I play", "He likes", "She likes", "I see"],
+      "story": { "en": "We play in the forest! They play by the river! Put it together!", "es": "¡Jugamos en el bosque! ¡Ellos juegan junto al río! ¡Ármalo!" },
+      "flow": ["story_moment", "listen_click", "drag_and_drop", "echo_chamber", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m10l13",
+      "title": "10.13: Traducción I",
+      "desc": "Piensa en inglés: ¿qué haces?",
+      "icon": "💡",
+      "vocab_new": ["I talk"],
+      "vocab_review": ["I like", "I want", "I see", "I hear", "I eat", "I drink", "We play"],
+      "story": { "en": "Think in English! What do you do every day?", "es": "¡Piensa en inglés! ¿Qué haces todos los días?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m10l14",
+      "title": "10.14: Traducción II",
+      "desc": "Más traducciones de rutinas.",
+      "icon": "💡",
+      "vocab_new": ["I walk"],
+      "vocab_review": ["I talk", "I play", "We play", "They play", "He likes", "She likes"],
+      "story": { "en": "I walk in the forest! I talk with Moon! Translate the routines!", "es": "¡Caminar en el bosque! ¡Hablo con Moon! ¡Traduce las rutinas!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber_translation", "speed_speak", "memory_flip", "matching"]
+    },
+    {
+      "id": "m10l15",
+      "title": "10.15: The Great Forest",
+      "desc": "Une todo: verbos, sujetos y rutinas.",
+      "icon": "🏛️",
+      "vocab_new": [],
+      "vocab_review": ["I like", "I want", "I know", "I see", "I hear", "I eat", "I drink", "I live", "I play", "I talk", "I walk", "He likes", "She likes", "We like", "They like", "We play", "They play"],
+      "story": { "en": "The forest is full of life! Everyone does something every day!", "es": "¡El bosque está lleno de vida! ¡Todos hacen algo todos los días!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "drag_and_drop", "fill_in_blank", "matching"]
+    },
+    {
+      "id": "m10l16",
+      "title": "10.16: Echo Continuo: Likes",
+      "desc": "Repite gustos sin pausa.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["I like", "You like", "He likes", "She likes", "We like", "They like", "I want", "She wants"],
+      "story": { "en": "Repeat the likes! Fast and clear!", "es": "¡Repite los gustos! ¡Rápido y claro!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m10l17",
+      "title": "10.17: Echo Continuo: Actions",
+      "desc": "Más verbos de rutina.",
+      "icon": "🔁",
+      "vocab_new": [],
+      "vocab_review": ["I know", "I see", "I hear", "I eat", "I drink", "I live", "I play", "I talk", "I walk"],
+      "story": { "en": "Keep going! Say what you do every day!", "es": "¡Sigue! ¡Di lo que haces todos los días!" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m10l18",
+      "title": "10.18: Echo Continuo: Time",
+      "desc": "Describe tus rutinas con tiempo.",
+      "icon": "🔁",
+      "vocab_new": ["Every day", "Always"],
+      "vocab_review": ["I like", "I want", "I eat", "I drink", "I play", "I walk", "I talk", "Every day"],
+      "story": { "en": "Every day! Always! What do you do?", "es": "¡Todos los días! ¡Siempre! ¿Qué haces?" },
+      "flow": ["story_moment", "echo_chamber", "speed_speak", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m10l19",
+      "title": "10.19: Rehearsal",
+      "desc": "Ensayo general antes de los relatos.",
+      "icon": "🎭",
+      "vocab_new": ["Sometimes", "Never", "Morning", "Night"],
+      "vocab_review": ["I like", "I want", "I know", "I see", "I hear", "I eat", "I drink", "I live", "I play", "I talk", "I walk", "He likes", "She likes", "We like", "They like", "Every day", "Always", "Sometimes", "Never", "Morning", "Night"],
+      "story": { "en": "Get ready for the campfire stories! Tell us about your day!", "es": "¡Prepárate para los relatos de la fogata! ¡Cuéntanos sobre tu día!" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    },
+    {
+      "id": "m10l20",
+      "title": "10.20: 🔥 Relatos de la Fogata — Daily Routines",
+      "desc": "Roleplay: ¿qué haces todos los días en el bosque?",
+      "icon": "🔥",
+      "vocab_new": [],
+      "vocab_review": ["I like", "You like", "He likes", "She likes", "We like", "They like", "I want", "She wants", "I know", "I see", "I hear", "I eat", "I drink", "I live", "I play", "I talk", "I walk", "Every day", "Always", "Sometimes", "Never", "Morning", "Night"],
+      "story": { "en": "Welcome to the campfire! Tell stories about your daily life in the forest. What do you do every day?", "es": "¡Bienvenido a la fogata! Cuenta historias sobre tu vida diaria en el bosque. ¿Qué haces todos los días?" },
+      "flow": ["story_moment", "listen_click", "echo_chamber", "memory_flip", "matching", "boss_battle"]
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "m10_eval_1",
+      "title": "Evaluación M10: Campfire Stories",
+      "preview": {
+        "en": "You and Moon are sitting by the campfire. Tell stories about your daily life in the forest!",
+        "es": "¡Tú y Moon están sentados junto a la fogata! ¡Cuenten historias sobre su vida diaria en el bosque!"
+      },
+      "lines": [
+        { "role": "moon", "en": "What a beautiful night! The fire is warm. Tell me, what do you like to do in the forest?", "es": "¡Qué noche tan hermosa! El fuego está cálido. Dime, ¿qué te gusta hacer en el bosque?" },
+        { "role": "student", "en": "(Say: I like to walk in the forest! I like the trees.)", "es": "(Di: ¡Me gusta caminar en el bosque! Me gustan los árboles.)" },
+        { "role": "moon", "en": "I like the trees too! And what about your friend? What does he like?", "es": "¡A mí también me gustan los árboles! ¿Y tu amigo? ¿Qué le gusta a él?" },
+        { "role": "student", "en": "(Say: He likes to play in the river. He likes to fish.)", "es": "(Di: A él le gusta jugar en el río. Le gusta pescar.)" },
+        { "role": "moon", "en": "Nice! And what do you want to eat tonight?", "es": "¡Qué bien! ¿Y qué quieres comer esta noche?" },
+        { "role": "student", "en": "(Say: I want to eat marshmallows! And I want hot chocolate.)", "es": "(Di: ¡Quiero comer malvaviscos! Y quiero chocolate caliente.)" },
+        { "role": "moon", "en": "Yummy! I hear something in the trees. What do you hear?", "es": "¡Delicioso! Escucho algo en los árboles. ¿Qué escuchas tú?" },
+        { "role": "student", "en": "(Say: I hear the crickets! And I hear an owl!) ", "es": "(Di: ¡Escucho los grillos! ¡Y escucho un búho!)" },
+        { "role": "moon", "en": "Yes! I see the owl too. What do you do every morning?", "es": "¡Sí! También veo el búho. ¿Qué haces cada mañana?" },
+        { "role": "student", "en": "(Say: Every morning I eat breakfast. I drink water. I walk in the forest.)", "es": "(Di: Cada mañana como desayuno. Bebo agua. Camino en el bosque.)" },
+        { "role": "moon", "en": "And at night? What do you do before sleep?", "es": "¿Y en la noche? ¿Qué haces antes de dormir?" },
+        { "role": "student", "en": "(Say: At night I talk with my friends. Sometimes I play music. I never walk alone.)", "es": "(Di: En la noche hablo con mis amigos. A veces toco música. Nunca camino solo.)" },
+        { "role": "moon", "en": "That is a beautiful life in the forest! Do you live here?", "es": "¡Esa es una vida hermosa en el bosque! ¿Vives aquí?" },
+        { "role": "student", "en": "(Say: Yes! I live in a little house. I like my home in the forest.)", "es": "(Di: ¡Sí! Vivo en una casita. Me gusta mi hogar en el bosque.)" },
+        { "role": "moon", "en": "Thank you for sharing your story! The fire is warm and the stars are bright. Good night!", "es": "¡Gracias por compartir tu historia! El fuego está cálido y las estrellas están brillantes. ¡Buenas noches!" },
+        { "role": "student", "en": "(Say goodnight to Moon and thank her for the campfire night!)", "es": "(Despídete de Moon y agrégale por la noche de fogata.)" }
+      ]
+    }
+  ]
+}

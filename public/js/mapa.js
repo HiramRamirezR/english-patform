@@ -200,7 +200,7 @@ function setupWeeklyEvaluationButton(profile) {
                     🥾 Has practicado suficiente esta semana.
                 </p>
                 <button class="btn-premium" style="width:100%; padding:0.8rem; font-size:0.9rem; font-weight:bold;" onclick="showSubscriptionModal()">
-                    🔒 Desbloquear Evaluación — $300/mes
+                    🔒 Desbloquear Evaluación — $100/mes
                 </button>
             `;
         } else {
@@ -541,8 +541,8 @@ window.showSubscriptionModal = async () => {
                     te esperan en lo profundo del bosque.
                 </p>
                 <div style="background: linear-gradient(135deg, #0f172a, #1e3a5f); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.25rem; text-align: center;">
-                    <div style="font-size: 2rem; font-weight: 800; color: #38bdf8; line-height: 1;">$300</div>
-                    <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.25rem;">MXN al mes — Solo <strong style="color: #7dd3fc;">$10 al día</strong></div>
+                    <div style="font-size: 2rem; font-weight: 800; color: #38bdf8; line-height: 1;">$100</div>
+                    <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.25rem;">MXN al mes — Solo <strong style="color: #7dd3fc;">$3.33 al día</strong></div>
                 </div>
                 <ul style="list-style: none; padding: 0; margin: 0 0 1rem; font-size: 0.9rem; color: #475569;">
                     <li style="padding: 0.4rem 0;">🌿 Todos los módulos del bosque desbloqueados</li>
@@ -593,8 +593,8 @@ const showModuleCompletionCelebration = async (modId = 'm1') => {
                     </p>
                 </div>
                 <div style="background: linear-gradient(135deg, #0f172a, #1e3a5f); border-radius: 16px; padding: 1.5rem;">
-                    <div style="font-size: 1.5rem; font-weight: 800; color: #38bdf8; margin-bottom: 0.25rem;">$300 MXN/mes</div>
-                    <div style="font-size: 0.8rem; color: #94a3b8;">Sigue explorando — Solo $10 al día</div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #38bdf8; margin-bottom: 0.25rem;">$100 MXN/mes</div>
+                    <div style="font-size: 0.8rem; color: #94a3b8;">Sigue explorando — Solo $3.33 al día</div>
                 </div>
             </div>
         `,

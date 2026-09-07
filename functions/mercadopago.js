@@ -149,7 +149,7 @@ exports.handler = async function (event, context) {
                 auto_recurring: {
                     frequency: 1,
                     frequency_type: 'months',
-                    transaction_amount: 300,
+                    transaction_amount: 100,
                     currency_id: 'MXN',
                     repetitions: null,
                     free_trial: null

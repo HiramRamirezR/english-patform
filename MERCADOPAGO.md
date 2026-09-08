@@ -17,7 +17,7 @@ Ir a **Netlify → Site → Environment Variables** y agregar:
 | `MERCADO_PAGO_ACCESS_TOKEN` | `APP_USR-xxxxxxxx...` | MP Dashboard → Credenciales → Access Token |
 | `MERCADO_PAGO_WEBHOOK_SECRET` | `xxxxxx...` | MP Dashboard → Webhooks → Tu webhook → Secret |
 | `FIREBASE_SERVICE_ACCOUNT` | JSON string completo | Firebase Console → Service Accounts → Generate new private key |
-| `URL` | `https://moonsforest.com` | Tu dominio de producción |
+| `SITE_URL` | `https://moonsforest.netlify.app` | Tu dominio de producción |
 
 ### Cómo obtener cada credencial:
 
@@ -107,6 +107,6 @@ Respuesta esperada: `{"valid": true, "premiumUntil": "2026-10-07T..."}`
 |----------|---------------|----------|
 | "Mercado Pago no configurado" | Falta `MERCADO_PAGO_ACCESS_TOKEN` | Agregar variable en Netlify |
 | Webhook no activa premium | Falta `FIREBASE_SERVICE_ACCOUNT` | Agregar JSON de service account |
-| Redirección falla | Falta `URL` o dominio incorrecto | Verificar variable `URL` en Netlify |
+| Redirección falla | Falta `SITE_URL` o dominio incorrecto | Verificar variable `SITE_URL` en Netlify |
 | Firma inválida en webhook | Secret no coincide | Verificar `MERCADO_PAGO_WEBHOOK_SECRET` |
 | Precio incorrecto | Cache del navegador | Hard refresh (Ctrl+Shift+R) |

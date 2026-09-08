@@ -138,8 +138,8 @@ exports.handler = async function (event, context) {
                 return { statusCode: 400, body: JSON.stringify({ error: 'userId y email requeridos' }) };
             }
 
-            const successUrl = returnUrl || `${process.env.URL || 'https://moonsforest.com'}/mapa.html?payment=success`;
-            const failureUrl = returnUrl || `${process.env.URL || 'https://moonsforest.com'}/mapa.html?payment=failed`;
+            const successUrl = returnUrl || `${process.env.SITE_URL || 'https://moonsforest.com'}/mapa.html?payment=success`;
+            const failureUrl = returnUrl || `${process.env.SITE_URL || 'https://moonsforest.com'}/mapa.html?payment=failed`;
 
             const preference = {
                 preapproval_plan_id: null,

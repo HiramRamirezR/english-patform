@@ -7,8 +7,6 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      // Usamos get() de forma segura: verificamos si el documento existe antes de leer datos
-      // y usamos .get() con valor por defecto para evitar errores si el campo no existe.
       return isSignedIn() && 
              exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('isAdmin', false) == true;
@@ -18,12 +16,8 @@ service cloud.firestore {
     match /users/{userId} {
       allow read: if isSignedIn() && request.auth.uid == userId;
       allow read: if isAdmin();
-      
-      // Permitir create solo si isAdmin no existe o es false (nunca puede crearse como admin)
       allow create: if isSignedIn() && request.auth.uid == userId 
                       && request.resource.data.get('isAdmin', false) == false;
-      
-      // Permitir update solo si isAdmin resultante es false (el usuario no puede escalarse a admin)
       allow update: if (isAdmin()) || 
                       (isSignedIn() && request.auth.uid == userId 
                       && request.resource.data.get('isAdmin', false) == false);
@@ -31,9 +25,7 @@ service cloud.firestore {
 
     // Reglas para la colección de maestros (PÚBLICA para alumnos)
     match /teachers/{teacherId} {
-      // Cualquier alumno puede ver los perfiles de maestros para referidos o agendar
       allow read: if isSignedIn();
-      // Solo el propio maestro o admin puede crear/modificar su perfil público
       allow write: if isSignedIn() && (isAdmin() || request.auth.uid == teacherId);
     }
 
@@ -43,14 +35,11 @@ service cloud.firestore {
       allow create: if isSignedIn() && (isAdmin() || request.auth.uid == request.resource.data.teacherId);
       allow update, delete: if isSignedIn() && (isAdmin() || request.auth.uid == resource.data.teacherId);
     }
-    
+
     // Reglas para evaluaciones
     match /evaluations/{evalId} {
-      // Alumno puede crear su propia evaluación
       allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-      // Admin puede leer y modificar todas
       allow read, update, delete: if isAdmin();
-      // El alumno puede leer sus propias evaluaciones (para ver feedback)
       allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
     }
 
@@ -60,4 +49,3 @@ service cloud.firestore {
     }
   }
 }
-

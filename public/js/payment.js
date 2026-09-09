@@ -1,5 +1,6 @@
 // public/js/payment.js
 // Mercado Pago Checkout Integration
+import { sendDiscordNotification } from './discord.js';
 
 /**
  * Inicia el flujo de suscripción premium ($100/mes)
@@ -26,7 +27,6 @@ export async function startSubscription(userId, userName, email) {
                     </ul>
                 </div>
             `,
-            icon: 'info',
             showCancelButton: true,
             confirmButtonText: '💳 Ir a pagar',
             cancelButtonText: 'Cancelar',
@@ -66,32 +66,30 @@ export async function startSubscription(userId, userName, email) {
 
     } catch (error) {
         window.devWarn("Error en suscripción:", error);
+
+        sendDiscordNotification(
+            '❌ Error al iniciar pago',
+            `**Usuario:** ${userName || 'Desconocido'}\n**UID:** ${userId}\n**Error:** ${error.message}`,
+            15548997,
+            null,
+            'errores'
+        );
+
         Swal.fire({
-            title: '💳 Pago manual disponible',
+            title: 'Algo salió mal',
             html: `
-                <div style="text-align: left; font-family: 'Outfit', sans-serif;">
-                    <p style="font-size:0.9rem; color:#475569; margin-bottom:1rem;">
-                        El pago en línea no está disponible temporalmente. Para activar tu acceso:
+                <div style="text-align: center; font-family: 'Outfit', sans-serif;">
+                    <p style="font-size: 0.9rem; color: #475569; margin-bottom: 0.5rem;">
+                        No pudimos conectar con el sistema de pagos.
                     </p>
-                    <div style="background:#f0fdf4; border-radius:12px; padding:1rem; margin-bottom:1rem;">
-                        <p style="font-size:0.85rem; color:#166534; margin-bottom:0.5rem; font-weight:600;">1. Transfiere $100 MXN</p>
-                        <p style="font-size:0.85rem; color:#166534;">Cuenta: <strong>Hiram Morales</strong></p>
-                        <p style="font-size:0.85rem; color:#166534;">CLABE: <strong>0121 8001 5820 7709 91</strong> (BBVA)</p>
-                    </div>
-                    <div style="background:#eff6ff; border-radius:12px; padding:1rem; margin-bottom:1rem;">
-                        <p style="font-size:0.85rem; color:#1e40af; margin-bottom:0.5rem; font-weight:600;">2. Envía tu comprobante por WhatsApp</p>
-                        <a href="https://wa.me/5219931172956?text=Hola%20quiero%20activar%20mi%20cuenta%20Premium%20de%20Moonsforest"
-                           target="_blank"
-                           style="display:inline-block; background:#22c55e; color:white; text-decoration:none; padding:0.6rem 1.2rem; border-radius:8px; font-weight:600; font-size:0.85rem;">
-                            📱 Enviar comprobante
-                        </a>
-                    </div>
-                    <p style="font-size:0.8rem; color:#94a3b8; text-align:center;">Activaré tu acceso en menos de 24 hrs</p>
+                    <p style="font-size: 0.85rem; color: #94a3b8;">
+                        Estamos trabajando para solucionarlo. Intenta de nuevo en unos minutos.
+                    </p>
                 </div>
             `,
-            icon: 'info',
-            confirmButtonText: 'Entendido',
-            confirmButtonColor: '#22c55e'
+            icon: 'error',
+            confirmButtonColor: '#38bdf8',
+            confirmButtonText: 'Entendido'
         });
     }
 }

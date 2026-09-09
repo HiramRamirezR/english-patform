@@ -142,7 +142,7 @@ exports.handler = async function (event, context) {
             const failureUrl = returnUrl || `${process.env.SITE_URL || 'https://moonsforest.com'}/mapa.html?payment=failed`;
 
             const preference = {
-                reason: 'Suscripción Mensual Moonsforest 🌲',
+                reason: 'Suscripcion Mensual Moonsforest',
                 external_reference: userId,
                 payer_email: email,
                 auto_recurring: {

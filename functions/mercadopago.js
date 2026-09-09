@@ -141,6 +141,10 @@ exports.handler = async function (event, context) {
             const successUrl = returnUrl || `${process.env.SITE_URL || 'https://moonsforest.com'}/mapa.html?payment=success`;
             const failureUrl = returnUrl || `${process.env.SITE_URL || 'https://moonsforest.com'}/mapa.html?payment=failed`;
 
+            const now = new Date();
+            const oneMonthLater = new Date(now);
+            oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
+
             const preference = {
                 reason: 'Suscripcion Mensual Moonsforest',
                 external_reference: userId,
@@ -148,6 +152,8 @@ exports.handler = async function (event, context) {
                 auto_recurring: {
                     frequency: 1,
                     frequency_type: 'months',
+                    start_date: now.toISOString(),
+                    end_date: oneMonthLater.toISOString(),
                     transaction_amount: 100,
                     currency_id: 'MXN'
                 },
@@ -156,6 +162,8 @@ exports.handler = async function (event, context) {
                     failure: failureUrl
                 }
             };
+
+            console.log("Payload MP:", JSON.stringify(preference, null, 2));
 
             const resp = await fetch(`${MERCADO_PAGO_API}/preapproval`, {
                 method: 'POST',

@@ -43,16 +43,13 @@ export async function startSubscription(userId, userName, email) {
             didOpen: () => { Swal.showLoading(); }
         });
 
-        const returnUrl = window.location.origin + '/mapa.html';
-
         const response = await fetch('/.netlify/functions/mercadopago/create-subscription', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 userId,
                 userName,
-                email,
-                returnUrl
+                email
             })
         });
 

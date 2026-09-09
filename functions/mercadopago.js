@@ -142,7 +142,6 @@ exports.handler = async function (event, context) {
             const failureUrl = returnUrl || `${process.env.SITE_URL || 'https://moonsforest.com'}/mapa.html?payment=failed`;
 
             const preference = {
-                preapproval_plan_id: null,
                 reason: 'Suscripción Mensual Moonsforest 🌲',
                 external_reference: userId,
                 payer_email: email,
@@ -150,15 +149,12 @@ exports.handler = async function (event, context) {
                     frequency: 1,
                     frequency_type: 'months',
                     transaction_amount: 100,
-                    currency_id: 'MXN',
-                    repetitions: null,
-                    free_trial: null
+                    currency_id: 'MXN'
                 },
                 back_url: {
                     success: successUrl,
                     failure: failureUrl
-                },
-                status: 'authorized'
+                }
             };
 
             const resp = await fetch(`${MERCADO_PAGO_API}/preapproval`, {

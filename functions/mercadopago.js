@@ -24,6 +24,22 @@ exports.handler = async function (event, context) {
         };
     }
 
+    // DEBUG: identificar la cuenta propietaria del Access Token
+    const meResp = await fetch(`${MERCADO_PAGO_API}/users/me`, {
+        headers: {
+            'Authorization': `Bearer ${MP_ACCESS_TOKEN}`
+        }
+    });
+
+    const meData = await meResp.json();
+
+    console.log("🔎 MERCADO PAGO USER:", JSON.stringify({
+        id: meData.id,
+        nickname: meData.nickname,
+        email: meData.email,
+        site_id: meData.site_id
+    }, null, 2));
+
     try {
         // --- VALIDAR PREMIUM (server-side) ---
         if (path === '/validate-premium' && event.httpMethod === 'POST') {

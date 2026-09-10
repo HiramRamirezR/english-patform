@@ -157,10 +157,7 @@ exports.handler = async function (event, context) {
                     transaction_amount: 100,
                     currency_id: 'MXN'
                 },
-                back_url: {
-                    success: successUrl,
-                    failure: failureUrl
-                }
+                back_url: `${process.env.SITE_URL}/mapa.html`
             };
 
             console.log("Payload MP:", JSON.stringify(preference, null, 2));

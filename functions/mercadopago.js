@@ -1,7 +1,6 @@
 // functions/mercadopago.js
 // Netlify Function: Mercado Pago subscription + webhook handler
 
-const { MercadoPagoConfig, PreApproval } = require('mercadopago');
 const MERCADO_PAGO_API = 'https://api.mercadopago.com';
 
 // Firebase lazy init
@@ -103,18 +102,20 @@ exports.handler = async function (event, context) {
             // Obtener datos del pago/aprobación
             let paymentData = null;
 
-            // Crear cliente MP con SDK
-            const client = new MercadoPagoConfig({ accessToken: MP_ACCESS_TOKEN });
-            const preApproval = new PreApproval(client);
-
             if (topic === 'preapproval' || topic === 'subscription') {
-                paymentData = await preApproval.get({ id: resourceId });
+                const resp = await fetch(`${MERCADO_PAGO_API}/preapproval/${resourceId}`, {
+                    headers: { 'Authorization': `Bearer ${MP_ACCESS_TOKEN}` }
+                });
+                paymentData = await resp.json();
             } else if (topic === 'payment') {
                 const resp = await fetch(`${MERCADO_PAGO_API}/v1/payments/${resourceId}`, {
                     headers: { 'Authorization': `Bearer ${MP_ACCESS_TOKEN}` }
                 });
                 const payment = await resp.json();
-                paymentData = await preApproval.get({ id: payment.preapproval_id });
+                const prefResp = await fetch(`${MERCADO_PAGO_API}/preapproval/${payment.preapproval_id}`, {
+                    headers: { 'Authorization': `Bearer ${MP_ACCESS_TOKEN}` }
+                });
+                paymentData = await prefResp.json();
             }
 
             if (paymentData && paymentData.status === 'authorized') {
@@ -160,11 +161,11 @@ exports.handler = async function (event, context) {
 
             console.log(`📧 Modo: ${isTestMode ? 'TEST' : 'PRODUCCION'} | Payer: ${payerEmail}`);
 
-            // Crear cliente MP con SDK
-            const client = new MercadoPagoConfig({ accessToken: MP_ACCESS_TOKEN });
-            const preApproval = new PreApproval(client);
+            const now = new Date();
+            const oneMonthLater = new Date(now);
+            oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
 
-            const body = {
+            const preference = {
                 reason: 'Suscripcion Mensual Moonsforest',
                 external_reference: userId,
                 payer_email: payerEmail,
@@ -178,17 +179,32 @@ exports.handler = async function (event, context) {
                 back_url: `${process.env.SITE_URL}/mapa.html`
             };
 
-            console.log("Payload MP:", JSON.stringify(body, null, 2));
+            console.log("Payload MP:", JSON.stringify(preference, null, 2));
 
-            const result = await preApproval.create({ body });
+            const resp = await fetch(`${MERCADO_PAGO_API}/preapproval`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${MP_ACCESS_TOKEN}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(preference)
+            });
 
-            console.log("✅ Suscripción creada:", result.id);
+            const data = await resp.json();
+
+            if (!resp.ok) {
+                console.error("MP Error:", data);
+                return {
+                    statusCode: 500,
+                    body: JSON.stringify({ error: 'Error al crear suscripción', detail: data })
+                };
+            }
 
             return {
                 statusCode: 200,
                 body: JSON.stringify({
-                    init_point: result.init_point,
-                    preapproval_id: result.id
+                    init_point: data.init_point,
+                    preapproval_id: data.id
                 })
             };
         }

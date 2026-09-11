@@ -154,6 +154,13 @@ exports.handler = async function (event, context) {
                 return { statusCode: 400, body: JSON.stringify({ error: 'userId y email requeridos' }) };
             }
 
+            // En modo TEST, usar email de test buyer para evitar error 145
+            const isTestMode = MP_ACCESS_TOKEN.startsWith('TEST-');
+            const testBuyerEmail = 'test_user_6973565152757274950@testuser.com';
+            const payerEmail = isTestMode ? testBuyerEmail : email;
+
+            console.log(`📧 Modo: ${isTestMode ? 'TEST' : 'PRODUCCION'} | Payer: ${payerEmail}`);
+
             const successUrl = returnUrl || `${process.env.SITE_URL || 'https://moonsforest.com'}/mapa.html?payment=success`;
             const failureUrl = returnUrl || `${process.env.SITE_URL || 'https://moonsforest.com'}/mapa.html?payment=failed`;
 
@@ -164,7 +171,7 @@ exports.handler = async function (event, context) {
             const preference = {
                 reason: 'Suscripcion Mensual Moonsforest',
                 external_reference: userId,
-                payer_email: email,
+                payer_email: payerEmail,
                 status: "pending",
                 auto_recurring: {
                     frequency: 1,

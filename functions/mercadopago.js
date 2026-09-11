@@ -164,7 +164,8 @@ exports.handler = async function (event, context) {
             const preference = {
                 reason: 'Suscripcion Mensual Moonsforest',
                 external_reference: userId,
-                payer_email: "test_payer@testuser.com",
+                payer_email: email,
+                status: "pending",
                 auto_recurring: {
                     frequency: 1,
                     frequency_type: 'months',
